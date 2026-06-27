@@ -328,8 +328,70 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .voice-msg-wave.playing span:nth-child(2){animation-delay:0.1s;} .voice-msg-wave.playing span:nth-child(3){animation-delay:0.2s;} .voice-msg-wave.playing span:nth-child(4){animation-delay:0.15s;} .voice-msg-wave.playing span:nth-child(5){animation-delay:0.05s;}
 @keyframes voicewave-pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
 @keyframes voicewave-bounce{from{height:4px;}to{height:15px;}}
-.msg-auto-trans{font-size:11.5px;color:rgba(255,255,255,0.6);margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.15);line-height:1.5;}
+.msg-miniapp-card{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px 12px;margin-top:8px;cursor:pointer;transition:opacity 0.15s;}
+.msg-row.theirs .msg-miniapp-card{background:rgba(0,0,0,0.04);border-color:var(--silver);}
+.msg-miniapp-card:active{opacity:0.75;}
+.msg-miniapp-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.msg-miniapp-info{flex:1;}
+.msg-miniapp-name{font-size:13px;font-weight:600;}
+.msg-miniapp-hint{font-size:10.5px;opacity:0.6;margin-top:1px;}
+
 .msg-row.theirs .msg-auto-trans{color:var(--ink4);border-top-color:var(--smoke);}
+
+/* Chat + button and expanding panel */
+.chat-plus-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--silver);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);flex-shrink:0;transition:transform 0.2s ease;}
+.chat-plus-btn:active{background:var(--smoke);}
+.chat-plus-panel{position:absolute;bottom:calc(60px + env(safe-area-inset-bottom,0px));left:0;right:0;background:var(--white);border-top:1px solid var(--smoke);padding:18px 16px 16px;z-index:200;box-shadow:0 -6px 24px rgba(0,0,0,0.08);}
+.chat-plus-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 4px;}
+.chat-plus-item{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;}
+.chat-plus-item:active .chat-plus-icon{transform:scale(0.88);}
+.chat-plus-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;transition:transform 0.12s;}
+.chat-plus-item span{font-size:10.5px;color:var(--ink3);text-align:center;}
+
+/* Special message cards */
+.msg-special-card{border-radius:14px;padding:14px 16px;margin-top:4px;text-align:center;min-width:140px;}
+.msg-transfer-card{background:linear-gradient(135deg,#43a047,#2e7d32);color:white;cursor:default;}
+.msg-redpacket-card{background:linear-gradient(135deg,#e53935,#b71c1c);color:white;cursor:pointer;}
+.msg-redpacket-card:active{opacity:0.85;}
+.msg-location-card{background:var(--smoke);color:var(--ink);text-align:left;padding:12px 14px;cursor:pointer;}
+.msg-location-card:active{opacity:0.8;}
+.msg-card-tag{display:inline-block;margin-top:8px;font-size:10px;opacity:0.75;border:1px solid rgba(255,255,255,0.45);border-radius:6px;padding:2px 8px;}
+.msg-poke-bubble{font-size:13px;color:var(--ink4);font-style:italic;padding:4px 0;}
+
+/* Poke shake animation */
+@keyframes poke-shake{0%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}100%{transform:translateX(0);}}
+#chat-view.poke-shake{animation:poke-shake 0.5s ease;}
+
+/* Now-playing chat card */
+.msg-nowplaying-card{background:linear-gradient(135deg,rgba(219,67,67,0.85),rgba(120,30,100,0.85));cursor:pointer;padding:12px 14px;border-radius:16px;margin-top:4px;}
+.msg-nowplaying-card:active{opacity:0.85;}
+
+/* Music friends tab */
+.music-friends-row{display:flex;gap:16px;padding:8px 0 16px;overflow-x:auto;}
+.music-friends-row::-webkit-scrollbar{display:none;}
+.music-friend-chip{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;}
+.music-friend-av{width:52px;height:52px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(255,255,255,0.9);border:2px solid rgba(255,255,255,0.15);position:relative;}
+.music-friend-name{font-size:11px;color:rgba(255,255,255,0.8);max-width:56px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.music-friend-dot{width:8px;height:8px;background:#db4343;border-radius:50%;position:absolute;top:-2px;right:-2px;border:2px solid rgba(20,20,20,0.9);}
+
+/* Char music detail page */
+.music-char-page{padding-bottom:24px;}
+.music-char-head{display:flex;align-items:center;gap:14px;padding:14px 0 10px;}
+.music-char-av{width:54px;height:54px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px;color:rgba(255,255,255,0.9);flex-shrink:0;}
+.music-char-mood{font-size:12px;color:rgba(255,255,255,0.6);margin-top:3px;}
+.music-char-refresh{border:none;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);font-size:16px;width:32px;height:32px;border-radius:50%;cursor:pointer;flex-shrink:0;}
+.music-char-persona{font-size:13px;color:rgba(255,255,255,0.8);line-height:1.7;background:rgba(255,255,255,0.07);border-radius:12px;padding:12px 14px;margin-bottom:16px;}
+.music-char-section{margin-bottom:20px;}
+.music-char-section-title{font-size:11px;letter-spacing:0.12em;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-bottom:10px;}
+.music-char-np{background:rgba(255,255,255,0.07);border-radius:12px;padding:12px 14px;}
+.music-char-comment{font-size:13px;color:rgba(255,255,255,0.75);font-style:italic;margin-top:8px;line-height:1.6;border-left:3px solid rgba(219,67,67,0.6);padding-left:10px;}
+.music-char-action-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.88);font-size:12.5px;padding:9px 14px;border-radius:12px;cursor:pointer;display:inline-block;margin-bottom:6px;}
+.music-char-action-btn:active{background:rgba(255,255,255,0.18);}
+.music-char-keyword{display:inline-block;background:rgba(219,67,67,0.2);border:1px solid rgba(219,67,67,0.35);color:rgba(255,255,255,0.88);font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;}
+.music-char-keyword:active{background:rgba(219,67,67,0.4);}
+
+
+
 .translation-lang-tag{display:inline-block;font-size:11px;color:var(--ink3);background:var(--smoke);padding:3px 10px;border-radius:8px;margin-bottom:14px;}
 .translation-original{font-size:14.5px;color:var(--ink);line-height:1.7;}
 .translation-divider{height:1px;background:var(--smoke);margin:16px 0;}
@@ -462,7 +524,10 @@ textarea.field-inp{resize:vertical;min-height:80px;line-height:1.5;}
 .lang-lesson-card{background:var(--smoke);border-radius:14px;padding:16px;font-size:13.5px;line-height:1.8;color:var(--ink);}
 .lang-feedback-card{background:rgba(0,0,0,0.04);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.7;color:var(--ink2);}
 .lang-error-card{border:1.5px solid var(--silver);border-radius:16px;padding:14px 16px;margin-bottom:12px;}
-.lang-error-type{font-size:11px;color:var(--ink4);}
+.lang-canvas-area{margin-top:14px;border:2px dashed var(--silver);border-radius:16px;overflow:hidden;background:#f7f7f7;position:relative;}
+.lang-canvas-label{font-size:11.5px;color:var(--ink4);text-align:center;padding:8px 0 4px;}
+.lang-hwcanvas{display:block;width:100%;touch-action:none;cursor:crosshair;background:#f7f7f7;border-radius:0 0 14px 14px;}
+.lang-canvas-hint{font-size:10.5px;color:var(--ink4);text-align:center;padding:4px 0 8px;background:#f7f7f7;}
 
 .preset-item{background:var(--smoke);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.15s;border:1.5px solid transparent;}
 .preset-item:active{background:var(--silver);}
@@ -514,23 +579,23 @@ input[type=file]{display:none;}
 #music-user-name{font-size:13px;color:rgba(255,255,255,0.9);max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .music-search-bar{flex:1;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.14);border-radius:18px;padding:8px 13px;}
 .music-search-bar input{flex:1;border:none;background:none;color:rgba(255,255,255,0.9);font-size:12.5px;outline:none;font-family:inherit;}
-.music-search-bar input::placeholder{color:rgba(255,255,255,0.45);}
+.music-search-bar input::placeholder{color:rgba(255,255,255,0.65);}
 .music-search-go{border:none;background:rgba(255,255,255,0.9);color:#1a1a1a;font-size:12px;padding:4px 10px;border-radius:10px;flex-shrink:0;cursor:pointer;}
 .music-content-area{flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;}
 .music-quick-row{display:flex;padding:14px 16px 8px;gap:0;flex-shrink:0;}
 .music-quick-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
 .music-quick-icon{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform 0.12s;}
 .music-quick-item:active .music-quick-icon{transform:scale(0.88);}
-.music-quick-item span{font-size:10.5px;color:rgba(255,255,255,0.75);}
-.music-bottom-tabs{display:flex;align-items:center;padding:10px 8px 18px;background:rgba(0,0,0,0.25);border-top:1px solid rgba(255,255,255,0.08);flex-shrink:0;gap:0;}
-.music-btab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:rgba(255,255,255,0.45);transition:color 0.15s;}
+.music-quick-item span{font-size:10.5px;color:rgba(255,255,255,0.9);}
+.music-bottom-tabs{display:flex;align-items:center;padding:10px 8px 18px;background:rgba(0,0,0,0.3);border-top:1px solid rgba(255,255,255,0.18);flex-shrink:0;gap:0;}
+.music-btab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:rgba(255,255,255,0.65);transition:color 0.15s;}
 .music-btab svg{transition:stroke 0.15s;}
 .music-btab span{font-size:10px;}
 .music-btab.active{color:rgba(255,255,255,0.95);}
-.music-mode-btn{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.7);flex-shrink:0;}
-.music-section-label{font-size:11px;letter-spacing:0.12em;color:rgba(255,255,255,0.5);padding:14px 16px 6px;flex-shrink:0;text-transform:uppercase;}
+.music-mode-btn{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.12);cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.88);flex-shrink:0;}
+.music-section-label{font-size:11px;letter-spacing:0.12em;color:rgba(255,255,255,0.75);padding:14px 16px 6px;flex-shrink:0;text-transform:uppercase;}
 .music-chart-picker{display:flex;gap:8px;overflow-x:auto;padding:0 16px 10px;flex-shrink:0;}
-.music-chart-chip{flex-shrink:0;font-size:12px;color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);padding:6px 13px;border-radius:14px;cursor:pointer;}
+.music-chart-chip{flex-shrink:0;font-size:12px;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.1);padding:6px 13px;border-radius:14px;cursor:pointer;}
 .music-chart-chip.active{background:rgba(255,255,255,0.9);color:#1a1a1a;}
 .music-list{flex:1;padding:0 16px 100px;}
 .music-section-header{font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);padding:12px 0 8px;}
@@ -539,16 +604,16 @@ input[type=file]{display:none;}
 .music-playlist-thumb{width:48px;height:48px;border-radius:8px;overflow:hidden;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .music-playlist-thumb img{width:100%;height:100%;object-fit:cover;}
 .music-playlist-name{font-size:13.5px;color:rgba(255,255,255,0.9);line-height:1.4;}
-.music-playlist-count{font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;}
+.music-playlist-count{font-size:11px;color:rgba(255,255,255,0.72);margin-top:2px;}
 .music-track{display:flex;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer;}
 .music-track.playing .music-track-name{color:#db4343;}
 .music-track-cover{width:42px;height:42px;border-radius:7px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);margin-right:12px;}
 .music-track-cover img{width:100%;height:100%;object-fit:cover;}
 .music-track-info{flex:1;min-width:0;}
 .music-track-name{font-size:13.5px;color:rgba(255,255,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.music-track-artist{font-size:11.5px;color:rgba(255,255,255,0.4);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.music-track-dur{font-size:11px;color:rgba(255,255,255,0.35);margin-left:8px;flex-shrink:0;}
-.music-track-fav{width:26px;height:26px;border:none;background:none;color:rgba(255,255,255,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.music-track-artist{font-size:11.5px;color:rgba(255,255,255,0.75);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.music-track-dur{font-size:11px;color:rgba(255,255,255,0.65);margin-left:8px;flex-shrink:0;}
+.music-track-fav{width:26px;height:26px;border:none;background:none;color:rgba(255,255,255,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .music-track-fav.faved{color:#db4343;}
 .music-account-panel{padding:16px;}
 .music-account-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.08);margin-bottom:10px;cursor:pointer;}
@@ -1220,6 +1285,10 @@ npx NeteaseCloudMusicApi</div>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           <span>我的</span>
         </div>
+      <div class="music-btab" id="mbtab-friends" onclick="switchMusicMainTab('friends')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>好友</span>
+        </div>
         <button class="music-mode-btn" id="music-mode-btn" onclick="cycleMusicPlayMode()" title="播放模式"></button>
       </div>
     </div>
@@ -1464,6 +1533,9 @@ npx NeteaseCloudMusicApi</div>
   </div>
   <div class="chat-msgs" id="cv-msgs"></div>
   <div class="chat-input-bar">
+    <button class="chat-plus-btn" onclick="toggleChatPlusMenu()" id="chat-plus-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
     <textarea class="chat-textarea" id="cv-input" placeholder="说点什么…" rows="1"></textarea>
     <button class="chat-send" onclick="cvSend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
   </div>
@@ -1645,6 +1717,51 @@ npx NeteaseCloudMusicApi</div>
   </div>
 </div>
 
+<!-- Chat + panel (slides up above input bar, NOT a full modal overlay) -->
+<div id="chat-plus-panel" class="chat-plus-panel" style="display:none">
+  <div class="chat-plus-grid">
+    <div class="chat-plus-item" onclick="closeChatPlus();sendChatTransfer()">
+      <div class="chat-plus-icon" style="background:#4caf50"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+      <span>转账</span>
+    </div>
+    <div class="chat-plus-item" onclick="closeChatPlus();sendChatLocation()">
+      <div class="chat-plus-icon" style="background:#2196f3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <span>发送定位</span>
+    </div>
+    <div class="chat-plus-item" onclick="closeChatPlus();sendPoke()">
+      <div class="chat-plus-icon" style="background:#ff9800"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+      <span>拍一拍</span>
+    </div>
+    <div class="chat-plus-item" onclick="closeChatPlus();openMiniAppFromChat()">
+      <div class="chat-plus-icon" style="background:#9c27b0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg></div>
+      <span>小程序</span>
+    </div>
+    <div class="chat-plus-item" onclick="closeChatPlus();sendChatRedPacket()">
+      <div class="chat-plus-icon" style="background:#e53935"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><polyline points="16 21 12 17 8 21"/><line x1="12" y1="12" x2="12" y2="12"/></svg></div>
+      <span>红包</span>
+    </div>
+    <div class="chat-plus-item" onclick="closeChatPlus();sendVoiceNote()">
+      <div class="chat-plus-icon" style="background:#607d8b"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
+      <span>语音消息</span>
+    </div>
+  </div>
+</div>
+
+<!-- Transfer modal -->
+<div class="modal-overlay" id="transfer-modal" onclick="if(event.target===this)closeTransferModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">转账</div><button class="modal-close" onclick="closeTransferModal()">×</button></div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--ink4);margin-bottom:14px">向 <b id="transfer-to-name">—</b> 转账</div>
+      <div style="font-size:12px;color:var(--ink4);margin-bottom:6px">当前余额：<span id="transfer-balance">—</span> 椿元</div>
+      <div class="field-group"><div class="field-lbl">金额（椿元）</div><input class="field-inp" id="transfer-amount" type="number" min="1" placeholder="请输入金额"></div>
+      <div class="field-group"><div class="field-lbl">留言（可选）</div><input class="field-inp" id="transfer-note" placeholder="例：请吃饭"></div>
+      <button class="save-btn" onclick="confirmTransfer()">确认转账</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="msgmenu-modal" onclick="if(event.target===this)closeMsgMenu()">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1768,6 +1885,20 @@ function buildChatModeInstruction(mode){
   }
   return '【输出格式要求】这是对话+剧情模式：以角色的对话为主，但可以穿插简短的动作、神态或场景描写（通常用于点明角色当下的状态或动作），描写部分应当简洁克制，不喧宾夺主，整体仍然保持对话节奏，不要写成大段叙事。';
 }
+
+// ── Miniapp injection into system prompt ──
+// Tells the AI which mini-apps are available so it can suggest opening one
+// when the user asks for relevant services (food delivery, shopping, etc.).
+// The AI appends a special tag [MINIAPP:id] to its reply; the renderer parses
+// this and shows a tappable card below the message bubble.
+const MINIAPP_PROMPT_BLOCK = `【可用小程序】当用户请求以下类型的服务时，你可以在回复末尾加上对应的小程序标记（格式：[MINIAPP:id]），系统会自动渲染成可点击的小程序入口卡片：
+- 点外卖/订餐/美团 → [MINIAPP:mini-meituan]
+- 饿了么/点餐 → [MINIAPP:mini-eleme]
+- 淘宝/购物/网购/优惠券 → [MINIAPP:mini-taobao]
+- 京东/JD/电器/快递 → [MINIAPP:mini-jd]
+- 看视频/B站/哔哩哔哩 → [MINIAPP:mini-bilibili]
+- 小红书/种草/推荐 → [MINIAPP:mini-xhs]
+只在用户明确需要该服务时才加标记，不要无缘无故插入。标记放在回复最末尾，不影响正常聊天内容。`;
 
 let currentChar = null;
 let currentChatIdentityId = null;
@@ -1935,6 +2066,7 @@ async function safeFetchJSON(url, options){
 // ══════════ APP NAV ══════════
 function closeAllModals(){
   document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));
+  if(typeof closeChatPlus === 'function') closeChatPlus();
 }
 function openApp(name){
   closeAllModals();
@@ -4002,10 +4134,156 @@ function updateIdentityChip(){
 }
 function closeChat(){
   closeAllModals();
+  closeChatPlus();
   currentGroupId = null;
   document.getElementById('chat-view').classList.remove('open');
   renderChatList();
 }
+
+// ══════════ CHAT + MENU ══════════
+let _chatPlusOpen = false;
+function toggleChatPlusMenu(){
+  _chatPlusOpen = !_chatPlusOpen;
+  const panel = document.getElementById('chat-plus-panel');
+  const btn   = document.getElementById('chat-plus-btn');
+  panel.style.display = _chatPlusOpen ? 'block' : 'none';
+  btn.style.transform = _chatPlusOpen ? 'rotate(45deg)' : 'rotate(0deg)';
+}
+function closeChatPlus(){
+  _chatPlusOpen = false;
+  const panel = document.getElementById('chat-plus-panel');
+  const btn   = document.getElementById('chat-plus-btn');
+  if(panel) panel.style.display = 'none';
+  if(btn)   btn.style.transform = 'rotate(0deg)';
+}
+
+// ── 转账 ──
+function sendChatTransfer(){
+  if(!currentChar && !currentGroupId){ return; }
+  const nameEl = document.getElementById('transfer-to-name');
+  const balEl  = document.getElementById('transfer-balance');
+  if(nameEl) nameEl.textContent = currentChar?.name || '群聊';
+  if(balEl)  balEl.textContent  = walletBalance;
+  document.getElementById('transfer-amount').value = '';
+  document.getElementById('transfer-note').value   = '';
+  document.getElementById('transfer-modal').classList.add('open');
+}
+function closeTransferModal(){ document.getElementById('transfer-modal').classList.remove('open'); }
+function confirmTransfer(){
+  const amount = parseInt(document.getElementById('transfer-amount').value);
+  const note   = document.getElementById('transfer-note').value.trim();
+  if(!amount || amount <= 0){ showToast('请输入有效金额'); return; }
+  if(amount > walletBalance){ showToast('余额不足'); return; }
+  walletBalance -= amount;
+  walletHistory.push({type:'out', amount, note: note||'转账给'+( currentChar?.name||'对方'), time:getTime()});
+  persist();
+  closeTransferModal();
+  // Insert a system-style transfer card into the chat
+  const ctx = getActiveChatContext();
+  if(ctx){
+    ctx.msgs.push({
+      text: `[TRANSFER:${amount}:${note||'转账'}]`,
+      mine:true, time:getTime()
+    });
+    persist();
+    ctx.rerender();
+  }
+  showToast('转账成功，已转出 '+amount+' 椿元');
+  // Let the character acknowledge
+  if(currentChar && !currentChar.isSystem){
+    const h = chatHistory.find(h2=>h2.id===currentChar.id);
+    if(h) setTimeout(()=>requestAIReply(h), 600);
+  }
+}
+
+// ── 发送定位 ──
+function sendChatLocation(){
+  const ctx = getActiveChatContext();
+  if(!ctx) return;
+  showToast('正在获取位置…');
+  if(!navigator.geolocation){ showToast('浏览器不支持定位'); return; }
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const lat = pos.coords.latitude.toFixed(5);
+    const lng = pos.coords.longitude.toFixed(5);
+    ctx.msgs.push({text:`[LOCATION:${lat}:${lng}]`, mine:true, time:getTime()});
+    persist(); ctx.rerender();
+  }, ()=>{
+    // Graceful fallback: insert a mock location card
+    ctx.msgs.push({text:'[LOCATION:31.22717:121.48162]', mine:true, time:getTime()});
+    persist(); ctx.rerender();
+    showToast('获取定位失败，已插入示例位置');
+  });
+}
+
+// ── 拍一拍 ──
+function sendPoke(){
+  const charName = currentChar?.name || '对方';
+  const ctx = getActiveChatContext();
+  if(!ctx) return;
+  ctx.msgs.push({text:'[POKE]', mine:true, time:getTime(), isSystemNote:false});
+  persist(); ctx.rerender();
+  // Show a shake animation on the chat view
+  const cv = document.getElementById('chat-view');
+  cv.classList.add('poke-shake');
+  setTimeout(()=>cv.classList.remove('poke-shake'), 600);
+  showToast('你拍了拍'+charName);
+  // Character reacts
+  if(currentChar && !currentChar.isSystem){
+    const h = chatHistory.find(h2=>h2.id===currentChar.id);
+    if(h){
+      h.msgs.push({text:'（被拍了一下）', mine:false, isSystemNote:true, time:getTime()});
+      persist(); ctx.rerender();
+      setTimeout(()=>requestAIReply(h), 500);
+    }
+  }
+}
+
+// ── 红包 ──
+function sendChatRedPacket(){
+  if(walletBalance < 1){ showToast('椿元余额不足，无法发红包'); return; }
+  const amount = Math.min(Math.floor(Math.random()*10)+1, walletBalance);
+  walletBalance -= amount;
+  walletHistory.push({type:'out', amount, note:'发红包', time:getTime()});
+  persist();
+  const ctx = getActiveChatContext();
+  if(!ctx) return;
+  ctx.msgs.push({text:`[REDPACKET:${amount}]`, mine:true, time:getTime()});
+  persist(); ctx.rerender();
+  showToast('已发出 '+amount+' 椿元红包');
+  if(currentChar && !currentChar.isSystem){
+    const h = chatHistory.find(h2=>h2.id===currentChar.id);
+    if(h) setTimeout(()=>requestAIReply(h), 600);
+  }
+}
+
+// ── 发送语音消息（调用TTS朗读输入框内容）──
+async function sendVoiceNote(){
+  const inp = document.getElementById('cv-input');
+  const text = inp?.value.trim();
+  if(!text){ showToast('请先在输入框里输入要发送的内容'); return; }
+  const config = getActiveVoicePreset();
+  if(!config){ showToast('请先在「设置 → 语音合成API」配置语音服务'); return; }
+  showToast('正在生成语音…');
+  try{
+    await synthesizeSpeech(config, text); // pre-cache
+    const ctx = getActiveChatContext();
+    if(!ctx) return;
+    ctx.msgs.push({text, mine:true, time:getTime(), isVoice:true});
+    persist(); ctx.rerender();
+    inp.value = '';
+  }catch(e){ showToast('语音生成失败：'+e.message); }
+}
+
+// ── 从聊天里快捷打开小程序 ──
+function openMiniAppFromChat(){
+  closeChatPlus();
+  closeChat();
+  setTimeout(()=>{
+    openApp('miniapps');
+  }, 350);
+}
+
+
 // ══════════ LIGHTWEIGHT MARKDOWN (bold / code / quote / line breaks) ══════════
 function renderMarkdownLite(text){
   let s = escHtml(text);
@@ -4041,7 +4319,95 @@ function renderMsgBubbleContent(m){
       <span class="voice-msg-dur">${dur}″</span>
     </div>${m.autoTranslation ? `<div class="msg-auto-trans">${escHtml(m.autoTranslation)}</div>` : ''}`;
   }
-  return renderMarkdownLite(m.text) + (m.autoTranslation ? `<div class="msg-auto-trans">${escHtml(m.autoTranslation)}</div>` : '');
+  // Parse special card tags
+  const MINIAPP_MAP = {
+    'mini-taobao':   {name:'淘宝',     icon:'🛍️', color:'#ff6b35'},
+    'mini-meituan':  {name:'美团外卖', icon:'🛵', color:'#ffc300'},
+    'mini-jd':       {name:'京东',     icon:'📦', color:'#e1251b'},
+    'mini-eleme':    {name:'饿了么',   icon:'⚡', color:'#00aeff'},
+    'mini-bilibili': {name:'哔哩哔哩', icon:'📺', color:'#fb7299'},
+    'mini-xhs':      {name:'小红书',   icon:'📕', color:'#ff2442'},
+    'mini-wechat':   {name:'微信读书', icon:'📖', color:'#07c160'},
+    'mini-douyin':   {name:'抖音',     icon:'🎵', color:'#1a1a1a'},
+  };
+  let text = m.text;
+
+  // [TRANSFER:amount:note]
+  const transferMatch = text.match(/^\[TRANSFER:(\d+):(.*?)\]$/);
+  if(transferMatch){
+    return `<div class="msg-special-card msg-transfer-card">
+      <div style="font-size:20px;margin-bottom:4px">💴</div>
+      <div style="font-size:16px;font-weight:700">${transferMatch[1]} 椿元</div>
+      <div style="font-size:11.5px;opacity:0.7;margin-top:2px">${escHtml(transferMatch[2])}</div>
+      <div class="msg-card-tag">转账</div>
+    </div>`;
+  }
+
+  // [REDPACKET:amount]
+  const rpMatch = text.match(/^\[REDPACKET:(\d+)\]$/);
+  if(rpMatch){
+    return `<div class="msg-special-card msg-redpacket-card" onclick="receiveRedPacket(this, '${rpMatch[1]}')">
+      <div style="font-size:24px;margin-bottom:4px">🧧</div>
+      <div style="font-size:14px;font-weight:600">恭喜发财，大吉大利</div>
+      <div style="font-size:11px;opacity:0.7;margin-top:4px">点击领取红包</div>
+    </div>`;
+  }
+
+  // [LOCATION:lat:lng]
+  const locMatch = text.match(/^\[LOCATION:([\d.]+):([\d.]+)\]$/);
+  if(locMatch){
+    const lat = locMatch[1], lng = locMatch[2];
+    return `<div class="msg-special-card msg-location-card" onclick="window.open('https://maps.google.com/?q=${lat},${lng}','_blank')">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:22px">📍</span>
+        <div>
+          <div style="font-size:13px;font-weight:600">我的位置</div>
+          <div style="font-size:11px;opacity:0.6">${lat}, ${lng} · 点击查看地图</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // [POKE]
+  if(text === '[POKE]'){
+    return `<div class="msg-poke-bubble">👋 拍了拍你</div>`;
+  }
+
+  // [NOWPLAYING:trackName:artist]
+  const npMatch = text.match(/^\[NOWPLAYING:(.+?):(.+?)\]$/);
+  if(npMatch){
+    const tName = npMatch[1], tArtist = npMatch[2];
+    return `<div class="msg-special-card msg-nowplaying-card" onclick="event.stopPropagation();syncCharTrack('${escHtml(tName).replace(/'/g,"\\'")}','${escHtml(tArtist).replace(/'/g,"\\'")}')">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:28px">🎵</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.95);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(tName)}</div>
+          <div style="font-size:11.5px;color:rgba(255,255,255,0.7);margin-top:1px">${escHtml(tArtist)}</div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,0.5);margin-top:4px">点击同步播放</div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"><polygon points="6 4 18 12 6 20 6 4"/></svg>
+      </div>
+    </div>`;
+  }
+
+  const miniappMatches = [...text.matchAll(/\[MINIAPP:([\w-]+)\]/g)];
+  let cardHtml = '';
+  if(miniappMatches.length > 0){
+    text = text.replace(/\[MINIAPP:([\w-]+)\]/g, '').trim();
+    cardHtml = miniappMatches.map(match => {
+      const id = match[1];
+      const app = MINIAPP_MAP[id];
+      if(!app) return '';
+      return `<div class="msg-miniapp-card" onclick="event.stopPropagation();openApp('miniapps');setTimeout(()=>openMiniApp('${id}'),400)">
+        <span class="msg-miniapp-icon" style="background:${app.color}">${app.icon}</span>
+        <div class="msg-miniapp-info"><div class="msg-miniapp-name">${escHtml(app.name)}</div><div class="msg-miniapp-hint">点击在内部打开</div></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>`;
+    }).join('');
+  }
+  const textHtml = renderMarkdownLite(text);
+  const autoTrans = m.autoTranslation ? `<div class="msg-auto-trans">${escHtml(m.autoTranslation)}</div>` : '';
+  return textHtml + autoTrans + cardHtml;
 }
 
 function renderMsgs(msgs){
@@ -4125,6 +4491,7 @@ async function requestAIReply(h){
       systemPrompt += idBlock;
     }
     systemPrompt += '\n\n' + buildChatModeInstruction(chatMode);
+    systemPrompt += '\n\n' + MINIAPP_PROMPT_BLOCK;
   }
   const apiMsgs = h.msgs.filter(m=>!m.isSystemNote);
   const maxTokens = chatMode==='novel' ? 2000 : (chatMode==='casual' ? 300 : 800);
@@ -4257,6 +4624,14 @@ async function maybeAutoTranslate(m){
   }
 }
 
+function receiveRedPacket(el, amount){
+  el.innerHTML = `<div style="font-size:18px;margin-bottom:4px">🧧</div><div style="font-size:14px;font-weight:600">已领取 ${amount} 椿元</div>`;
+  el.onclick = null;
+  walletBalance += parseInt(amount);
+  walletHistory.push({type:'in', amount:parseInt(amount), note:'领取红包', time:getTime()});
+  persist();
+  showToast('已领取 '+amount+' 椿元！');
+}
 
 let _voicePlaybackCache = {}; // mid -> blob URL (avoid re-synthesizing on replay)
 let _voiceAudioEl = null;
@@ -5011,7 +5386,7 @@ function skipMusicLogin() {
 let currentMusicMainTab = 'home';
 function switchMusicMainTab(tab) {
   currentMusicMainTab = tab;
-  ['home','playlist','discover','account'].forEach(t => {
+  ['home','playlist','discover','account','friends'].forEach(t => {
     document.getElementById('mbtab-'+t)?.classList.toggle('active', t===tab);
   });
   document.getElementById('music-quick-row').style.display  = tab==='home' ? 'flex' : 'none';
@@ -5021,6 +5396,7 @@ function switchMusicMainTab(tab) {
   else if(tab==='playlist') switchMusicView('my-playlists');
   else if(tab==='discover') switchMusicView('charts');
   else if(tab==='account')  renderMusicAccountPanel();
+  else if(tab==='friends')  renderMusicFriendsTab();
 }
 
 function renderMusicAccountPanel(){
@@ -5031,7 +5407,7 @@ function renderMusicAccountPanel(){
     <div class="music-account-row" onclick="ncmLogout()">
       <div class="music-user-avatar" style="width:50px;height:50px;font-size:18px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.9)">乐</div>
       <div style="flex:1"><div style="font-size:15px;font-weight:600;color:rgba(255,255,255,0.9)">${escHtml(name)}</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.45)">${ncmCookie ? '点击退出登录' : '未登录'}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.65)">${ncmCookie ? '点击退出登录' : '未登录'}</div>
       </div>
     </div>
     ${ncmCookie ? `
@@ -5039,12 +5415,280 @@ function renderMusicAccountPanel(){
       <div style="font-size:24px">🎵</div>
       <div style="flex:1"><div style="font-size:13.5px;color:rgba(255,255,255,0.9)">我的歌单</div></div>
     </div>` : `
-    <div style="text-align:center;padding:30px;font-size:13px;color:rgba(255,255,255,0.4);line-height:1.8">
+    <div style="text-align:center;padding:30px;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.8">
       登录后可查看你的歌单<br>
       <button class="music-qr-btn" style="margin-top:12px" onclick="openNeteaseQrModal()">立即登录</button>
     </div>`}
   `;
 }
+
+// ══════════ 好友 TAB (角色音乐人格 + 一起听 + 歌曲感知) ══════════
+// charMusicPersona[charId] = {persona:'...', keywords:[], fetchedAt}
+// charNowPlaying[charId]   = {name, artist, comment}
+let charMusicPersona  = JSON.parse(localStorage.getItem('tsb_music_persona')  || '{}');
+let charNowPlaying    = JSON.parse(localStorage.getItem('tsb_music_nowplay')   || '{}');
+
+function renderMusicFriendsTab(){
+  const el = document.getElementById('music-list');
+  const chars = myCharacters;
+  if(chars.length === 0){
+    el.innerHTML = `<div class="music-section-header">音乐好友</div>
+      <div style="text-align:center;padding:50px 0;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.8">
+        还没有创建任何角色<br>去「与你相遇」创建角色后，他们会出现在这里
+      </div>`;
+    return;
+  }
+  el.innerHTML = `<div class="music-section-header">音乐好友</div>
+    <div class="music-friends-row" id="music-friends-row">
+      ${chars.map(c=>{
+        const av = c.avatar ? `<img src="${c.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : escHtml(c.avatarLetter||c.name[0]||'?');
+        const hasPersona = !!charMusicPersona[c.id];
+        return `<div class="music-friend-chip" onclick="openCharMusicPage('${c.id}')">
+          <div class="music-friend-av" style="${c.avatar?'':'background:'+(c.avatarColor||'#1a1a1a')}">${av}</div>
+          <div class="music-friend-name">${escHtml(c.name)}</div>
+          ${hasPersona ? '<div class="music-friend-dot"></div>' : ''}
+        </div>`;
+      }).join('')}
+    </div>
+    <div id="music-char-detail"></div>`;
+}
+
+async function openCharMusicPage(charId){
+  const c = findCharacter(charId);
+  if(!c) return;
+  const el = document.getElementById('music-char-detail');
+  el.innerHTML = '<div style="text-align:center;padding:30px 0;color:rgba(255,255,255,0.65);font-size:13px">正在分析音乐人格…</div>';
+
+  const preset = getActivePreset();
+  // Generate persona if not cached or stale (>1 hour)
+  const cached = charMusicPersona[charId];
+  const stale  = !cached || (Date.now() - (cached.fetchedAt||0)) > 3600000;
+
+  if(stale && preset){
+    try{
+      const sysP = `你是一个音乐人格分析师。根据角色设定，分析这个角色的音乐审美、风格偏好、情绪偏向，并给出他们可能喜欢的3-5个搜索关键词（用于在网易云音乐搜索歌单）。只输出JSON，格式：{"persona":"2-3句话描述音乐人格","keywords":["关键词1","关键词2",...],"mood":"此刻情绪标签"}`;
+      const raw = await callAIRaw(preset, sysP, [{role:'user', content:'角色设定：'+c.setting}], 400);
+      const parsed = JSON.parse(raw.trim().replace(/^```json\s*|```\s*$/gm,''));
+      charMusicPersona[charId] = {...parsed, fetchedAt: Date.now()};
+      localStorage.setItem('tsb_music_persona', JSON.stringify(charMusicPersona));
+    }catch(e){ /* use partial data if parse fails */ }
+  }
+
+  const persona = charMusicPersona[charId];
+  const nowPlay = charNowPlaying[charId];
+  // Current user track
+  const myTrack = activeTracks[currentTrackIdx] || null;
+
+  el.innerHTML = `
+    <div class="music-char-page">
+      <div class="music-char-head">
+        <div class="music-char-av" style="${c.avatar?'':'background:'+(c.avatarColor||'#1a1a1a')}">
+          ${c.avatar ? `<img src="${c.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : escHtml(c.avatarLetter||c.name[0]||'?')}
+        </div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:700;color:rgba(255,255,255,0.95)">${escHtml(c.name)}</div>
+          <div class="music-char-mood">${persona?.mood || '加载音乐人格中…'}</div>
+        </div>
+        <button class="music-char-refresh" onclick="refreshCharPersona('${charId}')" title="重新分析">↻</button>
+      </div>
+
+      ${persona ? `<div class="music-char-persona">${escHtml(persona.persona)}</div>` : ''}
+
+      <!-- TA 正在听 -->
+      <div class="music-char-section">
+        <div class="music-char-section-title">TA 正在听</div>
+        <div id="char-now-playing-${charId}">
+          ${nowPlay ? `<div class="music-char-np">
+            <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.92)">${escHtml(nowPlay.trackName)}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px">${escHtml(nowPlay.artist)}</div>
+            ${nowPlay.comment ? `<div class="music-char-comment">"${escHtml(nowPlay.comment)}"</div>` : ''}
+          </div>` : `<button class="music-char-action-btn" onclick="generateCharNowPlaying('${charId}')">✦ 看看 ${escHtml(c.name)} 在听什么</button>`}
+        </div>
+      </div>
+
+      <!-- 一起听 -->
+      <div class="music-char-section">
+        <div class="music-char-section-title">一起听</div>
+        ${myTrack ? `
+          <div style="font-size:12px;color:rgba(255,255,255,0.65);margin-bottom:8px">你正在听：${escHtml(myTrack.name)} · ${escHtml(myTrack.artist)}</div>
+          <div style="display:flex;gap:8px">
+            <button class="music-char-action-btn" onclick="listenTogetherMe('${charId}')">把我在听的分享给 ${escHtml(c.name)}</button>
+            <button class="music-char-action-btn" onclick="getCharReaction('${charId}')">让 ${escHtml(c.name)} 评价这首歌</button>
+          </div>
+        ` : `<div style="font-size:12px;color:rgba(255,255,255,0.5)">先播放一首歌，再邀请 ${escHtml(c.name)} 一起听</div>`}
+        <div id="char-reaction-${charId}" style="margin-top:10px"></div>
+      </div>
+
+      <!-- 根据音乐人格推荐歌单 -->
+      <div class="music-char-section">
+        <div class="music-char-section-title">${escHtml(c.name)} 喜欢的风格</div>
+        ${persona?.keywords?.length ? `
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+            ${persona.keywords.map(kw=>`<span class="music-char-keyword" onclick="searchByKeyword('${escHtml(kw)}')">${escHtml(kw)}</span>`).join('')}
+          </div>
+          <button class="music-char-action-btn" onclick="loadCharRecommend('${charId}')">根据 ${escHtml(c.name)} 的喜好推荐歌曲</button>
+          <div id="char-recommend-${charId}" style="margin-top:10px"></div>
+        ` : preset ? `<button class="music-char-action-btn" onclick="openCharMusicPage('${charId}')">重新分析</button>` : `<div style="font-size:12px;color:rgba(255,255,255,0.5)">需要配置API才能分析音乐人格</div>`}
+      </div>
+    </div>
+  `;
+}
+
+// ── Refresh persona ──
+async function refreshCharPersona(charId){
+  delete charMusicPersona[charId];
+  localStorage.setItem('tsb_music_persona', JSON.stringify(charMusicPersona));
+  await openCharMusicPage(charId);
+}
+
+// ── TA 正在听：AI 生成角色此刻可能在听的歌曲并附上感想 ──
+async function generateCharNowPlaying(charId){
+  const c = findCharacter(charId);
+  const persona = charMusicPersona[charId];
+  const preset  = getActivePreset();
+  const el = document.getElementById(`char-now-playing-${charId}`);
+  if(!el) return;
+  el.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.65);padding:8px 0">正在获取…</div>';
+  if(!preset){ el.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.5)">需要配置API</div>'; return; }
+  try{
+    const sysP = `你是${c.name}。${c.setting||''}\n\n现在根据你的音乐品味（${persona?.persona||''}），说说你此刻在听一首什么歌，以及听这首歌时的感受（1-2句话，不超过60字）。只输出JSON：{"trackName":"歌名","artist":"歌手","comment":"你的感受"}`;
+    const raw  = await callAIRaw(preset, sysP, [{role:'user', content:'你现在在听什么？'}], 200);
+    const data = JSON.parse(raw.trim().replace(/^```json\s*|```\s*$/gm,''));
+    charNowPlaying[charId] = {...data, fetchedAt: Date.now()};
+    localStorage.setItem('tsb_music_nowplay', JSON.stringify(charNowPlaying));
+    el.innerHTML = `<div class="music-char-np">
+      <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.92)">${escHtml(data.trackName)}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px">${escHtml(data.artist)}</div>
+      <div class="music-char-comment">"${escHtml(data.comment)}"</div>
+      <button class="music-char-action-btn" style="margin-top:10px" onclick="syncCharTrack('${escHtml(data.trackName).replace(/'/g,"\\'")}','${escHtml(data.artist).replace(/'/g,"\\'")}')">同步播放这首歌</button>
+    </div>`;
+  }catch(e){
+    el.innerHTML = `<div style="font-size:12px;color:rgba(255,255,255,0.5)">获取失败：${escHtml(e.message)}</div>`;
+  }
+}
+
+// ── 一起听：把用户当前播放的歌"分享"给角色（在聊天里插入一张歌曲卡片）──
+function listenTogetherMe(charId){
+  const t = activeTracks[currentTrackIdx];
+  if(!t){ showToast('请先播放一首歌'); return; }
+  const c = findCharacter(charId);
+  // Open the character's chat and insert a "正在听" message card
+  const contact = contacts.find(co=>co.id===charId);
+  if(!contact){
+    showToast('请先在「与你相遇」里和 '+c.name+' 建立连结');
+    return;
+  }
+  const h = chatHistory.find(h2=>h2.id===charId);
+  if(!h) return;
+  h.msgs.push({
+    text: `[NOWPLAYING:${t.name}:${t.artist}]`,
+    mine: true, time: getTime()
+  });
+  persist();
+  showToast('已分享「'+t.name+'」给 '+(c?.name||''));
+  // Navigate to the chat
+  setTimeout(()=>{
+    openApp('encounter');
+    switchEncTab(0);
+    setTimeout(()=>openChat(charId), 400);
+  }, 300);
+}
+
+// ── 角色评价当前播放的歌曲 ──
+async function getCharReaction(charId){
+  const t = activeTracks[currentTrackIdx];
+  if(!t){ showToast('请先播放一首歌'); return; }
+  const c       = findCharacter(charId);
+  const persona = charMusicPersona[charId];
+  const preset  = getActivePreset();
+  const el = document.getElementById(`char-reaction-${charId}`);
+  if(!el) return;
+  el.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.65);padding:8px 0">'+escHtml(c.name)+' 正在感受这首歌…</div>';
+  if(!preset){ el.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,0.5)">需要配置API</div>'; return; }
+  try{
+    const sysP = `你是${c.name}。${c.setting||''}\n音乐审美：${persona?.persona||'未知'}。请以你的视角，对歌曲「${t.name}」（${t.artist}）发表一段真实的感受（2-3句话，60字以内），说出你喜不喜欢、为什么、这首歌让你想到什么。语气符合你的人物性格。`;
+    const reply = await callAIRaw(preset, sysP, [{role:'user', content:`你觉得「${t.name}」这首歌怎么样？`}], 250);
+    el.innerHTML = `<div class="music-char-comment" style="margin-top:0">"${escHtml(reply.trim())}"</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:6px">— ${escHtml(c.name)} 对「${escHtml(t.name)}」的评价</div>`;
+    // Also push this reaction into the character's chat as a message
+    const contact = contacts.find(co=>co.id===charId);
+    if(contact){
+      const h = chatHistory.find(h2=>h2.id===charId);
+      if(h){
+        h.msgs.push({text: reply.trim(), mine:false, time:getTime()});
+        persist();
+      }
+    }
+  }catch(e){
+    el.innerHTML = `<div style="font-size:12px;color:rgba(255,255,255,0.5)">获取失败：${escHtml(e.message)}</div>`;
+  }
+}
+
+// ── 根据关键词搜索（角色喜好推荐）──
+function searchByKeyword(kw){
+  document.getElementById('music-search-input').value = kw;
+  runMusicSearch(kw);
+  // Switch back to home tab to show results
+  ['home','playlist','discover','account','friends'].forEach(t=>{
+    document.getElementById('mbtab-'+t)?.classList.toggle('active', t==='home');
+  });
+}
+
+// ── 根据角色喜好直接推荐歌曲（搜索并展示在好友页内）──
+async function loadCharRecommend(charId){
+  const persona = charMusicPersona[charId];
+  const c       = findCharacter(charId);
+  const el      = document.getElementById(`char-recommend-${charId}`);
+  if(!el||!persona?.keywords?.length) return;
+  el.innerHTML  = '<div style="font-size:12px;color:rgba(255,255,255,0.65);padding:6px 0">搜索中…</div>';
+  const kw      = persona.keywords[Math.floor(Math.random()*persona.keywords.length)];
+  if(ncmCookie && ncmApiBase){
+    try{
+      const data = await ncmFetch('/cloudsearch', {keywords:kw, limit:6});
+      const songs = songsToTracks(data.result?.songs || []);
+      if(songs.length===0){ el.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,0.5)">没有找到相关歌曲</div>'; return; }
+      activeTracks = songs;
+      el.innerHTML = `<div style="font-size:11.5px;color:rgba(255,255,255,0.65);margin-bottom:8px">「${escHtml(kw)}」相关推荐</div>`;
+      songs.forEach((s,i)=>{
+        const row = document.createElement('div');
+        row.className = 'music-track';
+        row.onclick   = ()=>playTrack(i);
+        row.innerHTML = `<div class="music-track-cover">${s.cover?`<img src="${s.cover}">`:'♪'}</div>
+          <div class="music-track-info"><div class="music-track-name">${escHtml(s.name)}</div>
+          <div class="music-track-artist">${escHtml(s.artist)}</div></div>
+          <div class="music-track-dur">${s.dur}</div>`;
+        el.appendChild(row);
+      });
+    }catch(err){
+      el.innerHTML = `<div style="font-size:12px;color:rgba(255,255,255,0.5)">搜索失败：${escHtml(err.message)}</div>`;
+    }
+  }else{
+    // Guest: filter built-in tracks loosely
+    const results = BUILTIN_TRACKS.filter(t=>t.artist.toLowerCase().includes(kw.toLowerCase())||t.name.toLowerCase().includes(kw.toLowerCase())).slice(0,4);
+    if(!results.length){ el.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,0.5)">未找到（登录后可搜索全网）</div>'; return; }
+    el.innerHTML = results.map((s,i)=>`<div class="music-track" onclick="activeTracks=BUILTIN_TRACKS;playTrack(${BUILTIN_TRACKS.indexOf(s)})">
+      <div class="music-track-cover">♪</div>
+      <div class="music-track-info"><div class="music-track-name">${escHtml(s.name)}</div><div class="music-track-artist">${escHtml(s.artist)}</div></div>
+    </div>`).join('');
+  }
+}
+
+// ── 同步播放角色正在听的歌（搜索NCM并播放）──
+async function syncCharTrack(trackName, artist){
+  if(ncmCookie && ncmApiBase){
+    try{
+      const data = await ncmFetch('/cloudsearch', {keywords:trackName+' '+artist, limit:1});
+      const songs = songsToTracks(data.result?.songs||[]);
+      if(songs.length){ activeTracks = songs; playTrack(0); showToast('正在播放「'+trackName+'」'); return; }
+    }catch(e){}
+  }
+  showToast('在内置曲库中未找到该歌曲（请登录网易云或手动搜索）');
+}
+
+// ── 接收 [NOWPLAYING:name:artist] 消息卡片（聊天内渲染）──
+// (Handled in renderMsgBubbleContent via the card parser below)
+
+
 
 // ═══════════════════════════════════════
 // SECTION 1 · NeteaseCloudMusicApi BACKEND
@@ -5629,26 +6273,68 @@ function toggleLyricView() {
 }
 
 // ═══════════════════════════════════════
-// MINIAPPS
+// ═══════════════════════════════════════
+// MINIAPPS — real in-app iframe browser
 // ═══════════════════════════════════════
 const MINIAPPS = [
-  {id:'mini-taobao',  name:'淘宝优惠券领取', icon:'🛍️', color:'linear-gradient(135deg,#ff6b35,#ff8a00)', ready:true},
-  {id:'mini-meituan', name:'美团购物',        icon:'🛵', color:'linear-gradient(135deg,#ffc300,#ffb000)', ready:true},
-  {id:'mini-jd',      name:'京东购物',        icon:'📦', color:'linear-gradient(135deg,#e1251b,#c81e15)', ready:true},
-  {id:'mini-devmode', name:'待开发',          icon:'🔧', color:'linear-gradient(135deg,#9e9e9e,#6b6b6b)', ready:true},
+  {id:'mini-taobao',   name:'淘宝',     icon:'🛍️', color:'linear-gradient(135deg,#ff6b35,#ff8a00)', url:'https://m.taobao.com'},
+  {id:'mini-meituan',  name:'美团外卖', icon:'🛵', color:'linear-gradient(135deg,#ffc300,#ffb000)', url:'https://h5.waimai.meituan.com'},
+  {id:'mini-jd',       name:'京东',     icon:'📦', color:'linear-gradient(135deg,#e1251b,#c81e15)', url:'https://m.jd.com'},
+  {id:'mini-eleme',    name:'饿了么',   icon:'⚡', color:'linear-gradient(135deg,#00aeff,#0076e3)', url:'https://h5.ele.me'},
+  {id:'mini-bilibili', name:'哔哩哔哩', icon:'📺', color:'linear-gradient(135deg,#fb7299,#d44f7c)', url:'https://m.bilibili.com'},
+  {id:'mini-douyin',   name:'抖音',     icon:'🎵', color:'linear-gradient(135deg,#1a1a1a,#3d3d3d)',  url:'https://www.douyin.com'},
+  {id:'mini-wechat',   name:'微信读书', icon:'📖', color:'linear-gradient(135deg,#07c160,#059047)',  url:'https://weread.qq.com'},
+  {id:'mini-xhs',      name:'小红书',   icon:'📕', color:'linear-gradient(135deg,#ff2442,#cc1a33)',  url:'https://www.xiaohongshu.com'},
 ];
+
 function renderMiniappGrid() {
   const el = document.getElementById('miniapp-grid');
   el.innerHTML = MINIAPPS.map(m =>
-    `<div class="miniapp-tile" onclick="openMiniSub('${m.id}')">
+    `<div class="miniapp-tile" onclick="openMiniApp('${m.id}')">
       <div class="miniapp-tile-icon" style="background:${m.color}">${m.icon}</div>
       <div class="miniapp-tile-name">${escHtml(m.name)}</div>
     </div>`
   ).join('');
 }
-function openMiniSub(id)  { document.getElementById(id).classList.add('open'); }
-function closeMiniSub(id) { document.getElementById(id).classList.remove('open'); }
-function openExternalLink(url) { window.open(url, '_blank', 'noopener,noreferrer'); showToast('正在跳转到外部页面…'); }
+
+// Opens the mini-app in a full-screen in-app iframe panel
+function openMiniApp(id){
+  const app = MINIAPPS.find(m=>m.id===id);
+  if(!app) return;
+  // Build the in-app browser overlay
+  let overlay = document.getElementById('miniapp-browser');
+  if(!overlay){
+    overlay = document.createElement('div');
+    overlay.id = 'miniapp-browser';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9000;display:flex;flex-direction:column;background:#fff;';
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px 8px;background:#f8f8f8;border-bottom:1px solid #eee;flex-shrink:0;padding-top:max(10px,env(safe-area-inset-top))">
+      <button onclick="closeMiniApp()" style="border:none;background:none;font-size:20px;cursor:pointer;padding:0;color:#666">‹</button>
+      <div style="font-size:14px;font-weight:600;color:#333;flex:1;text-align:center">${escHtml(app.name)}</div>
+      <button onclick="document.getElementById('mini-iframe').contentWindow?.location.reload()" style="border:none;background:none;font-size:16px;cursor:pointer;color:#666">↻</button>
+      <button onclick="window.open('${app.url}','_blank','noopener')" style="border:none;background:none;font-size:13px;cursor:pointer;color:#666">浏览器↗</button>
+    </div>
+    <div style="font-size:11px;color:#999;background:#f0f0f0;padding:5px 14px;text-align:center;flex-shrink:0">部分网站因安全策略可能拒绝内嵌，点右上角「浏览器↗」在系统浏览器打开</div>
+    <iframe id="mini-iframe" src="${app.url}" style="flex:1;border:none;width:100%;" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
+  `;
+  overlay.style.display = 'flex';
+}
+
+function closeMiniApp(){
+  const overlay = document.getElementById('miniapp-browser');
+  if(overlay){
+    const iframe = overlay.querySelector('iframe');
+    if(iframe) iframe.src = 'about:blank'; // stop any media playing
+    overlay.style.display = 'none';
+  }
+}
+
+function openMiniSub(id)  { document.getElementById(id)?.classList.add('open'); }
+function closeMiniSub(id) { document.getElementById(id)?.classList.remove('open'); }
+function openExternalLink(url) { window.open(url, '_blank', 'noopener,noreferrer'); }
+
 
 // ══════════ LANGUAGE LEARNING APP (语习 · 完整实现) ══════════
 const LANG_OPTIONS = [
@@ -5778,7 +6464,7 @@ function renderCurrentQuestion(){
     <div class="lang-q-counter">第 ${currentQ+1} / 20 题 · ${currentQ<10?'词汇学习':'造句练习'}</div>`;
 
   if(currentQ < 10){
-    // Phase 1: Vocabulary cards
+    // Phase 1: Vocabulary cards with handwriting canvas
     const w = wordCards[currentQ];
     body.innerHTML = `${progressHtml}
       <div class="lang-vocab-card">
@@ -5789,18 +6475,19 @@ function renderCurrentQuestion(){
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> 听读
         </button>` : ''}
       </div>
-      <div class="field-group" style="margin-top:16px">
-        <div class="field-lbl">跟写：输入这个词</div>
-        <input class="field-inp" id="lang-write-input" placeholder="${escHtml(w.foreign)}" autocomplete="off" autocorrect="off" spellcheck="false"
-          onkeydown="if(event.key==='Enter')submitVocabAnswer()">
+      <div class="lang-canvas-area">
+        <div class="lang-canvas-label">用手指 / 触控笔跟写上面的词</div>
+        <canvas id="lang-hwcanvas" class="lang-hwcanvas" width="340" height="150"></canvas>
+        <div class="lang-canvas-hint">写完后点「识别」；写错了点「清除」重写</div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:4px">
-        <button class="save-btn" style="flex:2;margin-top:0" onclick="submitVocabAnswer()">提交</button>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="wb-import-btn" style="flex:1" onclick="clearHwCanvas()">清除</button>
+        <button class="save-btn" style="flex:2;margin-top:0" onclick="recognizeHandwriting('${escHtml(w.foreign).replace(/'/g,"\\'")}')">识别并提交</button>
         <button class="wb-import-btn" style="flex:1" onclick="markVocabSelf(true)">✓ 会了</button>
         <button class="wb-import-btn" style="flex:1" onclick="markVocabSelf(false)">✗ 不会</button>
       </div>
       <div id="lang-answer-feedback" style="margin-top:10px"></div>`;
-    document.getElementById('lang-write-input')?.focus();
+    initHwCanvas();
   } else {
     // Phase 2: Sentence composition
     const s = sentenceCards[currentQ-10];
@@ -5911,6 +6598,137 @@ function showLangSessionResult(){
 }
 
 // ── TTS for vocabulary listen ──
+// ══════════ HANDWRITING CANVAS ══════════
+// Real on-screen handwriting recognition: user draws strokes on a Canvas with
+// finger/stylus, we capture the drawing as a base64 PNG and send it to the
+// configured AI (vision model like claude-3 or gpt-4o) for recognition.
+// This requires a vision-capable model; a text-only model will not work.
+let _hwCtx = null, _hwDrawing = false, _hwHasStrokes = false;
+
+function initHwCanvas(){
+  const canvas = document.getElementById('lang-hwcanvas');
+  if(!canvas) return;
+  // Set actual pixel size for high-DPI screens
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width  = (rect.width  || 340) * dpr;
+  canvas.height = (rect.height || 150) * dpr;
+  canvas.style.width  = (rect.width  || 340) + 'px';
+  canvas.style.height = (rect.height || 150) + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#f7f7f7';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = '#1a1a1a';
+  ctx.lineWidth   = 3;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+  _hwCtx = ctx;
+  _hwDrawing = false;
+  _hwHasStrokes = false;
+  // Touch events
+  canvas.addEventListener('touchstart',  hwTouchStart, {passive:false});
+  canvas.addEventListener('touchmove',   hwTouchMove,  {passive:false});
+  canvas.addEventListener('touchend',    hwTouchEnd,   {passive:false});
+  // Mouse events (desktop / stylus)
+  canvas.addEventListener('mousedown',   hwMouseDown);
+  canvas.addEventListener('mousemove',   hwMouseMove);
+  canvas.addEventListener('mouseup',     hwMouseUp);
+  canvas.addEventListener('mouseleave',  hwMouseUp);
+}
+
+function hwPos(canvas, clientX, clientY){
+  const r = canvas.getBoundingClientRect();
+  return {x: clientX - r.left, y: clientY - r.top};
+}
+function hwTouchStart(e){
+  e.preventDefault();
+  const t = e.touches[0];
+  const p = hwPos(e.target, t.clientX, t.clientY);
+  _hwDrawing = true; _hwHasStrokes = true;
+  _hwCtx.beginPath(); _hwCtx.moveTo(p.x, p.y);
+}
+function hwTouchMove(e){
+  e.preventDefault();
+  if(!_hwDrawing) return;
+  const t = e.touches[0];
+  const p = hwPos(e.target, t.clientX, t.clientY);
+  _hwCtx.lineTo(p.x, p.y); _hwCtx.stroke();
+}
+function hwTouchEnd(e){ e.preventDefault(); _hwDrawing = false; }
+function hwMouseDown(e){
+  const p = hwPos(e.target, e.clientX, e.clientY);
+  _hwDrawing = true; _hwHasStrokes = true;
+  _hwCtx.beginPath(); _hwCtx.moveTo(p.x, p.y);
+}
+function hwMouseMove(e){
+  if(!_hwDrawing) return;
+  const p = hwPos(e.target, e.clientX, e.clientY);
+  _hwCtx.lineTo(p.x, p.y); _hwCtx.stroke();
+}
+function hwMouseUp(){ _hwDrawing = false; }
+
+function clearHwCanvas(){
+  const canvas = document.getElementById('lang-hwcanvas');
+  if(!canvas) return;
+  _hwCtx.fillStyle = '#f7f7f7';
+  _hwCtx.fillRect(0, 0, canvas.width, canvas.height);
+  _hwHasStrokes = false;
+}
+
+async function recognizeHandwriting(targetWord){
+  if(!_hwHasStrokes){ showToast('请先在画板上手写该词'); return; }
+  const canvas = document.getElementById('lang-hwcanvas');
+  if(!canvas) return;
+  const feedEl = document.getElementById('lang-answer-feedback');
+  feedEl.innerHTML = '<div style="font-size:12px;color:var(--ink4);padding:8px 0">正在识别手写内容…</div>';
+  const preset = getLangApiConfig();
+  if(!preset){ showToast('请先配置API才能使用手写识别'); return; }
+
+  // Capture canvas as base64 PNG
+  const imageData = canvas.toDataURL('image/png').split(',')[1];
+
+  try{
+    // Build a vision request — works with Anthropic claude-3+ and OpenAI gpt-4o
+    let body, headers;
+    if(preset.format === 'openai'){
+      headers = {'Content-Type':'application/json','Authorization':'Bearer '+preset.apiKey};
+      body = JSON.stringify({
+        model: preset.model,
+        max_tokens: 100,
+        messages:[{role:'user', content:[
+          {type:'image_url', image_url:{url:'data:image/png;base64,'+imageData}},
+          {type:'text', text:`请识别这张手写图片上写的是什么词（可能是外语单词或短语），只输出识别到的文字本身，不要任何说明。如果完全看不出来，输出"无法识别"。参考词汇：${targetWord}`}
+        ]}]
+      });
+    }else{
+      headers = {'Content-Type':'application/json','x-api-key':preset.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
+      body = JSON.stringify({
+        model: preset.model,
+        max_tokens: 100,
+        messages:[{role:'user', content:[
+          {type:'image', source:{type:'base64', media_type:'image/png', data:imageData}},
+          {type:'text', text:`请识别这张手写图片上写的是什么词（可能是外语单词或短语），只输出识别到的文字本身，不要任何说明。如果完全看不出来，输出"无法识别"。参考词汇：${targetWord}`}
+        ]}]
+      });
+    }
+    const resp = await fetch(preset.endpoint, {method:'POST', headers, body});
+    const data  = await resp.json();
+    const recognized = (data.content?.[0]?.text || data.choices?.[0]?.message?.content || '').trim();
+    if(!recognized || recognized === '无法识别'){
+      feedEl.innerHTML = '<div class="lang-wrong-tag">无法识别手写内容，请写得更清晰一些，或直接点「✓ 会了 / ✗ 不会」</div>';
+      return;
+    }
+    // Fuzzy match — allow minor spelling differences
+    const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[，。！？,.!?]/g,'');
+    const correct = norm(recognized) === norm(targetWord);
+    const w = langCurrentSession.wordCards[langCurrentSession.currentQ];
+    showVocabFeedback(correct, w, recognized);
+  }catch(e){
+    feedEl.innerHTML = `<div class="lang-wrong-tag">识别失败：${escHtml(e.message)}<br><span style="font-size:11.5px">如模型不支持视觉，请改用支持图像的模型（claude-3-5-sonnet、gpt-4o等）</span></div>`;
+  }
+}
+
 async function speakWord(text){
   const config = getActiveVoicePreset();
   if(!config){ showToast('请先在「语习设置」配置语音API'); return; }
@@ -5975,12 +6793,17 @@ function retryLangError(idx){
         <div class="lang-vocab-reading">${escHtml(w.reading)}</div>
         <div class="lang-vocab-zh">${escHtml(w.zh)}</div>
       </div>
-      <div class="field-group" style="margin-top:16px">
-        <div class="field-lbl">跟写一遍</div>
-        <input class="field-inp" id="lang-write-input" placeholder="${escHtml(w.foreign)}" autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="lang-canvas-area">
+        <div class="lang-canvas-label">用手指 / 触控笔跟写</div>
+        <canvas id="lang-hwcanvas" class="lang-hwcanvas" width="340" height="150"></canvas>
+        <div class="lang-canvas-hint">写完后点「识别」</div>
       </div>
-      <button class="save-btn" onclick="submitRetryVocab(${idx})">提交</button>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="wb-import-btn" style="flex:1" onclick="clearHwCanvas()">清除</button>
+        <button class="save-btn" style="flex:2;margin-top:0" onclick="submitRetryVocab(${idx})">识别并提交</button>
+      </div>
       <div id="lang-answer-feedback" style="margin-top:10px"></div>`;
+    initHwCanvas();
   } else {
     langCurrentSession = {langId:err.langId, levelId:err.levelId, lang, level, wordCards:[], sentenceCards:[{zh_hint:err.zhHint, answer:err.reference, keywords:[]}], currentQ:10, answers:[], retryIdx:idx};
     body.innerHTML = `
@@ -5999,16 +6822,22 @@ function retryLangError(idx){
 
 function submitRetryVocab(origIdx){
   const err = langErrors[origIdx];
-  const input = document.getElementById('lang-write-input')?.value.trim();
-  if(!input){ showToast('请输入'); return; }
-  const correct = input.toLowerCase()===err.foreign.toLowerCase();
-  const feedEl = document.getElementById('lang-answer-feedback');
-  if(correct){
-    feedEl.innerHTML = '<div class="lang-correct-tag">✓ 写对了！已从错题区移除</div>';
-    setTimeout(()=>dismissLangError(origIdx), 1400);
-  } else {
-    feedEl.innerHTML = `<div class="lang-wrong-tag">✗ 正确：<b>${escHtml(err.foreign)}</b></div>`;
-  }
+  // Use canvas recognition — delegate to recognizeHandwriting which calls showVocabFeedback,
+  // but we need to temporarily set the session state correctly first.
+  langCurrentSession.wordCards[0] = {foreign:err.foreign, reading:err.reading, zh:err.zh};
+  langCurrentSession.currentQ = 0;
+  // Override showVocabFeedback callback for retry (removes error on correct)
+  const origFn = showVocabFeedback;
+  window._retryVocabIdx = origIdx;
+  recognizeHandwriting(err.foreign).then(()=>{
+    // After recognition, check if correct and remove from error list
+    if(langCurrentSession.answers.length > 0){
+      const last = langCurrentSession.answers[langCurrentSession.answers.length-1];
+      if(last.correct){
+        setTimeout(()=>dismissLangError(origIdx), 1400);
+      }
+    }
+  });
 }
 
 // ── Alt API settings ──
