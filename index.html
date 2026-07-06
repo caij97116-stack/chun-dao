@@ -403,6 +403,11 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .deploy-method-tab.active{border-color:var(--ink);background:var(--smoke);}
 .deploy-method-tab span{display:block;font-size:10px;color:var(--ink4);margin-top:3px;}
 .deploy-step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;}
+.poke-preset-chip{display:inline-flex;align-items:center;padding:6px 14px;border:1.5px solid var(--silver);border-radius:20px;font-size:13px;color:var(--ink3);cursor:pointer;transition:all 0.15s;}
+.poke-preset-chip.active{border-color:var(--ink);background:var(--smoke);color:var(--ink);font-weight:500;}
+.rp-cover-chip{display:inline-flex;width:42px;height:42px;align-items:center;justify-content:center;font-size:24px;border:1.5px solid var(--silver);border-radius:10px;cursor:pointer;transition:all 0.15s;}
+.rp-cover-chip.active{border-color:var(--ink);background:var(--smoke);}
+
 .deploy-step-num{width:24px;height:24px;border-radius:50%;background:var(--ink);color:white;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .deploy-step-text{font-size:13px;color:var(--ink2);line-height:1.6;}
 .deploy-step-text code{background:var(--smoke);padding:1px 6px;border-radius:5px;font-family:'SF Mono',Menlo,monospace;font-size:11.5px;}
@@ -1149,6 +1154,62 @@ npx NeteaseCloudMusicApi</div>
       </button>
     </div>
 
+    <!-- SUB: 功能计划与绑定 -->
+    <div class="subpage" id="sub-feature-plan">
+      <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-feature-plan')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title">功能计划与绑定</div></div>
+      <div class="app-body">
+        <div class="sec-label">拍一拍</div>
+        <div class="s-card" style="margin-bottom:16px">
+          <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+            <div class="s-text"><div class="s-title">拍一拍内容</div><div class="s-sub">发送拍一拍时显示的后缀文字</div></div>
+          </div>
+          <div style="padding:4px 0 8px;display:flex;gap:8px;flex-wrap:wrap" id="poke-presets">
+            <div class="poke-preset-chip active" onclick="selectPokeText(this,'的肩膀')">肩膀</div>
+            <div class="poke-preset-chip" onclick="selectPokeText(this,'的脑袋')">脑袋</div>
+            <div class="poke-preset-chip" onclick="selectPokeText(this,'一下')">一下</div>
+            <div class="poke-preset-chip" onclick="selectPokeText(this,'的头')">头</div>
+            <div class="poke-preset-chip" onclick="selectPokeText(this,'的手')">手</div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <input class="field-inp" id="poke-custom-input" placeholder="自定义后缀（例：的发呆的脸）" style="flex:1">
+            <button class="save-btn" style="margin:0;padding:8px 14px" onclick="savePokeCustomText()">保存</button>
+          </div>
+          <div style="font-size:11px;color:var(--ink4);margin-top:8px">预览：👋 拍了拍你<span id="poke-preview">的肩膀</span></div>
+        </div>
+
+        <div class="sec-label">功能开关</div>
+        <div class="s-card" style="margin-bottom:16px">
+          <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+            <div class="s-text"><div class="s-title">自动翻译外语消息</div><div class="s-sub">角色发送外语时自动显示中文翻译</div></div>
+            <div class="s-toggle on" id="toggle-auto-translate" onclick="toggleFeatureFlag('autoTranslate',this)"></div>
+          </div>
+          <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+            <div class="s-text"><div class="s-title">纯对话模式多气泡</div><div class="s-sub">纯对话模式下AI可发1-5条连续消息</div></div>
+            <div class="s-toggle on" id="toggle-multi-bubble" onclick="toggleFeatureFlag('multiBubble',this)"></div>
+          </div>
+          <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+            <div class="s-text"><div class="s-title">角色随机语音消息</div><div class="s-sub">开启语音授权的角色偶尔发语音</div></div>
+            <div class="s-toggle on" id="toggle-random-voice" onclick="toggleFeatureFlag('randomVoice',this)"></div>
+          </div>
+        </div>
+
+        <div class="sec-label">定位偏好</div>
+        <div class="s-card">
+          <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+            <div class="s-text"><div class="s-title">默认发送定位</div><div class="s-sub">留空则每次实时获取</div></div>
+          </div>
+          <div class="field-group" style="margin-bottom:0">
+            <input class="field-inp" id="default-location-name" placeholder="位置名称（例：家）">
+            <div style="display:flex;gap:8px;margin-top:6px">
+              <input class="field-inp" id="default-location-lat" placeholder="纬度" style="flex:1">
+              <input class="field-inp" id="default-location-lng" placeholder="经度" style="flex:1">
+            </div>
+            <button class="save-btn" style="margin-top:8px" onclick="saveDefaultLocation()">保存默认位置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="enc-page" id="enc-moments">
       <div class="enc-header">
         <div class="enc-header-title">朋友圈</div>
@@ -1209,6 +1270,15 @@ npx NeteaseCloudMusicApi</div>
             <div class="archive-title-row"><div class="archive-title">人生档案</div></div>
             <div id="life-archive-list"></div>
             <button class="add-archive-btn" onclick="openLifeArchiveModal()">+ 添加人生档案</button>
+          </div>
+          <div class="archive-section">
+            <div class="s-card">
+              <div class="s-row" onclick="openSub('sub-feature-plan')">
+                <div class="s-icon" style="background:linear-gradient(135deg,#9c27b0,#673ab7)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                <div class="s-text"><div class="s-title">功能计划与绑定</div><div class="s-sub">拍一拍自定义 · 定位偏好 · 功能开关</div></div>
+                <div class="s-arrow">›</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1796,6 +1866,60 @@ npx NeteaseCloudMusicApi</div>
   </div>
 </div>
 
+<!-- 转账详情大页 -->
+<div class="modal-overlay" id="transfer-detail-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">转账详情</div><button class="modal-close" onclick="document.getElementById('transfer-detail-modal').classList.remove('open')">×</button></div>
+    <div class="modal-body" style="text-align:center">
+      <div style="font-size:48px;margin:16px 0">💴</div>
+      <div style="font-size:28px;font-weight:700;color:var(--ink)" id="td-amount">0</div>
+      <div style="font-size:13px;color:var(--ink4);margin-top:6px">椿元</div>
+      <div style="font-size:14px;color:var(--ink2);margin-top:20px;padding:14px;background:var(--smoke);border-radius:12px" id="td-note">—</div>
+      <div style="font-size:12px;color:var(--ink4);margin-top:12px" id="td-time">—</div>
+      <div style="font-size:12px;color:var(--ink4);margin-top:4px">转账状态：已到账</div>
+    </div>
+  </div>
+</div>
+
+<!-- 红包详情大页 -->
+<div class="modal-overlay" id="rp-detail-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">红包详情</div><button class="modal-close" onclick="document.getElementById('rp-detail-modal').classList.remove('open')">×</button></div>
+    <div class="modal-body" style="text-align:center">
+      <div style="font-size:64px;margin:16px 0" id="rpd-cover">🧧</div>
+      <div style="font-size:22px;font-weight:600;color:var(--ink)" id="rpd-note">恭喜发财</div>
+      <div style="font-size:28px;font-weight:700;color:#e53935;margin-top:16px"><span id="rpd-amount">0</span> 椿元</div>
+    </div>
+  </div>
+</div>
+
+<!-- 红包发送弹窗 -->
+<div class="modal-overlay" id="redpacket-modal" onclick="if(event.target===this)closeRedPacketModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">发红包</div><button class="modal-close" onclick="closeRedPacketModal()">×</button></div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--ink4);margin-bottom:10px">当前余额：<span id="redpacket-balance">—</span> 椿元</div>
+      <div class="field-group">
+        <div class="field-lbl">红包封面</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+          <span class="rp-cover-chip active" onclick="selectRpCover(this,'🧧')">🧧</span>
+          <span class="rp-cover-chip" onclick="selectRpCover(this,'🎊')">🎊</span>
+          <span class="rp-cover-chip" onclick="selectRpCover(this,'🎁')">🎁</span>
+          <span class="rp-cover-chip" onclick="selectRpCover(this,'💝')">💝</span>
+          <span class="rp-cover-chip" onclick="selectRpCover(this,'🌸')">🌸</span>
+          <input class="field-inp" id="redpacket-cover" value="🧧" style="width:60px;text-align:center;font-size:18px" placeholder="自定">
+        </div>
+      </div>
+      <div class="field-group"><div class="field-lbl">金额（椿元）</div><input class="field-inp" id="redpacket-amount" type="number" min="1" placeholder="请输入金额"></div>
+      <div class="field-group"><div class="field-lbl">祝福语</div><input class="field-inp" id="redpacket-note" placeholder="恭喜发财，大吉大利"></div>
+      <button class="save-btn" onclick="confirmSendRedPacket()" style="background:linear-gradient(135deg,#e53935,#b71c1c)">塞入红包 🧧</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="msgmenu-modal" onclick="if(event.target===this)closeMsgMenu()">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1852,8 +1976,18 @@ const SYS_ASSISTANT = {
   id: 'sys_tsubaki',
   name: '椿島です助手',
   tag: '系统 · 内置助手',
-  desc: '我是椿島です的常驻助手，可以解答关于这个小手机系统的任何问题：怎么创建角色、怎么配置 API、钱包怎么用、身份档案怎么管理……我对整个系统拥有完整的访问权限，随时可以帮你查看和说明当前的数据状态。',
-  setting: '你是"椿島です助手"，椿島这个虚拟手机系统的内置AI管家。你的职责：1) 解答用户关于本系统所有功能的疑问（设置App、与你相遇App、角色创建、世界书导入、API配置、钱包、身份档案等）；2) 你可以读取并告知用户当前系统状态（联系人数量、消息数量、已保存的角色列表、身份列表等，这些信息会在系统提示中提供给你）；3) 语气专业、友善、简洁，像一个熟悉系统底层的管家AI；4) 如果用户问的是系统外的内容，正常以助手身份回答即可，不要拒绝；5) 不要使用过多的表情符号，保持克制优雅的语气，契合"椿島"这个略带禅意的品牌调性。',
+  desc: '我是椿島です的常驻助手，可以解答关于这个小手机系统的任何问题，也可以帮你测试各种功能——转账、红包、拍一拍、小程序卡片、语音消息等！',
+  setting: `你是"椿島です助手"，椿島这个虚拟手机系统的内置AI管家。你的职责：
+1) 解答用户关于本系统所有功能的疑问；
+2) 你可以读取并告知用户当前系统状态；
+3) 【功能测试】你可以主动测试系统功能，直接在消息里插入特殊标签：
+   - 发送转账：在消息末尾加 [TRANSFER:金额:备注]，例如 [TRANSFER:10:测试转账]
+   - 发送红包：在消息末尾加 [REDPACKET:金额:封面emoji:祝福语]，例如 [REDPACKET:5:🎊:测试红包]
+   - 拍一拍：消息正文为 [POKE:的肩膀]
+   - 发小程序：在消息末尾加 [MINIAPP:mini-meituan] 等
+   - 发语音（会触发TTS）：消息正文包含你想说的话，系统会随机转为语音
+4) 当用户说"帮我测试XXX功能"时，直接使用以上标签执行测试，不要只是描述；
+5) 语气专业友善，契合"椿島"的禅意品牌调性。`,
   isSystem: true,
   avatarColor: '#1a1a1a',
   avatarLetter: '椿'
@@ -1914,7 +2048,7 @@ let momentsAltApi = JSON.parse(localStorage.getItem('tsb_moments_altapi') || '{}
 const CHAT_MODE_LABELS = {casual:'纯对话', mixed:'对话+剧情', novel:'纯文本长篇'};
 function buildChatModeInstruction(mode){
   if(mode==='casual'){
-    return '【输出格式要求】这是纯文字对话模式，类似微信/QQ聊天：只输出角色会说的话本身，简短自然，像真实聊天软件里的对话气泡。不要添加任何场景描写、动作描写、心理描写或旁白，不要使用括号或星号包裹的动作说明。每次回复保持简短（通常1-3句话），符合即时通讯的语感。';
+    return '【输出格式要求】这是纯文字对话模式，类似微信/QQ聊天：只输出角色会说的话本身，简短自然，像真实聊天软件里的对话气泡。不要添加任何场景描写、动作描写、心理描写或旁白，不要使用括号或星号包裹的动作说明。可以发送1-5条气泡（用换行分隔），模仿真实聊天中连续发几条短消息的习惯，每条保持1-2句话，符合即时通讯的语感。';
   }else if(mode==='novel'){
     return '【输出格式要求】这是纯文本长篇模式：以小说叙事的方式撰写完整段落，包含细腻的场景描写、人物心理、动作神态和环境氛围，使用第三人称或角色第一人称视角展开叙述，可以包含对话但对话需融入叙事段落中。回复应当具有文学性和篇幅感，像在写一段小说章节，而不是聊天消息。';
   }
@@ -1926,14 +2060,24 @@ function buildChatModeInstruction(mode){
 // when the user asks for relevant services (food delivery, shopping, etc.).
 // The AI appends a special tag [MINIAPP:id] to its reply; the renderer parses
 // this and shows a tappable card below the message bubble.
-const MINIAPP_PROMPT_BLOCK = `【可用小程序】当用户请求以下类型的服务时，你可以在回复末尾加上对应的小程序标记（格式：[MINIAPP:id]），系统会自动渲染成可点击的小程序入口卡片：
+const MINIAPP_PROMPT_BLOCK = `【可用小程序与智能链接】你可以在回复末尾插入小程序卡片，让用户一键在内部打开相关页面。
+
+【固定小程序（用ID标记）】
 - 点外卖/订餐/美团 → [MINIAPP:mini-meituan]
 - 饿了么/点餐 → [MINIAPP:mini-eleme]
 - 淘宝/购物/网购/优惠券 → [MINIAPP:mini-taobao]
 - 京东/JD/电器/快递 → [MINIAPP:mini-jd]
-- 看视频/B站/哔哩哔哩 → [MINIAPP:mini-bilibili]
+- 看视频/B站/哔哩哔哩/UP主 → [MINIAPP:mini-bilibili]
 - 小红书/种草/推荐 → [MINIAPP:mini-xhs]
-只在用户明确需要该服务时才加标记，不要无缘无故插入。标记放在回复最末尾，不影响正常聊天内容。`;
+
+【智能搜索卡片（可带真实URL，更精准）】
+格式：[MINIAPP_URL:显示名称:图标emoji:背景色:完整URL]
+例：用户问"你知道敖厂长吗"→ 回复末尾加 [MINIAPP_URL:敖厂长的频道:📺:#fb7299:https://search.bilibili.com/all?keyword=敖厂长]
+例：用户想买某商品→ [MINIAPP_URL:搜索XX:🛍️:#ff6b35:https://s.taobao.com/search?q=XX]
+例：用户想看某电影资讯→ [MINIAPP_URL:豆瓣搜索:🎬:#1a1a1a:https://www.douban.com/search?q=XX]
+可以在URL中把XX替换成用户关心的实际关键词。
+
+只在用户明确需要时才插入，不要无缘无故使用。标记放在回复最末尾。`;
 
 let currentChar = null;
 let currentChatIdentityId = null;
@@ -2024,7 +2168,7 @@ function ensureSysAssistantContact(){
     contacts.unshift({id:SYS_ASSISTANT.id, identityId: identities[0]?.id || 'id_default'});
     if(!chatHistory.find(h=>h.id===SYS_ASSISTANT.id)){
       chatHistory.push({id:SYS_ASSISTANT.id, msgs:[
-        {text:'你好，我是椿島です助手。这个系统里任何关于设置、角色创建、世界书导入、钱包或身份档案的问题，都可以问我。', mine:false, time:getTime()}
+        {text:'你好，我是椿島です助手。这个系统里任何关于设置、角色创建、世界书导入、钱包或身份档案的问题，都可以问我。', mine:false, time:getTime(), timestamp:Date.now()}
       ], unread:true});
     }
     persist();
@@ -2051,8 +2195,28 @@ function updateDate(){
   if(dEl) dEl.textContent = months[n.getMonth()]+' '+n.getDate();
 }
 function getTime(){
-  const n=new Date();
-  return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
+  // Store the full timestamp for smart display; return HH:MM for backwards compat
+  const n = new Date();
+  return n.getHours().toString().padStart(2,'0') + ':' + n.getMinutes().toString().padStart(2,'0');
+}
+// WeChat-style smart timestamp label: shown above message groups
+// 今天: HH:MM  |  昨天: 昨天 HH:MM  |  本周: 周x HH:MM  |  更早: MM月DD日 HH:MM
+function smartTimeLabel(timeStr, timestamp){
+  const ts = timestamp || Date.now();
+  const now = new Date();
+  const d = new Date(ts);
+  const hm = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const yesterdayStart = todayStart - 86400000;
+  const weekStart = todayStart - (now.getDay() || 7) * 86400000 + 86400000; // Monday
+  if (ts >= todayStart) return hm;
+  if (ts >= yesterdayStart) return '昨天 ' + hm;
+  if (ts >= weekStart) {
+    const days = ['周日','周一','周二','周三','周四','周五','周六'];
+    return days[d.getDay()] + ' ' + hm;
+  }
+  if (d.getFullYear() === now.getFullYear()) return (d.getMonth()+1)+'月'+d.getDate()+'日 '+hm;
+  return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日';
 }
 function escHtml(t){
   return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -2138,6 +2302,7 @@ function openSub(id){
   if(id==='sub-frame-bg') renderFrameBgGrid();
   if(id==='sub-ncm-api') initNcmApiSettingsUI();
   if(id==='sub-voice-api') initVoiceApiSettingsUI();
+  if(id==='sub-feature-plan') initFeaturePlanPage();
   if(id==='sub-langlearn-errors') renderLangErrors();
   if(id==='sub-profile'){
     document.getElementById('set-name').value = userProfile.name;
@@ -2347,6 +2512,22 @@ let voiceApiActiveId = localStorage.getItem('tsb_voiceapi_active') || null;
 function getActiveVoicePreset(){
   return voiceApiPresets.find(p=>p.id===voiceApiActiveId) || voiceApiPresets[0] || null;
 }
+// Returns the voice preset for a specific character (falls back to global active)
+function getVoicePresetForChar(charId){
+  const contact = contacts.find(c=>c.id===charId);
+  if(contact?.voicePresetId){
+    const preset = voiceApiPresets.find(p=>p.id===contact.voicePresetId);
+    if(preset) return preset;
+  }
+  return getActiveVoicePreset();
+}
+function setCharVoicePreset(charId, presetId){
+  const contact = contacts.find(c=>c.id===charId);
+  if(!contact) return;
+  contact.voicePresetId = presetId || null;
+  persist();
+  showToast(presetId ? '已绑定语音预设' : '已改为使用全局预设');
+}
 // Alias used throughout the code
 Object.defineProperty(window, 'voiceApiConfig', {get: getActiveVoicePreset, configurable:true});
 
@@ -2496,6 +2677,73 @@ function isVoiceConfigComplete(c){
 }
 
 let _pendingVoiceSave = null;
+// ══════════ 功能计划与绑定 ══════════
+let featureFlags = JSON.parse(localStorage.getItem('tsb_feature_flags') || '{"autoTranslate":true,"multiBubble":true,"randomVoice":true}');
+
+function initFeaturePlanPage(){
+  const pt = userProfile.pokeText || '的肩膀';
+  const preview = document.getElementById('poke-preview');
+  if(preview) preview.textContent = pt;
+  // Highlight matching preset chip
+  document.querySelectorAll('.poke-preset-chip').forEach(c=>{
+    c.classList.toggle('active', c.textContent===pt || ('的'+c.textContent)===pt);
+  });
+  // Sync feature flag toggles
+  Object.entries(featureFlags).forEach(([key,val])=>{
+    const el = document.getElementById('toggle-'+key.replace(/([A-Z])/g,'-$1').toLowerCase());
+    if(el) el.classList.toggle('on', !!val);
+  });
+  // Load saved default location
+  const defLoc = JSON.parse(localStorage.getItem('tsb_default_location') || 'null');
+  if(defLoc){
+    const n = document.getElementById('default-location-name');
+    const lat = document.getElementById('default-location-lat');
+    const lng = document.getElementById('default-location-lng');
+    if(n) n.value = defLoc.name || '';
+    if(lat) lat.value = defLoc.lat || '';
+    if(lng) lng.value = defLoc.lng || '';
+  }
+}
+function selectPokeText(el, text){
+  document.querySelectorAll('.poke-preset-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('poke-custom-input').value = '';
+  userProfile.pokeText = text;
+  persist();
+  const preview = document.getElementById('poke-preview');
+  if(preview) preview.textContent = text;
+  showToast('拍一拍内容已更新');
+}
+function savePokeCustomText(){
+  const val = document.getElementById('poke-custom-input').value.trim();
+  if(!val){ showToast('请输入自定义内容'); return; }
+  document.querySelectorAll('.poke-preset-chip').forEach(c=>c.classList.remove('active'));
+  userProfile.pokeText = val;
+  persist();
+  const preview = document.getElementById('poke-preview');
+  if(preview) preview.textContent = val;
+  showToast('已保存：👋 拍了拍你'+val);
+}
+function toggleFeatureFlag(key, el){
+  featureFlags[key] = !featureFlags[key];
+  el.classList.toggle('on', featureFlags[key]);
+  localStorage.setItem('tsb_feature_flags', JSON.stringify(featureFlags));
+  showToast(featureFlags[key] ? '已开启' : '已关闭');
+}
+function saveDefaultLocation(){
+  const name = document.getElementById('default-location-name').value.trim();
+  const lat  = document.getElementById('default-location-lat').value.trim();
+  const lng  = document.getElementById('default-location-lng').value.trim();
+  if(!lat || !lng){ showToast('请填写纬度和经度'); return; }
+  localStorage.setItem('tsb_default_location', JSON.stringify({name, lat, lng}));
+  showToast('默认位置已保存');
+}
+function selectRpCover(el, emoji){
+  document.querySelectorAll('.rp-cover-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('redpacket-cover').value = emoji;
+}
+
 function saveVoiceApiConfig(){
   const provider = document.querySelector('#voice-provider-options .apitype-opt.selected')?.dataset.provider || 'openai';
   const data = getVoiceProviderFormData(provider);
@@ -3652,7 +3900,7 @@ function postUserMoment(){
   if(!text){ showToast('写点什么吧'); return; }
   momentsFeed.push({
     id:'mo_'+Date.now(), authorType:'user', authorId:null, text,
-    time:getTime(), timestamp:Date.now(),
+    time:getTime(), timestamp:Date.now(), timestamp:Date.now(),
     likes:[], comments:[], status:'approved'
   });
   persist();
@@ -3673,7 +3921,7 @@ async function postUserComment(mid, inputEl){
   if(!text) return;
   const m = momentsFeed.find(x=>x.id===mid);
   if(!m) return;
-  m.comments.push({authorType:'user', authorId:null, text, time:getTime()});
+  m.comments.push({authorType:'user', authorId:null, text, time:getTime(), timestamp:Date.now()});
   persist();
   renderMomentsFeed();
   // If commenting on a character's own post, give that character a chance to reply
@@ -3828,7 +4076,7 @@ async function momentsGenerateCharacterPost(charId){
     const reply = await callAIRaw(preset, systemPrompt, [{role:'user', content:'生成一条朋友圈动态'}], 200);
     momentsFeed.push({
       id:'mo_'+Date.now()+'_'+charId, authorType:'char', authorId:charId, text:reply.trim(),
-      time:getTime(), timestamp:Date.now(),
+      time:getTime(), timestamp:Date.now(), timestamp:Date.now(),
       likes:[], comments:[], status:'pending'
     });
     persist();
@@ -3848,7 +4096,7 @@ async function momentsGenerateCharacterComment(post, viewerCharId){
       '\n\n【任务】这是你自己发布的一条朋友圈动态，刚刚有人评论了它。请以你自己的语气简短回复这条评论（1-2句话即可），只输出回复正文，不要加引号或前缀。';
     const recentComment = post.comments.slice(-1)[0]?.text || '';
     const reply = await callAIRaw(preset, systemPrompt, [{role:'user', content:'评论内容："'+recentComment+'"，请回复。'}], 150);
-    post.comments.push({authorType:'char', authorId:viewerCharId, text:reply.trim(), time:getTime()});
+    post.comments.push({authorType:'char', authorId:viewerCharId, text:reply.trim(), time:getTime(), timestamp:Date.now()});
     persist();
     renderMomentsFeed();
   }catch(e){ /* silent — comment generation is best-effort */ }
@@ -4006,7 +4254,7 @@ async function gcSend(){
   inp.value=''; inp.style.height='auto';
   const g = groupChats.find(g2=>g2.id===currentGroupId);
   if(!g) return;
-  g.msgs.push({text, mine:true, time:getTime()});
+  g.msgs.push({text, mine:true, time:getTime(), timestamp:Date.now()});
   persist();
   renderGroupMsgs(g.msgs);
   await requestGroupAIReplies(g);
@@ -4065,12 +4313,12 @@ async function requestGroupAIReplies(g){
       const data = await safeFetchJSON(preset.endpoint, {method:'POST', headers, body: JSON.stringify(body)});
       const reply = data.content?.[0]?.text || data.choices?.[0]?.message?.content || '（无响应）';
       document.getElementById('typing-row')?.remove();
-      g.msgs.push({text:reply, mine:false, speakerId:memberId, time:getTime()});
+      g.msgs.push({text:reply, mine:false, speakerId:memberId, time:getTime(), timestamp:Date.now()});
       persist();
       renderGroupMsgs(g.msgs);
     }catch(e){
       document.getElementById('typing-row')?.remove();
-      g.msgs.push({text:'⚠ '+e.message, mine:false, speakerId:memberId, time:getTime()});
+      g.msgs.push({text:'⚠ '+e.message, mine:false, speakerId:memberId, time:getTime(), timestamp:Date.now()});
       persist();
       renderGroupMsgs(g.msgs);
       break; // stop the chain on error to avoid repeated failures
@@ -4119,7 +4367,7 @@ function confirmAddChar(){
     if(!chatHistory.find(h=>h.id===currentChar.id)){
       const openerText = (currentChar.opener && currentChar.opener.trim()) || ('你好，我是'+currentChar.name+'。');
       chatHistory.push({id:currentChar.id, msgs:[
-        {text:openerText, mine:false, time:getTime()}
+        {text:openerText, mine:false, time:getTime(), timestamp:Date.now()}
       ], unread:true});
     }
     persist();
@@ -4210,7 +4458,7 @@ function confirmTransfer(){
   if(!amount || amount <= 0){ showToast('请输入有效金额'); return; }
   if(amount > walletBalance){ showToast('余额不足'); return; }
   walletBalance -= amount;
-  walletHistory.push({type:'out', amount, note: note||'转账给'+( currentChar?.name||'对方'), time:getTime()});
+  walletHistory.push({type:'out', amount, note: note||'转账给'+( currentChar?.name||'对方'), time:getTime(), timestamp:Date.now()});
   persist();
   closeTransferModal();
   // Insert a system-style transfer card into the chat
@@ -4218,7 +4466,7 @@ function confirmTransfer(){
   if(ctx){
     ctx.msgs.push({
       text: `[TRANSFER:${amount}:${note||'转账'}]`,
-      mine:true, time:getTime()
+      mine:true, time:getTime(), timestamp:Date.now()
     });
     persist();
     ctx.rerender();
@@ -4235,18 +4483,33 @@ function confirmTransfer(){
 function sendChatLocation(){
   const ctx = getActiveChatContext();
   if(!ctx) return;
+  // Check for a user-saved default location first
+  const defLoc = JSON.parse(localStorage.getItem('tsb_default_location') || 'null');
+  if(defLoc && defLoc.lat && defLoc.lng){
+    const tag = defLoc.name ? `[LOCATION:${defLoc.lat}:${defLoc.lng}:${defLoc.name}]` : `[LOCATION:${defLoc.lat}:${defLoc.lng}]`;
+    ctx.msgs.push({text:tag, mine:true, time:getTime(), timestamp:Date.now()});
+    persist(); ctx.rerender();
+    showToast('已发送默认位置：'+(defLoc.name||defLoc.lat+','+defLoc.lng));
+    return;
+  }
+  // Try real GPS
   showToast('正在获取位置…');
-  if(!navigator.geolocation){ showToast('浏览器不支持定位'); return; }
+  if(!navigator.geolocation){
+    ctx.msgs.push({text:'[LOCATION:31.22717:121.48162]', mine:true, time:getTime(), timestamp:Date.now()});
+    persist(); ctx.rerender();
+    showToast('浏览器不支持定位，已插入示例位置');
+    return;
+  }
   navigator.geolocation.getCurrentPosition(pos=>{
     const lat = pos.coords.latitude.toFixed(5);
     const lng = pos.coords.longitude.toFixed(5);
-    ctx.msgs.push({text:`[LOCATION:${lat}:${lng}]`, mine:true, time:getTime()});
+    ctx.msgs.push({text:`[LOCATION:${lat}:${lng}]`, mine:true, time:getTime(), timestamp:Date.now()});
     persist(); ctx.rerender();
+    showToast('位置已发送');
   }, ()=>{
-    // Graceful fallback: insert a mock location card
-    ctx.msgs.push({text:'[LOCATION:31.22717:121.48162]', mine:true, time:getTime()});
+    ctx.msgs.push({text:'[LOCATION:31.22717:121.48162]', mine:true, time:getTime(), timestamp:Date.now()});
     persist(); ctx.rerender();
-    showToast('获取定位失败，已插入示例位置');
+    showToast('获取定位失败，已插入示例位置。可在「功能计划」设置默认位置');
   });
 }
 
@@ -4255,18 +4518,17 @@ function sendPoke(){
   const charName = currentChar?.name || '对方';
   const ctx = getActiveChatContext();
   if(!ctx) return;
-  ctx.msgs.push({text:'[POKE]', mine:true, time:getTime(), isSystemNote:false});
+  const pokeText = userProfile.pokeText || '的肩膀';
+  ctx.msgs.push({text:`[POKE:${pokeText}]`, mine:true, time:getTime(), timestamp:Date.now(), isSystemNote:false});
   persist(); ctx.rerender();
-  // Show a shake animation on the chat view
   const cv = document.getElementById('chat-view');
   cv.classList.add('poke-shake');
   setTimeout(()=>cv.classList.remove('poke-shake'), 600);
-  showToast('你拍了拍'+charName);
-  // Character reacts
+  showToast('你拍了拍'+charName+pokeText);
   if(currentChar && !currentChar.isSystem){
     const h = chatHistory.find(h2=>h2.id===currentChar.id);
     if(h){
-      h.msgs.push({text:'（被拍了一下）', mine:false, isSystemNote:true, time:getTime()});
+      h.msgs.push({text:'（被拍了一下）', mine:false, isSystemNote:true, time:getTime(), timestamp:Date.now()});
       persist(); ctx.rerender();
       setTimeout(()=>requestAIReply(h), 500);
     }
@@ -4275,21 +4537,35 @@ function sendPoke(){
 
 // ── 红包 ──
 function sendChatRedPacket(){
-  if(walletBalance < 1){ showToast('椿元余额不足，无法发红包'); return; }
-  const amount = Math.min(Math.floor(Math.random()*10)+1, walletBalance);
+  // Open the red packet composer modal
+  document.getElementById('redpacket-amount').value = '';
+  document.getElementById('redpacket-note').value = '恭喜发财，大吉大利';
+  document.getElementById('redpacket-cover').value = '🧧';
+  document.getElementById('redpacket-balance').textContent = walletBalance;
+  document.getElementById('redpacket-modal').classList.add('open');
+}
+function closeRedPacketModal(){ document.getElementById('redpacket-modal').classList.remove('open'); }
+function confirmSendRedPacket(){
+  const amount = parseInt(document.getElementById('redpacket-amount').value) || 0;
+  const note   = document.getElementById('redpacket-note').value.trim() || '恭喜发财，大吉大利';
+  const cover  = document.getElementById('redpacket-cover').value.trim() || '🧧';
+  if(amount <= 0){ showToast('请输入红包金额'); return; }
+  if(amount > walletBalance){ showToast('余额不足'); return; }
   walletBalance -= amount;
-  walletHistory.push({type:'out', amount, note:'发红包', time:getTime()});
+  walletHistory.push({type:'out', amount, note:'发红包：'+note, time:getTime(), timestamp:Date.now()});
   persist();
   const ctx = getActiveChatContext();
-  if(!ctx) return;
-  ctx.msgs.push({text:`[REDPACKET:${amount}]`, mine:true, time:getTime()});
+  if(!ctx){ closeRedPacketModal(); return; }
+  ctx.msgs.push({text:`[REDPACKET:${amount}:${cover}:${note}]`, mine:true, time:getTime(), timestamp:Date.now()});
   persist(); ctx.rerender();
+  closeRedPacketModal();
   showToast('已发出 '+amount+' 椿元红包');
   if(currentChar && !currentChar.isSystem){
     const h = chatHistory.find(h2=>h2.id===currentChar.id);
     if(h) setTimeout(()=>requestAIReply(h), 600);
   }
 }
+
 
 // ── 发送语音消息（调用TTS朗读输入框内容）──
 async function sendVoiceNote(){
@@ -4303,7 +4579,7 @@ async function sendVoiceNote(){
     await synthesizeSpeech(config, text); // pre-cache
     const ctx = getActiveChatContext();
     if(!ctx) return;
-    ctx.msgs.push({text, mine:true, time:getTime(), isVoice:true});
+    ctx.msgs.push({text, mine:true, time:getTime(), timestamp:Date.now(), isVoice:true});
     persist(); ctx.rerender();
     inp.value = '';
   }catch(e){ showToast('语音生成失败：'+e.message); }
@@ -4354,58 +4630,96 @@ function renderMsgBubbleContent(m){
       <span class="voice-msg-dur">${dur}″</span>
     </div>${m.autoTranslation ? `<div class="msg-auto-trans">${escHtml(m.autoTranslation)}</div>` : ''}`;
   }
+  // Declare text variable first so all card parsers below can use it
+  let text = m.text;
   // Parse special card tags
   const MINIAPP_MAP = {
-    'mini-taobao':   {name:'淘宝',     icon:'🛍️', color:'#ff6b35'},
-    'mini-meituan':  {name:'美团外卖', icon:'🛵', color:'#ffc300'},
-    'mini-jd':       {name:'京东',     icon:'📦', color:'#e1251b'},
-    'mini-eleme':    {name:'饿了么',   icon:'⚡', color:'#00aeff'},
-    'mini-bilibili': {name:'哔哩哔哩', icon:'📺', color:'#fb7299'},
-    'mini-xhs':      {name:'小红书',   icon:'📕', color:'#ff2442'},
-    'mini-wechat':   {name:'微信读书', icon:'📖', color:'#07c160'},
-    'mini-douyin':   {name:'抖音',     icon:'🎵', color:'#1a1a1a'},
+    'mini-taobao':   {name:'淘宝',     icon:'🛍️', color:'#ff6b35', url:'https://m.taobao.com', searchUrl:'https://s.taobao.com/search?q='},
+    'mini-meituan':  {name:'美团外卖', icon:'🛵', color:'#ffc300', url:'https://h5.waimai.meituan.com', searchUrl:'https://h5.waimai.meituan.com'},
+    'mini-jd':       {name:'京东',     icon:'📦', color:'#e1251b', url:'https://m.jd.com', searchUrl:'https://search.jd.com/Search?keyword='},
+    'mini-eleme':    {name:'饿了么',   icon:'⚡', color:'#00aeff', url:'https://h5.ele.me', searchUrl:'https://h5.ele.me'},
+    'mini-bilibili': {name:'哔哩哔哩', icon:'📺', color:'#fb7299', url:'https://m.bilibili.com', searchUrl:'https://search.bilibili.com/all?keyword='},
+    'mini-xhs':      {name:'小红书',   icon:'📕', color:'#ff2442', url:'https://www.xiaohongshu.com', searchUrl:'https://www.xiaohongshu.com/search_result/?keyword='},
+    'mini-wechat':   {name:'微信读书', icon:'📖', color:'#07c160', url:'https://weread.qq.com', searchUrl:'https://weread.qq.com'},
+    'mini-douyin':   {name:'抖音',     icon:'🎵', color:'#1a1a1a', url:'https://www.douyin.com', searchUrl:'https://www.douyin.com/search/'},
   };
-  let text = m.text;
 
-  // [TRANSFER:amount:note]
+  // [MINIAPP_URL:name:icon:color:url] — AI-generated smart link card with real target URL
+  const urlCardMatch = text.match(/^\[MINIAPP_URL:([^:]+):([^:]+):([^:]+):(.+)\]$/);
+  if(urlCardMatch){
+    const [,name,icon,color,url] = urlCardMatch;
+    return `<div class="msg-miniapp-card" onclick="event.stopPropagation();openMiniAppUrl('${escHtml(url).replace(/'/g,"\\'")}','${escHtml(name).replace(/'/g,"\\'")}')">
+      <span class="msg-miniapp-icon" style="background:${escHtml(color)};font-size:18px">${icon}</span>
+      <div class="msg-miniapp-info"><div class="msg-miniapp-name">${escHtml(name)}</div><div class="msg-miniapp-hint">点击在内部打开</div></div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>`;
+  }
+
+  // [TRANSFER:amount:note] — tappable to show full detail
   const transferMatch = text.match(/^\[TRANSFER:(\d+):(.*?)\]$/);
   if(transferMatch){
-    return `<div class="msg-special-card msg-transfer-card">
-      <div style="font-size:20px;margin-bottom:4px">💴</div>
-      <div style="font-size:16px;font-weight:700">${transferMatch[1]} 椿元</div>
-      <div style="font-size:11.5px;opacity:0.7;margin-top:2px">${escHtml(transferMatch[2])}</div>
-      <div class="msg-card-tag">转账</div>
-    </div>`;
-  }
-
-  // [REDPACKET:amount]
-  const rpMatch = text.match(/^\[REDPACKET:(\d+)\]$/);
-  if(rpMatch){
-    return `<div class="msg-special-card msg-redpacket-card" onclick="receiveRedPacket(this, '${rpMatch[1]}')">
-      <div style="font-size:24px;margin-bottom:4px">🧧</div>
-      <div style="font-size:14px;font-weight:600">恭喜发财，大吉大利</div>
-      <div style="font-size:11px;opacity:0.7;margin-top:4px">点击领取红包</div>
-    </div>`;
-  }
-
-  // [LOCATION:lat:lng]
-  const locMatch = text.match(/^\[LOCATION:([\d.]+):([\d.]+)\]$/);
-  if(locMatch){
-    const lat = locMatch[1], lng = locMatch[2];
-    return `<div class="msg-special-card msg-location-card" onclick="window.open('https://maps.google.com/?q=${lat},${lng}','_blank')">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:22px">📍</span>
-        <div>
-          <div style="font-size:13px;font-weight:600">我的位置</div>
-          <div style="font-size:11px;opacity:0.6">${lat}, ${lng} · 点击查看地图</div>
+    return `<div class="msg-special-card msg-transfer-card" onclick="openTransferDetail('${transferMatch[1]}','${escHtml(transferMatch[2]).replace(/'/g,"\\'")}')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:28px">💴</span>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:700">${transferMatch[1]} 椿元</div>
+          <div style="font-size:11.5px;opacity:0.75;margin-top:2px">${escHtml(transferMatch[2])}</div>
         </div>
+        <div class="msg-card-tag">转账</div>
       </div>
     </div>`;
   }
 
-  // [POKE]
-  if(text === '[POKE]'){
-    return `<div class="msg-poke-bubble">👋 拍了拍你</div>`;
+  // [REDPACKET:amount] or [REDPACKET:amount:cover:note]
+  const rpMatch = text.match(/^\[REDPACKET:(\d+)(?::([^:]+))?(?::(.+))?\]$/);
+  if(rpMatch){
+    const amount = rpMatch[1], cover = rpMatch[2]||'🧧', note = rpMatch[3]||'恭喜发财，大吉大利';
+    const isMine = m.mine;
+    if(isMine){
+      return `<div class="msg-special-card msg-redpacket-card" onclick="openRedPacketDetail('${amount}','${escHtml(cover).replace(/'/g,"\\'")}','${escHtml(note).replace(/'/g,"\\'")}')">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:28px">${cover}</span>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">${escHtml(note)}</div>
+            <div style="font-size:11px;opacity:0.75;margin-top:2px">红包 · ${amount} 椿元</div>
+          </div>
+        </div>
+      </div>`;
+    }
+    return `<div class="msg-special-card msg-redpacket-card" onclick="receiveRedPacket(this,'${amount}','${escHtml(cover).replace(/'/g,"\\'")}')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:28px">${cover}</span>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${escHtml(note)}</div>
+          <div style="font-size:11px;opacity:0.75;margin-top:2px">点击领取红包</div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>`;
+  }
+
+  // [LOCATION:lat:lng]
+  const locMatch = text.match(/^\[LOCATION:([\d.]+):([\d.]+)(?::([^\]]*))?\]$/);
+  if(locMatch){
+    const lat = locMatch[1], lng = locMatch[2], name = locMatch[3] || '';
+    const label = name || '我的位置';
+    const mapUrl = `https://uri.amap.com/marker?position=${lng},${lat}&name=${encodeURIComponent(label)}`;
+    return `<div class="msg-special-card msg-location-card" onclick="window.open('${mapUrl}','_blank')">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:24px">📍</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:var(--ink)">${escHtml(label)}</div>
+          <div style="font-size:11px;opacity:0.6;margin-top:2px">${lat}, ${lng} · 点击在地图中查看</div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>`;
+  }
+
+  // [POKE] or [POKE:customText]
+  if(text === '[POKE]' || text.startsWith('[POKE:')){
+    const pokeContent = text.startsWith('[POKE:') ? text.slice(6, -1) : '的肩膀';
+    return `<div class="msg-poke-bubble">👋 拍了拍你${escHtml(pokeContent)}</div>`;
   }
 
   // [NOWPLAYING:trackName:artist]
@@ -4447,6 +4761,8 @@ function renderMsgBubbleContent(m){
 
 function renderMsgs(msgs){
   ensureMsgIds(msgs);
+  // Attach timestamps to messages that don't have one (legacy compatibility)
+  msgs.forEach(m=>{ if(!m.timestamp) m.timestamp = Date.now(); });
   const el=document.getElementById('cv-msgs');
   const c = currentChar;
   const avatarHtml = c.avatar ? '<img src="'+c.avatar+'">' : escHtml(c.avatarLetter||c.name[0]||'?');
@@ -4454,9 +4770,12 @@ function renderMsgs(msgs){
     if(m.isSystemNote){
       return '<div class="msg-time-label" style="color:var(--ink3)">'+escHtml(m.text)+'</div>';
     }
-    const showTime = (i===0) || (msgs[i-1] && msgs[i-1].time!==m.time);
+    // Show time label when: first message, or >5 minutes from previous message
+    const prevTs = i>0 ? (msgs[i-1].timestamp||0) : 0;
+    const showTime = i===0 || (m.timestamp - prevTs) > 5*60*1000;
+    const timeLabel = showTime ? '<div class="msg-time-label">'+smartTimeLabel(m.time, m.timestamp)+'</div>' : '';
     const isLastAiMsg = !m.mine && i===msgs.length-1;
-    return (showTime?'<div class="msg-time-label">'+m.time+'</div>':'') +
+    return timeLabel +
       '<div class="msg-row '+(m.mine?'mine':'theirs')+'" data-mid="'+m.mid+'" oncontextmenu="event.preventDefault();openMsgMenu(\''+m.mid+'\')" ontouchstart="msgPressStart(\''+m.mid+'\')" ontouchend="msgPressEnd()" ontouchmove="msgPressEnd()" onmousedown="msgPressStart(\''+m.mid+'\')" onmouseup="msgPressEnd()" onmouseleave="msgPressEnd()">' +
       (!m.mine ? '<div class="msg-av" style="'+(c.avatar?'':'background:'+(c.avatarColor||'#1a1a1a'))+'">'+avatarHtml+'</div>' : '') +
       '<div class="msg-bub'+(m.isVoice?' msg-bub-voice':'')+'">'+renderMsgBubbleContent(m)+(isLastAiMsg?'<button class="msg-regen-inline" onclick="event.stopPropagation();regenerateLastReply()" title="重新生成"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></button>':'')+'</div></div>';
@@ -4548,10 +4867,22 @@ async function requestAIReply(h){
     // Voice message randomization: only for voice-authorized contacts, with a
     // real TTS config present, and only sometimes (not every message — mimics
     // how real people occasionally send a voice note rather than always).
-    const shouldBeVoice = contact?.voiceEnabled && voiceApiConfig && Math.random() < 0.25;
-    const newMsg = {text:reply, mine:false, time:getTime()};
-    if(shouldBeVoice) newMsg.isVoice = true;
-    h.msgs.push(newMsg);
+    const shouldBeVoice = contact?.voiceEnabled && voiceApiConfig && (featureFlags.randomVoice !== false) && Math.random() < 0.25;
+    // In casual mode, split multi-paragraph replies into separate message bubbles
+    // (mimics the real behavior of sending several short messages in a row)
+    const chatMode = contacts.find(c=>c.id===currentChar?.id)?.chatMode || 'mixed';
+    if(chatMode === 'casual' && featureFlags.multiBubble !== false){
+      const parts = reply.split(/\n+/).map(p=>p.trim()).filter(Boolean).slice(0, 5);
+      for(let i=0; i<parts.length; i++){
+        const bubble = {text:parts[i], mine:false, time:getTime(), timestamp:Date.now() + i*500};
+        if(shouldBeVoice && i===0) bubble.isVoice = true;
+        h.msgs.push(bubble);
+      }
+    } else {
+      const newMsg = {text:reply, mine:false, time:getTime(), timestamp:Date.now()};
+      if(shouldBeVoice) newMsg.isVoice = true;
+      h.msgs.push(newMsg);
+    }
     persist();
     renderMsgs(h.msgs);
     updateStats(); renderChatList();
@@ -4562,7 +4893,7 @@ async function requestAIReply(h){
     });
   }catch(e){
     document.getElementById('typing-row')?.remove();
-    h.msgs.push({text:'⚠ '+e.message, mine:false, time:getTime()});
+    h.msgs.push({text:'⚠ '+e.message, mine:false, time:getTime(), timestamp:Date.now()});
     persist();
     renderMsgs(h.msgs);
   }
@@ -4659,13 +4990,34 @@ async function maybeAutoTranslate(m){
   }
 }
 
-function receiveRedPacket(el, amount){
-  el.innerHTML = `<div style="font-size:18px;margin-bottom:4px">🧧</div><div style="font-size:14px;font-weight:600">已领取 ${amount} 椿元</div>`;
-  el.onclick = null;
+function receiveRedPacket(el, amount, cover){
+  const c = cover || '🧧';
+  el.innerHTML = `<div style="display:flex;align-items:center;gap:12px">
+    <span style="font-size:28px">${c}</span>
+    <div><div style="font-size:13px;font-weight:600">已领取 ${amount} 椿元</div>
+    <div style="font-size:11px;opacity:0.75;margin-top:2px">到账 ${amount} 椿元</div></div>
+  </div>`;
+  el.onclick = null; el.style.opacity = '0.75';
   walletBalance += parseInt(amount);
-  walletHistory.push({type:'in', amount:parseInt(amount), note:'领取红包', time:getTime()});
+  walletHistory.push({type:'in', amount:parseInt(amount), note:'领取红包', time:getTime(), timestamp:Date.now()});
   persist();
   showToast('已领取 '+amount+' 椿元！');
+}
+function openTransferDetail(amount, note){
+  const modal = document.getElementById('transfer-detail-modal');
+  if(!modal) return;
+  document.getElementById('td-amount').textContent = amount;
+  document.getElementById('td-note').textContent = note;
+  document.getElementById('td-time').textContent = smartTimeLabel('', Date.now());
+  modal.classList.add('open');
+}
+function openRedPacketDetail(amount, cover, note){
+  const modal = document.getElementById('rp-detail-modal');
+  if(!modal) return;
+  document.getElementById('rpd-cover').textContent = cover || '🧧';
+  document.getElementById('rpd-amount').textContent = amount;
+  document.getElementById('rpd-note').textContent = note;
+  modal.classList.add('open');
 }
 
 let _voicePlaybackCache = {}; // mid -> blob URL (avoid re-synthesizing on replay)
@@ -4684,10 +5036,13 @@ async function playVoiceMessage(mid){
     _voiceAudioEl.onended = () => waveEl?.classList.remove('playing');
     return;
   }
-  if(!voiceApiConfig){ showToast('请先在「设置 → 语音合成API」配置语音服务'); return; }
+  // Use per-character preset if set, otherwise fall back to global
+  const charId = m.mine ? null : currentChar?.id;
+  const config = charId ? getVoicePresetForChar(charId) : getActiveVoicePreset();
+  if(!config){ showToast('请先在「设置 → 语音合成API」配置语音服务'); return; }
   if(waveEl) waveEl.classList.add('loading');
   try{
-    const audioUrl = await synthesizeSpeech(voiceApiConfig, m.text);
+    const audioUrl = await synthesizeSpeech(config, m.text);
     _voicePlaybackCache[mid] = audioUrl;
     if(waveEl){ waveEl.classList.remove('loading'); waveEl.classList.add('playing'); }
     if(_voiceAudioEl) _voiceAudioEl.pause();
@@ -4822,9 +5177,18 @@ function openChatMenu(){
     <div class="s-card" style="margin-bottom:16px">
       <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
         <div class="s-icon rose"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
-        <div class="s-text"><div class="s-title">允许${escHtml(currentChar.name)}发语音</div><div class="s-sub">开启后偶尔会收到语音消息，而非每条都是</div></div>
+        <div class="s-text"><div class="s-title">允许${escHtml(currentChar.name)}发语音</div><div class="s-sub">开启后偶尔会收到语音消息</div></div>
         <div class="s-toggle ${voiceOn?'on':''}" onclick="handleVoiceAuthToggle('${currentChar.id}', this)"></div>
       </div>
+      ${voiceOn && voiceApiPresets.length > 0 ? `
+      <div class="s-row" style="cursor:default;padding-top:4px" onclick="event.stopPropagation()">
+        <div class="s-text"><div class="s-sub" style="margin-bottom:4px">使用的语音预设</div>
+          <select class="field-inp" style="font-size:12px;padding:5px 8px" onchange="setCharVoicePreset('${currentChar.id}',this.value)">
+            <option value="">使用全局激活预设</option>
+            ${voiceApiPresets.map(p=>`<option value="${p.id}" ${contact?.voicePresetId===p.id?'selected':''}>${escHtml(p.name||VOICE_PROVIDER_LABELS[p.provider])}</option>`).join('')}
+          </select>
+        </div>
+      </div>` : ''}
     </div>`;
   }
   actions += `<div class="s-card">
@@ -4985,7 +5349,7 @@ function selectIdentitySwitchTarget(idnId){
       updateIdentityChip();
       const h = chatHistory.find(h2=>h2.id===currentChar.id);
       if(h){
-        h.msgs.push({text:'【系统】对话身份已切换为「'+idn.name+'」', mine:false, time:getTime(), isSystemNote:true});
+        h.msgs.push({text:'【系统】对话身份已切换为「'+idn.name+'」', mine:false, time:getTime(), timestamp:Date.now(), isSystemNote:true});
         persist();
         renderMsgs(h.msgs);
       }
@@ -5302,7 +5666,7 @@ function doRecharge(){
   const v = parseFloat(document.getElementById('wallet-amount').value);
   if(!v || v<=0){ showToast('请输入有效金额'); return; }
   walletBalance += v;
-  walletHistory.push({label:'充值', amount:v, time:getTime()+' · '+new Date().toLocaleDateString()});
+  walletHistory.push({label:'充值', amount:v, time:getTime(), timestamp:Date.now()+' · '+new Date().toLocaleDateString()});
   persist(); renderMeProfile();
   closeWalletModal();
   showToast('充值成功 ¥'+v.toFixed(2));
@@ -5312,7 +5676,7 @@ function doWithdraw(){
   if(!v || v<=0){ showToast('请输入有效金额'); return; }
   if(v > walletBalance){ showToast('余额不足'); return; }
   walletBalance -= v;
-  walletHistory.push({label:'提现', amount:-v, time:getTime()+' · '+new Date().toLocaleDateString()});
+  walletHistory.push({label:'提现', amount:-v, time:getTime(), timestamp:Date.now()+' · '+new Date().toLocaleDateString()});
   persist(); renderMeProfile();
   closeWalletModal();
   showToast('提现成功 ¥'+v.toFixed(2));
@@ -5326,7 +5690,7 @@ function doWithdraw(){
 //   B) Built-in archive.org tracks (CORS-safe, no crossOrigin attribute)
 
 // ── State ──
-let ncmApiBase = localStorage.getItem('tsb_ncm_api') || '';  // e.g. http://localhost:3000
+let ncmApiBase = localStorage.getItem('tsb_ncm_api') || 'https://api-enhanced-lake-zeta.vercel.app';  // e.g. http://localhost:3000
 let ncmCookie  = localStorage.getItem('tsb_ncm_cookie') || '';
 let ncmUserId  = localStorage.getItem('tsb_ncm_uid') || '';
 let ncmUserName= localStorage.getItem('tsb_ncm_name') || '';
@@ -5809,7 +6173,7 @@ async function getCharReaction(charId){
     if(contact){
       const h = chatHistory.find(h2=>h2.id===charId);
       if(h){
-        h.msgs.push({text: reply.trim(), mine:false, time:getTime()});
+        h.msgs.push({text: reply.trim(), mine:false, time:getTime(), timestamp:Date.now()});
         persist();
       }
     }
@@ -5888,49 +6252,46 @@ async function syncCharTrack(trackName, artist){
 // SECTION 1 · NeteaseCloudMusicApi BACKEND
 // ═══════════════════════════════════════
 async function ncmFetch(path, params) {
-  if (!ncmApiBase) throw new Error('未配置API地址');
+  if (!ncmApiBase) throw new Error('未配置API地址，请先在设置中填写');
   let url = ncmApiBase.replace(/\/$/, '') + path;
   const ps = {...params};
-  if (ncmCookie) ps.cookie = ncmCookie;
-  // Vercel-deployed instances (and some overseas IPs) need a CN IP spoof to
-  // access region-locked content; harmless no-op on self-hosted instances.
+  // Only pass cookie when we actually have one (empty string causes issues on some versions)
+  if (ncmCookie && ncmCookie.trim()) ps.cookie = ncmCookie;
+  // CN IP needed for Vercel deployments to access region-locked content
   if (!ps.realIP) ps.realIP = '116.25.146.177';
-  // Some endpoints (e.g. playlist/tracks add/del) require a timestamp post-v4.29.7
-  // to be considered a "legal" request — always attach one defensively.
+  // timestamp required by NeteaseCloudMusicApi v4.29.7+
   if (!ps.timestamp) ps.timestamp = Date.now();
   if (Object.keys(ps).length) {
     url += '?' + Object.entries(ps).map(([k,v]) => encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&');
   }
   const resp = await fetch(url);
-  if (!resp.ok) throw new Error('API Error ' + resp.status);
+  if (!resp.ok) {
+    // Try to get error details from response body
+    let errBody = '';
+    try { errBody = await resp.text(); } catch(e2){}
+    throw new Error(`HTTP ${resp.status}${errBody ? '：'+errBody.slice(0,80) : ''}`);
+  }
   return resp.json();
 }
 
 // ── QR Login flow ──
 async function openNeteaseQrModal() {
-  const hasApi = !!ncmApiBase;
-  document.getElementById('am-title').textContent = hasApi ? '网易云扫码登录' : '配置API后端';
-  document.getElementById('am-body').innerHTML = hasApi
-    ? `<div style="text-align:center;padding:12px 0">
-         <div id="ncm-qr-box" class="qr-display-box"><div style="color:var(--ink4);font-size:13px">生成中…</div></div>
-         <div class="qr-status-text" id="ncm-qr-status">请用网易云音乐 App 扫描二维码</div>
-         <div style="font-size:11px;color:var(--ink4);margin-top:8px;line-height:1.7">
-           扫码后点击「授权登录」，系统会自动检测并完成登录。<br>
-           <b>注：需要先在设置里填写自建 API 地址。</b>
-         </div>
-       </div>`
-    : `<div style="padding:8px 0">
-         <div style="font-size:13px;color:var(--ink2);line-height:1.8;margin-bottom:14px">
-           要实现<b>真实登录 + 读取歌单 + 播放网易云歌曲</b>，需要在本机/服务器运行一个开源 API 服务，然后把地址填在这里。<br><br>
-           <b>最快启动方式（在电脑终端执行）：</b>
-         </div>
-         <div class="msg-code-block">npm install -g NeteaseCloudMusicApi\nnpx NeteaseCloudMusicApi</div>
-         <div style="font-size:12px;color:var(--ink4);margin:10px 0 4px">启动后默认地址是 http://localhost:3000，填在下面：</div>
-         <input class="field-inp" id="ncm-api-input" placeholder="http://localhost:3000" value="${escHtml(ncmApiBase)}">
-         <button class="save-btn" style="margin-top:12px" onclick="saveNcmApiBase()">保存并开始扫码</button>
-       </div>`;
+  document.getElementById('am-title').textContent = '网易云扫码登录';
+  document.getElementById('am-body').innerHTML = `
+    <div style="text-align:center;padding:8px 0">
+      <div style="font-size:11px;color:var(--ink4);margin-bottom:10px;word-break:break-all">
+        API：${escHtml(ncmApiBase)}
+        <button onclick="openSub('sub-ncm-api');closeArchiveModal()" style="border:none;background:none;color:var(--ink3);font-size:11px;cursor:pointer;text-decoration:underline">修改</button>
+      </div>
+      <div id="ncm-qr-box" class="qr-display-box"><div style="color:var(--ink4);font-size:13px;padding:20px">正在生成二维码…</div></div>
+      <div class="qr-status-text" id="ncm-qr-status">正在连接…</div>
+      <div style="font-size:11px;color:var(--ink4);margin-top:10px;line-height:1.7">
+        用<b>网易云音乐 App</b> 扫码后，点「授权登录」即可完成登录。<br>
+        二维码有效期约 3 分钟，过期会提示重新获取。
+      </div>
+    </div>`;
   document.getElementById('archive-modal').classList.add('open');
-  if (hasApi) startNcmQrLogin();
+  startNcmQrLogin();
 }
 
 function saveNcmApiBase() {
@@ -5949,28 +6310,48 @@ function saveNcmApiBase() {
 async function startNcmQrLogin() {
   clearInterval(musicQrTimer);
   musicQrPollCount = 0;
+  const box    = document.getElementById('ncm-qr-box');
+  const status = document.getElementById('ncm-qr-status');
+  if(box) box.innerHTML = '<div style="color:var(--ink4);font-size:13px;padding:20px">正在连接 API…</div>';
   try {
-    // Step 1: get QR key
-    const keyData = await ncmFetch('/login/qr/key', {timestamp: Date.now()});
-    musicQrKey = keyData.data.unikey;
-    // Step 2: generate QR image
-    const qrData = await ncmFetch('/login/qr/create', {key: musicQrKey, qrimg: true, timestamp: Date.now()});
-    const box = document.getElementById('ncm-qr-box');
-    if (box) box.innerHTML = '<img src="'+qrData.data.qrimg+'" style="width:100%;height:100%;border-radius:8px">';
-    // Step 3: poll
+    // Step 1: get QR key — Vercel版有时返回 {data:{unikey}} 有时返回 {data:{code:200,unikey}}
+    const keyData = await ncmFetch('/login/qr/key', {});
+    musicQrKey = keyData.data?.unikey || keyData.unikey;
+    if(!musicQrKey) throw new Error('无法获取二维码密钥（返回：'+JSON.stringify(keyData).slice(0,100)+'）');
+
+    // Step 2: generate QR — request base64 image; field may be qrimg or qrbase64
+    const qrData = await ncmFetch('/login/qr/create', {key: musicQrKey, qrimg: true});
+    const imgSrc = qrData.data?.qrimg || qrData.data?.qrbase64 || qrData.qrimg || '';
+    if(!imgSrc) throw new Error('未获取到二维码图片（返回：'+JSON.stringify(qrData).slice(0,100)+'）');
+    if(box) box.innerHTML = '<img src="'+imgSrc+'" style="width:100%;height:100%;border-radius:8px;object-fit:contain">';
+    if(status) status.textContent = '请用网易云音乐 App 扫描二维码';
+
+    // Step 3: start polling every 2 seconds
     musicQrTimer = setInterval(pollNcmQrStatus, 2000);
   } catch(e) {
-    const box = document.getElementById('ncm-qr-box');
-    if (box) box.innerHTML = '<div style="color:#a33;font-size:12px;padding:10px">连接失败：'+escHtml(e.message)+'<br>请确认API服务正在运行</div>';
+    if(box) box.innerHTML = `<div style="color:#c33;font-size:12px;padding:10px;line-height:1.7;text-align:left">
+      <b>连接失败</b><br>${escHtml(e.message)}<br><br>
+      <span style="color:var(--ink4)">请检查：<br>
+      1. API地址是否正确（当前：${escHtml(ncmApiBase)}）<br>
+      2. Vercel是否部署成功（访问地址看是否有文档页面）<br>
+      3. 浏览器控制台是否有CORS报错</span>
+    </div>`;
+    if(status) status.textContent = '连接失败，请检查API配置';
   }
 }
 
 async function pollNcmQrStatus() {
   musicQrPollCount++;
-  if (musicQrPollCount > 60) { clearInterval(musicQrTimer); return; }
+  if (musicQrPollCount > 90) {  // 3 minutes max
+    clearInterval(musicQrTimer);
+    const st = document.getElementById('ncm-qr-status');
+    if(st) st.textContent = '二维码已超时，请关闭后重新获取';
+    return;
+  }
   try {
-    const data = await ncmFetch('/login/qr/check', {key: musicQrKey, timestamp: Date.now()});
-    const code = data.code;
+    const data = await ncmFetch('/login/qr/check', {key: musicQrKey});
+    // Some versions return code at top level, others inside data
+    const code = data.code ?? data.data?.code;
     const status = document.getElementById('ncm-qr-status');
     if (code === 800) {
       if (status) status.textContent = '二维码已过期，请关闭后重新获取';
@@ -5978,25 +6359,30 @@ async function pollNcmQrStatus() {
     } else if (code === 801) {
       if (status) status.textContent = '等待扫码…';
     } else if (code === 802) {
-      if (status) status.textContent = '已扫码，请在手机上确认授权';
+      if (status) status.textContent = '已扫码，请在手机上点「授权登录」';
     } else if (code === 803) {
       clearInterval(musicQrTimer);
-      // Login success — get cookie and user info
-      ncmCookie = data.cookie || '';
+      // Extract cookie — may be in data.cookie or top-level cookie
+      const rawCookie = data.cookie || data.data?.cookie || '';
+      ncmCookie = rawCookie;
       localStorage.setItem('tsb_ncm_cookie', ncmCookie);
-      const profile = await ncmFetch('/login/status', {});
-      const user = profile.data?.profile;
-      if (user) {
-        ncmUserId   = String(user.userId);
-        ncmUserName = user.nickname;
-        localStorage.setItem('tsb_ncm_uid', ncmUserId);
-        localStorage.setItem('tsb_ncm_name', ncmUserName);
-      }
+      if(status) status.textContent = '登录成功，正在获取用户信息…';
+      try{
+        // /login/status requires the cookie to be sent
+        const profile = await ncmFetch('/login/status', {});
+        const user = profile.data?.profile || profile.profile;
+        if (user) {
+          ncmUserId   = String(user.userId);
+          ncmUserName = user.nickname;
+          localStorage.setItem('tsb_ncm_uid', ncmUserId);
+          localStorage.setItem('tsb_ncm_name', ncmUserName);
+        }
+      }catch(e2){/* user info fetch failed, still consider login success */}
       closeArchiveModal();
-      showToast('登录成功！欢迎，' + (ncmUserName||''));
-      showMusicMainView(true);
+      showToast('登录成功！欢迎，' + (ncmUserName||'网易云用户'));
+      showMusicMainView();
     }
-  } catch(e) { /* silently ignore poll errors */ }
+  } catch(e) { /* silently ignore transient poll errors */ }
 }
 
 function ncmLogout() {
@@ -6554,7 +6940,10 @@ function renderMiniappGrid() {
 function openMiniApp(id){
   const app = MINIAPPS.find(m=>m.id===id);
   if(!app) return;
-  // Build the in-app browser overlay
+  openMiniAppUrl(app.url, app.name);
+}
+
+function openMiniAppUrl(url, title){
   let overlay = document.getElementById('miniapp-browser');
   if(!overlay){
     overlay = document.createElement('div');
@@ -6565,12 +6954,12 @@ function openMiniApp(id){
   overlay.innerHTML = `
     <div style="display:flex;align-items:center;gap:10px;padding:10px 14px 8px;background:#f8f8f8;border-bottom:1px solid #eee;flex-shrink:0;padding-top:max(10px,env(safe-area-inset-top))">
       <button onclick="closeMiniApp()" style="border:none;background:none;font-size:20px;cursor:pointer;padding:0;color:#666">‹</button>
-      <div style="font-size:14px;font-weight:600;color:#333;flex:1;text-align:center">${escHtml(app.name)}</div>
+      <div style="font-size:14px;font-weight:600;color:#333;flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(title||url)}</div>
       <button onclick="document.getElementById('mini-iframe').contentWindow?.location.reload()" style="border:none;background:none;font-size:16px;cursor:pointer;color:#666">↻</button>
-      <button onclick="window.open('${app.url}','_blank','noopener')" style="border:none;background:none;font-size:13px;cursor:pointer;color:#666">浏览器↗</button>
+      <button onclick="window.open('${escHtml(url).replace(/'/g,"\\'")}','_blank','noopener')" style="border:none;background:none;font-size:13px;cursor:pointer;color:#666">浏览器↗</button>
     </div>
     <div style="font-size:11px;color:#999;background:#f0f0f0;padding:5px 14px;text-align:center;flex-shrink:0">部分网站因安全策略可能拒绝内嵌，点右上角「浏览器↗」在系统浏览器打开</div>
-    <iframe id="mini-iframe" src="${app.url}" style="flex:1;border:none;width:100%;" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
+    <iframe id="mini-iframe" src="${escHtml(url)}" style="flex:1;border:none;width:100%;" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
   `;
   overlay.style.display = 'flex';
 }
@@ -6579,7 +6968,7 @@ function closeMiniApp(){
   const overlay = document.getElementById('miniapp-browser');
   if(overlay){
     const iframe = overlay.querySelector('iframe');
-    if(iframe) iframe.src = 'about:blank'; // stop any media playing
+    if(iframe) iframe.src = 'about:blank';
     overlay.style.display = 'none';
   }
 }
@@ -6696,7 +7085,7 @@ async function startLangSession(langId, levelId){
       currentQ: 0,
       answers:  [],
     };
-    langHistory.push({langId, levelId, time:getTime(), timestamp:Date.now()});
+    langHistory.push({langId, levelId, time:getTime(), timestamp:Date.now(), timestamp:Date.now()});
     localStorage.setItem('tsb_lang_history', JSON.stringify(langHistory));
     renderLangHomeStats();
     renderCurrentQuestion();
@@ -6779,7 +7168,7 @@ function showVocabFeedback(correct, w, userInput){
     feedEl.innerHTML = '<div class="lang-correct-tag">✓ 写对了，继续！</div>';
   } else {
     feedEl.innerHTML = `<div class="lang-wrong-tag">✗ 正确写法：<b>${escHtml(w.foreign)}</b>（${escHtml(w.reading)}）— ${escHtml(w.zh)}</div>`;
-    langErrors.push({type:'vocab', langId:langCurrentSession.langId, levelId:langCurrentSession.levelId, foreign:w.foreign, reading:w.reading, zh:w.zh, userInput, time:getTime()});
+    langErrors.push({type:'vocab', langId:langCurrentSession.langId, levelId:langCurrentSession.levelId, foreign:w.foreign, reading:w.reading, zh:w.zh, userInput, time:getTime(), timestamp:Date.now()});
     localStorage.setItem('tsb_lang_errors', JSON.stringify(langErrors));
   }
   langCurrentSession.answers.push({q:langCurrentSession.currentQ, correct});
@@ -6808,7 +7197,7 @@ async function submitSentenceAnswer(){
         ? `<div class="lang-correct-tag">✓ ${escHtml(parsed.comment||'')}</div>`
         : `<div class="lang-wrong-tag">✗ ${escHtml(parsed.comment||'')}<br><span style="font-size:12px;opacity:0.8">参考：${escHtml(parsed.reference||s.answer)}</span></div>`;
       if(!correct){
-        langErrors.push({type:'sentence', langId:lang.id, levelId:langCurrentSession.levelId, zhHint:s.zh_hint, userInput:input, reference:parsed.reference||s.answer, explanation:parsed.comment||'', time:getTime()});
+        langErrors.push({type:'sentence', langId:lang.id, levelId:langCurrentSession.levelId, zhHint:s.zh_hint, userInput:input, reference:parsed.reference||s.answer, explanation:parsed.comment||'', time:getTime(), timestamp:Date.now()});
         localStorage.setItem('tsb_lang_errors', JSON.stringify(langErrors));
       }
     }catch(e){
