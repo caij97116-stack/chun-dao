@@ -68,7 +68,11 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .page-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.35);cursor:pointer;transition:all 0.25s ease;}
 .page-dot.active{background:rgba(255,255,255,0.95);width:16px;border-radius:3px;}
 .app-row{display:flex;gap:16px;justify-content:flex-start;}
-.app-icon-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex:0 0 auto;width:72px;}
+.app-icon-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex:0 0 auto;width:72px;position:relative;user-select:none;-webkit-user-select:none;touch-action:manipulation;}
+.app-icon-wrap.dragging{opacity:0.4;transform:scale(1.08);z-index:50;transition:transform 0.15s;}
+.app-icon-wrap.drag-hover{outline:2px dashed var(--ink);border-radius:16px;outline-offset:2px;}
+.app-icon-wrap.drag-mode .app-icon{animation:appJiggle 0.3s ease-in-out infinite;}
+@keyframes appJiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-1.5deg)}75%{transform:rotate(1.5deg)}}
 .app-icon{width:64px;height:64px;border-radius:16px;overflow:hidden;position:relative;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:transform 0.15s ease;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;}
 .app-icon:active{transform:scale(0.88);}
 .app-icon img{width:100%;height:100%;object-fit:cover;}
@@ -1308,6 +1312,10 @@ input[type=file]{display:none;}
 
   <!-- ══════ ENCOUNTER APP ══════ -->
   <div id="encounter-app" style="display:none">
+    <div class="app-statusbar">
+      <span class="asb-time" id="eclock">09:41</span>
+      <button class="app-close-btn" onclick="closeApp()">×</button>
+    </div>
     <div class="enc-page active" id="enc-chats" style="display:flex">
       <div class="enc-header">
         <div class="enc-header-title">与你相遇</div>
@@ -1621,7 +1629,7 @@ input[type=file]{display:none;}
     <!-- FULL SCREEN PLAYER -->
     <div id="music-full-player" class="music-full-player">
       <div class="music-full-top">
-        <button class="back-btn" style="background:rgba(255,255,255,0.1)" onclick="closeMusicFullPlayer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9" transform="rotate(90 12 12)"/></svg></button>
+        <button class="back-btn" style="background:var(--silver);color:var(--ink)" onclick="closeMusicFullPlayer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
         <div class="music-full-top-title">正在播放</div>
         <div style="width:34px"></div>
       </div>
@@ -2020,21 +2028,6 @@ input[type=file]{display:none;}
   <div class="chat-topbar">
     <button class="chat-back" onclick="closeChat()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
     <div class="chat-topbar-info"><div class="chat-topbar-name" id="cv-name">—</div><div class="chat-topbar-status" id="cv-status">在线</div></div>
-    <button class="chat-auto-msg-toggle" id="cv-auto-msg-toggle" onclick="toggleAutoMessage()" title="自动消息">
-      <span class="auto-msg-dot"></span>
-      <span class="auto-msg-label">自动</span>
-    </button>
-    <button class="chat-auto-msg-gear" id="cv-auto-msg-gear" onclick="openAutoMsgSettings(event)" title="设置间隔">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    </button>
-    <button class="chat-imagegen-toggle" id="cv-imagegen-toggle" onclick="toggleImageGen()" title="AI生图">
-      <span class="imagegen-dot"></span>
-      <span class="imagegen-label">生图</span>
-    </button>
-    <button class="chat-identity-chip" id="cv-identity-chip" onclick="openIdentitySwitchModal()">
-      <span id="cv-identity-label">旅人</span>
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-    </button>
     <button class="chat-topbar-more" onclick="openChatMenu()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
   </div>
   <div class="chat-msgs" id="cv-msgs"></div>
@@ -2448,6 +2441,7 @@ const SYS_ASSISTANT = {
 - 拍一拍：[POKE:的肩膀]
 - 发小程序：[MINIAPP:mini-meituan]（美团）、[MINIAPP:mini-eleme]（饿了么）、[MINIAPP:mini-taobao]（淘宝）、[MINIAPP:mini-jd]（京东）、[MINIAPP:mini-bilibili]（B站）、[MINIAPP:mini-xhs]（小红书）
 - 智能链接：[MINIAPP_URL:名称:图标:颜色:URL]，例如 [MINIAPP_URL:搜索:🔍:#333:https://www.baidu.com]
+- 测试通知弹窗：[NOTIFY:标题:预览内容]，例如 [NOTIFY:椿島です:测试消息]，会触发手机顶部弹窗通知（微信风格+系统通知栏）
 当用户说"帮我测试XXX"时，直接使用标签执行测试，不要只是描述。
 
 【CSS 美化生成】
@@ -2463,11 +2457,11 @@ const SYS_ASSISTANT = {
 
 桌面时钟框：.top-frame（容器）、#top-frame-bg（背景图层）、.top-frame-glass（磨砂玻璃遮罩）、.top-frame-time（时间数字）、.top-frame-weekday（星期文字）、.top-frame-date（日期文字）、.home-statusbar（顶部状态栏）
 
-首屏/桌面：.home-bg（全局大背景）、.splash-bg（开屏背景）、.home-lower（App图标区域）、.app-icon（App图标外框）、.app-label（图标文字标签）、.dock（底部Dock栏）、.splash-logo（开屏文字）、.splash-progress/.splash-fill（进度条）
+首屏/桌面：.home-bg（全局大背景）、.splash-bg（开屏背景）、.home-lower（App图标区域）、.app-icon（App图标外框）、.app-icon-wrap（图标容器·支持长按拖动排序）、.app-icon-wrap.dragging（拖动中）、.app-icon-wrap.drag-hover（悬停目标）、.app-icon-wrap.drag-mode（排序模式·抖动）、.app-label（图标文字标签）、.dock（底部Dock栏）、.splash-logo（开屏文字）、.splash-progress/.splash-fill（进度条）、.app-statusbar（App内状态栏）、.app-close-btn（关闭按钮）
 
-设置App：.s-card（分组卡片）、.s-row（设置行）、.s-icon（图标底色）、.s-title/.s-sub（标题/副标题）、.topbar-title（顶部标题）、.apitype-opt（API类型选择卡）、.format-opt（响应格式选择卡）、API设置：.auto-msg-settings（自动消息弹窗）、.auto-msg-settings-card（弹窗卡片）、.auto-msg-slider（滑块）、.chat-auto-msg-toggle（自动消息开关）、.chat-auto-msg-gear（齿轮按钮）、.chat-imagegen-toggle（AI生图开关）、#sub-api-settings（API设置入口）、#sub-image-api（生图API页）
+设置App：.s-card（分组卡片）、.s-row（设置行）、.s-icon（图标底色）、.s-title/.s-sub（标题/副标题）、.topbar-title（顶部标题）、.apitype-opt（API类型选择卡）、.format-opt（响应格式选择卡）、API设置：.auto-msg-settings（自动消息弹窗）、.auto-msg-settings-card（弹窗卡片）、.auto-msg-slider（滑块）、#menu-auto-msg-toggle（自动消息开关·菜单内）、#menu-imagegen-toggle（AI生图开关·菜单内）、#sub-api-settings（API设置入口）、#sub-image-api（生图API页）
 
-聊天界面：.chat-item（聊天列表行）、.chat-avatar（列表头像）、.chat-name/.chat-preview（昵称/预览文字）、.msg-bub（消息气泡）、.msg-row.mine .msg-bub（我方气泡）、.msg-row.theirs .msg-bub（对方气泡）、.msg-code-block（代码块）、.msg-inline-code（行内代码）、.msg-quote-line（引用行）、.chat-topbar（聊天顶部条）、.chat-input-bar（输入栏）、.chat-textarea（输入框）、.enc-tabbar（底部Tab栏）、.char-card（角色横条）、.chat-identity-chip（身份切换按钮）
+聊天界面：.chat-item（聊天列表行）、.chat-avatar（列表头像）、.chat-name/.chat-preview（昵称/预览文字）、.msg-bub（消息气泡）、.msg-row.mine .msg-bub（我方气泡）、.msg-row.theirs .msg-bub（对方气泡）、.msg-code-block（代码块）、.msg-inline-code（行内代码）、.msg-quote-line（引用行）、.chat-topbar（聊天顶部条）、.chat-input-bar（输入栏）、.chat-textarea（输入框）、.enc-tabbar（底部Tab栏）、.char-card（角色横条）、.chat-topbar-more（顶栏三点按钮）、#chatmenu-modal（对话设置菜单）
 
 朋友圈：.moments-toolbar（工具栏）、.moments-feed（动态流）、.moment-card（动态卡片）、.moment-avatar（头像）、.moment-name/.moment-time（名称/时间）、.moment-text（正文）、.moment-action-btn（点赞/评论按钮）、.moment-action-btn.liked（已点赞）、.moment-likes-row（点赞列表）、.moment-comments（评论容器）、.moment-comment-line（单条评论）、.moment-review-card（审核卡片）、.moment-approve-btn/.moment-reject-btn（审核按钮）
 
@@ -2522,6 +2516,7 @@ let diaries = JSON.parse(localStorage.getItem('tsb_diaries') || '[]');
 let chatMemoryMode = localStorage.getItem('tsb_chatmemory_mode') || 'none'; // 'none'|'all'|'selective'
 let chatMemoryApps = JSON.parse(localStorage.getItem('tsb_chatmemory_apps') || '[]');
 let _pendingMemoryMode = null; // 待确认的模式
+let appOrder = JSON.parse(localStorage.getItem('tsb_apporder') || '["encounter","settings","music","lifefaces","miniapps","world","langlearn","diary","tanban","twitter"]');
 
 // ── 聊天记忆互通 ──
 function requestMemoryMode(mode){
@@ -3007,6 +3002,10 @@ const MINIAPP_PROMPT_BLOCK = `【可用小程序与智能链接】你可以在�
 - 看视频/B站/哔哩哔哩/UP主 → [MINIAPP:mini-bilibili]
 - 小红书/种草/推荐 → [MINIAPP:mini-xhs]
 
+【通知弹窗测试】
+当用户说"测试弹窗""测试通知""能不能看到弹窗"等时，在回复末尾加上 [NOTIFY:标题:预览内容]。
+例如用户说"测试弹窗"→ 回复末尾加 [NOTIFY:椿島です:弹窗测试成功]
+
 【智能搜索卡片（可带真实URL，更精准）】
 格式：[MINIAPP_URL:显示名称:图标emoji:背景色:完整URL]
 例：用户问"你知道敖厂长吗"→ 回复末尾加 [MINIAPP_URL:敖厂长的频道:📺:#fb7299:https://search.bilibili.com/all?keyword=敖厂长]
@@ -3043,6 +3042,7 @@ function _persistNow(){
     localStorage.setItem('tsb_diaries', JSON.stringify(diaries));
     localStorage.setItem('tsb_chatmemory_mode', chatMemoryMode);
     localStorage.setItem('tsb_chatmemory_apps', JSON.stringify(chatMemoryApps));
+    localStorage.setItem('tsb_apporder', JSON.stringify(appOrder));
     localStorage.setItem('tsb_identities', JSON.stringify(identities));
     localStorage.setItem('tsb_lifearchive', JSON.stringify(lifeArchive));
     localStorage.setItem('tsb_presets', JSON.stringify(presets));
@@ -3096,6 +3096,7 @@ function init(){
   updateChatMemorySubLabel();
   refreshMemoryPage();
   initHomePageDots();
+  renderAppIcons();
   document.getElementById('cv-input').addEventListener('input', function(){
     this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,90)+'px';
   });
@@ -3405,30 +3406,21 @@ function toggleAutoMessage(){
     currentChar.autoMsgMax = 0;
     delete _autoMsgNextTime[currentChar.id];
     persist();
-    updateAutoMessageUI();
+    closeChatMenu();
     showToast('已关闭自动消息');
   } else {
+    closeChatMenu();
     openAutoMsgSettings();
   }
 }
 
 function updateAutoMessageUI(){
-  const toggle = document.getElementById('cv-auto-msg-toggle');
-  const gear = document.getElementById('cv-auto-msg-gear');
-  if(!toggle) return;
-  if(!currentChar || currentChar.isSystem){
-    toggle.style.display = 'none';
-    if(gear) gear.classList.remove('show');
-    return;
-  }
-  toggle.style.display = 'flex';
-  const enabled = (currentChar.autoMsgMin || 0) > 0;
-  if(enabled){
-    toggle.classList.add('on');
-    if(gear) gear.classList.add('show');
-  } else {
-    toggle.classList.remove('on');
-    if(gear) gear.classList.remove('show');
+  // 菜单动态生成，无需更新 topbar 按钮
+  const menuToggle = document.getElementById('menu-auto-msg-toggle');
+  if(menuToggle && currentChar){
+    const enabled = (currentChar.autoMsgMin || 0) > 0;
+    if(enabled) menuToggle.classList.add('on');
+    else menuToggle.classList.remove('on');
   }
 }
 
@@ -3489,22 +3481,16 @@ function toggleImageGen(){
   if(!currentChar || currentChar.isSystem) return;
   currentChar.imageGen = !currentChar.imageGen;
   persist();
-  updateImageGenUI();
+  closeChatMenu();
   showToast(currentChar.imageGen ? '已开启 AI 生图（聊天中可生成图片）' : '已关闭 AI 生图');
 }
 
 function updateImageGenUI(){
-  const toggle = document.getElementById('cv-imagegen-toggle');
-  if(!toggle) return;
-  if(!currentChar || currentChar.isSystem){
-    toggle.style.display = 'none';
-    return;
-  }
-  toggle.style.display = 'flex';
-  if(currentChar.imageGen){
-    toggle.classList.add('on');
-  } else {
-    toggle.classList.remove('on');
+  // 菜单动态生成，无需更新 topbar 按钮
+  const menuToggle = document.getElementById('menu-imagegen-toggle');
+  if(menuToggle && currentChar){
+    if(currentChar.imageGen) menuToggle.classList.add('on');
+    else menuToggle.classList.remove('on');
   }
 }
 
@@ -3630,7 +3616,7 @@ function openApp(name){
   document.getElementById('tanban-app').style.display='none';
   document.getElementById('twitter-app').style.display='none';
   if(name==='settings') document.getElementById('settings-app').style.display='flex';
-  if(name==='encounter') document.getElementById('encounter-app').style.display='flex';
+  if(name==='encounter'){ document.getElementById('encounter-app').style.display='flex'; document.getElementById('eclock').textContent = document.getElementById('hclock').textContent; }
   if(name==='music'){ document.getElementById('music-app').style.display='flex'; initMusicAppView(); }
   if(name==='lifefaces'){ document.getElementById('lifefaces-app').style.display='flex'; renderLfList(); }
   if(name==='miniapps'){ document.getElementById('miniapps-app').style.display='flex'; renderMiniappGrid(); }
@@ -3666,6 +3652,198 @@ function closeApp(){
   clearTimeout(_appFrameCloseTimer);
   _appFrameCloseTimer = setTimeout(()=>{ frame.style.display='none'; },450);
 }
+
+// ── APP 图标拖动排序 ──
+let _appDragMode = false;
+let _appDragEl = null;
+let _appDragGhost = null;
+let _appDragStartX = 0;
+let _appDragStartY = 0;
+let _appDragOrigIdx = -1;
+let _appDragLongPressTimer = null;
+let _appDragMoved = false;
+
+const APP_ICON_DATA = {
+  encounter:{label:'与你相遇',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',color:'#4a9eff'},
+  settings:{label:'设置',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',color:'#555'},
+  music:{label:'云乐',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',color:'#e74c3c'},
+  lifefaces:{label:'人生百面',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',color:'#9b59b6'},
+  miniapps:{label:'小程序',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',color:'#2ecc71'},
+  world:{label:'世界书',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',color:'#1abc9c'},
+  langlearn:{label:'语言学习',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',color:'#e67e22'},
+  diary:{label:'日记本',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',color:'#f39c12'},
+  tanban:{label:'谈版',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',color:'#3498db'},
+  twitter:{label:'X 广场',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>',color:'#1a1a1a'},
+};
+
+function renderAppIcons(){
+  const pages = document.querySelectorAll('.app-page');
+  const dock = document.querySelector('.dock');
+  if(!pages.length) return;
+  // Clear existing icons
+  pages.forEach(p=>p.innerHTML='');
+  if(dock) dock.innerHTML='';
+  // Split apps: first 2 per page (we have 2 pages), rest go to dock
+  // Actually, let's keep the original layout: page0 gets first 2, page1 gets next 6, dock gets last 2
+  const page0 = appOrder.slice(0,2);
+  const page1 = appOrder.slice(2,8);
+  const dockApps = appOrder.slice(8,10);
+  function makeIcon(appName){
+    const d = APP_ICON_DATA[appName] || {label:appName,icon:'',color:'#555'};
+    return `<div class="app-icon-wrap" data-app="${appName}" ontouchstart="onAppIconTouch(event)" ontouchmove="onAppIconMove(event)" ontouchend="onAppIconEnd(event)" onmousedown="onAppIconMouse(event)" onclick="if(!_appDragMoved)openApp('${appName}')"><div class="app-icon" style="background:${d.color}">${d.icon}</div><div class="app-label">${d.label}</div></div>`;
+  }
+  if(pages[0]) pages[0].innerHTML = page0.map(makeIcon).join('');
+  if(pages[1]) pages[1].innerHTML = page1.map(makeIcon).join('');
+  if(dock) dock.innerHTML = dockApps.map(makeIcon).join('');
+}
+
+function enterAppDragMode(){
+  _appDragMode = true;
+  document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.add('drag-mode'));
+  showToast('拖动图标排序 · 点击空白退出');
+}
+
+function exitAppDragMode(){
+  _appDragMode = false;
+  document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-mode','dragging','drag-hover'));
+  _appDragEl = null;
+  _appDragOrigIdx = -1;
+  _appDragMoved = false;
+}
+
+function onAppIconTouch(e){
+  if(!_appDragMode){
+    _appDragLongPressTimer = setTimeout(()=>{
+      enterAppDragMode();
+      _appDragMoved = false;
+    }, 500);
+    return;
+  }
+  e.preventDefault();
+  _appDragEl = e.currentTarget;
+  _appDragOrigIdx = getAppIconIndex(_appDragEl);
+  const touch = e.touches[0];
+  _appDragStartX = touch.clientX;
+  _appDragStartY = touch.clientY;
+  _appDragEl.classList.add('dragging');
+  _appDragMoved = false;
+}
+
+function onAppIconMove(e){
+  if(!_appDragEl) return;
+  e.preventDefault();
+  const touch = e.touches[0];
+  const dx = touch.clientX - _appDragStartX;
+  const dy = touch.clientY - _appDragStartY;
+  if(Math.abs(dx)<5 && Math.abs(dy)<5) return;
+  _appDragMoved = true;
+  _appDragEl.style.transform = `translate(${dx}px,${dy}px) scale(1.08)`;
+  // Find hover target
+  document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
+  const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.app-icon-wrap');
+  if(target && target!==_appDragEl) target.classList.add('drag-hover');
+}
+
+function onAppIconEnd(e){
+  clearTimeout(_appDragLongPressTimer);
+  if(!_appDragEl){
+    if(!_appDragMoved) return;
+    _appDragEl = null;
+    return;
+  }
+  _appDragEl.style.transform = '';
+  _appDragEl.classList.remove('dragging');
+  document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
+  // Find drop target
+  const touch = e.changedTouches[0];
+  const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.app-icon-wrap');
+  if(target && target!==_appDragEl && _appDragMoved){
+    swapAppIcon(_appDragEl, target);
+  }
+  _appDragEl = null;
+  _appDragOrigIdx = -1;
+}
+
+function onAppIconMouse(e){
+  if(e.button !== 0) return;
+  if(!_appDragMode){
+    _appDragLongPressTimer = setTimeout(()=>{
+      enterAppDragMode();
+      _appDragMoved = false;
+    }, 500);
+    return;
+  }
+  _appDragEl = e.currentTarget;
+  _appDragOrigIdx = getAppIconIndex(_appDragEl);
+  _appDragStartX = e.clientX;
+  _appDragStartY = e.clientY;
+  _appDragEl.classList.add('dragging');
+  _appDragMoved = false;
+  const onMove = (ev)=>{
+    if(!_appDragEl) return;
+    const dx = ev.clientX - _appDragStartX;
+    const dy = ev.clientY - _appDragStartY;
+    if(Math.abs(dx)<5 && Math.abs(dy)<5) return;
+    _appDragMoved = true;
+    _appDragEl.style.transform = `translate(${dx}px,${dy}px) scale(1.08)`;
+    document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
+    const target = document.elementFromPoint(ev.clientX, ev.clientY)?.closest('.app-icon-wrap');
+    if(target && target!==_appDragEl) target.classList.add('drag-hover');
+  };
+  const onUp = (ev)=>{
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    if(!_appDragEl) return;
+    _appDragEl.style.transform = '';
+    _appDragEl.classList.remove('dragging');
+    document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
+    const target = document.elementFromPoint(ev.clientX, ev.clientY)?.closest('.app-icon-wrap');
+    if(target && target!==_appDragEl && _appDragMoved){
+      swapAppIcon(_appDragEl, target);
+    }
+    _appDragEl = null;
+    _appDragOrigIdx = -1;
+  };
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+}
+
+function getAppIconIndex(el){
+  const all = [...document.querySelectorAll('.app-icon-wrap')];
+  return all.indexOf(el);
+}
+
+function swapAppIcon(a, b){
+  const appA = a.dataset.app;
+  const appB = b.dataset.app;
+  const idxA = appOrder.indexOf(appA);
+  const idxB = appOrder.indexOf(appB);
+  if(idxA<0||idxB<0) return;
+  [appOrder[idxA], appOrder[idxB]] = [appOrder[idxB], appOrder[idxA]];
+  localStorage.setItem('tsb_apporder', JSON.stringify(appOrder));
+  renderAppIcons();
+  // Re-enter drag mode after re-render
+  if(_appDragMode){
+    setTimeout(()=>{
+      document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.add('drag-mode'));
+    }, 50);
+  }
+  showToast('已交换位置');
+}
+
+// Click blank area to exit drag mode
+document.addEventListener('click', function(e){
+  if(!_appDragMode) return;
+  if(e.target.closest('.app-icon-wrap')) return;
+  exitAppDragMode();
+  persist();
+  showToast('排序已保存');
+});
+
+// Cancel long press on mouseup
+document.addEventListener('mouseup', ()=>{
+  clearTimeout(_appDragLongPressTimer);
+});
 function openSub(id){
   document.getElementById(id).classList.add('open');
   if(id==='sub-newpreset') renderNewPresetForm();
@@ -3802,6 +3980,7 @@ function exportAllData(){
     presets, activePresetId: activePresetId || '',
     imageApiActiveId: imageApiActiveId || '',
     chatMemoryMode, chatMemoryApps,
+    appOrder,
     worldbooks: typeof worldbooks !== 'undefined' ? worldbooks : [],
     groupChats: typeof groupChats !== 'undefined' ? groupChats : [],
     appSettings
@@ -3858,6 +4037,7 @@ function handleImportData(input){
     if(data.imageApiActiveId) imageApiActiveId = data.imageApiActiveId;
     if(data.chatMemoryMode) chatMemoryMode = data.chatMemoryMode;
     if(Array.isArray(data.chatMemoryApps)) chatMemoryApps = data.chatMemoryApps;
+    if(Array.isArray(data.appOrder)) appOrder = data.appOrder;
     if(Array.isArray(data.worldbooks)) worldbooks = data.worldbooks;
     if(Array.isArray(data.groupChats)) groupChats = data.groupChats;
     if(data.appSettings) appSettings = data.appSettings;
@@ -3875,6 +4055,7 @@ function clearAllData(){
   localStorage.removeItem('tsb_diaries');
   localStorage.removeItem('tsb_chatmemory_mode');
   localStorage.removeItem('tsb_chatmemory_apps');
+  localStorage.removeItem('tsb_apporder');
   localStorage.removeItem('tsb_identities');
   localStorage.removeItem('tsb_lifearchive');
   localStorage.removeItem('tsb_presets');
@@ -4905,10 +5086,16 @@ const CSS_REF_DATA = [
     ['.splash-bg','开屏动画背景（同样使用 --bg-gif）'],
     ['.home-lower','App图标区域，叠在大背景之上'],
     ['.app-icon','所有桌面App图标外框'],
+    ['.app-icon-wrap','App图标容器（含图标+标签，支持拖动排序）'],
+    ['.app-icon-wrap.dragging','拖动中的图标状态'],
+    ['.app-icon-wrap.drag-hover','拖动悬停目标高亮'],
+    ['.app-icon-wrap.drag-mode','排序模式（图标抖动动画）'],
     ['.app-label','App图标下方文字标签'],
     ['.dock','底部Dock栏'],
     ['.splash-logo','开屏「椿島です」文字'],
     ['.splash-progress, .splash-fill','开屏进度条'],
+    ['.app-statusbar','App内顶部状态栏'],
+    ['.app-close-btn','App关闭按钮（×）'],
   ]},
   {group:'设置 App', items:[
     ['.s-card','设置分组卡片背景'],
@@ -4923,9 +5110,9 @@ const CSS_REF_DATA = [
     ['.auto-msg-settings','自动消息间隔设置弹窗'],
     ['.auto-msg-settings-card','弹窗卡片'],
     ['.auto-msg-slider','间隔滑块'],
-    ['.chat-auto-msg-toggle','自动消息开关按钮'],
-    ['.chat-auto-msg-gear','自动消息齿轮按钮'],
-    ['.chat-imagegen-toggle','AI生图开关按钮'],
+    ['#menu-auto-msg-toggle','自动消息开关（菜单内）'],
+    ['#menu-imagegen-toggle','AI生图开关（菜单内）'],
+    ['#chatmenu-modal','对话设置菜单'],
   ]},
   {group:'与你相遇 · 聊天', items:[
     ['.chat-item','聊天列表每一行'],
@@ -4939,7 +5126,7 @@ const CSS_REF_DATA = [
     ['.msg-quote-line','消息中的引用行样式'],
     ['.msg-regen-inline','气泡内的小型重新生成按钮'],
     ['.chat-topbar','聊天页顶部条'],
-    ['.chat-identity-chip','聊天顶部的身份切换按钮'],
+    ['.chat-topbar-more','顶栏三点按钮'],
     ['.chat-input-bar','聊天底部输入栏'],
     ['.chat-textarea','聊天输入框本体'],
     ['.enc-tabbar','底部四个Tab栏（消息/角色/朋友圈/我的）'],
@@ -5824,7 +6011,6 @@ function openGroupChat(id){
   g.unread = false;
   document.getElementById('cv-name').textContent = g.name;
   document.getElementById('cv-status').textContent = g.memberIds.length + ' 位角色';
-  document.getElementById('cv-identity-chip').style.display = 'none';
   persist();
   renderGroupMsgs(g.msgs);
   document.getElementById('chat-view').classList.add('open');
@@ -6008,19 +6194,8 @@ function openChat(id){
   h.unread = false;
   persist();
   renderMsgs(h.msgs);
-  updateIdentityChip();
   document.getElementById('chat-view').classList.add('open');
-  updateAutoMessageUI();
-  updateImageGenUI();
   updateStats(); renderChatList();
-}
-function updateIdentityChip(){
-  const chip = document.getElementById('cv-identity-chip');
-  if(!currentChar || currentChar.isSystem){ chip.style.display='none'; return; }
-  chip.style.display='flex';
-  const contact = contacts.find(c=>c.id===currentChar.id);
-  const idn = identities.find(i=>i.id===(contact?.identityId)) || identities[0];
-  document.getElementById('cv-identity-label').textContent = idn ? idn.name : '默认身份';
 }
 function closeChat(){
   closeAllModals();
@@ -6353,6 +6528,15 @@ function renderMsgBubbleContent(m){
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"><polygon points="6 4 18 12 6 20 6 4"/></svg>
       </div>
     </div>`;
+  }
+
+  // [NOTIFY:标题:预览内容] — 触发通知弹窗测试
+  const notifyMatch = text.match(/^\[NOTIFY:([^:]+)(?::(.+))?\]/);
+  if(notifyMatch){
+    const notifyTitle = notifyMatch[1] || '测试通知';
+    const notifyPreview = notifyMatch[2] || '这是来自椿島です助手的消息';
+    showNotification(notifyTitle, notifyPreview, '🤖');
+    text = text.replace(/^\[NOTIFY:[^\]]+\]/, '').trim();
   }
 
   const miniappMatches = [...text.matchAll(/\[MINIAPP:([\w-]+)\]/g)];
@@ -6847,6 +7031,41 @@ function openChatMenu(){
         </div>
       </div>` : ''}
     </div>`;
+    // ── 自动消息 ──
+    const autoMsgOn = (currentChar.autoMsgMin || 0) > 0;
+    actions += `<div class="sec-label">自动消息</div>
+    <div class="s-card" style="margin-bottom:16px">
+      <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+        <div class="s-icon ink"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="s-text"><div class="s-title">模拟真人主动发消息</div><div class="s-sub">${autoMsgOn ? currentChar.autoMsgMin+'~'+currentChar.autoMsgMax+'分钟随机发' : '关闭后角色不会主动找你'}</div></div>
+        <div class="s-toggle ${autoMsgOn?'on':''}" id="menu-auto-msg-toggle" onclick="event.stopPropagation();toggleAutoMessage()"></div>
+      </div>
+      ${autoMsgOn ? `
+      <div class="s-row" onclick="openAutoMsgSettings()">
+        <div class="s-text"><div class="s-title">设置发送间隔</div><div class="s-sub">调整最短和最长时间</div></div>
+        <div class="s-arrow">›</div>
+      </div>` : ''}
+    </div>`;
+    // ── AI生图 ──
+    const imageGenOn = !!currentChar.imageGen;
+    actions += `<div class="sec-label">AI 生图</div>
+    <div class="s-card" style="margin-bottom:16px">
+      <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+        <div class="s-icon ink"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="s-text"><div class="s-title">聊天中生成图片</div><div class="s-sub">${imageGenOn ? '角色可发送AI生成的图片' : '关闭后不生成图片'}</div></div>
+        <div class="s-toggle ${imageGenOn?'on':''}" id="menu-imagegen-toggle" onclick="event.stopPropagation();toggleImageGen()"></div>
+      </div>
+    </div>`;
+    // ── 切换身份 ──
+    const curIdentity = identities.find(i=>i.id===(contact?.identityId)) || identities[0];
+    actions += `<div class="sec-label">对话身份</div>
+    <div class="s-card" style="margin-bottom:16px">
+      <div class="s-row" onclick="closeChatMenu();openIdentitySwitchModal()">
+        <div class="s-icon ink"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="s-text"><div class="s-title">当前身份：${escHtml(curIdentity?.name||'旅人')}</div><div class="s-sub">切换后TA会用不同方式看待你</div></div>
+        <div class="s-arrow">›</div>
+      </div>
+    </div>`;
   }
   actions += `<div class="s-card">
     <div class="s-row" onclick="clearChatHistory()">
@@ -7003,7 +7222,6 @@ function selectIdentitySwitchTarget(idnId){
     if(confirmed){
       contact.identityId = idnId;
       persist();
-      updateIdentityChip();
       const h = chatHistory.find(h2=>h2.id===currentChar.id);
       if(h){
         h.msgs.push({text:'【系统】对话身份已切换为「'+idn.name+'」', mine:false, time:getTime(), timestamp:Date.now(), isSystemNote:true});
@@ -7462,12 +7680,7 @@ async function renderMusicDiscoverPage(){
   document.getElementById('music-chart-picker').style.display = 'none';
   el.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--ink3);font-size:13px">加载中…</div>';
   if(!ncmCookie || !ncmApiBase){
-    document.getElementById('music-chart-picker').style.display = 'flex';
-    renderChartPicker();
-    activeTracks = BUILTIN_TRACKS;
-    renderMusicList();
-    // Prepend the section header after renderMusicList has populated the list
-    el.insertAdjacentHTML('afterbegin', '<div class="music-section-header">排行榜（访客模式 — 显示内置曲库）</div>');
+    el.innerHTML = '<div style="text-align:center;padding:50px 0;font-size:13px;color:var(--ink4);line-height:1.8">登录网易云账号后<br>即可发现更多精彩内容</div>';
     return;
   }
   try{
@@ -8115,10 +8328,8 @@ async function switchMusicView(view) {
     if(view==='charts'){
       document.getElementById('music-list').innerHTML='<div style="text-align:center;padding:50px 0;font-size:13px;color:var(--ink4);line-height:1.8">排行榜需要登录网易云账号<br>请先配置 API 后端并登录</div>';
     } else if(view==='my-playlists'){
-      activeTracks = BUILTIN_TRACKS.filter(t=>myPlaylist.includes(t.id));
-      document.getElementById('music-list').innerHTML = '<div class="music-section-header">本地收藏</div>';
-      renderMusicList();
-    } else {
+      document.getElementById('music-list').innerHTML = '<div style="text-align:center;padding:50px 0;font-size:13px;color:var(--ink4);line-height:1.8">登录网易云账号后<br>即可查看和管理歌单</div>';
+    } else if(view==='recommend'){
       activeTracks = BUILTIN_TRACKS;
       document.getElementById('music-list').innerHTML = '<div class="music-section-header">内置曲库</div>';
       renderMusicList();
