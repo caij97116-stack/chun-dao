@@ -386,10 +386,45 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .tanban-char-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--silver);border-radius:16px;cursor:pointer;transition:all 0.15s;}
 .tanban-char-row:active{background:var(--smoke);}
 .tanban-char-av{width:44px;height:44px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:16px;color:white;flex-shrink:0;}
-.tanban-phone-header{text-align:center;padding:24px 0;}
-.tanban-phone-av{width:72px;height:72px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:26px;color:white;margin:0 auto;}
-.tanban-app-card{background:var(--smoke);border-radius:14px;padding:14px 16px;margin-bottom:12px;}
-.tanban-app-card-title{font-size:12px;font-weight:600;color:var(--ink3);margin-bottom:8px;}
+
+/* Character phone view: floating transparent topbar over a full-bleed lock-screen */
+.tanban-phone-topbar{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:12px;padding:14px 16px;padding-top:max(14px,env(safe-area-inset-top));}
+.tanban-phone-topbar .back-btn{background:rgba(255,255,255,0.22);color:white;backdrop-filter:blur(8px);}
+.tanban-phone-topbar .topbar-title{color:white;font-size:15px;font-weight:600;text-shadow:0 1px 6px rgba(0,0,0,0.3);}
+
+.tanban-lockscreen{position:relative;height:230px;background-size:cover;background-position:center;flex-shrink:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+.tanban-lockscreen-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.35) 0%,rgba(0,0,0,0.15) 40%,rgba(0,0,0,0.55) 100%);backdrop-filter:blur(0.5px);}
+.tanban-lockscreen-content{position:relative;z-index:2;text-align:center;padding-bottom:20px;}
+.tanban-lockscreen-avatar{width:56px;height:56px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;margin:0 auto 10px;border:2px solid rgba(255,255,255,0.5);}
+.tanban-lockscreen-avatar img{width:100%;height:100%;object-fit:cover;}
+.tanban-lockscreen-name{font-size:19px;font-weight:600;color:white;text-shadow:0 1px 8px rgba(0,0,0,0.4);}
+.tanban-lockscreen-mood{font-size:12px;color:rgba(255,255,255,0.85);margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.4);padding:0 30px;}
+
+.tanban-app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 8px;padding:22px 16px;}
+.tanban-mini-app{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;}
+.tanban-mini-app:active .tanban-mini-icon{transform:scale(0.88);}
+.tanban-mini-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,0.12);transition:transform 0.12s;}
+.tanban-mini-app span{font-size:10.5px;color:var(--ink2);display:flex;align-items:center;gap:3px;}
+.tanban-mini-app span i{font-style:normal;font-size:9px;color:white;background:var(--petald);border-radius:8px;padding:1px 5px;}
+
+.tanban-mini-back{display:flex;align-items:center;gap:6px;padding:14px 16px;font-size:12.5px;color:var(--ink3);cursor:pointer;border-bottom:1px solid var(--smoke);}
+.tanban-mini-content{padding:18px 16px 30px;}
+.tanban-mini-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:14px;}
+.tanban-empty-hint{text-align:center;padding:40px 20px;color:var(--ink4);font-size:12.5px;line-height:1.8;}
+
+.tanban-post-card{background:var(--smoke);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.tanban-post-text{font-size:13.5px;color:var(--ink);line-height:1.6;}
+.tanban-post-time{font-size:11px;color:var(--ink4);margin-top:8px;}
+
+.tanban-chat-preview{background:var(--smoke);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+.tanban-chat-line{font-size:12.5px;line-height:1.6;color:var(--ink2);}
+.tanban-chat-line.mine{color:var(--ink3);}
+.tanban-chat-line b{color:var(--ink);}
+
+.tanban-about-card{background:var(--smoke);border-radius:14px;padding:4px 16px;}
+.tanban-about-row{padding:12px 0;border-bottom:1px solid var(--silver);font-size:13px;color:var(--ink2);line-height:1.6;}
+.tanban-about-row:last-child{border-bottom:none;}
+.tanban-about-label{display:block;font-size:11px;color:var(--ink4);margin-bottom:4px;}
 
 /* ══════ 推特 App (椿岛配色版) ══════ */
 #twitter-app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--white);}
@@ -1695,8 +1730,11 @@ npx NeteaseCloudMusicApi</div>
 
     <!-- SUB: peek into a character's "phone" -->
     <div class="subpage" id="sub-tanban-phone">
-      <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-tanban-phone')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title" id="tanban-phone-title">TA的手机</div></div>
-      <div class="app-body" id="tanban-phone-body" style="padding-top:16px"></div>
+      <div class="tanban-phone-topbar">
+        <button class="back-btn" onclick="closeSub('sub-tanban-phone')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div class="topbar-title" id="tanban-phone-title">TA的手机</div>
+      </div>
+      <div id="tanban-phone-body"></div>
     </div>
   </div>
 
@@ -2309,7 +2347,7 @@ function showScreen(id){
 function updateClock(){
   const n=new Date(), h=n.getHours().toString().padStart(2,'0'), m=n.getMinutes().toString().padStart(2,'0');
   const t = h+':'+m;
-  ['hclock','sclock','tf-time','mclock','lfclock'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=t; });
+  ['hclock','sclock','tf-time','mclock','lfclock','tanbanclock','twitterclock'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=t; });
 }
 function updateDate(){
   const days=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
@@ -7692,52 +7730,139 @@ function renderTanbanHome(){
   }).join('');
 }
 
+// ══════════ 探班 — 查看角色的手机（锁屏式主页 + 可点入的迷你App）══════════
+let tanbanCurrentCharId = null;
+
 function openTanbanPhone(charId){
+  tanbanCurrentCharId = charId;
   const c = findCharacter(charId);
   if(!c) return;
-  document.getElementById('tanban-phone-title').textContent = c.name + ' 的手机';
+  document.getElementById('tanban-phone-title').textContent = c.name;
+  renderTanbanCharHome(charId);
+  openSub('sub-tanban-phone');
+}
+
+// The character's own "home screen": lock-screen-style header (their avatar as
+// backdrop, like the real phone's home-bg) + a grid of tappable mini-apps that
+// surface data already generated elsewhere in the system (music persona from
+// 云乐, posts from 朋友圈/推特, shared chat history) — genuinely peeking into
+// what's "on their phone" rather than just a stats card.
+function renderTanbanCharHome(charId){
+  const c = findCharacter(charId);
+  if(!c) return;
   const body = document.getElementById('tanban-phone-body');
-  const av = c.avatar ? `<img src="${c.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : escHtml(c.avatarLetter||c.name[0]||'?');
   const persona = charMusicPersona[charId];
-  const nowPlay = charNowPlaying[charId];
+  const av = c.avatar ? `<img src="${c.avatar}">` : escHtml(c.avatarLetter||c.name[0]||'?');
+  const bgStyle = c.avatar ? `background-image:url('${c.avatar}')` : `background:${c.avatarColor||'#1a1a1a'}`;
+  const momentsCount = momentsFeed.filter(m=>m.authorType==='char' && m.authorId===charId && m.status==='approved').length;
+  const tweetsCount = twitterPosts.filter(p=>p.authorType==='char' && p.authorId===charId).length;
   const h = chatHistory.find(x=>x.id===charId);
   const msgCount = h?.msgs?.length || 0;
 
   body.innerHTML = `
-    <div class="tanban-phone-header">
-      <div class="tanban-phone-av" style="${c.avatar?'':'background:'+(c.avatarColor||'#1a1a1a')}">${av}</div>
-      <div style="font-size:16px;font-weight:700;color:var(--ink);margin-top:10px">${escHtml(c.name)}</div>
-      <div style="font-size:12px;color:var(--ink4);margin-top:2px">${escHtml(c.tag||'')}</div>
-    </div>
-
-    <div class="tanban-app-card">
-      <div class="tanban-app-card-title">📱 基本状态</div>
-      <div style="font-size:12.5px;color:var(--ink2);line-height:1.8">
-        与你的对话消息数：${msgCount} 条<br>
-        ${c.desc ? '简介：'+escHtml(c.desc) : ''}
+    <div class="tanban-lockscreen" style="${bgStyle}">
+      <div class="tanban-lockscreen-overlay"></div>
+      <div class="tanban-lockscreen-content">
+        <div class="tanban-lockscreen-avatar" style="${c.avatar?'':'background:'+(c.avatarColor||'#1a1a1a')}">${av}</div>
+        <div class="tanban-lockscreen-name">${escHtml(c.name)}</div>
+        <div class="tanban-lockscreen-mood">${escHtml(persona?.mood || c.tag || '')}</div>
       </div>
     </div>
-
-    ${persona ? `<div class="tanban-app-card">
-      <div class="tanban-app-card-title">🎵 音乐品味</div>
-      <div style="font-size:12.5px;color:var(--ink2);line-height:1.7">${escHtml(persona.persona||'')}</div>
-      ${persona.keywords?.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${persona.keywords.map(k=>`<span style="font-size:11px;background:var(--smoke);color:var(--ink3);padding:3px 10px;border-radius:12px">${escHtml(k)}</span>`).join('')}</div>` : ''}
-    </div>` : `<div class="tanban-app-card">
-      <div class="tanban-app-card-title">🎵 音乐品味</div>
-      <div style="font-size:12px;color:var(--ink4)">还没有生成过，去「云乐 → 好友」里看看TA的音乐人格吧</div>
-    </div>`}
-
-    ${nowPlay ? `<div class="tanban-app-card">
-      <div class="tanban-app-card-title">🎧 最近在听</div>
-      <div style="font-size:13px;font-weight:600;color:var(--ink)">${escHtml(nowPlay.trackName||'')}</div>
-      <div style="font-size:11.5px;color:var(--ink4);margin-top:2px">${escHtml(nowPlay.artist||'')}</div>
-    </div>` : ''}
-
-    <div class="tanban-app-card" style="text-align:center;color:var(--ink4);font-size:11.5px;padding:20px">
-      这是探班功能的初步框架<br>后续会加入更多可探索的内容（TA的朋友圈、TA的推特动态等）
+    <div class="tanban-app-grid">
+      <div class="tanban-mini-app" onclick="openTanbanMiniApp('${charId}','music')">
+        <div class="tanban-mini-icon music-icon-skin"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="rgba(255,255,255,0.85)" stroke-width="1.3"/><path d="M9 16.5a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4z" fill="rgba(255,255,255,0.9)"/><path d="M15 15a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4z" fill="rgba(255,255,255,0.9)"/><path d="M9 13.6V8l6 1.5v4" stroke="rgba(255,255,255,0.9)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span>云乐</span>
+      </div>
+      <div class="tanban-mini-app" onclick="openTanbanMiniApp('${charId}','moments')">
+        <div class="tanban-mini-icon" style="background:linear-gradient(135deg,#5a8f6f,#3d6b52)"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <span>朋友圈${momentsCount?'<i>'+momentsCount+'</i>':''}</span>
+      </div>
+      <div class="tanban-mini-app" onclick="openTanbanMiniApp('${charId}','twitter')">
+        <div class="tanban-mini-icon twitter-icon-skin"><svg width="21" height="21" viewBox="0 0 24 24" fill="white"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.6 4.9a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.8.1c.5 1.6 2 2.8 3.8 2.8A8.2 8.2 0 0 1 2 18.6a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.6-6.2 11.6-11.6v-.5c.8-.6 1.5-1.3 2.1-2.1z"/></svg></div>
+        <span>推特${tweetsCount?'<i>'+tweetsCount+'</i>':''}</span>
+      </div>
+      <div class="tanban-mini-app" onclick="openTanbanMiniApp('${charId}','chat')">
+        <div class="tanban-mini-icon" style="background:linear-gradient(135deg,#4a9c6d,#2d7a4f)"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <span>聊天记录${msgCount?'<i>'+msgCount+'</i>':''}</span>
+      </div>
+      <div class="tanban-mini-app" onclick="openTanbanMiniApp('${charId}','about')">
+        <div class="tanban-mini-icon" style="background:linear-gradient(135deg,#8a7ba8,#665285)"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></div>
+        <span>关于TA</span>
+      </div>
     </div>
   `;
-  openSub('sub-tanban-phone');
+}
+
+// Swaps the phone body to show one mini-app's detail. Each detail view has its
+// own "‹ 返回" affordance to go back to the character's home screen (distinct
+// from the outer back button which exits the phone entirely to the char list).
+function openTanbanMiniApp(charId, appType){
+  const c = findCharacter(charId);
+  if(!c) return;
+  const body = document.getElementById('tanban-phone-body');
+  const backBar = `<div class="tanban-mini-back" onclick="renderTanbanCharHome('${charId}')">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    返回 ${escHtml(c.name)} 的主屏幕
+  </div>`;
+
+  if(appType === 'music'){
+    const persona = charMusicPersona[charId];
+    const nowPlay = charNowPlaying[charId];
+    body.innerHTML = backBar + `<div class="tanban-mini-content">
+      <div class="tanban-mini-title">🎵 云乐 · 音乐品味</div>
+      ${persona ? `
+        <div class="music-char-persona">${escHtml(persona.persona||'')}</div>
+        ${persona.keywords?.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">${persona.keywords.map(k=>`<span class="music-char-keyword">${escHtml(k)}</span>`).join('')}</div>` : ''}
+      ` : `<div class="tanban-empty-hint">还没有生成过 TA 的音乐人格<br>去「云乐 → 好友」里看看吧</div>`}
+      ${nowPlay ? `<div class="music-char-np">
+        <div style="font-size:14px;font-weight:600;color:var(--ink)">${escHtml(nowPlay.trackName||'')}</div>
+        <div style="font-size:12px;color:var(--ink4);margin-top:2px">${escHtml(nowPlay.artist||'')}</div>
+        ${nowPlay.comment ? `<div class="music-char-comment">"${escHtml(nowPlay.comment)}"</div>` : ''}
+      </div>` : ''}
+    </div>`;
+  } else if(appType === 'moments'){
+    const posts = momentsFeed.filter(m=>m.authorType==='char' && m.authorId===charId && m.status==='approved').sort((a,b)=>b.timestamp-a.timestamp);
+    body.innerHTML = backBar + `<div class="tanban-mini-content">
+      <div class="tanban-mini-title">📷 TA 的朋友圈</div>
+      ${posts.length ? posts.map(m=>`
+        <div class="tanban-post-card">
+          <div class="tanban-post-text">${escHtml(m.text)}</div>
+          <div class="tanban-post-time">${momentTimeLabel(m.timestamp)} · ${m.likes.length} 赞</div>
+        </div>
+      `).join('') : `<div class="tanban-empty-hint">TA 还没有发过朋友圈<br>去朋友圈开启 TA 的自动发布试试</div>`}
+    </div>`;
+  } else if(appType === 'twitter'){
+    const posts = twitterPosts.filter(p=>p.authorType==='char' && p.authorId===charId).sort((a,b)=>b.timestamp-a.timestamp);
+    body.innerHTML = backBar + `<div class="tanban-mini-content">
+      <div class="tanban-mini-title">🐦 TA 的推特</div>
+      ${posts.length ? posts.map(p=>`
+        <div class="tanban-post-card">
+          <div class="tanban-post-text">${escHtml(p.text)}</div>
+          <div class="tanban-post-time">${smartTimeLabel('', p.timestamp)} · ${p.likes.length} 赞 · ${p.retweets.length} 转推</div>
+        </div>
+      `).join('') : `<div class="tanban-empty-hint">TA 还没有发过推文<br>去推特点顶部 ↻ 按钮让 TA 发一条试试</div>`}
+    </div>`;
+  } else if(appType === 'chat'){
+    const h = chatHistory.find(x=>x.id===charId);
+    const msgs = (h?.msgs || []).filter(m=>!m.isSystemNote).slice(-20);
+    body.innerHTML = backBar + `<div class="tanban-mini-content">
+      <div class="tanban-mini-title">💬 与你的聊天记录</div>
+      ${msgs.length ? `<div class="tanban-chat-preview">${msgs.map(m=>`
+        <div class="tanban-chat-line ${m.mine?'mine':'theirs'}">
+          <b>${m.mine ? escHtml(userProfile.name||'我') : escHtml(c.name)}：</b>${escHtml((m.text||'').replace(/\[[\w:.-]+\]/g,'').slice(0,80))}
+        </div>
+      `).join('')}</div>` : `<div class="tanban-empty-hint">还没有聊天记录</div>`}
+    </div>`;
+  } else if(appType === 'about'){
+    body.innerHTML = backBar + `<div class="tanban-mini-content">
+      <div class="tanban-mini-title">👤 关于 ${escHtml(c.name)}</div>
+      <div class="tanban-about-card">
+        ${c.tag ? `<div class="tanban-about-row"><span class="tanban-about-label">标签</span>${escHtml(c.tag)}</div>` : ''}
+        ${c.desc ? `<div class="tanban-about-row"><span class="tanban-about-label">简介</span>${escHtml(c.desc)}</div>` : ''}
+        ${c.setting ? `<div class="tanban-about-row"><span class="tanban-about-label">人设</span>${escHtml(c.setting)}</div>` : ''}
+      </div>
+    </div>`;
+  }
 }
 
 // ══════════ 推特 App (完整仿照界面，配色跟随椿岛风格) ══════════
@@ -7746,7 +7871,6 @@ let twitterHomeTab = 'foryou';
 let twitterMainTab = 'home';
 
 function initTwitterApp(){
-  document.getElementById('twitterclock').textContent = document.getElementById('hclock')?.textContent || '';
   const av = document.getElementById('tw-header-avatar');
   if(av){
     if(userProfile.avatar) av.innerHTML = `<img src="${userProfile.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
