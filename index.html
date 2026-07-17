@@ -2593,12 +2593,12 @@ function refreshMemoryPage(){
   const allT = document.getElementById('mem-all-toggle');
   const selT = document.getElementById('mem-sel-toggle');
   const apps = document.getElementById('mem-apps-section');
-  if(allT) allT.style.background = chatMemoryMode==='all'?'var(--ink)':'var(--silver)';
-  if(selT) selT.style.background = chatMemoryMode==='selective'?'var(--ink)':'var(--silver)';
+  if(allT){ allT.classList.toggle('on', chatMemoryMode==='all'); }
+  if(selT){ selT.classList.toggle('on', chatMemoryMode==='selective'); }
   if(apps) apps.style.display = chatMemoryMode==='selective'?'block':'none';
   ['diary','moments'].forEach(app=>{
     const el = document.getElementById('mem-app-'+app);
-    if(el) el.style.background = chatMemoryApps.includes(app)?'var(--ink)':'var(--silver)';
+    if(el) el.classList.toggle('on', chatMemoryApps.includes(app));
   });
 }
 
