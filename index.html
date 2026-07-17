@@ -1016,9 +1016,29 @@ input[type=file]{display:none;}
       <div class="settings-section">
         <div class="sec-label">API 设置</div>
         <div class="s-card">
-          <div class="s-row" onclick="openSub('sub-api-settings')">
-            <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-            <div class="s-text"><div class="s-title">API 设置</div><div class="s-sub" id="api-settings-sub">管理对话、语音、生图API</div></div>
+          <div class="s-row" onclick="openSub('sub-newpreset')">
+            <div class="s-icon" style="background:#4a9eff"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="s-text"><div class="s-title">对话 AI</div><div class="s-sub" id="chat-api-sub">API Key、模型、端点</div></div>
+            <div class="s-arrow">›</div>
+          </div>
+          <div class="s-row" onclick="openSub('sub-voice-api')">
+            <div class="s-icon" style="background:#ff6b6b"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+            <div class="s-text"><div class="s-title">语音合成</div><div class="s-sub" id="voice-api-sub">OpenAI / ElevenLabs / Azure</div></div>
+            <div class="s-arrow">›</div>
+          </div>
+          <div class="s-row" onclick="openSub('sub-image-api')">
+            <div class="s-icon" style="background:#e67e22"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="s-text"><div class="s-title">生图 API</div><div class="s-sub" id="image-api-sub">Stable Diffusion / DALL·E</div></div>
+            <div class="s-arrow">›</div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="sec-label">预设</div>
+        <div class="s-card">
+          <div class="s-row" onclick="openSub('sub-preset-manager')">
+            <div class="s-icon" style="background:var(--ink)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+            <div class="s-text"><div class="s-title">管理预设</div><div class="s-sub" id="preset-sub">保存配置，分类切换</div></div>
             <div class="s-arrow">›</div>
           </div>
         </div>
@@ -1239,6 +1259,12 @@ input[type=file]{display:none;}
       <div class="app-body" id="presetlist-body"></div>
     </div>
 
+    <!-- SUB: Unified preset manager (all categories) -->
+    <div class="subpage" id="sub-preset-manager">
+      <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-preset-manager')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title">管理预设</div></div>
+      <div class="app-body" id="preset-manager-body"></div>
+    </div>
+
     <!-- SUB: Theme -->
     <div class="subpage" id="sub-theme">
       <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-theme')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title">主题</div></div>
@@ -1312,10 +1338,6 @@ input[type=file]{display:none;}
 
   <!-- ══════ ENCOUNTER APP ══════ -->
   <div id="encounter-app" style="display:none">
-    <div class="app-statusbar">
-      <span class="asb-time" id="eclock">09:41</span>
-      <button class="app-close-btn" onclick="closeApp()">×</button>
-    </div>
     <div class="enc-page active" id="enc-chats" style="display:flex">
       <div class="enc-header">
         <div class="enc-header-title">与你相遇</div>
@@ -2444,6 +2466,13 @@ const SYS_ASSISTANT = {
 - 测试通知弹窗：[NOTIFY:标题:预览内容]，例如 [NOTIFY:椿島です:测试消息]，会触发手机顶部弹窗通知（微信风格+系统通知栏）
 当用户说"帮我测试XXX"时，直接使用标签执行测试，不要只是描述。
 
+【API 设置与预设管理】
+设置 → API 设置 下有三个独立入口：
+- 对话 AI：配置聊天模型（Anthropic/OpenAI/反代/公益站），保存后成为「对话预设」
+- 语音合成：配置 TTS 朗读（OpenAI TTS / ElevenLabs / Azure / 阿里云），保存后成为「语音预设」
+- 生图 API：配置 AI 图片生成（OpenAI DALL-E / Stability AI），保存后成为「生图预设」
+设置 → 预设 → 管理预设：统一查看所有预设，按类别（对话AI/语音合成/生图API）分组，可切换、编辑、删除。每个类别独立管理，不会切错。
+
 【CSS 美化生成】
 你可以帮用户生成主题 CSS 文件。使用以下格式：
 [CSS_FILE:主题名.css]
@@ -2459,7 +2488,7 @@ const SYS_ASSISTANT = {
 
 首屏/桌面：.home-bg（全局大背景）、.splash-bg（开屏背景）、.home-lower（App图标区域）、.app-icon（App图标外框）、.app-icon-wrap（图标容器·支持长按拖动排序）、.app-icon-wrap.dragging（拖动中）、.app-icon-wrap.drag-hover（悬停目标）、.app-icon-wrap.drag-mode（排序模式·抖动）、.app-label（图标文字标签）、.dock（底部Dock栏）、.splash-logo（开屏文字）、.splash-progress/.splash-fill（进度条）、.app-statusbar（App内状态栏）、.app-close-btn（关闭按钮）
 
-设置App：.s-card（分组卡片）、.s-row（设置行）、.s-icon（图标底色）、.s-title/.s-sub（标题/副标题）、.topbar-title（顶部标题）、.apitype-opt（API类型选择卡）、.format-opt（响应格式选择卡）、API设置：.auto-msg-settings（自动消息弹窗）、.auto-msg-settings-card（弹窗卡片）、.auto-msg-slider（滑块）、#menu-auto-msg-toggle（自动消息开关·菜单内）、#menu-imagegen-toggle（AI生图开关·菜单内）、#sub-api-settings（API设置入口）、#sub-image-api（生图API页）
+设置App：.s-card（分组卡片）、.s-row（设置行）、.s-icon（图标底色）、.s-title/.s-sub（标题/副标题）、.topbar-title（顶部标题）、.apitype-opt（API类型选择卡）、.format-opt（响应格式选择卡）、API设置：.auto-msg-settings（自动消息弹窗）、.auto-msg-settings-card（弹窗卡片）、.auto-msg-slider（滑块）、#menu-auto-msg-toggle（自动消息开关·菜单内）、#menu-imagegen-toggle（AI生图开关·菜单内）、#sub-newpreset（对话AI API配置页）、#sub-voice-api（语音合成API页）、#sub-image-api（生图API页）、#sub-preset-manager（预设管理页）
 
 聊天界面：.chat-item（聊天列表行）、.chat-avatar（列表头像）、.chat-name/.chat-preview（昵称/预览文字）、.msg-bub（消息气泡）、.msg-row.mine .msg-bub（我方气泡）、.msg-row.theirs .msg-bub（对方气泡）、.msg-code-block（代码块）、.msg-inline-code（行内代码）、.msg-quote-line（引用行）、.chat-topbar（聊天顶部条）、.chat-input-bar（输入栏）、.chat-textarea（输入框）、.enc-tabbar（底部Tab栏）、.char-card（角色横条）、.chat-topbar-more（顶栏三点按钮）、#chatmenu-modal（对话设置菜单）
 
@@ -2516,7 +2545,6 @@ let diaries = JSON.parse(localStorage.getItem('tsb_diaries') || '[]');
 let chatMemoryMode = localStorage.getItem('tsb_chatmemory_mode') || 'none'; // 'none'|'all'|'selective'
 let chatMemoryApps = JSON.parse(localStorage.getItem('tsb_chatmemory_apps') || '[]');
 let _pendingMemoryMode = null; // 待确认的模式
-let appOrder = JSON.parse(localStorage.getItem('tsb_apporder') || '["encounter","settings","music","lifefaces","miniapps","world","langlearn","diary","tanban","twitter"]');
 
 // ── 聊天记忆互通 ──
 function requestMemoryMode(mode){
@@ -3042,7 +3070,6 @@ function _persistNow(){
     localStorage.setItem('tsb_diaries', JSON.stringify(diaries));
     localStorage.setItem('tsb_chatmemory_mode', chatMemoryMode);
     localStorage.setItem('tsb_chatmemory_apps', JSON.stringify(chatMemoryApps));
-    localStorage.setItem('tsb_apporder', JSON.stringify(appOrder));
     localStorage.setItem('tsb_identities', JSON.stringify(identities));
     localStorage.setItem('tsb_lifearchive', JSON.stringify(lifeArchive));
     localStorage.setItem('tsb_presets', JSON.stringify(presets));
@@ -3096,7 +3123,8 @@ function init(){
   updateChatMemorySubLabel();
   refreshMemoryPage();
   initHomePageDots();
-  renderAppIcons();
+  initAppIconDrag();
+  restoreAppOrder();
   document.getElementById('cv-input').addEventListener('input', function(){
     this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,90)+'px';
   });
@@ -3616,7 +3644,7 @@ function openApp(name){
   document.getElementById('tanban-app').style.display='none';
   document.getElementById('twitter-app').style.display='none';
   if(name==='settings') document.getElementById('settings-app').style.display='flex';
-  if(name==='encounter'){ document.getElementById('encounter-app').style.display='flex'; document.getElementById('eclock').textContent = document.getElementById('hclock').textContent; }
+  if(name==='encounter') document.getElementById('encounter-app').style.display='flex';
   if(name==='music'){ document.getElementById('music-app').style.display='flex'; initMusicAppView(); }
   if(name==='lifefaces'){ document.getElementById('lifefaces-app').style.display='flex'; renderLfList(); }
   if(name==='miniapps'){ document.getElementById('miniapps-app').style.display='flex'; renderMiniappGrid(); }
@@ -3656,45 +3684,22 @@ function closeApp(){
 // ── APP 图标拖动排序 ──
 let _appDragMode = false;
 let _appDragEl = null;
-let _appDragGhost = null;
 let _appDragStartX = 0;
 let _appDragStartY = 0;
-let _appDragOrigIdx = -1;
 let _appDragLongPressTimer = null;
 let _appDragMoved = false;
 
-const APP_ICON_DATA = {
-  encounter:{label:'与你相遇',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',color:'#4a9eff'},
-  settings:{label:'设置',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',color:'#555'},
-  music:{label:'云乐',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',color:'#e74c3c'},
-  lifefaces:{label:'人生百面',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',color:'#9b59b6'},
-  miniapps:{label:'小程序',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',color:'#2ecc71'},
-  world:{label:'世界书',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',color:'#1abc9c'},
-  langlearn:{label:'语言学习',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',color:'#e67e22'},
-  diary:{label:'日记本',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',color:'#f39c12'},
-  tanban:{label:'谈版',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',color:'#3498db'},
-  twitter:{label:'X 广场',icon:'<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>',color:'#1a1a1a'},
-};
-
-function renderAppIcons(){
-  const pages = document.querySelectorAll('.app-page');
-  const dock = document.querySelector('.dock');
-  if(!pages.length) return;
-  // Clear existing icons
-  pages.forEach(p=>p.innerHTML='');
-  if(dock) dock.innerHTML='';
-  // Split apps: first 2 per page (we have 2 pages), rest go to dock
-  // Actually, let's keep the original layout: page0 gets first 2, page1 gets next 6, dock gets last 2
-  const page0 = appOrder.slice(0,2);
-  const page1 = appOrder.slice(2,8);
-  const dockApps = appOrder.slice(8,10);
-  function makeIcon(appName){
-    const d = APP_ICON_DATA[appName] || {label:appName,icon:'',color:'#555'};
-    return `<div class="app-icon-wrap" data-app="${appName}" ontouchstart="onAppIconTouch(event)" ontouchmove="onAppIconMove(event)" ontouchend="onAppIconEnd(event)" onmousedown="onAppIconMouse(event)" onclick="if(!_appDragMoved)openApp('${appName}')"><div class="app-icon" style="background:${d.color}">${d.icon}</div><div class="app-label">${d.label}</div></div>`;
-  }
-  if(pages[0]) pages[0].innerHTML = page0.map(makeIcon).join('');
-  if(pages[1]) pages[1].innerHTML = page1.map(makeIcon).join('');
-  if(dock) dock.innerHTML = dockApps.map(makeIcon).join('');
+function initAppIconDrag(){
+  // 给原始 HTML 图标添加 data-app 和拖拽事件，不修改 HTML
+  document.querySelectorAll('.app-icon-wrap').forEach(el=>{
+    const onclick = el.getAttribute('onclick') || '';
+    const match = onclick.match(/openApp\('(\w+)'\)/);
+    if(match) el.dataset.app = match[1];
+    el.addEventListener('touchstart', onAppIconTouch, {passive:false});
+    el.addEventListener('touchmove', onAppIconMove, {passive:false});
+    el.addEventListener('touchend', onAppIconEnd);
+    el.addEventListener('mousedown', onAppIconMouse);
+  });
 }
 
 function enterAppDragMode(){
@@ -3707,21 +3712,16 @@ function exitAppDragMode(){
   _appDragMode = false;
   document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-mode','dragging','drag-hover'));
   _appDragEl = null;
-  _appDragOrigIdx = -1;
   _appDragMoved = false;
 }
 
 function onAppIconTouch(e){
   if(!_appDragMode){
-    _appDragLongPressTimer = setTimeout(()=>{
-      enterAppDragMode();
-      _appDragMoved = false;
-    }, 500);
+    _appDragLongPressTimer = setTimeout(()=>{ enterAppDragMode(); _appDragMoved = false; }, 500);
     return;
   }
   e.preventDefault();
   _appDragEl = e.currentTarget;
-  _appDragOrigIdx = getAppIconIndex(_appDragEl);
   const touch = e.touches[0];
   _appDragStartX = touch.clientX;
   _appDragStartY = touch.clientY;
@@ -3738,7 +3738,6 @@ function onAppIconMove(e){
   if(Math.abs(dx)<5 && Math.abs(dy)<5) return;
   _appDragMoved = true;
   _appDragEl.style.transform = `translate(${dx}px,${dy}px) scale(1.08)`;
-  // Find hover target
   document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
   const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.app-icon-wrap');
   if(target && target!==_appDragEl) target.classList.add('drag-hover');
@@ -3746,35 +3745,25 @@ function onAppIconMove(e){
 
 function onAppIconEnd(e){
   clearTimeout(_appDragLongPressTimer);
-  if(!_appDragEl){
-    if(!_appDragMoved) return;
-    _appDragEl = null;
-    return;
-  }
+  if(!_appDragEl){ _appDragEl = null; return; }
   _appDragEl.style.transform = '';
   _appDragEl.classList.remove('dragging');
   document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
-  // Find drop target
   const touch = e.changedTouches[0];
   const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.app-icon-wrap');
   if(target && target!==_appDragEl && _appDragMoved){
     swapAppIcon(_appDragEl, target);
   }
   _appDragEl = null;
-  _appDragOrigIdx = -1;
 }
 
 function onAppIconMouse(e){
   if(e.button !== 0) return;
   if(!_appDragMode){
-    _appDragLongPressTimer = setTimeout(()=>{
-      enterAppDragMode();
-      _appDragMoved = false;
-    }, 500);
+    _appDragLongPressTimer = setTimeout(()=>{ enterAppDragMode(); _appDragMoved = false; }, 500);
     return;
   }
   _appDragEl = e.currentTarget;
-  _appDragOrigIdx = getAppIconIndex(_appDragEl);
   _appDragStartX = e.clientX;
   _appDragStartY = e.clientY;
   _appDragEl.classList.add('dragging');
@@ -3802,43 +3791,86 @@ function onAppIconMouse(e){
       swapAppIcon(_appDragEl, target);
     }
     _appDragEl = null;
-    _appDragOrigIdx = -1;
   };
   document.addEventListener('mousemove', onMove);
   document.addEventListener('mouseup', onUp);
 }
 
-function getAppIconIndex(el){
-  const all = [...document.querySelectorAll('.app-icon-wrap')];
-  return all.indexOf(el);
-}
-
 function swapAppIcon(a, b){
-  const appA = a.dataset.app;
-  const appB = b.dataset.app;
-  const idxA = appOrder.indexOf(appA);
-  const idxB = appOrder.indexOf(appB);
-  if(idxA<0||idxB<0) return;
-  [appOrder[idxA], appOrder[idxB]] = [appOrder[idxB], appOrder[idxA]];
-  localStorage.setItem('tsb_apporder', JSON.stringify(appOrder));
-  renderAppIcons();
-  // Re-enter drag mode after re-render
-  if(_appDragMode){
-    setTimeout(()=>{
-      document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.add('drag-mode'));
-    }, 50);
+  // 直接在 DOM 中交换两个元素
+  const parentA = a.parentNode;
+  const parentB = b.parentNode;
+  const nextA = a.nextSibling;
+  const nextB = b.nextSibling;
+  // 如果是同一个父元素
+  if(parentA === parentB){
+    if(nextA === b){
+      parentA.insertBefore(b, a); // b 移到 a 前面
+    } else if(nextB === a){
+      parentA.insertBefore(a, b); // a 移到 b 前面
+    } else {
+      const placeholder = document.createTextNode('');
+      parentA.insertBefore(placeholder, a);
+      parentA.insertBefore(a, b);
+      parentA.insertBefore(b, placeholder);
+      parentA.removeChild(placeholder);
+    }
+  } else {
+    const placeholderA = document.createTextNode('');
+    parentA.insertBefore(placeholderA, a);
+    parentB.insertBefore(a, nextB);
+    parentA.insertBefore(b, placeholderA);
+    parentA.removeChild(placeholderA);
   }
+  persistAppOrder();
   showToast('已交换位置');
 }
 
-// Click blank area to exit drag mode
+function persistAppOrder(){
+  const all = [...document.querySelectorAll('.app-icon-wrap')];
+  const order = all.map(el=>el.dataset.app).filter(Boolean);
+  localStorage.setItem('tsb_apporder', JSON.stringify(order));
+}
+
+function restoreAppOrder(){
+  const saved = localStorage.getItem('tsb_apporder');
+  if(!saved) return;
+  const order = JSON.parse(saved);
+  const all = [...document.querySelectorAll('.app-icon-wrap')];
+  const map = {};
+  all.forEach(el=>{ if(el.dataset.app) map[el.dataset.app] = el; });
+  // 找到所有 app-page 和 dock 的父容器
+  const containers = [...document.querySelectorAll('.app-page,.dock')];
+  const allEls = [];
+  containers.forEach(c=>{ allEls.push(...c.querySelectorAll('.app-icon-wrap')); });
+  // 按保存的顺序重新排列
+  let idx = 0;
+  for(const appName of order){
+    const el = map[appName];
+    if(!el || idx >= allEls.length) continue;
+    if(allEls[idx] !== el){
+      el.parentNode.insertBefore(el, allEls[idx]);
+      // 重新获取 allEls
+      const newAll = [];
+      containers.forEach(c=>{ newAll.push(...c.querySelectorAll('.app-icon-wrap')); });
+      allEls.splice(0, allEls.length, ...newAll);
+    }
+    idx++;
+  }
+}
+
+// Click blank area to exit drag mode; prevent app open in drag mode
 document.addEventListener('click', function(e){
   if(!_appDragMode) return;
-  if(e.target.closest('.app-icon-wrap')) return;
+  // 如果点击的是图标，阻止打开 APP
+  if(e.target.closest('.app-icon-wrap')){
+    e.stopPropagation();
+    e.preventDefault();
+    return;
+  }
   exitAppDragMode();
-  persist();
   showToast('排序已保存');
-});
+}, true);
 
 // Cancel long press on mouseup
 document.addEventListener('mouseup', ()=>{
@@ -3848,6 +3880,7 @@ function openSub(id){
   document.getElementById(id).classList.add('open');
   if(id==='sub-newpreset') renderNewPresetForm();
   if(id==='sub-presetlist') renderPresetListPage();
+  if(id==='sub-preset-manager') renderPresetManagerPage();
   if(id==='sub-customcss') initCustomCssUI();
   if(id==='sub-frame-bg') renderFrameBgGrid();
   if(id==='sub-voice-api') initVoiceApiSettingsUI();
@@ -3980,7 +4013,6 @@ function exportAllData(){
     presets, activePresetId: activePresetId || '',
     imageApiActiveId: imageApiActiveId || '',
     chatMemoryMode, chatMemoryApps,
-    appOrder,
     worldbooks: typeof worldbooks !== 'undefined' ? worldbooks : [],
     groupChats: typeof groupChats !== 'undefined' ? groupChats : [],
     appSettings
@@ -4037,7 +4069,6 @@ function handleImportData(input){
     if(data.imageApiActiveId) imageApiActiveId = data.imageApiActiveId;
     if(data.chatMemoryMode) chatMemoryMode = data.chatMemoryMode;
     if(Array.isArray(data.chatMemoryApps)) chatMemoryApps = data.chatMemoryApps;
-    if(Array.isArray(data.appOrder)) appOrder = data.appOrder;
     if(Array.isArray(data.worldbooks)) worldbooks = data.worldbooks;
     if(Array.isArray(data.groupChats)) groupChats = data.groupChats;
     if(data.appSettings) appSettings = data.appSettings;
@@ -4055,7 +4086,6 @@ function clearAllData(){
   localStorage.removeItem('tsb_diaries');
   localStorage.removeItem('tsb_chatmemory_mode');
   localStorage.removeItem('tsb_chatmemory_apps');
-  localStorage.removeItem('tsb_apporder');
   localStorage.removeItem('tsb_identities');
   localStorage.removeItem('tsb_lifearchive');
   localStorage.removeItem('tsb_presets');
@@ -4818,6 +4848,15 @@ function updatePresetCount(){
   const cnt = presets.filter(p=>!p.apiCategory || p.apiCategory==='chat').length;
   const el = document.getElementById('preset-cnt');
   if(el) el.textContent = cnt>0 ? (cnt+' 个预设') : '暂无预设';
+  // Update preset-sub in settings
+  const sub = document.getElementById('preset-sub');
+  if(sub){
+    const total = presets.length;
+    const chat = presets.filter(p=>!p.apiCategory||p.apiCategory==='chat').length;
+    const voice = presets.filter(p=>p.apiCategory==='voice').length;
+    const img = presets.filter(p=>p.apiCategory==='image').length;
+    sub.textContent = total>0 ? `对话${chat} · 语音${voice} · 生图${img}` : '保存配置，分类切换';
+  }
 }
 
 function renderNewPresetForm(editId){
@@ -5038,6 +5077,136 @@ function getActivePreset(){
   return presets.find(p=>p.id===activePresetId && (!p.apiCategory || p.apiCategory==='chat'));
 }
 
+// ══════════ UNIFIED PRESET MANAGER (all categories) ══════════
+function renderPresetManagerPage(){
+  const body = document.getElementById('preset-manager-body');
+  const chatPresets = presets.filter(p=>!p.apiCategory || p.apiCategory==='chat');
+  const voicePresets = presets.filter(p=>p.apiCategory==='voice');
+  const imagePresets = presets.filter(p=>p.apiCategory==='image');
+  const typeLabel = {official:'官方', reverse:'反代', public:'公益站'};
+  const total = chatPresets.length + voicePresets.length + imagePresets.length;
+
+  if(total===0){
+    body.innerHTML = `<div style="text-align:center;padding:48px 0;color:var(--ink4);font-size:14px;letter-spacing:0.06em">
+      暂无预设<br><br><span style="font-size:12px">请先在 API 设置中配置并保存预设</span>
+    </div>`;
+    return;
+  }
+
+  let html = '';
+
+  // ── 对话 AI ──
+  if(chatPresets.length>0){
+    html += `<div class="sec-label">对话 AI</div><div class="s-card">`;
+    html += chatPresets.map(p=>`
+      <div class="preset-item ${p.id===activePresetId?'active':''}">
+        <div class="preset-dot" style="background:#4a9eff"></div>
+        <div class="preset-info">
+          <div class="preset-name">${escHtml(p.name)} <span class="preset-type-badge">${typeLabel[p.apiType]||'官方'}</span></div>
+          <div class="preset-model">${escHtml(p.model)}</div>
+        </div>
+        <button class="preset-delete" onclick="event.stopPropagation();switchPresetFromManager('${p.id}','chat')" title="切换">↻</button>
+        <button class="preset-delete" onclick="event.stopPropagation();editPresetFromManager('${p.id}','chat')">✎</button>
+        <button class="preset-delete" onclick="event.stopPropagation();deletePresetFromManager('${p.id}','chat')">×</button>
+      </div>
+    `).join('');
+    html += `<button onclick="closeSub('sub-preset-manager');openSub('sub-newpreset')" style="width:100%;border:1.5px dashed var(--silver);background:none;padding:12px;border-radius:14px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--ink4);letter-spacing:0.06em;margin-top:8px">+ 添加对话预设</button>`;
+    html += `</div><div style="height:16px"></div>`;
+  }
+
+  // ── 语音合成 ──
+  if(voicePresets.length>0){
+    html += `<div class="sec-label">语音合成</div><div class="s-card">`;
+    html += voicePresets.map(p=>`
+      <div class="preset-item ${p.id===voiceApiActiveId?'active':''}">
+        <div class="preset-dot" style="background:#ff6b6b"></div>
+        <div class="preset-info">
+          <div class="preset-name">${escHtml(p.name||VOICE_PROVIDER_LABELS[p.provider])}</div>
+          <div class="preset-model">${VOICE_PROVIDER_LABELS[p.provider]||p.provider} · ${escHtml(p.voice||'默认')}</div>
+        </div>
+        <button class="preset-delete" onclick="event.stopPropagation();switchPresetFromManager('${p.id}','voice')" title="切换">↻</button>
+        <button class="preset-delete" onclick="event.stopPropagation();editPresetFromManager('${p.id}','voice')">✎</button>
+        <button class="preset-delete" onclick="event.stopPropagation();deletePresetFromManager('${p.id}','voice')">×</button>
+      </div>
+    `).join('');
+    html += `<button onclick="closeSub('sub-preset-manager');openSub('sub-voice-api')" style="width:100%;border:1.5px dashed var(--silver);background:none;padding:12px;border-radius:14px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--ink4);letter-spacing:0.06em;margin-top:8px">+ 添加语音预设</button>`;
+    html += `</div><div style="height:16px"></div>`;
+  }
+
+  // ── 生图 API ──
+  if(imagePresets.length>0){
+    html += `<div class="sec-label">生图 API</div><div class="s-card">`;
+    html += imagePresets.map(p=>`
+      <div class="preset-item ${p.id===imageApiActiveId?'active':''}">
+        <div class="preset-dot" style="background:#e67e22"></div>
+        <div class="preset-info">
+          <div class="preset-name">${escHtml(p.name)}</div>
+          <div class="preset-model">${escHtml(p.model)} · ${escHtml(p.size||'1024x1024')}</div>
+        </div>
+        <button class="preset-delete" onclick="event.stopPropagation();switchPresetFromManager('${p.id}','image')" title="切换">↻</button>
+        <button class="preset-delete" onclick="event.stopPropagation();editPresetFromManager('${p.id}','image')">✎</button>
+        <button class="preset-delete" onclick="event.stopPropagation();deletePresetFromManager('${p.id}','image')">×</button>
+      </div>
+    `).join('');
+    html += `<button onclick="closeSub('sub-preset-manager');openSub('sub-image-api')" style="width:100%;border:1.5px dashed var(--silver);background:none;padding:12px;border-radius:14px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--ink4);letter-spacing:0.06em;margin-top:8px">+ 添加生图预设</button>`;
+    html += `</div>`;
+  }
+
+  body.innerHTML = html;
+}
+
+function switchPresetFromManager(id, category){
+  if(category==='chat'){
+    activePresetId = id; persist();
+    renderPresetManagerPage(); updatePresetCount();
+  } else if(category==='voice'){
+    voiceApiActiveId = id;
+    localStorage.setItem('tsb_voiceapi_active', voiceApiActiveId);
+    persist();
+    renderPresetManagerPage();
+  } else if(category==='image'){
+    imageApiActiveId = id;
+    localStorage.setItem('tsb_imageapi_active', imageApiActiveId);
+    persist();
+    renderPresetManagerPage();
+  }
+  showToast('已切换预设');
+}
+
+function editPresetFromManager(id, category){
+  closeSub('sub-preset-manager');
+  if(category==='chat'){
+    openSub('sub-newpreset');
+    renderNewPresetForm(id);
+  } else if(category==='voice'){
+    // Set voiceApiActiveId to the editing preset so the form populates
+    voiceApiActiveId = id;
+    localStorage.setItem('tsb_voiceapi_active', voiceApiActiveId);
+    openSub('sub-voice-api');
+  } else if(category==='image'){
+    imageApiActiveId = id;
+    localStorage.setItem('tsb_imageapi_active', imageApiActiveId);
+    openSub('sub-image-api');
+  }
+}
+
+function deletePresetFromManager(id, category){
+  presets = presets.filter(p=>p.id!==id);
+  if(category==='chat' && activePresetId===id){
+    activePresetId = presets.find(p=>!p.apiCategory || p.apiCategory==='chat')?.id || null;
+  }
+  if(category==='voice' && voiceApiActiveId===id){
+    voiceApiActiveId = presets.find(p=>p.apiCategory==='voice')?.id || null;
+    localStorage.setItem('tsb_voiceapi_active', voiceApiActiveId||'');
+  }
+  if(category==='image' && imageApiActiveId===id){
+    imageApiActiveId = presets.find(p=>p.apiCategory==='image')?.id || null;
+    localStorage.setItem('tsb_imageapi_active', imageApiActiveId||'');
+  }
+  persist(); renderPresetManagerPage(); updatePresetCount();
+  showToast('已删除预设');
+}
+
 // ══════════ CUSTOM CSS ══════════
 let customCssText = localStorage.getItem('tsb_customcss') || '';
 function applyCustomCssToDom(){
@@ -5105,8 +5274,10 @@ const CSS_REF_DATA = [
     ['.topbar-title','顶部标题文字'],
     ['.apitype-opt','API类型选择卡（官方/反代/公益站）'],
     ['.format-opt','响应格式选择卡'],
-    ['#sub-api-settings','API设置统一入口子页面'],
+    ['#sub-newpreset','对话AI API配置页'],
+    ['#sub-voice-api','语音合成API配置页'],
     ['#sub-image-api','生图API设置子页面'],
+    ['#sub-preset-manager','预设管理页（按类别分组）'],
     ['.auto-msg-settings','自动消息间隔设置弹窗'],
     ['.auto-msg-settings-card','弹窗卡片'],
     ['.auto-msg-slider','间隔滑块'],
