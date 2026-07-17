@@ -801,6 +801,51 @@ input[type=file]{display:none;}
 .css-ref-desc{font-size:11px;color:var(--ink4);text-align:right;}
 .css-ref-copy{width:26px;height:26px;border:none;background:var(--white);border-radius:7px;color:var(--ink3);cursor:pointer;font-size:12px;flex-shrink:0;margin-left:8px;}
 
+/* ══ FOOD ORDERING MODAL ══ */
+.food-modal{position:fixed;inset:0;z-index:9500;display:none;background:rgba(0,0,0,0.5);}
+.food-modal.open{display:flex;align-items:flex-end;justify-content:center;}
+.food-sheet{width:min(420px,100vw);max-height:92dvh;background:var(--white);border-radius:20px 20px 0 0;display:flex;flex-direction:column;overflow:hidden;animation:slideUp 0.35s cubic-bezier(0.4,0,0.2,1);}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.food-header{background:linear-gradient(135deg,#ffc300,#ffb000);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.food-header-title{font-size:18px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;}
+.food-header-close{width:32px;height:32px;border:none;background:rgba(255,255,255,0.25);border-radius:50%;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.food-search{display:flex;gap:10px;padding:12px 16px;background:var(--smoke);flex-shrink:0;}
+.food-search input{flex:1;border:1px solid var(--silver);border-radius:12px;padding:10px 14px;font-size:14px;outline:none;background:var(--white);font-family:inherit;}
+.food-search button{background:linear-gradient(135deg,#ffc300,#ffb000);border:none;border-radius:12px;padding:10px 18px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.food-tabs{display:flex;gap:0;padding:8px 16px 0;background:var(--white);flex-shrink:0;border-bottom:1px solid var(--silver);}
+.food-tab{flex:1;padding:10px 0;text-align:center;font-size:13px;color:var(--ink4);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;font-weight:500;}
+.food-tab.active{color:var(--ink);border-bottom-color:#ffc300;}
+.food-body{flex:1;overflow-y:auto;padding:12px 16px;}
+.food-body::-webkit-scrollbar{display:none;}
+.food-shop-card{background:var(--white);border:1px solid var(--silver);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:12px;}
+.food-shop-card:active{background:var(--smoke);}
+.food-shop-avatar{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.food-shop-info{flex:1;min-width:0;}
+.food-shop-name{font-size:15px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.food-shop-meta{font-size:11px;color:var(--ink4);margin-top:3px;display:flex;gap:10px;}
+.food-shop-tag{font-size:10px;background:#fff3cd;color:#b8860b;padding:2px 8px;border-radius:8px;}
+.food-item-card{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--smoke);}
+.food-item-img{width:64px;height:64px;border-radius:10px;background:var(--smoke);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.food-item-info{flex:1;min-width:0;}
+.food-item-name{font-size:14px;font-weight:500;color:var(--ink);}
+.food-item-desc{font-size:11px;color:var(--ink4);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.food-item-price{font-size:15px;font-weight:700;color:#e53935;margin-top:4px;}
+.food-item-add{width:32px;height:32px;border-radius:50%;background:#ffc300;border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.12s;}
+.food-item-add:active{transform:scale(0.85);}
+.food-cart-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--smoke);}
+.food-cart-name{font-size:14px;color:var(--ink);flex:1;}
+.food-cart-price{font-size:14px;font-weight:600;color:#e53935;margin:0 12px;}
+.food-cart-remove{width:26px;height:26px;border-radius:50%;border:1px solid var(--silver);background:var(--white);color:var(--ink4);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.food-cart-footer{background:var(--white);border-top:1px solid var(--silver);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.food-cart-total{font-size:16px;font-weight:700;color:var(--ink);}
+.food-cart-total span{color:#e53935;}
+.food-checkout-btn{background:linear-gradient(135deg,#ffc300,#ffb000);border:none;border-radius:14px;padding:12px 28px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:transform 0.12s;}
+.food-checkout-btn:active{transform:scale(0.95);}
+.food-checkout-btn:disabled{opacity:0.5;pointer-events:none;}
+.food-empty{text-align:center;padding:40px 20px;color:var(--ink4);font-size:13px;}
+.food-ai-tip{background:#fff9e6;border:1px solid #ffe082;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#8d6e00;line-height:1.6;}
+.food-ai-tip strong{color:#b8860b;}
+
 </style>
 <body>
 
@@ -2011,6 +2056,10 @@ npx NeteaseCloudMusicApi</div>
       <div class="chat-plus-icon" style="background:#607d8b"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
       <span>语音消息</span>
     </div>
+    <div class="chat-plus-item" onclick="closeChatPlus();openFoodOrder()">
+      <div class="chat-plus-icon" style="background:#ffc300"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+      <span>外卖</span>
+    </div>
   </div>
 </div>
 
@@ -2041,6 +2090,32 @@ npx NeteaseCloudMusicApi</div>
       <div style="font-size:14px;color:var(--ink2);margin-top:20px;padding:14px;background:var(--smoke);border-radius:12px" id="td-note">—</div>
       <div style="font-size:12px;color:var(--ink4);margin-top:12px" id="td-time">—</div>
       <div style="font-size:12px;color:var(--ink4);margin-top:4px">转账状态：已到账</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FOOD ORDERING MODAL ══════════ -->
+<div class="food-modal" id="food-modal" onclick="if(event.target===this)closeFoodOrder()">
+  <div class="food-sheet" onclick="event.stopPropagation()">
+    <div class="food-header">
+      <div class="food-header-title">🛵 外卖点餐</div>
+      <button class="food-header-close" onclick="closeFoodOrder()">✕</button>
+    </div>
+    <div class="food-search">
+      <input id="food-search-input" placeholder="搜索美食、餐厅..." onkeydown="if(event.key==='Enter')foodSearch()">
+      <button onclick="foodSearch()">搜索</button>
+    </div>
+    <div class="food-tabs">
+      <div class="food-tab active" id="food-tab-shops" onclick="switchFoodTab('shops')">🏪 商家</div>
+      <div class="food-tab" id="food-tab-cart" onclick="switchFoodTab('cart')">🛒 购物车 <span id="food-cart-badge" style="display:none;background:#e53935;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:4px">0</span></div>
+    </div>
+    <div class="food-body" id="food-body">
+      <div class="food-ai-tip">💡 <strong>AI 点餐助手已就绪</strong> — 你可以直接在聊天中跟 AI 说「帮我搜附近的火锅」「推荐几个好吃的」，AI 会帮你找到合适的餐厅和菜品！</div>
+      <div class="food-empty">🔍 搜索你想吃的美食吧</div>
+    </div>
+    <div class="food-cart-footer" id="food-cart-footer" style="display:none">
+      <div class="food-cart-total">合计 <span id="food-total-price">¥0</span></div>
+      <button class="food-checkout-btn" id="food-checkout-btn" onclick="foodCheckout()" disabled>去结算</button>
     </div>
   </div>
 </div>
@@ -2232,6 +2307,13 @@ const MINIAPP_PROMPT_BLOCK = `【可用小程序与智能链接】你可以在�
 - 京东/JD/电器/快递 → [MINIAPP:mini-jd]
 - 看视频/B站/哔哩哔哩/UP主 → [MINIAPP:mini-bilibili]
 - 小红书/种草/推荐 → [MINIAPP:mini-xhs]
+
+【外卖点餐助手能力】你是一个外卖点餐助手！当用户聊到吃的、想点外卖、问有什么好吃的时，你可以：
+1. 推荐餐厅类型（火锅、日料、川菜、奶茶等）和具体菜品
+2. 帮用户分析「想吃什么」——根据口味偏好、预算、天气推荐
+3. 帮用户构建一个合理的点餐清单（几个人吃、荤素搭配、预算控制）
+4. 在回复末尾用 [MINIAPP:mini-meituan] 引导用户打开外卖面板
+5. 用自然对话的方式，像朋友一样跟用户聊吃什么，而不是冷冰冰的菜单
 
 【智能搜索卡片（可带真实URL，更精准）】
 格式：[MINIAPP_URL:显示名称:图标emoji:背景色:完整URL]
@@ -4857,6 +4939,24 @@ function renderMsgBubbleContent(m){
     </div>`;
   }
 
+  // [FOOD_ORDER:total:items] — food order card
+  const foodMatch = text.match(/^\[FOOD_ORDER:([\d.]+):(.+?)\]$/);
+  if(foodMatch){
+    const total = foodMatch[1], items = foodMatch[2];
+    return `<div class="msg-special-card" style="background:linear-gradient(135deg,#fff9e6,#fff3cd);color:var(--ink);cursor:default;border:1px solid #ffe082">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:24px">🛵</span>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">外卖订单</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:4px;line-height:1.5">${escHtml(items)}</div>
+          <div style="font-size:15px;font-weight:700;color:#e53935;margin-top:6px">合计 ¥${total}</div>
+          <div style="font-size:10px;color:var(--ink4);margin-top:3px">预计30分钟送达 · 正在配送中…</div>
+        </div>
+        <div class="msg-card-tag" style="background:#ffc300;color:#fff">已下单</div>
+      </div>
+    </div>`;
+  }
+
   // [REDPACKET:amount] or [REDPACKET:amount:cover:note]
   const rpMatch = text.match(/^\[REDPACKET:(\d+)(?::([^:]+))?(?::(.+))?\]$/);
   if(rpMatch){
@@ -7178,6 +7278,312 @@ function closeMiniApp(){
 function openMiniSub(id)  { document.getElementById(id)?.classList.add('open'); }
 function closeMiniSub(id) { document.getElementById(id)?.classList.remove('open'); }
 function openExternalLink(url) { window.open(url, '_blank', 'noopener,noreferrer'); }
+
+// ══════════ FOOD ORDERING SYSTEM ══════════
+// Mock restaurant data with realistic Chinese food options
+const FOOD_SHOPS = [
+  {id:'s1',name:'海底捞火锅',icon:'🍲',tags:['火锅','川味','人气'],rating:'4.8',delivery:'30min',minPrice:25,deliveryFee:3,
+   items:[
+    {id:'f1',name:'招牌毛肚',desc:'新鲜毛肚，七上八下',price:38,icon:'🥩'},
+    {id:'f2',name:'虾滑',desc:'手打虾滑，Q弹爽滑',price:32,icon:'🦐'},
+    {id:'f3',name:'肥牛卷',desc:'澳洲肥牛，薄切大片',price:42,icon:'🥓'},
+    {id:'f4',name:'藕片',desc:'新鲜莲藕',price:12,icon:'🪷'},
+    {id:'f5',name:'土豆片',desc:'脆爽土豆',price:8,icon:'🥔'},
+    {id:'f6',name:'酸梅汤',desc:'冰镇解辣',price:10,icon:'🥤'},
+   ]},
+  {id:'s2',name:'喜茶',icon:'🧋',tags:['奶茶','果茶','网红'],rating:'4.6',delivery:'25min',minPrice:15,deliveryFee:2,
+   items:[
+    {id:'f7',name:'多肉葡萄',desc:'手剥葡萄+芝士奶盖',price:29,icon:'🍇'},
+    {id:'f8',name:'芝芝莓莓',desc:'草莓+芝士奶盖',price:28,icon:'🍓'},
+    {id:'f9',name:'满杯红柚',desc:'西柚果茶',price:22,icon:'🍊'},
+    {id:'f10',name:'烤布蕾奶茶',desc:'焦糖布蕾+奶茶',price:24,icon:'🍮'},
+   ]},
+  {id:'s3',name:'肯德基',icon:'🍗',tags:['炸鸡','汉堡','快餐'],rating:'4.5',delivery:'20min',minPrice:20,deliveryFee:4,
+   items:[
+    {id:'f11',name:'香辣鸡腿堡套餐',desc:'汉堡+薯条+可乐',price:35,icon:'🍔'},
+    {id:'f12',name:'吮指原味鸡',desc:'经典原味鸡块x2',price:18,icon:'🍗'},
+    {id:'f13',name:'葡式蛋挞',desc:'酥脆蛋挞x2',price:12,icon:'🥧'},
+    {id:'f14',name:'劲爆鸡米花',desc:'大份鸡米花',price:15,icon:'🍿'},
+    {id:'f15',name:'圣代冰淇淋',desc:'巧克力/草莓',price:9,icon:'🍦'},
+   ]},
+  {id:'s4',name:'杨国福麻辣烫',icon:'🍜',tags:['麻辣烫','自选','实惠'],rating:'4.4',delivery:'28min',minPrice:18,deliveryFee:2,
+   items:[
+    {id:'f16',name:'经典麻辣烫套餐',desc:'荤素搭配，微辣/中辣/特辣',price:25,icon:'🍜'},
+    {id:'f17',name:'番茄麻辣烫',desc:'番茄汤底，酸甜可口',price:22,icon:'🍅'},
+    {id:'f18',name:'骨汤麻辣烫',desc:'浓郁骨汤，不辣星人首选',price:24,icon:'🦴'},
+    {id:'f19',name:'加料: 肥牛',desc:'额外加一份肥牛',price:8,icon:'🥓'},
+    {id:'f20',name:'加料: 芝士年糕',desc:'额外加芝士年糕',price:6,icon:'🧀'},
+   ]},
+  {id:'s5',name:'日料一番',icon:'🍣',tags:['日料','寿司','刺身'],rating:'4.7',delivery:'35min',minPrice:30,deliveryFee:5,
+   items:[
+    {id:'f21',name:'三文鱼刺身',desc:'挪威三文鱼，5切',price:48,icon:'🐟'},
+    {id:'f22',name:'鳗鱼饭',desc:'蒲烧鳗鱼+米饭',price:42,icon:'🍱'},
+    {id:'f23',name:'加州卷',desc:'8枚经典加州卷',price:28,icon:'🍣'},
+    {id:'f24',name:'味噌汤',desc:'豆腐海带味噌',price:12,icon:'🍵'},
+    {id:'f25',name:'炸虾天妇罗',desc:'大虾天妇罗x3',price:32,icon:'🍤'},
+   ]},
+  {id:'s6',name:'川味小馆',icon:'🌶️',tags:['川菜','麻辣','下饭'],rating:'4.6',delivery:'25min',minPrice:22,deliveryFee:3,
+   items:[
+    {id:'f26',name:'水煮鱼',desc:'鲜嫩鱼片，麻辣鲜香',price:45,icon:'🐟'},
+    {id:'f27',name:'麻婆豆腐',desc:'经典川味，嫩滑豆腐',price:18,icon:'🧈'},
+    {id:'f28',name:'回锅肉',desc:'五花肉+蒜苗',price:32,icon:'🥩'},
+    {id:'f29',name:'宫保鸡丁',desc:'花生+鸡丁+干辣椒',price:28,icon:'🍗'},
+    {id:'f30',name:'蛋炒饭',desc:'粒粒分明',price:12,icon:'🍚'},
+   ]},
+  {id:'s7',name:'深夜烧烤',icon:'🍖',tags:['烧烤','夜宵','撸串'],rating:'4.3',delivery:'30min',minPrice:15,deliveryFee:3,
+   items:[
+    {id:'f31',name:'羊肉串x10',desc:'秘制羊肉串',price:30,icon:'🍢'},
+    {id:'f32',name:'烤鸡翅x5',desc:'蜜汁烤翅',price:22,icon:'🍗'},
+    {id:'f33',name:'烤茄子',desc:'蒜蓉烤茄子',price:12,icon:'🍆'},
+    {id:'f34',name:'烤韭菜',desc:'孜然烤韭菜',price:8,icon:'🥬'},
+    {id:'f35',name:'烤馒头',desc:'外酥内软x2',price:6,icon:'🍞'},
+   ]},
+  {id:'s8',name:'轻食沙拉',icon:'🥗',tags:['轻食','沙拉','健康'],rating:'4.5',delivery:'22min',minPrice:25,deliveryFee:2,
+   items:[
+    {id:'f36',name:'凯撒沙拉',desc:'罗马生菜+培根+面包丁',price:28,icon:'🥬'},
+    {id:'f37',name:'牛油果鸡肉沙拉',desc:'牛油果+鸡胸肉+藜麦',price:35,icon:'🥑'},
+    {id:'f38',name:'鲜榨橙汁',desc:'NFC鲜榨',price:18,icon:'🍊'},
+    {id:'f39',name:'酸奶水果杯',desc:'希腊酸奶+时令水果',price:16,icon:'🍓'},
+    {id:'f40',name:'全麦三明治',desc:'火腿+芝士+蔬菜',price:22,icon:'🥪'},
+   ]},
+];
+
+let foodCart = [];
+let foodCurrentTab = 'shops';
+let foodCurrentShop = null;
+let foodSearchResults = [];
+
+function openFoodOrder(){
+  document.getElementById('food-modal').classList.add('open');
+  foodCurrentTab = 'shops';
+  switchFoodTab('shops');
+  renderFoodShops(FOOD_SHOPS);
+}
+
+function closeFoodOrder(){
+  document.getElementById('food-modal').classList.remove('open');
+}
+
+function switchFoodTab(tab){
+  foodCurrentTab = tab;
+  document.getElementById('food-tab-shops').classList.toggle('active', tab==='shops');
+  document.getElementById('food-tab-cart').classList.toggle('active', tab==='cart');
+  document.getElementById('food-cart-footer').style.display = (tab==='cart') ? 'flex' : 'none';
+
+  if(tab==='shops'){
+    if(foodSearchResults.length > 0){
+      renderFoodSearchResults(foodSearchResults);
+    }else{
+      renderFoodShops(FOOD_SHOPS);
+    }
+  }else{
+    renderFoodCart();
+  }
+}
+
+function foodSearch(){
+  const q = document.getElementById('food-search-input').value.trim().toLowerCase();
+  if(!q){
+    foodSearchResults = [];
+    renderFoodShops(FOOD_SHOPS);
+    return;
+  }
+
+  // Search shops
+  foodSearchResults = FOOD_SHOPS.filter(s => 
+    s.name.toLowerCase().includes(q) || 
+    s.tags.some(t=>t.includes(q)) ||
+    s.items.some(i=>i.name.toLowerCase().includes(q)||i.desc.toLowerCase().includes(q))
+  );
+
+  renderFoodSearchResults(foodSearchResults);
+}
+
+function renderFoodShops(shops){
+  const body = document.getElementById('food-body');
+  const aiTip = body.querySelector('.food-ai-tip');
+  const list = shops.map(s=>{
+    const tagHtml = s.tags.map(t=>`<span class="food-shop-tag">${t}</span>`).join('');
+    return `<div class="food-shop-card" onclick="openFoodShop('${s.id}')">
+      <div class="food-shop-avatar" style="background:var(--smoke)">${s.icon}</div>
+      <div class="food-shop-info">
+        <div class="food-shop-name">${escHtml(s.name)}</div>
+        <div class="food-shop-meta">
+          <span>⭐ ${s.rating}</span><span>🕐 ${s.delivery}</span><span>起送¥${s.minPrice}</span>
+        </div>
+        <div style="margin-top:6px">${tagHtml}</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink4)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>`;
+  }).join('');
+  body.innerHTML = (aiTip? aiTip.outerHTML : '') + (list || '<div class="food-empty">😔 没找到相关餐厅，试试其他关键词</div>');
+}
+
+function renderFoodSearchResults(results){
+  const body = document.getElementById('food-body');
+  const aiTip = body.querySelector('.food-ai-tip');
+  if(results.length===0){
+    body.innerHTML = (aiTip? aiTip.outerHTML : '') + '<div class="food-empty">😔 没找到相关餐厅，试试其他关键词</div>';
+    return;
+  }
+  // Group: show matching items under each shop
+  const q = document.getElementById('food-search-input').value.trim().toLowerCase();
+  let html = '';
+  results.forEach(s=>{
+    const matchingItems = s.items.filter(i=>i.name.toLowerCase().includes(q)||i.desc.toLowerCase().includes(q));
+    const showItems = matchingItems.length>0 ? matchingItems : s.items.slice(0,3);
+    html += `<div class="food-shop-card" onclick="openFoodShop('${s.id}')" style="margin-bottom:16px">
+      <div class="food-shop-avatar" style="background:var(--smoke)">${s.icon}</div>
+      <div class="food-shop-info">
+        <div class="food-shop-name">${escHtml(s.name)} ⭐${s.rating}</div>
+        <div class="food-shop-meta"><span>🕐 ${s.delivery}</span><span>配送¥${s.deliveryFee}</span></div>
+      </div>
+    </div>`;
+    showItems.forEach(item=>{
+      const inCart = foodCart.find(c=>c.id===item.id);
+      html += `<div class="food-item-card">
+        <div class="food-item-img">${item.icon}</div>
+        <div class="food-item-info">
+          <div class="food-item-name">${escHtml(item.name)}</div>
+          <div class="food-item-desc">${escHtml(item.desc)}</div>
+          <div class="food-item-price">¥${item.price}</div>
+        </div>
+        <button class="food-item-add" onclick="event.stopPropagation();addToCart('${s.id}','${item.id}')" style="${inCart?'background:#4caf50':''}">${inCart?'✓':'+'}</button>
+      </div>`;
+    });
+  });
+  body.innerHTML = (aiTip? aiTip.outerHTML : '') + html;
+}
+
+function openFoodShop(shopId){
+  const shop = FOOD_SHOPS.find(s=>s.id===shopId);
+  if(!shop) return;
+  foodCurrentShop = shop;
+  const body = document.getElementById('food-body');
+  const tagHtml = shop.tags.map(t=>`<span class="food-shop-tag">${t}</span>`).join('');
+  let html = `<div style="padding-bottom:8px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:56px;height:56px;border-radius:14px;background:var(--smoke);display:flex;align-items:center;justify-content:center;font-size:28px">${shop.icon}</div>
+      <div>
+        <div style="font-size:17px;font-weight:600;color:var(--ink)">${escHtml(shop.name)}</div>
+        <div style="font-size:12px;color:var(--ink4);margin-top:3px">⭐${shop.rating} · 🕐${shop.delivery} · 起送¥${shop.minPrice} · 配送¥${shop.deliveryFee}</div>
+      </div>
+    </div>
+    <div style="margin-bottom:4px">${tagHtml}</div>
+  </div>`;
+  shop.items.forEach(item=>{
+    const inCart = foodCart.find(c=>c.id===item.id);
+    html += `<div class="food-item-card">
+      <div class="food-item-img">${item.icon}</div>
+      <div class="food-item-info">
+        <div class="food-item-name">${escHtml(item.name)}</div>
+        <div class="food-item-desc">${escHtml(item.desc)}</div>
+        <div class="food-item-price">¥${item.price}</div>
+      </div>
+      <button class="food-item-add" onclick="addToCart('${shop.id}','${item.id}')" style="${inCart?'background:#4caf50':''}">${inCart?'✓':'+'}</button>
+    </div>`;
+  });
+  body.innerHTML = html;
+}
+
+function addToCart(shopId, itemId){
+  const shop = FOOD_SHOPS.find(s=>s.id===shopId);
+  if(!shop) return;
+  const item = shop.items.find(i=>i.id===itemId);
+  if(!item) return;
+
+  const existing = foodCart.find(c=>c.id===itemId);
+  if(existing){
+    existing.qty++;
+  }else{
+    foodCart.push({id:item.id, name:item.name, price:item.price, icon:item.icon, shopId:shop.id, shopName:shop.name, qty:1});
+  }
+  updateCartBadge();
+  showToast(`已加入购物车：${item.name}`);
+
+  // Refresh current view
+  if(foodCurrentShop && foodCurrentShop.id===shopId){
+    openFoodShop(shopId);
+  }else if(foodSearchResults.length>0){
+    renderFoodSearchResults(foodSearchResults);
+  }
+}
+
+function removeFromCart(itemId){
+  foodCart = foodCart.filter(c=>c.id!==itemId);
+  updateCartBadge();
+  renderFoodCart();
+}
+
+function updateCartBadge(){
+  const badge = document.getElementById('food-cart-badge');
+  const total = foodCart.reduce((s,c)=>s+c.qty, 0);
+  if(total>0){
+    badge.style.display = 'inline';
+    badge.textContent = total;
+  }else{
+    badge.style.display = 'none';
+  }
+
+  const btn = document.getElementById('food-checkout-btn');
+  const totalPrice = foodCart.reduce((s,c)=>s+c.price*c.qty, 0);
+  document.getElementById('food-total-price').textContent = '¥'+totalPrice.toFixed(2);
+  btn.disabled = total===0;
+}
+
+function renderFoodCart(){
+  const body = document.getElementById('food-body');
+  if(foodCart.length===0){
+    body.innerHTML = '<div class="food-empty">🛒 购物车是空的，去逛逛吧</div>';
+    document.getElementById('food-cart-footer').style.display = 'none';
+    return;
+  }
+  let html = '';
+  let total = 0;
+  foodCart.forEach(c=>{
+    const subtotal = c.price * c.qty;
+    total += subtotal;
+    html += `<div class="food-cart-item">
+      <span style="font-size:20px;margin-right:8px">${c.icon}</span>
+      <div class="food-cart-name">${escHtml(c.name)} <span style="font-size:11px;color:var(--ink4)">x${c.qty}</span> <span style="font-size:10px;color:var(--ink4)">${escHtml(c.shopName)}</span></div>
+      <div class="food-cart-price">¥${subtotal.toFixed(2)}</div>
+      <button class="food-cart-remove" onclick="removeFromCart('${c.id}')">✕</button>
+    </div>`;
+  });
+  html += `<div style="text-align:right;padding:10px 0;font-size:13px;color:var(--ink4)">配送费预估 ¥3~5</div>`;
+  body.innerHTML = html;
+  document.getElementById('food-cart-footer').style.display = 'flex';
+  document.getElementById('food-total-price').textContent = '¥'+total.toFixed(2);
+  document.getElementById('food-checkout-btn').disabled = total===0;
+}
+
+function foodCheckout(){
+  if(foodCart.length===0) return;
+  const total = foodCart.reduce((s,c)=>s+c.price*c.qty, 0);
+  const items = foodCart.map(c=>`${c.icon} ${c.name} x${c.qty}`).join('、');
+  
+  // Insert order into chat
+  const ctx = getActiveChatContext();
+  if(ctx){
+    ctx.msgs.push({
+      text: `[FOOD_ORDER:${total.toFixed(2)}:${items}]`,
+      mine:true, time:getTime(), timestamp:Date.now()
+    });
+    persist();
+    ctx.rerender();
+  }
+
+  showToast(`🎉 下单成功！合计 ¥${total.toFixed(2)}，预计 30 分钟送达`);
+  foodCart = [];
+  updateCartBadge();
+  closeFoodOrder();
+
+  // Let AI respond to the order
+  if(currentChar && !currentChar.isSystem){
+    const h = chatHistory.find(h2=>h2.id===currentChar.id);
+    if(h) setTimeout(()=>requestAIReply(h), 600);
+  }
+}
 
 
 // ══════════ LANGUAGE LEARNING APP (语习 · 完整实现) ══════════
