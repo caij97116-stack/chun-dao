@@ -2559,11 +2559,11 @@ function requestMemoryMode(mode){
     title.textContent = '确认开启单方面互通';
     body.innerHTML = '<div style="margin-bottom:12px"><span style="font-weight:600;color:var(--ink)">✓ 优点：</span>你可以精确控制哪些App的内容被角色看到，节省token的同时保护隐私。</div><div><span style="font-weight:600;color:#c0392b">⚠ 注意：</span>需要先在下方勾选要互通的App，否则角色无法获取任何外部记忆。</div>';
   }
-  document.getElementById('mem-confirm-modal').style.display = 'flex';
+  document.getElementById('mem-confirm-modal').classList.add('open');
 }
 
 function closeMemoryConfirm(){
-  document.getElementById('mem-confirm-modal').style.display = 'none';
+  document.getElementById('mem-confirm-modal').classList.remove('open');
   _pendingMemoryMode = null;
 }
 
