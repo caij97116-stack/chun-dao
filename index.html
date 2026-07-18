@@ -6418,10 +6418,12 @@ function renderGroupMsgs(msgs){
       return '<div class="msg-time-label" style="color:var(--ink3)">'+escHtml(m.text)+'</div>';
     }
     const showTime = (i===0) || (msgs[i-1] && msgs[i-1].time!==m.time);
+    const displayText = (m._hasFetchedLinks && m._displayText) ? m._displayText : m.text;
     if(m.mine){
+      const fetchTag = m._hasFetchedLinks ? '<div style="margin-top:4px;font-size:10px;color:var(--ink4);display:flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>已读取链接内容</div>' : '';
       return (showTime?'<div class="msg-time-label">'+m.time+'</div>':'') +
         '<div class="msg-row mine" data-mid="'+m.mid+'" oncontextmenu="event.preventDefault();openMsgMenu(\''+m.mid+'\')" ontouchstart="msgPressStart(\''+m.mid+'\')" ontouchend="msgPressEnd()" ontouchmove="msgPressEnd()" onmousedown="msgPressStart(\''+m.mid+'\')" onmouseup="msgPressEnd()" onmouseleave="msgPressEnd()">' +
-        '<div class="msg-bub">'+renderMarkdownLite(m.text)+'</div></div>';
+        '<div class="msg-bub">'+renderMarkdownLite(displayText)+fetchTag+'</div></div>';
     }
     const speaker = findCharacter(m.speakerId) || {name:'未知角色', avatarColor:'#888'};
     const avatarHtml = speaker.avatar ? '<img src="'+speaker.avatar+'">' : escHtml(speaker.avatarLetter||speaker.name[0]||'?');
@@ -6436,13 +6438,32 @@ async function gcSend(){
   const inp = document.getElementById('cv-input');
   const text = inp.value.trim();
   if(!text || !currentGroupId) return;
+  _chatBusy = true;
   inp.value=''; inp.style.height='auto';
   const g = groupChats.find(g2=>g2.id===currentGroupId);
-  if(!g) return;
-  g.msgs.push({text, mine:true, time:getTime(), timestamp:Date.now()});
-  persist();
-  renderGroupMsgs(g.msgs);
-  await requestGroupAIReplies(g);
+  if(!g){ _chatBusy = false; return; }
+
+  try{
+    const urls = extractURLs(text);
+    let enrichedText = text;
+    if(urls.length > 0){
+      const results = await Promise.all(urls.map(async url => {
+        try{ const content = await fetchLinkContent(url); return {url, content, ok:true}; }
+        catch(e){ return {url, content: '抓取失败：'+e.message, ok:false}; }
+      }));
+      const fetchedBlocks = results.map(r => `\n---\n[链接内容] ${r.url}\n${r.content}`).join('');
+      enrichedText = text + '\n\n[以下是从链接中自动抓取的内容，请基于这些内容回复用户]' + fetchedBlocks;
+    }
+    g.msgs.push({text: enrichedText, mine:true, time:getTime(), timestamp:Date.now(), _hasFetchedLinks: urls.length>0, _displayText: urls.length>0 ? text : undefined});
+    persist();
+    renderGroupMsgs(g.msgs);
+    await requestGroupAIReplies(g);
+  }catch(e){
+    g.msgs.push({text: '⚠ 链接抓取异常: '+e.message, mine:true, time:getTime(), timestamp:Date.now()});
+    persist();
+    renderGroupMsgs(g.msgs);
+    _chatBusy = false;
+  }
 }
 async function requestGroupAIReplies(g){
   // Each member character gets a chance to respond, one at a time, so the
@@ -6808,6 +6829,10 @@ function renderMsgBubbleContent(m){
   }
   // Declare text variable first so all card parsers below can use it
   let text = m.text;
+  // If message has fetched links, show the display text in UI (not the full enriched content)
+  if(m._hasFetchedLinks && m._displayText){
+    text = m._displayText;
+  }
   // Parse special card tags
   const MINIAPP_MAP = {
     'mini-taobao':   {name:'淘宝',     icon:'🛍️', color:'#ff6b35', url:'https://m.taobao.com', searchUrl:'https://s.taobao.com/search?q='},
@@ -6982,7 +7007,8 @@ function renderMsgBubbleContent(m){
   }
   const textHtml = renderMarkdownLite(text);
   const autoTrans = m.autoTranslation ? `<div class="msg-auto-trans">${escHtml(m.autoTranslation)}</div>` : '';
-  return textHtml + autoTrans + cardHtml;
+  const fetchIndicator = m._hasFetchedLinks ? '<div style="margin-top:4px;font-size:10px;color:var(--ink4);display:flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>已读取链接内容</div>' : '';
+  return textHtml + fetchIndicator + autoTrans + cardHtml;
 }
 
 function renderMsgs(msgs){
@@ -7029,6 +7055,34 @@ function buildSystemContextSnapshot(){
   ].join('\n');
 }
 
+// ── Link content fetching (via Jina AI Reader) ──
+function extractURLs(text){
+  const regex = /https?:\/\/[^\s<>"{}|\\^`\[\]]+/gi;
+  return [...new Set(text.match(regex)||[])];
+}
+
+async function fetchLinkContent(url, timeoutMs=8000){
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), timeoutMs);
+  try{
+    const res = await fetch('https://r.jina.ai/'+encodeURIComponent(url), {
+      headers: {'Accept':'text/markdown','X-No-Cache':'true'},
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const text = await res.text();
+    // Truncate to avoid token overflow — keep first 3000 chars
+    const limit = 3000;
+    const truncated = text.length > limit ? text.slice(0, limit)+'\n\n…(内容过长已截断)' : text;
+    return truncated;
+  }catch(e){
+    clearTimeout(timer);
+    // Fallback: try fetching via a lightweight approach
+    throw new Error(e.name==='AbortError' ? '请求超时' : '抓取失败: '+e.message);
+  }
+}
+
 async function cvSend(){
   if(currentGroupId){ await gcSend(); return; }
   const inp = document.getElementById('cv-input');
@@ -7038,11 +7092,56 @@ async function cvSend(){
   inp.value=''; inp.style.height='auto';
   const t = getTime();
   const h = chatHistory.find(h2=>h2.id===currentChar.id);
-  if(!h) return;
-  h.msgs.push({text, mine:true, time:t});
-  persist();
-  renderMsgs(h.msgs);
-  await requestAIReply(h);
+  if(!h){ _chatBusy = false; return; }
+
+  try{
+    // ── Detect URLs and fetch content via Jina AI Reader ──
+    const urls = extractURLs(text);
+    let enrichedText = text;
+    if(urls.length > 0){
+      // Show fetching indicator
+      h.msgs.push({text: text, mine:true, time:t, _fetching: true});
+      persist();
+      renderMsgs(h.msgs);
+      // Update the last message to show fetching status
+      const msgsEl = document.getElementById('cv-msgs');
+      const lastBub = msgsEl?.querySelector('.msg-row.mine:last-of-type .msg-bub');
+      if(lastBub) lastBub.innerHTML = escHtml(text) + '<div style="margin-top:6px;font-size:11px;color:var(--ink4);display:flex;align-items:center;gap:4px"><span class="typing-dots" style="display:inline-flex;gap:3px"><span class="typing-dot" style="width:4px;height:4px"></span><span class="typing-dot" style="width:4px;height:4px"></span><span class="typing-dot" style="width:4px;height:4px"></span></span> 正在读取链接内容…</div>';
+
+      // Fetch all URLs in parallel
+      const results = await Promise.all(urls.map(async url => {
+        try{
+          const content = await fetchLinkContent(url);
+          return {url, content, ok:true};
+        }catch(e){
+          return {url, content: '抓取失败：'+e.message, ok:false};
+        }
+      }));
+
+      // Build enriched text for AI
+      const fetchedBlocks = results.map(r =>
+        `\n---\n[链接内容] ${r.url}\n${r.content}`
+      ).join('');
+      enrichedText = text + '\n\n[以下是从链接中自动抓取的内容，请基于这些内容回复用户]' + fetchedBlocks;
+
+      // Remove the fetching placeholder and add the real message
+      h.msgs.pop();
+      h.msgs.push({text: enrichedText, mine:true, time:t, _hasFetchedLinks: true, _displayText: text});
+    } else {
+      h.msgs.push({text, mine:true, time:t});
+    }
+
+    persist();
+    renderMsgs(h.msgs);
+    await requestAIReply(h);
+  }catch(e){
+    // Remove placeholder if failed mid-fetch
+    if(h.msgs.length>0 && h.msgs[h.msgs.length-1]._fetching) h.msgs.pop();
+    h.msgs.push({text: '⚠ 链接抓取异常: '+e.message, mine:true, time:t});
+    persist();
+    renderMsgs(h.msgs);
+    _chatBusy = false;
+  }
 }
 
 async function requestAIReply(h){
