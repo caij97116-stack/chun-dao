@@ -3882,8 +3882,13 @@ function openSub(id){
   let container = el.parentNode;
   while(container && container.id !== 'app-frame' && container.id !== 'phone'){
     if(container.style && container.style.display === 'none'){
-      if(!container._wasVisible) container._wasVisible = false;
+      container._wasVisible = false;
       container.style.display = 'flex';
+      el._subContainer = container;
+      break;
+    }
+    if(container.style && container.style.display === 'flex'){
+      if(container._wasVisible === undefined) container._wasVisible = true;
       el._subContainer = container;
       break;
     }
