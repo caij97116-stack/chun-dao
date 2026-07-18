@@ -2615,6 +2615,7 @@ window.__TSB_IMG_SEA__ = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wB
 
 
 // ══════════ DATA & STATE ══════════
+const API_BASE = "https://chun-dao.onrender.com";
 const SYS_ASSISTANT = {
   id: 'sys_tsubaki',
   name: '椿島です助手',
@@ -8574,7 +8575,7 @@ function doWithdraw(){
 //   B) Built-in archive.org tracks (CORS-safe, no crossOrigin attribute)
 
 // ── State ──
-let ncmApiBase = localStorage.getItem('tsb_ncm_api') || 'https://api-enhanced-lake-zeta.vercel.app';  // e.g. http://localhost:3000
+let ncmApiBase = localStorage.getItem('tsb_ncm_api') || API_BASE + '/api';  // e.g. http://localhost:3000
 let ncmCookie  = localStorage.getItem('tsb_ncm_cookie') || '';
 let ncmUserId  = localStorage.getItem('tsb_ncm_uid') || '';
 let ncmUserName= localStorage.getItem('tsb_ncm_name') || '';
@@ -9149,7 +9150,7 @@ async function ncmFetch(path, params) {
   const ps = {...params};
   // Only pass cookie when we actually have one (empty string causes issues on some versions)
   if (ncmCookie && ncmCookie.trim()) ps.cookie = ncmCookie;
-  // CN IP needed for Vercel deployments to access region-locked content
+  // CN IP needed for the backend to access region-locked content
   if (!ps.realIP) ps.realIP = '116.25.146.177';
   // timestamp required by NeteaseCloudMusicApi v4.29.7+
   if (!ps.timestamp) ps.timestamp = Date.now();
@@ -9192,7 +9193,7 @@ async function startNcmQrLogin() {
   const status = document.getElementById('ncm-qr-status');
   if(box) box.innerHTML = '<div style="color:var(--ink4);font-size:13px;padding:20px">正在连接 API…</div>';
   try {
-    // Step 1: get QR key — Vercel版有时返回 {data:{unikey}} 有时返回 {data:{code:200,unikey}}
+    // Step 1: get QR key — 有时返回 {data:{unikey}} 有时返回 {data:{code:200,unikey}}
     const keyData = await ncmFetch('/login/qr/key', {});
     musicQrKey = keyData.data?.unikey || keyData.unikey;
     if(!musicQrKey) throw new Error('无法获取二维码密钥（返回：'+JSON.stringify(keyData).slice(0,100)+'）');
@@ -9211,7 +9212,7 @@ async function startNcmQrLogin() {
       <b>连接失败</b><br>${escHtml(e.message)}<br><br>
       <span style="color:var(--ink4)">请检查：<br>
       1. API地址是否正确（当前：${escHtml(ncmApiBase)}）<br>
-      2. Vercel是否部署成功（访问地址看是否有文档页面）<br>
+      2. 后端API是否部署成功（访问地址看是否有文档页面）<br>
       3. 浏览器控制台是否有CORS报错</span>
     </div>`;
     if(status) status.textContent = '连接失败，请检查API配置';
