@@ -3883,12 +3883,16 @@ function openSub(id){
   while(container && container.id !== 'app-frame' && container.id !== 'phone'){
     if(container.style && container.style.display === 'none'){
       container._wasVisible = false;
+      container._savedZIndex = container.style.zIndex;
       container.style.display = 'flex';
+      container.style.zIndex = '60';
       el._subContainer = container;
       break;
     }
     if(container.style && container.style.display === 'flex'){
       if(container._wasVisible === undefined) container._wasVisible = true;
+      container._savedZIndex = container.style.zIndex;
+      container.style.zIndex = '60';
       el._subContainer = container;
       break;
     }
@@ -3916,8 +3920,12 @@ function closeSub(id){
   const el = document.getElementById(id);
   el.classList.remove('open');
   if(!document.querySelector('.subpage.open')){
-    if(el._subContainer && !el._subContainer._wasVisible){
-      el._subContainer.style.display = 'none';
+    if(el._subContainer){
+      if(!el._subContainer._wasVisible){
+        el._subContainer.style.display = 'none';
+      }
+      el._subContainer.style.zIndex = el._subContainer._savedZIndex || '';
+      el._subContainer._savedZIndex = undefined;
     }
     el._subContainer = null;
   }
