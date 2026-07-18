@@ -2211,25 +2211,6 @@ input[type=file]{display:none;}
     </div>
   </div>
 
-</div>
-
-<!-- ══════ CHAT VIEW ══════ -->
-<div id="chat-view">
-  <div class="chat-topbar">
-    <button class="chat-back" onclick="closeChat()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-    <div class="chat-topbar-info"><div class="chat-topbar-name" id="cv-name">—</div><div class="chat-topbar-status" id="cv-status">在线</div></div>
-    <button class="chat-topbar-more" onclick="openChatMenu()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
-  </div>
-  <div class="chat-msgs" id="cv-msgs"></div>
-  <div class="chat-input-bar">
-    <button class="chat-plus-btn" onclick="toggleChatPlusMenu()" id="chat-plus-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    </button>
-    <textarea class="chat-textarea" id="cv-input" placeholder="说点什么…" rows="1"></textarea>
-    <button class="chat-send" onclick="cvSend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-  </div>
-</div>
-
 <!-- ══════ MODALS ══════ -->
 <div class="modal-overlay" id="char-modal" onclick="if(event.target===this)closeCharModal()">
   <div class="modal-sheet">
@@ -2604,6 +2585,25 @@ input[type=file]{display:none;}
     <button class="notif-close" onclick="event.stopPropagation();dismissNotification()">✕</button>
   </div>
 </div>
+</div>
+
+<!-- ══════ CHAT VIEW ══════ -->
+<div id="chat-view">
+  <div class="chat-topbar">
+    <button class="chat-back" onclick="closeChat()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="chat-topbar-info"><div class="chat-topbar-name" id="cv-name">—</div><div class="chat-topbar-status" id="cv-status">在线</div></div>
+    <button class="chat-topbar-more" onclick="openChatMenu()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+  </div>
+  <div class="chat-msgs" id="cv-msgs"></div>
+  <div class="chat-input-bar">
+    <button class="chat-plus-btn" onclick="toggleChatPlusMenu()" id="chat-plus-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+    <textarea class="chat-textarea" id="cv-input" placeholder="说点什么…" rows="1"></textarea>
+    <button class="chat-send" onclick="cvSend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+</div>
+
 
 </div>
 
