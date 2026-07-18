@@ -82,13 +82,14 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .tanban-icon-skin{background:linear-gradient(135deg,#2d6a7a,#164352);}
 .twitter-icon-skin{background:linear-gradient(135deg,#4a9fd8,#1a6fb0);}
 .store-icon-skin{background:linear-gradient(135deg,#4facfe,#00f2fe);}
+.studyroom-icon-skin{background:linear-gradient(135deg,#a8e063,#56ab2f);}
 .dock{position:relative;z-index:10;padding:10px 16px 28px;display:flex;gap:16px;justify-content:center;background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.12);flex-shrink:0;}
 
 /* ══ APP FRAME ══ */
 #app-frame{position:absolute;inset:0;transform:scale(0.92) translateY(40px);opacity:0;pointer-events:none;transition:transform 0.45s cubic-bezier(0.4,0,0.2,1),opacity 0.35s ease;z-index:50;display:none;}
 #app-frame.open{display:block;transform:scale(1) translateY(0);opacity:1;pointer-events:all;}
 
-#settings-app,#encounter-app,#lifefaces-app,#miniapps-app,#world-app,#langlearn-app,#diary-app,#tanban-app,#store-app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--smoke);}
+#settings-app,#encounter-app,#lifefaces-app,#miniapps-app,#world-app,#langlearn-app,#diary-app,#tanban-app,#store-app,#studyroom-app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--smoke);}
 
 .app-statusbar{height:50px;background:var(--white);display:flex;align-items:center;justify-content:space-between;padding:0 22px;flex-shrink:0;border-bottom:1px solid var(--silver);}
 .asb-time{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.02em;}
@@ -963,6 +964,12 @@ input[type=file]{display:none;}
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="3" y="2" width="18" height="20" rx="3" stroke="rgba(255,255,255,0.85)" stroke-width="1.3"/><circle cx="8.5" cy="11" r="1.5" fill="rgba(255,255,255,0.9)"/><circle cx="15.5" cy="11" r="1.5" fill="rgba(255,255,255,0.9)"/><path d="M6 16h12" stroke="rgba(255,255,255,0.9)" stroke-width="1.3" stroke-linecap="round"/></svg>
           </div>
           <span class="app-label">应用商店</span>
+        </div>
+        <div class="app-icon-wrap" onclick="openApp('studyroom')">
+          <div class="app-icon studyroom-icon-skin">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="rgba(255,255,255,0.85)" stroke-width="1.3"/><path d="M4 8h16" stroke="rgba(255,255,255,0.85)" stroke-width="1.3"/><path d="M12 8v13" stroke="rgba(255,255,255,0.85)" stroke-width="1.3"/></svg>
+          </div>
+          <span class="app-label">自习室</span>
         </div>
         </div>
       </div>
@@ -2105,6 +2112,16 @@ input[type=file]{display:none;}
     </div>
   </div>
 
+  <!-- ═══ STUDYROOM APP ═══ -->
+  <div id="studyroom-app" style="display:none">
+    <div class="app-statusbar">
+      <span class="asb-time" id="studyroomclock">09:41</span>
+      <button class="app-close-btn" onclick="closeApp()">×</button>
+    </div>
+    <div class="studyroom-content" id="studyroom-content">
+    </div>
+  </div>
+
 </div>
 
 <!-- ══════ CHAT VIEW ══════ -->
@@ -3232,7 +3249,7 @@ function showScreen(id){
 function updateClock(){
   const n=new Date(), h=n.getHours().toString().padStart(2,'0'), m=n.getMinutes().toString().padStart(2,'0');
   const t = h+':'+m;
-  ['hclock','sclock','eclock','tf-time','mclock','lfclock','tanbanclock','twitterclock','storeclock'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=t; });
+  ['hclock','sclock','eclock','tf-time','mclock','lfclock','tanbanclock','twitterclock','storeclock','studyroomclock'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=t; });
 }
 function updateDate(){
   const days=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
@@ -3717,6 +3734,7 @@ function openApp(name){
   document.getElementById('tanban-app').style.display='none';
   document.getElementById('twitter-app').style.display='none';
   document.getElementById('store-app').style.display='none';
+  document.getElementById('studyroom-app').style.display='none';
   if(name==='settings') document.getElementById('settings-app').style.display='flex';
   if(name==='encounter') document.getElementById('encounter-app').style.display='flex';
   if(name==='music'){ document.getElementById('music-app').style.display='flex'; initMusicAppView(); }
@@ -3728,6 +3746,7 @@ function openApp(name){
   if(name==='tanban'){ document.getElementById('tanban-app').style.display='flex'; renderTanbanHome(); }
   if(name==='twitter'){ document.getElementById('twitter-app').style.display='flex'; initTwitterApp(); }
   if(name==='store'){ document.getElementById('store-app').style.display='flex'; }
+  if(name==='studyroom'){ document.getElementById('studyroom-app').style.display='flex'; }
   frame.style.display='block';
   requestAnimationFrame(()=>frame.classList.add('open'));
 }
@@ -5618,6 +5637,10 @@ const CSS_REF_DATA = [
     ['.store-card-btn','获取按钮'],
     ['.store-featured-card','推荐横幅卡片'],
     ['.store-tab.active','当前选中标签'],
+  ]},
+  {group:'自习室 App', items:[
+    ['#studyroom-app','自习室整体背景'],
+    ['.studyroom-content','自习室内容区域'],
   ]},
 
   {group:'通知弹窗（微信风格）', items:[
