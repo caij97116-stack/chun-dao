@@ -1338,6 +1338,10 @@ input[type=file]{display:none;}
 
   <!-- ══════ ENCOUNTER APP ══════ -->
   <div id="encounter-app" style="display:none">
+    <div class="app-statusbar">
+      <span class="asb-time" id="eclock">09:41</span>
+      <button class="app-close-btn" onclick="closeApp()">×</button>
+    </div>
     <div class="enc-page active" id="enc-chats" style="display:flex">
       <div class="enc-header">
         <div class="enc-header-title">与你相遇</div>
@@ -3159,7 +3163,7 @@ function showScreen(id){
 function updateClock(){
   const n=new Date(), h=n.getHours().toString().padStart(2,'0'), m=n.getMinutes().toString().padStart(2,'0');
   const t = h+':'+m;
-  ['hclock','sclock','tf-time','mclock','lfclock','tanbanclock','twitterclock'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=t; });
+  ['hclock','sclock','eclock','tf-time','mclock','lfclock','tanbanclock','twitterclock'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=t; });
 }
 function updateDate(){
   const days=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
