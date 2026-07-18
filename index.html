@@ -63,13 +63,14 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .app-grid-area{flex:1;position:relative;z-index:10;padding:18px 16px 8px;display:flex;flex-direction:column;gap:18px;overflow:hidden;}
 .app-pages-container{flex:1;position:relative;z-index:10;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .app-pages-container::-webkit-scrollbar{display:none;}
-.app-page{flex:0 0 100%;scroll-snap-align:start;display:flex;flex-direction:column;gap:18px;padding:18px 16px 8px;box-sizing:border-box;}
+.app-page{flex:0 0 100%;scroll-snap-align:start;display:flex;flex-direction:column;gap:18px;padding:18px 16px 8px;box-sizing:border-box;position:relative;}
 .page-dots{position:relative;z-index:10;display:flex;justify-content:center;align-items:center;gap:6px;padding:4px 0 10px;flex-shrink:0;}
 .page-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.35);cursor:pointer;transition:all 0.25s ease;}
 .page-dot.active{background:rgba(255,255,255,0.95);width:16px;border-radius:3px;}
 .app-row{display:flex;gap:16px;justify-content:flex-start;}
-.app-icon-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex:0 0 auto;width:72px;position:relative;user-select:none;-webkit-user-select:none;touch-action:manipulation;}
-.app-icon-wrap.dragging{opacity:0.4;transform:scale(1.08);z-index:50;transition:transform 0.15s;}
+.app-icon-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;width:72px;position:relative;user-select:none;-webkit-user-select:none;touch-action:manipulation;}
+.app-icon-wrap.placed{position:absolute;transition:none;}
+.app-icon-wrap.dragging{opacity:0.7;z-index:50;transition:none;}
 .app-icon-wrap.drag-hover{outline:2px dashed var(--ink);border-radius:16px;outline-offset:2px;}
 .app-icon-wrap.drag-mode .app-icon{animation:appJiggle 0.3s ease-in-out infinite;}
 @keyframes appJiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-1.5deg)}75%{transform:rotate(1.5deg)}}
@@ -3128,7 +3129,6 @@ function init(){
   refreshMemoryPage();
   initHomePageDots();
   initAppIconDrag();
-  restoreAppOrder();
   document.getElementById('cv-input').addEventListener('input', function(){
     this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,90)+'px';
   });
@@ -3685,16 +3685,17 @@ function closeApp(){
   _appFrameCloseTimer = setTimeout(()=>{ frame.style.display='none'; },450);
 }
 
-// ── APP 图标拖动排序 ──
+// ── APP 图标自由拖动定位 ──
 let _appDragMode = false;
 let _appDragEl = null;
 let _appDragStartX = 0;
 let _appDragStartY = 0;
+let _appDragOrigX = 0;
+let _appDragOrigY = 0;
 let _appDragLongPressTimer = null;
 let _appDragMoved = false;
 
 function initAppIconDrag(){
-  // 给原始 HTML 图标添加 data-app 和拖拽事件，不修改 HTML
   document.querySelectorAll('.app-icon-wrap').forEach(el=>{
     const onclick = el.getAttribute('onclick') || '';
     const match = onclick.match(/openApp\('(\w+)'\)/);
@@ -3704,19 +3705,52 @@ function initAppIconDrag(){
     el.addEventListener('touchend', onAppIconEnd);
     el.addEventListener('mousedown', onAppIconMouse);
   });
+  restoreAppPositions();
+}
+
+function getAppIconPos(el){
+  return { x: parseInt(el.dataset.x) || 0, y: parseInt(el.dataset.y) || 0 };
+}
+
+function setAppIconPos(el, x, y){
+  el.dataset.x = x; el.dataset.y = y;
+  el.style.left = x + 'px'; el.style.top = y + 'px';
 }
 
 function enterAppDragMode(){
   _appDragMode = true;
+  // Move all icons to be direct children of .app-page and convert to absolute
+  document.querySelectorAll('.app-page').forEach(page=>{
+    const pageRect = page.getBoundingClientRect();
+    // Collect all icons from nested .app-row
+    const icons = page.querySelectorAll('.app-icon-wrap');
+    icons.forEach(el=>{
+      if(!el.dataset.app) return;
+      // Get position BEFORE moving in DOM
+      const rect = el.getBoundingClientRect();
+      const x = Math.round(rect.left - pageRect.left);
+      const y = Math.round(rect.top - pageRect.top);
+      // Move to be direct child of .app-page
+      if(el.parentNode !== page) page.appendChild(el);
+      setAppIconPos(el, x, y);
+      el.classList.add('placed');
+      el.style.transition = 'none';
+    });
+  });
+  // Hide empty .app-row containers
+  document.querySelectorAll('.app-row').forEach(r=>{ r.style.display = 'none'; });
   document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.add('drag-mode'));
-  showToast('拖动图标排序 · 点击空白退出');
+  showToast('拖动图标自由定位 · 点击空白完成');
 }
 
 function exitAppDragMode(){
   _appDragMode = false;
-  document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-mode','dragging','drag-hover'));
+  document.querySelectorAll('.app-icon-wrap').forEach(el=>{
+    el.classList.remove('drag-mode','dragging','drag-hover');
+  });
   _appDragEl = null;
   _appDragMoved = false;
+  persistAppPositions();
 }
 
 function onAppIconTouch(e){
@@ -3729,6 +3763,8 @@ function onAppIconTouch(e){
   const touch = e.touches[0];
   _appDragStartX = touch.clientX;
   _appDragStartY = touch.clientY;
+  const pos = getAppIconPos(_appDragEl);
+  _appDragOrigX = pos.x; _appDragOrigY = pos.y;
   _appDragEl.classList.add('dragging');
   _appDragMoved = false;
 }
@@ -3741,22 +3777,27 @@ function onAppIconMove(e){
   const dy = touch.clientY - _appDragStartY;
   if(Math.abs(dx)<5 && Math.abs(dy)<5) return;
   _appDragMoved = true;
-  _appDragEl.style.transform = `translate(${dx}px,${dy}px) scale(1.08)`;
+  const newX = _appDragOrigX + dx;
+  const newY = _appDragOrigY + dy;
+  _appDragEl.style.left = newX + 'px';
+  _appDragEl.style.top = newY + 'px';
+  _appDragEl.style.transform = '';
   document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
-  const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.app-icon-wrap');
-  if(target && target!==_appDragEl) target.classList.add('drag-hover');
 }
 
 function onAppIconEnd(e){
   clearTimeout(_appDragLongPressTimer);
   if(!_appDragEl){ _appDragEl = null; return; }
-  _appDragEl.style.transform = '';
   _appDragEl.classList.remove('dragging');
   document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
-  const touch = e.changedTouches[0];
-  const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.app-icon-wrap');
-  if(target && target!==_appDragEl && _appDragMoved){
-    swapAppIcon(_appDragEl, target);
+  if(_appDragMoved){
+    // Save the new position
+    const newX = parseInt(_appDragEl.style.left);
+    const newY = parseInt(_appDragEl.style.top);
+    if(!isNaN(newX) && !isNaN(newY)){
+      _appDragEl.dataset.x = newX;
+      _appDragEl.dataset.y = newY;
+    }
   }
   _appDragEl = null;
 }
@@ -3770,6 +3811,8 @@ function onAppIconMouse(e){
   _appDragEl = e.currentTarget;
   _appDragStartX = e.clientX;
   _appDragStartY = e.clientY;
+  const pos = getAppIconPos(_appDragEl);
+  _appDragOrigX = pos.x; _appDragOrigY = pos.y;
   _appDragEl.classList.add('dragging');
   _appDragMoved = false;
   const onMove = (ev)=>{
@@ -3778,21 +3821,26 @@ function onAppIconMouse(e){
     const dy = ev.clientY - _appDragStartY;
     if(Math.abs(dx)<5 && Math.abs(dy)<5) return;
     _appDragMoved = true;
-    _appDragEl.style.transform = `translate(${dx}px,${dy}px) scale(1.08)`;
+    const newX = _appDragOrigX + dx;
+    const newY = _appDragOrigY + dy;
+    _appDragEl.style.left = newX + 'px';
+    _appDragEl.style.top = newY + 'px';
+    _appDragEl.style.transform = '';
     document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
-    const target = document.elementFromPoint(ev.clientX, ev.clientY)?.closest('.app-icon-wrap');
-    if(target && target!==_appDragEl) target.classList.add('drag-hover');
   };
   const onUp = (ev)=>{
     document.removeEventListener('mousemove', onMove);
     document.removeEventListener('mouseup', onUp);
     if(!_appDragEl) return;
-    _appDragEl.style.transform = '';
     _appDragEl.classList.remove('dragging');
     document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
-    const target = document.elementFromPoint(ev.clientX, ev.clientY)?.closest('.app-icon-wrap');
-    if(target && target!==_appDragEl && _appDragMoved){
-      swapAppIcon(_appDragEl, target);
+    if(_appDragMoved){
+      const newX = parseInt(_appDragEl.style.left);
+      const newY = parseInt(_appDragEl.style.top);
+      if(!isNaN(newX) && !isNaN(newY)){
+        _appDragEl.dataset.x = newX;
+        _appDragEl.dataset.y = newY;
+      }
     }
     _appDragEl = null;
   };
@@ -3800,67 +3848,43 @@ function onAppIconMouse(e){
   document.addEventListener('mouseup', onUp);
 }
 
-function swapAppIcon(a, b){
-  // 直接在 DOM 中交换两个元素
-  const parentA = a.parentNode;
-  const parentB = b.parentNode;
-  const nextA = a.nextSibling;
-  const nextB = b.nextSibling;
-  // 如果是同一个父元素
-  if(parentA === parentB){
-    if(nextA === b){
-      parentA.insertBefore(b, a); // b 移到 a 前面
-    } else if(nextB === a){
-      parentA.insertBefore(a, b); // a 移到 b 前面
-    } else {
-      const placeholder = document.createTextNode('');
-      parentA.insertBefore(placeholder, a);
-      parentA.insertBefore(a, b);
-      parentA.insertBefore(b, placeholder);
-      parentA.removeChild(placeholder);
-    }
-  } else {
-    const placeholderA = document.createTextNode('');
-    parentA.insertBefore(placeholderA, a);
-    parentB.insertBefore(a, nextB);
-    parentA.insertBefore(b, placeholderA);
-    parentA.removeChild(placeholderA);
-  }
-  persistAppOrder();
-  showToast('已交换位置');
+function persistAppPositions(){
+  const positions = [];
+  document.querySelectorAll('.app-icon-wrap[data-app]').forEach(el=>{
+    const page = el.closest('.app-page');
+    const pageIdx = page ? parseInt(page.id.replace('app-page-','')) : 0;
+    positions.push({
+      app: el.dataset.app,
+      page: pageIdx,
+      x: parseInt(el.dataset.x) || 0,
+      y: parseInt(el.dataset.y) || 0
+    });
+  });
+  localStorage.setItem('tsb_apppositions', JSON.stringify(positions));
 }
 
-function persistAppOrder(){
-  const all = [...document.querySelectorAll('.app-icon-wrap')];
-  const order = all.map(el=>el.dataset.app).filter(Boolean);
-  localStorage.setItem('tsb_apporder', JSON.stringify(order));
-}
-
-function restoreAppOrder(){
-  const saved = localStorage.getItem('tsb_apporder');
+function restoreAppPositions(){
+  const saved = localStorage.getItem('tsb_apppositions');
   if(!saved) return;
-  const order = JSON.parse(saved);
-  const all = [...document.querySelectorAll('.app-icon-wrap')];
-  const map = {};
-  all.forEach(el=>{ if(el.dataset.app) map[el.dataset.app] = el; });
-  // 找到所有 app-page 和 dock 的父容器
-  const containers = [...document.querySelectorAll('.app-page,.dock')];
-  const allEls = [];
-  containers.forEach(c=>{ allEls.push(...c.querySelectorAll('.app-icon-wrap')); });
-  // 按保存的顺序重新排列
-  let idx = 0;
-  for(const appName of order){
-    const el = map[appName];
-    if(!el || idx >= allEls.length) continue;
-    if(allEls[idx] !== el){
-      el.parentNode.insertBefore(el, allEls[idx]);
-      // 重新获取 allEls
-      const newAll = [];
-      containers.forEach(c=>{ newAll.push(...c.querySelectorAll('.app-icon-wrap')); });
-      allEls.splice(0, allEls.length, ...newAll);
-    }
-    idx++;
-  }
+  try{
+    const positions = JSON.parse(saved);
+    const map = {};
+    document.querySelectorAll('.app-icon-wrap[data-app]').forEach(el=>{
+      map[el.dataset.app] = el;
+    });
+    positions.forEach(p=>{
+      const el = map[p.app];
+      if(el){
+        setAppIconPos(el, p.x, p.y);
+        el.classList.add('placed');
+        // Move to the correct page
+        const targetPage = document.getElementById('app-page-' + (p.page || 0));
+        if(targetPage && el.closest('.app-page') !== targetPage){
+          targetPage.appendChild(el);
+        }
+      }
+    });
+  }catch(e){}
 }
 
 // Click blank area to exit drag mode; prevent app open in drag mode
@@ -3873,7 +3897,7 @@ document.addEventListener('click', function(e){
     return;
   }
   exitAppDragMode();
-  showToast('排序已保存');
+  showToast('位置已保存');
 }, true);
 
 // Cancel long press on mouseup
@@ -4136,6 +4160,7 @@ function clearAllData(){
   localStorage.removeItem('tsb_wallethist');
   localStorage.removeItem('tsb_profile');
   localStorage.removeItem('tsb_appsettings');
+  localStorage.removeItem('tsb_apppositions');
   showToast('数据已清空，正在刷新…');
   setTimeout(()=>location.reload(), 1000);
 }
