@@ -793,11 +793,11 @@ textarea.field-inp{resize:vertical;min-height:80px;line-height:1.5;}
 .preset-delete{width:28px;height:28px;border:none;background:none;font-size:16px;color:var(--ink4);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;}
 .preset-delete:active{background:var(--silver);}
 
-.toast{position:absolute;bottom:120px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(26,26,26,0.92);color:white;padding:9px 20px;border-radius:20px;font-size:13px;white-space:nowrap;opacity:0;pointer-events:none;z-index:999;transition:all 0.3s ease;backdrop-filter:blur(10px);letter-spacing:0.05em;max-width:80%;overflow:hidden;text-overflow:ellipsis;}
+.toast{position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(26,26,26,0.92);color:white;padding:9px 20px;border-radius:20px;font-size:13px;white-space:nowrap;opacity:0;pointer-events:none;z-index:99999;transition:all 0.3s ease;backdrop-filter:blur(10px);letter-spacing:0.05em;max-width:80%;overflow:hidden;text-overflow:ellipsis;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* ══ 顶部通知弹窗（微信风格） ══ */
-.notification-popup{position:absolute;top:0;left:0;right:0;z-index:1000;transform:translateY(-120%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);pointer-events:none;}
+.notification-popup{position:fixed;top:0;left:0;width:min(390px,100vw);z-index:99999;transform:translateY(-120%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);pointer-events:none;}
 .notification-popup.show{transform:translateY(0);pointer-events:all;}
 .notif-card{background:rgba(30,30,30,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin:8px 12px;border-radius:16px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);cursor:pointer;}
 .notif-card:active{background:rgba(50,50,50,0.95);}
@@ -2571,6 +2571,7 @@ input[type=file]{display:none;}
   </div>
 </div>
 
+</div>
 <div class="toast" id="toast"></div>
 
 <!-- 顶部通知弹窗（微信风格） -->
@@ -2584,7 +2585,6 @@ input[type=file]{display:none;}
     </div>
     <button class="notif-close" onclick="event.stopPropagation();dismissNotification()">✕</button>
   </div>
-</div>
 </div>
 
 <!-- ══════ CHAT VIEW ══════ -->
@@ -3424,7 +3424,9 @@ function escHtml(t){
   return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 function showToast(msg){
+  syncPopupPosition();
   const t=document.getElementById('toast');
+  if(!t) return;
   t.textContent=msg; t.classList.add('show');
   clearTimeout(t._timer);
   t._timer = setTimeout(()=>t.classList.remove('show'),2200);
@@ -3432,6 +3434,27 @@ function showToast(msg){
 
 // ══ 顶部通知弹窗（微信风格）+ 系统级推送 ══
 let _notifTimer = null;
+
+// ══ 弹窗定位引擎：跟随手机框位置 ══
+function syncPopupPosition(){
+  const phone = document.getElementById('phone');
+  const popup = document.getElementById('notification-popup');
+  const toast = document.getElementById('toast');
+  if(!phone) return;
+  const r = phone.getBoundingClientRect();
+  if(popup){
+    popup.style.top = r.top + 'px';
+    popup.style.left = r.left + 'px';
+    popup.style.width = r.width + 'px';
+  }
+  if(toast){
+    toast.style.left = (r.left + r.width/2) + 'px';
+    toast.style.bottom = (window.innerHeight - r.bottom + 120) + 'px';
+  }
+}
+window.addEventListener('load', syncPopupPosition);
+window.addEventListener('resize', syncPopupPosition);
+
 function requestNotifPermission(){
   if(!('Notification' in window)) return;
   if(Notification.permission === 'default'){
@@ -3439,49 +3462,45 @@ function requestNotifPermission(){
   }
 }
 function showNotification(title, preview, avatar){
-  // 1. 应用内弹窗（始终显示）
+  syncPopupPosition(); // 先同步手机框位置
   const popup = document.getElementById('notification-popup');
   const iconEl = document.getElementById('notif-icon');
   const titleEl = document.getElementById('notif-title');
   const previewEl = document.getElementById('notif-preview');
   const timeEl = document.getElementById('notif-time');
-  if(popup){
-    if(avatar){
-      if(avatar.startsWith('http') || avatar.startsWith('/')){
-        iconEl.innerHTML = '<img src="'+avatar+'" style="width:100%;height:100%;object-fit:cover;">';
-      }else{
-        iconEl.textContent = avatar;
-        iconEl.style.background = currentChar?.avatarColor || '#1a1a1a';
-      }
+  if(!popup||!iconEl||!titleEl||!previewEl||!timeEl){console.warn('通知弹窗元素缺失');return;}
+  if(avatar){
+    if(avatar.startsWith('http')||avatar.startsWith('/')){
+      iconEl.innerHTML = '<img src="'+avatar+'" style="width:100%;height:100%;object-fit:cover;" alt="">';
     }else{
-      iconEl.textContent = '🤖';
-      iconEl.style.background = '';
+      iconEl.textContent = avatar;
+      iconEl.style.background = currentChar?.avatarColor || '#1a1a1a';
     }
-    titleEl.textContent = title || '新消息';
-    previewEl.textContent = preview || '';
-    timeEl.textContent = getTime();
-    popup.classList.add('show');
-    clearTimeout(_notifTimer);
-    _notifTimer = setTimeout(()=>dismissNotification(), 5000);
+  }else{
+    iconEl.textContent = '🤖';
+    iconEl.style.background = '';
   }
-  // 2. 系统级通知（手机通知栏可见，微信那种）
-  if('Notification' in window && Notification.permission === 'granted'){
-    // 页面不可见时才发系统通知，避免重复打扰
-    if(document.hidden){
-      const sysNotif = new Notification(title || '新消息', {
-        body: preview || '',
-        icon: (avatar && (avatar.startsWith('http')||avatar.startsWith('/'))) ? avatar : undefined,
-        tag: 'tsubaki-ai-reply',
-        requireInteraction: false,
-        vibrate: [200, 100, 200]
-      });
-      sysNotif.onclick = function(){
-        window.focus();
-        if(currentChar) openChat(currentChar);
-        sysNotif.close();
-      };
-      setTimeout(()=>sysNotif.close(), 6000);
-    }
+  titleEl.textContent = title || '新消息';
+  previewEl.textContent = preview || '';
+  timeEl.textContent = getTime();
+  popup.classList.add('show');
+  clearTimeout(_notifTimer);
+  _notifTimer = setTimeout(()=>dismissNotification(), 5000);
+  // 系统级通知（页面隐藏时）
+  if('Notification' in window && Notification.permission === 'granted' && document.hidden){
+    const sysNotif = new Notification(title || '新消息', {
+      body: preview || '',
+      icon: (avatar && (avatar.startsWith('http')||avatar.startsWith('/'))) ? avatar : undefined,
+      tag: 'tsubaki-ai-reply',
+      requireInteraction: false,
+      vibrate: [200, 100, 200]
+    });
+    sysNotif.onclick = function(){
+      window.focus();
+      if(currentChar) openChat(currentChar);
+      sysNotif.close();
+    };
+    setTimeout(()=>sysNotif.close(), 6000);
   }
 }
 function dismissNotification(){
@@ -3491,11 +3510,16 @@ function dismissNotification(){
 }
 function jumpToChatFromNotif(){
   dismissNotification();
-  // 跳转到聊天界面
-  if(currentChar){
-    openChat(currentChar);
-  }
+  if(currentChar) openChat(currentChar);
 }
+
+// ══ 测试通知弹窗（在浏览器控制台输入 testNotify() 即可触发） ══
+window.testNotify = function(msg){
+  showNotification(msg||'测试通知', '这是一条来自春岛的模拟消息推送，像微信一样从手机顶部滑出 ✨', '🤖');
+};
+window.testToast = function(msg){
+  showToast(msg||'这是一条测试提示');
+};
 
 // ══════════ 自动消息（AI主动发消息） ══════════
 let _chatBusy = false;
