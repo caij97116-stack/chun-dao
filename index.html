@@ -1244,6 +1244,7 @@ input[type=file]{display:none;}
           <input type="file" id="import-data-file" accept=".json" onchange="handleImportData(this)">
         </div>
         <div class="sec-label">危险操作</div>
+        <button class="danger-btn" onclick="resetAppPositions()" style="margin-bottom:10px">重置 APP 位置</button>
         <button class="danger-btn" onclick="clearAllData()">清空全部数据</button>
       </div>
     </div>
@@ -2419,6 +2420,18 @@ input[type=file]{display:none;}
     <div class="modal-footer" style="display:flex;gap:10px;padding:12px 20px 20px;border-top:1px solid var(--silver)">
       <button class="auto-msg-settings-btn secondary" onclick="closeMemoryConfirm()">取消</button>
       <button class="auto-msg-settings-btn primary" onclick="confirmMemoryMode()">确定</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="reset-pos-modal" onclick="if(event.target===this)closeResetPosModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">重置 APP 位置</div><button class="modal-close" onclick="closeResetPosModal()">×</button></div>
+    <div class="modal-body" style="padding:16px 20px;text-align:center;color:var(--ink)">确定要重置所有 APP 图标位置吗？<br>图标将恢复到默认排列。</div>
+    <div class="modal-footer" style="display:flex;gap:10px;padding:12px 20px 20px;border-top:1px solid var(--silver)">
+      <button class="auto-msg-settings-btn secondary" onclick="closeResetPosModal()">取消</button>
+      <button class="auto-msg-settings-btn primary" onclick="confirmResetPositions()">确定</button>
     </div>
   </div>
 </div>
@@ -3791,12 +3804,15 @@ function onAppIconEnd(e){
   _appDragEl.classList.remove('dragging');
   document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
   if(_appDragMoved){
-    // Save the new position
-    const newX = parseInt(_appDragEl.style.left);
-    const newY = parseInt(_appDragEl.style.top);
+    // Save the new position, snap to avoid overlap
+    let newX = parseInt(_appDragEl.style.left);
+    let newY = parseInt(_appDragEl.style.top);
     if(!isNaN(newX) && !isNaN(newY)){
-      _appDragEl.dataset.x = newX;
-      _appDragEl.dataset.y = newY;
+      const snapped = snapAppIcon(_appDragEl, newX, newY);
+      _appDragEl.style.left = snapped.x + 'px';
+      _appDragEl.style.top = snapped.y + 'px';
+      _appDragEl.dataset.x = snapped.x;
+      _appDragEl.dataset.y = snapped.y;
     }
   }
   _appDragEl = null;
@@ -3835,17 +3851,62 @@ function onAppIconMouse(e){
     _appDragEl.classList.remove('dragging');
     document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.remove('drag-hover'));
     if(_appDragMoved){
-      const newX = parseInt(_appDragEl.style.left);
-      const newY = parseInt(_appDragEl.style.top);
+      let newX = parseInt(_appDragEl.style.left);
+      let newY = parseInt(_appDragEl.style.top);
       if(!isNaN(newX) && !isNaN(newY)){
-        _appDragEl.dataset.x = newX;
-        _appDragEl.dataset.y = newY;
+        const snapped = snapAppIcon(_appDragEl, newX, newY);
+        _appDragEl.style.left = snapped.x + 'px';
+        _appDragEl.style.top = snapped.y + 'px';
+        _appDragEl.dataset.x = snapped.x;
+        _appDragEl.dataset.y = snapped.y;
       }
     }
     _appDragEl = null;
   };
   document.addEventListener('mousemove', onMove);
   document.addEventListener('mouseup', onUp);
+}
+
+function snapAppIcon(el, x, y){
+  const ICON_W = 72, ICON_H = 90;
+  const page = el.closest('.app-page');
+  if(!page) return {x, y};
+  const pageRect = page.getBoundingClientRect();
+  const maxX = Math.max(0, pageRect.width - ICON_W);
+  const maxY = Math.max(0, pageRect.height - ICON_H);
+  // Clamp
+  x = Math.max(0, Math.min(x, maxX));
+  y = Math.max(0, Math.min(y, maxY));
+  // Get other icons
+  const others = page.querySelectorAll('.app-icon-wrap[data-app]');
+  const occupied = [];
+  others.forEach(sib=>{
+    if(sib === el) return;
+    const sx = parseInt(sib.dataset.x) || parseInt(sib.style.left) || 0;
+    const sy = parseInt(sib.dataset.y) || parseInt(sib.style.top) || 0;
+    if(!isNaN(sx) && !isNaN(sy)) occupied.push({x:sx, y:sy});
+  });
+  // Check if overlapping
+  function overlaps(px, py){
+    for(const o of occupied){
+      if(Math.abs(px - o.x) < ICON_W - 4 && Math.abs(py - o.y) < ICON_H - 4) return true;
+    }
+    return false;
+  }
+  if(!overlaps(x, y)) return {x, y};
+  // Find nearest non-overlapping position using spiral search
+  const STEP = 8;
+  for(let r = STEP; r <= 400; r += STEP){
+    for(let dx = -r; dx <= r; dx += STEP){
+      for(let dy = -r; dy <= r; dy += STEP){
+        if(Math.abs(dx) !== r && Math.abs(dy) !== r) continue;
+        const nx = Math.max(0, Math.min(x + dx, maxX));
+        const ny = Math.max(0, Math.min(y + dy, maxY));
+        if(!overlaps(nx, ny)) return {x: nx, y: ny};
+      }
+    }
+  }
+  return {x, y};
 }
 
 function persistAppPositions(){
@@ -4163,6 +4224,35 @@ function clearAllData(){
   localStorage.removeItem('tsb_apppositions');
   showToast('数据已清空，正在刷新…');
   setTimeout(()=>location.reload(), 1000);
+}
+
+function resetAppPositions(){
+  document.getElementById('reset-pos-modal').classList.add('open');
+}
+
+function closeResetPosModal(){
+  document.getElementById('reset-pos-modal').classList.remove('open');
+}
+
+function confirmResetPositions(){
+  closeResetPosModal();
+  // Remove saved positions
+  localStorage.removeItem('tsb_apppositions');
+  // Remove all .placed class and inline positioning
+  document.querySelectorAll('.app-icon-wrap').forEach(el=>{
+    el.classList.remove('placed');
+    el.style.left = '';
+    el.style.top = '';
+    el.dataset.x = '';
+    el.dataset.y = '';
+  });
+  // Restore icons to their original .app-row containers
+  document.querySelectorAll('.app-page').forEach(page=>{
+    const rows = page.querySelectorAll('.app-row');
+    rows.forEach(r=>{ r.style.display = ''; });
+  });
+  showToast('APP 位置已重置，正在刷新…');
+  setTimeout(()=>location.reload(), 800);
 }
 
 // ══════════ VOICE (TTS) API CONFIGURATION ══════════
