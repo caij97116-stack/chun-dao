@@ -1103,9 +1103,8 @@ input[type=file]{display:none;}
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- SUB: Voice (TTS) API config -->
+    <!-- SUB: Voice (TTS) API config -->
     <div class="subpage" id="sub-voice-api">
       <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-voice-api')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title">语音合成 API</div>
         <button class="back-btn" style="margin-left:auto" onclick="openVoiceApiHelpDialog()">
@@ -2042,6 +2041,7 @@ input[type=file]{display:none;}
       <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-twitter-profile')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title" id="tw-profile-title">主页</div></div>
       <div class="app-body" id="tw-profile-body" style="padding-top:0"></div>
     </div>
+  </div>
 
 </div>
 
@@ -3877,7 +3877,19 @@ document.addEventListener('mouseup', ()=>{
   clearTimeout(_appDragLongPressTimer);
 });
 function openSub(id){
-  document.getElementById(id).classList.add('open');
+  const el = document.getElementById(id);
+  // Find the parent app container (e.g. #settings-app, #encounter-app, etc.)
+  let container = el.parentNode;
+  while(container && container.id !== 'app-frame' && container.id !== 'phone'){
+    if(container.style && container.style.display === 'none'){
+      if(!container._wasVisible) container._wasVisible = false;
+      container.style.display = 'flex';
+      el._subContainer = container;
+      break;
+    }
+    container = container.parentNode;
+  }
+  el.classList.add('open');
   if(id==='sub-newpreset') renderNewPresetForm();
   if(id==='sub-presetlist') renderPresetListPage();
   if(id==='sub-preset-manager') renderPresetManagerPage();
@@ -3895,7 +3907,16 @@ function openSub(id){
     pv.innerHTML = userProfile.avatar ? '<img src="'+userProfile.avatar+'">' : escHtml(userProfile.name[0]||'旅');
   }
 }
-function closeSub(id){ document.getElementById(id).classList.remove('open'); }
+function closeSub(id){
+  const el = document.getElementById(id);
+  el.classList.remove('open');
+  if(!document.querySelector('.subpage.open')){
+    if(el._subContainer && !el._subContainer._wasVisible){
+      el._subContainer.style.display = 'none';
+    }
+    el._subContainer = null;
+  }
+}
 
 function toggleSwitch(el){
   el.classList.toggle('on');
