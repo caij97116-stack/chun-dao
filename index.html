@@ -8597,7 +8597,7 @@ function doWithdraw(){
 //   B) Built-in archive.org tracks (CORS-safe, no crossOrigin attribute)
 
 // ── State ──
-let ncmApiBase = localStorage.getItem('tsb_ncm_api') || API_BASE + '/api';  // e.g. http://localhost:3000
+let ncmApiBase = localStorage.getItem('tsb_ncm_api') || 'https://api-enhanced-lake-zeta.vercel.app';  // e.g. http://localhost:3000
 let ncmCookie  = localStorage.getItem('tsb_ncm_cookie') || '';
 let ncmUserId  = localStorage.getItem('tsb_ncm_uid') || '';
 let ncmUserName= localStorage.getItem('tsb_ncm_name') || '';
