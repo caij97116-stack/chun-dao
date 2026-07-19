@@ -2095,7 +2095,7 @@ input[type=file]{display:none;}
     <!-- SUB: character diary body -->
     <div class="subpage" id="sub-char-diary-body">
       <div class="sub-topbar">
-        <button class="back-btn" onclick="closeSub()">←</button>
+        <button class="back-btn" onclick="closeSub('sub-char-diary-body')">←</button>
         <div class="topbar-title" id="char-diary-body-title">角色日记</div>
       </div>
       <div class="sub-body" style="padding:16px">
@@ -2571,22 +2571,6 @@ input[type=file]{display:none;}
   </div>
 </div>
 
-</div>
-<div class="toast" id="toast"></div>
-
-<!-- 顶部通知弹窗（微信风格） -->
-<div class="notification-popup" id="notification-popup" onclick="jumpToChatFromNotif()">
-  <div class="notif-card" onclick="event.stopPropagation();jumpToChatFromNotif()">
-    <div class="notif-icon" id="notif-icon">🤖</div>
-    <div class="notif-body">
-      <div class="notif-title" id="notif-title"></div>
-      <div class="notif-preview" id="notif-preview"></div>
-      <div class="notif-time" id="notif-time"></div>
-    </div>
-    <button class="notif-close" onclick="event.stopPropagation();dismissNotification()">✕</button>
-  </div>
-</div>
-
 <!-- ══════ CHAT VIEW ══════ -->
 <div id="chat-view">
   <div class="chat-topbar">
@@ -2603,6 +2587,22 @@ input[type=file]{display:none;}
     <button class="chat-send" onclick="cvSend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
   </div>
 </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- 顶部通知弹窗（微信风格） -->
+<div class="notification-popup" id="notification-popup" onclick="jumpToChatFromNotif()">
+  <div class="notif-card" onclick="event.stopPropagation();jumpToChatFromNotif()">
+    <div class="notif-icon" id="notif-icon">🤖</div>
+    <div class="notif-body">
+      <div class="notif-title" id="notif-title"></div>
+      <div class="notif-preview" id="notif-preview"></div>
+      <div class="notif-time" id="notif-time"></div>
+    </div>
+    <button class="notif-close" onclick="event.stopPropagation();dismissNotification()">✕</button>
+  </div>
+</div>
+
 
 
 </div>
