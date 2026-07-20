@@ -146,6 +146,7 @@ class PushSendRequest(BaseModel):
     title: str
     body: str = ""
     icon: str = "/icon-192.png"
+    image: str = None
     tag: str = "tsubaki-msg"
     charId: str = None
     requireInteraction: bool = False
@@ -436,6 +437,7 @@ async def push_send(req: PushSendRequest):
         "title": req.title,
         "body": req.body,
         "icon": req.icon,
+        "image": req.image,
         "tag": req.tag,
         "url": "/",
         "charId": req.charId,

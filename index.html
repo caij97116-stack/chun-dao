@@ -3523,6 +3523,7 @@ function showNotification(title, preview, avatar){
   // PWA Web Push：通过 Service Worker 发送系统级推送
   sendWebPush(title || '新消息', preview || '', {
     icon: (avatar && (avatar.startsWith('http')||avatar.startsWith('/'))) ? avatar : undefined,
+    image: (avatar && (avatar.startsWith('http')||avatar.startsWith('/'))) ? avatar : undefined,
     charId: currentChar?.id || null,
     timestamp: Date.now()
   });
@@ -11043,6 +11044,7 @@ async function sendWebPush(title, body, options = {}) {
         title: title,
         body: body,
         icon: options.icon || '/icon-192.png',
+        image: options.image || undefined,
         tag: options.tag || 'tsubaki-msg',
         charId: options.charId || null,
         requireInteraction: options.requireInteraction || false,

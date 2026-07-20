@@ -40,6 +40,7 @@ self.addEventListener('push', (event) => {
     body: data.body || '',
     icon: data.icon || '/icon-192.png',
     badge: '/icon-192.png',
+    image: data.image || undefined,
     tag: data.tag || 'tsubaki-msg',
     requireInteraction: data.requireInteraction || false,
     vibrate: data.vibrate || [200, 100, 200],
