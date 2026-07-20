@@ -511,6 +511,73 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .tanban-about-row:last-child{border-bottom:none;}
 .tanban-about-label{display:block;font-size:11px;color:var(--ink4);margin-bottom:4px;}
 
+/* ══════ 岛居 App ══════ */
+#island-app{position:absolute;inset:0;display:flex;flex-direction:column;background:#e8f5e9;overflow:hidden;}
+.island-icon-skin{background:linear-gradient(135deg,#43a047,#2e7d32);}
+.island-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:rgba(255,255,255,0.9);border-bottom:1px solid #c8e6c9;flex-shrink:0;z-index:10;}
+.island-title{font-size:16px;font-weight:700;color:#2e7d32;}
+.island-header-btns{display:flex;gap:8px;}
+.island-header-btn{padding:6px 12px;border-radius:16px;border:1px solid #a5d6a7;background:white;font-size:12px;color:#388e3c;cursor:pointer;}
+.island-header-btn.primary{background:#43a047;color:white;border:none;}
+.island-canvas{flex:1;position:relative;overflow:hidden;}
+.island-ground{position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to bottom,#a5d6a7,#66bb6a);border-radius:50% 50% 0 0 / 20px 20px 0 0;}
+.island-sky{position:absolute;top:0;left:0;right:0;bottom:40%;background:linear-gradient(to bottom,#81d4fa,#b3e5fc);}
+.island-sun{position:absolute;top:20px;right:25px;width:50px;height:50px;border-radius:50%;background:#fff9c4;box-shadow:0 0 40px #fff176;}
+.island-cloud{position:absolute;background:white;border-radius:50px;opacity:0.8;}
+.island-cloud::before,.island-cloud::after{content:'';position:absolute;background:white;border-radius:50%;}
+.island-cloud-1{top:40px;left:20px;width:60px;height:24px;animation:islandCloudMove 20s linear infinite;}
+.island-cloud-1::before{width:30px;height:30px;top:-15px;left:10px;}
+.island-cloud-1::after{width:20px;height:20px;top:-8px;right:10px;}
+.island-cloud-2{top:70px;right:60px;width:50px;height:20px;animation:islandCloudMove 25s linear infinite reverse;}
+.island-cloud-2::before{width:24px;height:24px;top:-12px;left:8px;}
+.island-ocean{position:absolute;bottom:0;left:0;right:0;height:15%;background:linear-gradient(to bottom,#4fc3f7,#0288d1);}
+.island-tree{position:absolute;bottom:36%;}
+.island-tree-1{left:12%;width:50px;height:70px;}
+.island-tree-2{right:10%;width:40px;height:55px;}
+.island-tree-trunk{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:8px;height:40%;background:#795548;border-radius:2px;}
+.island-tree-leaf{position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:40px;background:#388e3c;border-radius:50%;}
+.island-tree-leaf::after{content:'';position:absolute;top:-10px;left:-5px;width:30px;height:30px;background:#43a047;border-radius:50%;}
+.island-house{position:absolute;bottom:35%;left:55%;width:60px;height:50px;}
+.island-house-body{position:absolute;bottom:0;left:0;right:0;height:60%;background:#ffcc80;border-radius:4px 4px 0 0;}
+.island-house-roof{position:absolute;top:0;left:-5px;right:-5px;height:50%;background:#e53935;clip-path:polygon(50% 0%,0% 100%,100% 100%);}
+.island-house-door{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:12px;height:18px;background:#5d4037;border-radius:4px 4px 0 0;}
+.island-character{position:absolute;bottom:37%;transform:translateX(-50%);transition:left 2s ease-in-out,bottom 2s ease-in-out;cursor:pointer;z-index:5;}
+.island-character-body{width:32px;height:40px;position:relative;}
+.island-character-head{width:20px;height:20px;border-radius:50%;background:#ffcc80;margin:0 auto;position:relative;}
+.island-character-head::after{content:'';position:absolute;top:4px;left:50%;transform:translateX(-50%);width:8px;height:4px;background:#5d4037;border-radius:2px;}
+.island-character-torso{width:24px;height:20px;border-radius:6px 6px 0 0;margin:1px auto 0;background:#2196f3;}
+.island-character-name{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:10px;color:#2e7d32;white-space:nowrap;font-weight:600;}
+.island-ui-bar{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:8px;z-index:8;}
+.island-ui-stat{background:rgba(255,255,255,0.9);border-radius:10px;padding:6px 10px;font-size:11px;color:#2e7d32;display:flex;align-items:center;gap:4px;backdrop-filter:blur(4px);}
+.island-ui-stat-icon{font-size:14px;}
+.island-ui-stat-val{font-weight:700;}
+.island-bubble{position:absolute;background:white;border-radius:12px;padding:6px 10px;font-size:11px;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,0.1);white-space:nowrap;z-index:6;animation:islandBubbleIn 0.3s ease-out;}
+.island-bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid white;}
+@keyframes islandCloudMove{0%{transform:translateX(0)}100%{transform:translateX(60px)}}
+@keyframes islandBubbleIn{0%{opacity:0;transform:translateY(5px)}100%{opacity:1;transform:translateY(0)}}
+/* ── 岛居 - 捏人面板 ── */
+.island-create-panel{position:absolute;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;padding:20px 16px 24px;z-index:20;box-shadow:0 -4px 20px rgba(0,0,0,0.1);transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
+.island-create-panel.open{transform:translateY(0);}
+.island-create-panel h3{font-size:16px;color:#2e7d32;margin:0 0 14px;text-align:center;}
+.island-create-field{margin-bottom:12px;}
+.island-create-field label{display:block;font-size:11px;color:var(--ink4);margin-bottom:4px;}
+.island-create-field input,.island-create-field select{width:100%;padding:10px 12px;border:1px solid #c8e6c9;border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box;}
+.island-create-field input:focus{outline:none;border-color:#43a047;}
+.island-avatar-preview{width:64px;height:64px;border-radius:50%;background:#c8e6c9;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden;}
+.island-avatar-preview img{width:100%;height:100%;object-fit:cover;}
+.island-create-color-options{display:flex;gap:8px;flex-wrap:wrap;}
+.island-color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform 0.15s;}
+.island-color-dot:hover{transform:scale(1.15);}
+.island-color-dot.selected{border-color:#2e7d32;transform:scale(1.2);}
+.island-create-actions{display:flex;gap:10px;margin-top:16px;}
+.island-create-actions button{flex:1;padding:12px;border-radius:12px;border:none;font-size:14px;font-weight:600;cursor:pointer;}
+.island-create-actions .btn-cancel{background:#f5f5f5;color:#666;}
+.island-create-actions .btn-save{background:#43a047;color:white;}
+.island-empty-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#81c784;font-size:14px;line-height:1.8;}
+.island-empty-hint .hint-icon{font-size:48px;display:block;margin-bottom:8px;}
+.island-actions{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:8;}
+.island-action-btn{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.9);border:none;font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;}
+
 /* ══════ 推特 App (椿岛配色版) ══════ */
 #twitter-app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--white);}
 .tw-header{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--smoke);flex-shrink:0;gap:10px;}
@@ -1065,6 +1132,14 @@ input[type=file]{display:none;}
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="rgba(255,255,255,0.85)" stroke-width="1.3"/><path d="M4 8h16" stroke="rgba(255,255,255,0.85)" stroke-width="1.3"/><path d="M12 8v13" stroke="rgba(255,255,255,0.85)" stroke-width="1.3"/></svg>
           </div>
           <span class="app-label">自习室</span>
+        </div>
+        </div>
+        <div class="app-row">
+        <div class="app-icon-wrap" onclick="openApp('island')">
+          <div class="app-icon island-icon-skin">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M3 20c2-8 6-12 9-12s7 4 9 12" stroke="rgba(255,255,255,0.85)" fill="rgba(255,255,255,0.15)" stroke-width="1.3"/><circle cx="12" cy="6" r="1.5" fill="rgba(255,255,255,0.9)"/><path d="M8 8l1-2 1 2" stroke="rgba(255,255,255,0.7)" stroke-width="1"/><path d="M14 9l1-1.5 1 1.5" stroke="rgba(255,255,255,0.7)" stroke-width="1"/></svg>
+          </div>
+          <span class="app-label">岛居</span>
         </div>
         </div>
       </div>
@@ -2229,7 +2304,100 @@ input[type=file]{display:none;}
     </div>
     <div class="studyroom-content" id="studyroom-content">
     </div>
+</div>
+
+<!-- ══════ 岛居 App ══════ -->
+<div id="island-app" style="display:none">
+  <div class="island-header">
+    <span class="island-title">🏝 岛居</span>
+    <div class="island-header-btns">
+      <button class="island-header-btn" id="island-create-btn" onclick="openIslandCreate()">+ 捏人</button>
+      <button class="island-header-btn" onclick="switchIslandChar()">切换角色</button>
+      <button class="island-header-btn" onclick="closeApp()">✕</button>
+    </div>
   </div>
+  <div class="island-canvas" id="island-canvas">
+    <!-- 天空 -->
+    <div class="island-sky"></div>
+    <div class="island-sun"></div>
+    <div class="island-cloud island-cloud-1"></div>
+    <div class="island-cloud island-cloud-2"></div>
+    <!-- 地面 -->
+    <div class="island-ground"></div>
+    <div class="island-ocean"></div>
+    <!-- 装饰 -->
+    <div class="island-tree island-tree-1"><div class="island-tree-leaf"></div><div class="island-tree-trunk"></div></div>
+    <div class="island-tree island-tree-2"><div class="island-tree-leaf"></div><div class="island-tree-trunk"></div></div>
+    <div class="island-house"><div class="island-house-roof"></div><div class="island-house-body"></div><div class="island-house-door"></div></div>
+    <!-- 角色 -->
+    <div class="island-character" id="island-character" style="left:50%;display:none" onclick="interactWithIslandChar()">
+      <div class="island-character-body">
+        <div class="island-character-head" id="island-char-head"></div>
+        <div class="island-character-torso" id="island-char-torso"></div>
+      </div>
+      <div class="island-character-name" id="island-char-name"></div>
+    </div>
+    <!-- 气泡 -->
+    <div class="island-bubble" id="island-bubble" style="display:none"></div>
+    <!-- 空状态 -->
+    <div class="island-empty-hint" id="island-empty-hint">
+      <span class="hint-icon">🏝</span>
+      还没有角色<br>点击右上角「+ 捏人」开始吧
+    </div>
+    <!-- 状态栏 -->
+    <div class="island-ui-bar" id="island-ui-bar" style="display:none">
+      <div class="island-ui-stat"><span class="island-ui-stat-icon">❤️</span><span class="island-ui-stat-val" id="island-stat-affection">0</span></div>
+      <div class="island-ui-stat"><span class="island-ui-stat-icon">🍎</span><span class="island-ui-stat-val" id="island-stat-hunger">100</span></div>
+      <div class="island-ui-stat"><span class="island-ui-stat-icon">⚡</span><span class="island-ui-stat-val" id="island-stat-energy">100</span></div>
+      <div class="island-ui-stat"><span class="island-ui-stat-icon">😊</span><span class="island-ui-stat-val" id="island-stat-mood">100</span></div>
+    </div>
+    <!-- 底部操作区 -->
+    <div class="island-actions" id="island-actions" style="display:none">
+      <button class="island-action-btn" onclick="islandFeed()" title="喂食">🍎</button>
+      <button class="island-action-btn" onclick="islandPlay()" title="玩耍">🎾</button>
+      <button class="island-action-btn" onclick="islandTalk()" title="聊天">💬</button>
+      <button class="island-action-btn" onclick="islandSleep()" title="睡觉">😴</button>
+    </div>
+  </div>
+  <!-- 捏人面板 -->
+  <div class="island-create-panel" id="island-create-panel">
+    <h3>创造你的岛民</h3>
+    <div class="island-avatar-preview" id="island-avatar-preview" onclick="document.getElementById('island-avatar-file').click()">👤</div>
+    <input type="file" id="island-avatar-file" accept="image/*" style="display:none" onchange="onIslandAvatarSelected(this)">
+    <div class="island-create-field">
+      <label>姓名</label>
+      <input type="text" id="island-name-input" placeholder="给你的岛民起个名字" maxlength="12">
+    </div>
+    <div class="island-create-field">
+      <label>性格</label>
+      <select id="island-personality-input">
+        <option value="cheerful">🌟 活泼开朗</option>
+        <option value="quiet">🌙 安静内敛</option>
+        <option value="playful">🎭 调皮捣蛋</option>
+        <option value="cool">🕶 高冷傲娇</option>
+        <option value="gentle">🌸 温柔体贴</option>
+        <option value="lazy">🦥 慵懒随性</option>
+      </select>
+    </div>
+    <div class="island-create-field">
+      <label>衣服颜色</label>
+      <div class="island-create-color-options" id="island-color-options">
+        <div class="island-color-dot" style="background:#2196f3" data-color="#2196f3" onclick="selectIslandColor(this)"></div>
+        <div class="island-color-dot" style="background:#e91e63" data-color="#e91e63" onclick="selectIslandColor(this)"></div>
+        <div class="island-color-dot" style="background:#ff9800" data-color="#ff9800" onclick="selectIslandColor(this)"></div>
+        <div class="island-color-dot" style="background:#4caf50" data-color="#4caf50" onclick="selectIslandColor(this)"></div>
+        <div class="island-color-dot" style="background:#9c27b0" data-color="#9c27b0" onclick="selectIslandColor(this)"></div>
+        <div class="island-color-dot" style="background:#607d8b" data-color="#607d8b" onclick="selectIslandColor(this)"></div>
+        <div class="island-color-dot" style="background:#795548" data-color="#795548" onclick="selectIslandColor(this)"></div>
+        <div class="island-color-dot" style="background:#f44336" data-color="#f44336" onclick="selectIslandColor(this)"></div>
+      </div>
+    </div>
+    <div class="island-create-actions">
+      <button class="btn-cancel" onclick="closeIslandCreate()">取消</button>
+      <button class="btn-save" onclick="saveIslandCharacter()">创建</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══════ MODALS ══════ -->
 <div class="modal-overlay" id="char-modal" onclick="if(event.target===this)closeCharModal()">
@@ -3857,6 +4025,236 @@ function stripChainOfThought(text){
   return text.trim();
 }
 
+// ══════════════════════════════════════════
+// 岛居 App - 模拟小游戏引擎
+// ══════════════════════════════════════════
+
+// ── 岛居数据管理 ──
+function getIslandData(){ try{ var d=JSON.parse(localStorage.getItem('tsb_island')||'{}'); if(!d.chars)d.chars=[]; if(!d.currentIdx)d.currentIdx=0; return d; }catch(e){ return {chars:[],currentIdx:0}; } }
+function saveIslandData(d){ localStorage.setItem('tsb_island',JSON.stringify(d)); }
+
+// ── 初始化岛居 ──
+function initIslandApp(){
+  var data = getIslandData();
+  if(data.chars.length === 0){
+    // 空状态
+    document.getElementById('island-empty-hint').style.display = '';
+    document.getElementById('island-character').style.display = 'none';
+    document.getElementById('island-ui-bar').style.display = 'none';
+    document.getElementById('island-actions').style.display = 'none';
+    document.getElementById('island-create-btn').style.display = '';
+  } else {
+    renderIslandCharacter(data);
+  }
+}
+
+// ── 渲染当前角色 ──
+function renderIslandCharacter(data){
+  if(!data) data = getIslandData();
+  if(data.chars.length === 0){ initIslandApp(); return; }
+  var ch = data.chars[data.currentIdx];
+  if(!ch) return;
+  document.getElementById('island-empty-hint').style.display = 'none';
+  document.getElementById('island-character').style.display = '';
+  document.getElementById('island-ui-bar').style.display = '';
+  document.getElementById('island-actions').style.display = '';
+  document.getElementById('island-create-btn').style.display = '';
+
+  // 更新角色外观
+  var head = document.getElementById('island-char-head');
+  var torso = document.getElementById('island-char-torso');
+  var nameEl = document.getElementById('island-char-name');
+  if(ch.avatar) head.style.backgroundImage = 'url('+ch.avatar+')';
+  else head.style.backgroundImage = '';
+  head.style.backgroundColor = ch.avatar ? 'transparent' : '#ffcc80';
+  head.style.backgroundSize = 'cover';
+  torso.style.backgroundColor = ch.color || '#2196f3';
+  nameEl.textContent = ch.name || '岛民';
+
+  // 更新数值
+  document.getElementById('island-stat-affection').textContent = ch.affection || 0;
+  document.getElementById('island-stat-hunger').textContent = ch.hunger || 100;
+  document.getElementById('island-stat-energy').textContent = ch.energy || 100;
+  document.getElementById('island-stat-mood').textContent = ch.mood || 100;
+
+  // 随机站位
+  var charEl = document.getElementById('island-character');
+  charEl.style.left = (30 + Math.random() * 40) + '%';
+}
+
+// ── 捏人面板 ──
+var _islandSelectedColor = '#2196f3';
+function openIslandCreate(){
+  document.getElementById('island-create-panel').classList.add('open');
+  _islandSelectedColor = '#2196f3';
+  document.getElementById('island-name-input').value = '';
+  document.getElementById('island-avatar-preview').innerHTML = '👤';
+  document.getElementById('island-avatar-file').value = '';
+  // 重置颜色选择
+  var dots = document.querySelectorAll('.island-color-dot');
+  dots.forEach(function(d){ d.classList.remove('selected'); });
+  if(dots.length>0) dots[0].classList.add('selected');
+}
+function closeIslandCreate(){
+  document.getElementById('island-create-panel').classList.remove('open');
+}
+function selectIslandColor(el){
+  var dots = document.querySelectorAll('.island-color-dot');
+  dots.forEach(function(d){ d.classList.remove('selected'); });
+  el.classList.add('selected');
+  _islandSelectedColor = el.getAttribute('data-color');
+}
+var _islandAvatarData = null;
+function onIslandAvatarSelected(input){
+  var file = input.files[0];
+  if(!file) return;
+  if(file.size > 2*1024*1024){ showToast('图片不能超过 2MB'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    _islandAvatarData = e.target.result;
+    var preview = document.getElementById('island-avatar-preview');
+    preview.innerHTML = '<img src="'+_islandAvatarData+'" style="width:100%;height:100%;object-fit:cover">';
+  };
+  reader.readAsDataURL(file);
+}
+function saveIslandCharacter(){
+  var name = document.getElementById('island-name-input').value.trim();
+  if(!name){ showToast('请输入名字'); return; }
+  var data = getIslandData();
+  data.chars.push({
+    name: name,
+    avatar: _islandAvatarData || null,
+    personality: document.getElementById('island-personality-input').value,
+    color: _islandSelectedColor,
+    affection: 0, hunger: 100, energy: 100, mood: 100,
+    createdAt: Date.now()
+  });
+  data.currentIdx = data.chars.length - 1;
+  saveIslandData(data);
+  _islandAvatarData = null;
+  closeIslandCreate();
+  renderIslandCharacter(data);
+  showToast('岛民「'+name+'」已创建！');
+}
+
+// ── 切换角色 ──
+function switchIslandChar(){
+  var data = getIslandData();
+  if(data.chars.length <= 1){ showToast('只有一个岛民'); return; }
+  data.currentIdx = (data.currentIdx + 1) % data.chars.length;
+  saveIslandData(data);
+  renderIslandCharacter(data);
+  showToast('切换到「'+data.chars[data.currentIdx].name+'」');
+}
+
+// ── 模拟交互 ──
+function interactWithIslandChar(){
+  var data = getIslandData();
+  var ch = data.chars[data.currentIdx];
+  if(!ch) return;
+  // 随机对话气泡
+  var bubbles = [
+    '你好呀！','今天天气真好~','你来看我啦！','岛上好舒服~',
+    '要不要一起散步？','我想吃水果了','有点困了...','嘿嘿~'
+  ];
+  var bubble = bubbles[Math.floor(Math.random() * bubbles.length)];
+  showIslandBubble(bubble);
+  // 好感度微增
+  ch.affection = Math.min(999, (ch.affection||0) + 1);
+  saveIslandData(data);
+  updateIslandStats();
+}
+
+function showIslandBubble(text){
+  var bubble = document.getElementById('island-bubble');
+  var char = document.getElementById('island-character');
+  bubble.textContent = text;
+  bubble.style.display = '';
+  bubble.style.top = (char.getBoundingClientRect().top - char.parentElement.getBoundingClientRect().top - 40) + 'px';
+  bubble.style.left = (char.offsetLeft) + 'px';
+  setTimeout(function(){ bubble.style.display = 'none'; }, 2500);
+}
+
+function updateIslandStats(){
+  var data = getIslandData();
+  var ch = data.chars[data.currentIdx];
+  if(!ch) return;
+  document.getElementById('island-stat-affection').textContent = ch.affection || 0;
+  document.getElementById('island-stat-hunger').textContent = ch.hunger || 100;
+  document.getElementById('island-stat-energy').textContent = ch.energy || 100;
+  document.getElementById('island-stat-mood').textContent = ch.mood || 100;
+}
+
+// ── 操作按钮 ──
+function islandFeed(){
+  var data = getIslandData();
+  var ch = data.chars[data.currentIdx];
+  if(!ch) return;
+  ch.hunger = Math.min(100, (ch.hunger||100) + 15);
+  ch.affection = Math.min(999, (ch.affection||0) + 2);
+  saveIslandData(data); updateIslandStats();
+  showIslandBubble('好吃！谢谢~');
+}
+function islandPlay(){
+  var data = getIslandData();
+  var ch = data.chars[data.currentIdx];
+  if(!ch) return;
+  ch.energy = Math.max(0, (ch.energy||100) - 10);
+  ch.mood = Math.min(100, (ch.mood||100) + 10);
+  ch.affection = Math.min(999, (ch.affection||0) + 3);
+  saveIslandData(data); updateIslandStats();
+  var charEl = document.getElementById('island-character');
+  charEl.style.left = (20 + Math.random() * 60) + '%';
+  showIslandBubble('哈哈哈好开心！');
+}
+function islandTalk(){
+  var data = getIslandData();
+  var ch = data.chars[data.currentIdx];
+  if(!ch) return;
+  ch.affection = Math.min(999, (ch.affection||0) + 5);
+  ch.mood = Math.min(100, (ch.mood||100) + 5);
+  saveIslandData(data); updateIslandStats();
+  var talks = {
+    cheerful: ['今天超开心的！', '你真是个有趣的人~', '我们来唱歌吧！'],
+    quiet: ['嗯...', '有你在就好。', '我刚刚在看云。'],
+    playful: ['嘿嘿，你来抓我呀！', '我藏了一个秘密~', '略略略！'],
+    cool: ['哼，才不是特意等你呢。', '...还行吧。', '你来了啊。'],
+    gentle: ['你累了吗？', '要不要喝杯茶？', '今天也辛苦了~'],
+    lazy: ['zzz...啊，你来了。', '好困...借我靠一下。', '懒得动...']
+  };
+  var pool = talks[ch.personality] || talks.cheerful;
+  showIslandBubble(pool[Math.floor(Math.random() * pool.length)]);
+}
+function islandSleep(){
+  var data = getIslandData();
+  var ch = data.chars[data.currentIdx];
+  if(!ch) return;
+  ch.energy = Math.min(100, (ch.energy||100) + 30);
+  ch.mood = Math.min(100, (ch.mood||100) + 5);
+  saveIslandData(data); updateIslandStats();
+  showIslandBubble('晚安~ 💤');
+}
+
+// ── 挂机衰减（每 30 秒触发一次） ──
+var _islandDecayTimer = null;
+function startIslandDecay(){
+  if(_islandDecayTimer) return;
+  _islandDecayTimer = setInterval(function(){
+    var app = document.getElementById('island-app');
+    if(!app || app.style.display === 'none') return;
+    var data = getIslandData();
+    if(data.chars.length === 0) return;
+    var ch = data.chars[data.currentIdx];
+    if(!ch) return;
+    ch.hunger = Math.max(0, (ch.hunger||100) - 2);
+    ch.energy = Math.max(0, (ch.energy||100) - 1);
+    ch.mood = Math.max(0, (ch.mood||100) - 1);
+    saveIslandData(data);
+    updateIslandStats();
+  }, 30000);
+}
+startIslandDecay();
+
 function updateImageGenUI(){
   // 菜单动态生成，无需更新 topbar 按钮
   const menuToggle = document.getElementById('menu-imagegen-toggle');
@@ -4001,6 +4399,7 @@ function openApp(name){
   if(name==='twitter'){ document.getElementById('twitter-app').style.display='flex'; initTwitterApp(); }
   if(name==='store'){ document.getElementById('store-app').style.display='flex'; _storeTab='recommend'; switchStoreTab('recommend'); }
   if(name==='studyroom'){ document.getElementById('studyroom-app').style.display='flex'; }
+  if(name==='island'){ document.getElementById('island-app').style.display='flex'; initIslandApp(); }
   frame.style.display='block';
   requestAnimationFrame(()=>frame.classList.add('open'));
 }
