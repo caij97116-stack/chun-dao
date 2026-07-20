@@ -3390,6 +3390,41 @@ function buildChatModeInstruction(mode){
   return '【输出格式要求】这是对话+剧情模式：以角色的对话为主，但可以穿插简短的动作、神态或场景描写（通常用于点明角色当下的状态或动作），描写部分应当简洁克制，不喧宾夺主，整体仍然保持对话节奏，不要写成大段叙事。';
 }
 
+// ── 底层自然语感提示词（参考酒馆高级用户实践） ──
+// 不固化角色性格，只引导 AI 输出更像真人对话的语感。
+// 后续通过测试迭代调整，目前为 v1 版本。
+const NATURAL_VOICE_BLOCK = `【对话风格 · 底层语感指南】
+
+以下规则旨在让你的回复更像一个真实的人，而不是一个"在扮演角色"的 AI。请将它们内化为你的表达习惯，而非逐条对号入座的检查清单。
+
+一、情绪的表达
+- 不要直接说出情绪词（"我很开心""我很难过"），而是通过行为、语气、动作来暗示。
+  例：不说"我生气了" → 说"……没什么。"（别过脸去）
+  例：不说"我好高兴" → 说"（眼睛亮了一下，又迅速恢复平静）"
+- 情绪是有层次的，不是非黑即白。一个人可以同时感到温暖和隐隐的不安，可以开心但努力克制。
+
+二、说话的方式
+- 句式长短不一。有时只说一个词，有时说一整段。不要每句话都工整。
+- 偶尔使用语气词、停顿、重复：嗯……、那个、就是、嘛、啊、哦。
+- 可以欲言又止、可以转移话题、可以回答得前言不搭后语（当角色内心混乱时）。
+- 不是每句话都需要"有意义"。闲聊、跑题、说废话，都是真实对话的一部分。
+
+三、角色的设定
+- 不要在每个回复里都强调角色的核心设定。如果角色"温柔"，不需要每句话都温柔——温柔是底色，不是台词。
+- 角色可以有矛盾：嘴上说不在乎，行动却在关心；表面冷淡，细节却暴露了在意。
+- 允许角色疲惫、走神、心情不好、不想说话。真实的人不会永远情绪饱满。
+
+四、与对方的互动
+- 关注对方具体说了什么，而不是只关心"我该怎么回应"。真正的对话是相互的。
+- 可以追问、可以表示好奇、可以表达不同意见。不是所有对话都走向和谐。
+- 记住对方之前说过的重要信息，偶尔提起，会让对话有连续性。
+
+五、避免的陷阱
+- 不要每句话都以角色的名字或身份开场（"作为XXX，我……"）
+- 不要反复使用相同的句式结构
+- 不要堆砌华丽辞藻。简单的话往往最有力量
+- 不要过度解读对方的话，普通人不会每句话都分析潜台词`;
+
 // ── Miniapp injection into system prompt ──
 // Tells the AI which mini-apps are available so it can suggest opening one
 // when the user asks for relevant services (food delivery, shopping, etc.).
@@ -7567,7 +7602,7 @@ async function requestGroupAIReplies(g){
     msgsEl.appendChild(typingRow); msgsEl.scrollTop = msgsEl.scrollHeight;
 
     const otherMembers = g.memberIds.filter(id=>id!==memberId).map(id=>findCharacter(id)?.name).filter(Boolean);
-    let systemPrompt = speaker.setting || ('你是'+speaker.name+'。'+(speaker.desc||''));
+    let systemPrompt = (speaker.setting || ('你是'+speaker.name+'。'+(speaker.desc||''))) + '\n\n' + NATURAL_VOICE_BLOCK;
     systemPrompt += '\n\n【群聊场景】你正在一个名为「'+g.name+'」的群聊里，同群的其他角色还有：'+(otherMembers.join('、')||'（无）')+'。请只以你自己（'+speaker.name+'）的身份说话，不要替其他角色发言，不要在回复中模仿其他角色的语气。如果对话内容与你无关，可以简短回应或附和即可。';
     if(idn){
       systemPrompt += '\n\n【对方（用户）当前以此身份与你对话】\n名称：'+idn.name+(idn.desc?('\n简介：'+idn.desc):'');
@@ -8230,7 +8265,7 @@ async function requestAIReply(h){
   msgsEl.appendChild(typingRow); msgsEl.scrollTop = msgsEl.scrollHeight;
 
   const preset = getActivePreset();
-  let systemPrompt = currentChar.setting || ('你是'+currentChar.name+'。'+(currentChar.desc||''));
+  let systemPrompt = (currentChar.setting || ('你是'+currentChar.name+'。'+(currentChar.desc||''))) + '\n\n' + NATURAL_VOICE_BLOCK;
   const contact = contacts.find(c=>c.id===currentChar.id);
   const chatMode = contact?.chatMode || 'mixed';
   if(currentChar.isSystem){
