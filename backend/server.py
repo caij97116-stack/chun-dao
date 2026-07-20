@@ -3,12 +3,23 @@ import secrets
 import string
 import os
 import json
+import logging
 from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, HTTPException, Query, Request, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from contextlib import contextmanager
+
+# Web Push 依赖
+try:
+    from pywebpush import webpush, WebPushException
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric import ec
+    HAS_WEB_PUSH = True
+except ImportError:
+    HAS_WEB_PUSH = False
+    logging.warning("pywebpush 未安装，Web Push 功能不可用。请运行: pip install pywebpush")
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "chundao_codes.db")
 TZ = timezone(timedelta(hours=8))
@@ -67,10 +78,77 @@ def init_db():
                 updated_at TEXT
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS push_subscriptions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                endpoint TEXT UNIQUE NOT NULL,
+                p256dh TEXT NOT NULL,
+                auth TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+        """)
 
 init_db()
 
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+
+# ══════════ VAPID Key Management (Web Push) ══════════
+VAPID_KEY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vapid_keys.json")
+
+def _generate_vapid_keys():
+    """生成 ECDSA P-256 VAPID 密钥对"""
+    if not HAS_WEB_PUSH:
+        return None, None
+    private_key = ec.generate_private_key(ec.SECP256R1())
+    public_key = private_key.public_key()
+
+    # 导出为 raw bytes (未压缩格式, 65 bytes: 04 + x + y)
+    private_raw = private_key.private_numbers().private_value.to_bytes(32, 'big')
+    public_raw = public_key.public_bytes(
+        serialization.Encoding.X962,
+        serialization.PublicFormat.UncompressedPoint
+    )
+
+    # Base64 URL-safe 编码
+    import base64
+    private_b64 = base64.urlsafe_b64encode(private_raw).rstrip(b'=').decode('ascii')
+    public_b64 = base64.urlsafe_b64encode(public_raw).rstrip(b'=').decode('ascii')
+
+    return private_b64, public_b64
+
+def _load_or_create_vapid_keys():
+    """加载或创建 VAPID 密钥对"""
+    if os.path.exists(VAPID_KEY_FILE):
+        with open(VAPID_KEY_FILE, 'r') as f:
+            data = json.load(f)
+            if data.get('private_key') and data.get('public_key'):
+                return data['private_key'], data['public_key']
+
+    private_key, public_key = _generate_vapid_keys()
+    if private_key and public_key:
+        with open(VAPID_KEY_FILE, 'w') as f:
+            json.dump({'private_key': private_key, 'public_key': public_key}, f)
+        logging.info("VAPID 密钥对已生成并保存")
+    return private_key, public_key
+
+VAPID_PRIVATE_KEY, VAPID_PUBLIC_KEY = _load_or_create_vapid_keys()
+VAPID_CLAIMS = {"sub": "mailto:admin@chundao.app"}
+
+# ══════════ Push Subscription Models ══════════
+class PushSubscribeRequest(BaseModel):
+    endpoint: str
+    keys: dict
+
+class PushUnsubscribeRequest(BaseModel):
+    endpoint: str
+
+class PushSendRequest(BaseModel):
+    title: str
+    body: str = ""
+    icon: str = "/icon-192.png"
+    tag: str = "tsubaki-msg"
+    charId: str = None
+    requireInteraction: bool = False
 
 @app.get("/")
 async def root():
@@ -309,6 +387,100 @@ async def delete_store_app(app_id: int):
             raise HTTPException(status_code=404, detail="应用不存在")
         conn.execute("DELETE FROM store_apps WHERE id=?", (app_id,))
     return {"success": True}
+
+# ══════════ Push Notification APIs ══════════
+
+@app.get("/api/push/vapid-public-key")
+async def get_vapid_public_key():
+    """返回 VAPID 公钥，供前端订阅推送"""
+    if not HAS_WEB_PUSH or not VAPID_PUBLIC_KEY:
+        raise HTTPException(status_code=501, detail="Web Push 功能未启用")
+    return {"publicKey": VAPID_PUBLIC_KEY}
+
+@app.post("/api/push/subscribe")
+async def push_subscribe(req: PushSubscribeRequest):
+    """保存推送订阅"""
+    if not HAS_WEB_PUSH:
+        raise HTTPException(status_code=501, detail="Web Push 功能未启用")
+    now = datetime.now(TZ).strftime("%Y-%m-%d %H:%M:%S")
+    with get_db() as conn:
+        conn.execute(
+            "INSERT OR REPLACE INTO push_subscriptions (endpoint, p256dh, auth, created_at) VALUES (?, ?, ?, ?)",
+            (req.endpoint, req.keys.get('p256dh', ''), req.keys.get('auth', ''), now)
+        )
+    logging.info(f"推送订阅已保存: {req.endpoint[:50]}...")
+    return {"success": True}
+
+@app.post("/api/push/unsubscribe")
+async def push_unsubscribe(req: PushUnsubscribeRequest):
+    """删除推送订阅"""
+    with get_db() as conn:
+        conn.execute("DELETE FROM push_subscriptions WHERE endpoint = ?", (req.endpoint,))
+    logging.info(f"推送订阅已删除: {req.endpoint[:50]}...")
+    return {"success": True}
+
+@app.post("/api/push/send")
+async def push_send(req: PushSendRequest):
+    """向所有已订阅设备发送推送通知"""
+    if not HAS_WEB_PUSH:
+        raise HTTPException(status_code=501, detail="Web Push 功能未启用")
+
+    with get_db() as conn:
+        rows = conn.execute("SELECT endpoint, p256dh, auth FROM push_subscriptions").fetchall()
+
+    if not rows:
+        return {"success": True, "sent": 0, "message": "无订阅设备"}
+
+    payload = {
+        "title": req.title,
+        "body": req.body,
+        "icon": req.icon,
+        "tag": req.tag,
+        "url": "/",
+        "charId": req.charId,
+        "requireInteraction": req.requireInteraction,
+        "vibrate": [200, 100, 200]
+    }
+
+    sent_count = 0
+    failed_count = 0
+    removed_endpoints = []
+
+    for row in rows:
+        try:
+            subscription_info = {
+                "endpoint": row["endpoint"],
+                "keys": {
+                    "p256dh": row["p256dh"],
+                    "auth": row["auth"]
+                }
+            }
+            webpush(
+                subscription_info=subscription_info,
+                data=json.dumps(payload),
+                vapid_private_key=VAPID_PRIVATE_KEY,
+                vapid_claims=VAPID_CLAIMS
+            )
+            sent_count += 1
+        except WebPushException as e:
+            logging.warning(f"推送失败: {e}")
+            # 410/404 表示订阅已失效，清理
+            if hasattr(e, 'response') and e.response is not None:
+                if e.response.status_code in (410, 404):
+                    removed_endpoints.append(row["endpoint"])
+            failed_count += 1
+        except Exception as e:
+            logging.error(f"推送异常: {e}")
+            failed_count += 1
+
+    # 清理失效订阅
+    if removed_endpoints:
+        with get_db() as conn:
+            for ep in removed_endpoints:
+                conn.execute("DELETE FROM push_subscriptions WHERE endpoint = ?", (ep,))
+        logging.info(f"已清理 {len(removed_endpoints)} 个失效订阅")
+
+    return {"success": True, "sent": sent_count, "failed": failed_count}
 
 ADMIN_HTML = """<!DOCTYPE html>
 <html lang="zh-CN">

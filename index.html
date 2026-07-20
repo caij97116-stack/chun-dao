@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>椿島</title>
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="椿汐岛">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <style>
 
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
@@ -1631,6 +1638,19 @@ input[type=file]{display:none;}
               <button class="wallet-btn" onclick="openWalletModal('recharge')">充值</button>
               <button class="wallet-btn" onclick="openWalletModal('withdraw')">提现</button>
               <button class="wallet-btn" onclick="openWalletModal('history')">明细</button>
+            </div>
+          </div>
+          <div class="archive-section">
+            <div class="archive-title-row"><div class="archive-title">通知推送</div></div>
+            <div class="s-card" style="margin-top:0">
+              <div class="s-row" id="push-toggle-row" onclick="togglePushNotifications()">
+                <div class="s-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+                <div class="s-info"><div class="s-title">系统推送通知</div><div class="s-sub" id="push-status-text">点击开启</div></div>
+                <div class="s-arrow">›</div>
+              </div>
+              <div class="s-row" style="font-size:11px;color:var(--ink4);padding:8px 16px 12px;line-height:1.6">
+                开启后，角色给你发消息时，手机将收到系统级弹窗通知（需将网页添加到主屏幕）。iOS 16.4+ / Android 均支持。
+              </div>
             </div>
           </div>
           <div class="archive-section">
@@ -3500,6 +3520,11 @@ function showNotification(title, preview, avatar){
     };
     setTimeout(()=>sysNotif.close(), 6000);
   }
+  // PWA Web Push：通过 Service Worker 发送系统级推送
+  sendWebPush(title || '新消息', preview || '', {
+    icon: (avatar && (avatar.startsWith('http')||avatar.startsWith('/'))) ? avatar : undefined,
+    charId: currentChar?.id || null
+  });
 }
 function dismissNotification(){
   const popup = document.getElementById('notification-popup');
@@ -10839,7 +10864,244 @@ function openTwitterProfile(authorType, authorId){
   openSub('sub-twitter-profile');
 }
 
+// ══════════════════════════════════════════
+// PWA 推送通知引擎
+// ══════════════════════════════════════════
+
+// VAPID 公钥（后端生成，此处为占位符，首次运行时从后端获取）
+let _vapidPublicKey = localStorage.getItem('tsb_vapid_public_key') || '';
+let _pushSubscription = null;
+let _pushEnabled = localStorage.getItem('tsb_push_enabled') === 'true';
+
+// ── 注册 Service Worker ──
+async function registerSW() {
+  if (!('serviceWorker' in navigator)) {
+    console.warn('[PWA] 浏览器不支持 Service Worker');
+    return null;
+  }
+  try {
+    const reg = await navigator.serviceWorker.register('/sw.js');
+    console.log('[PWA] Service Worker 已注册:', reg.scope);
+    // 监听来自 SW 的消息（如通知点击）
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data?.type === 'notification-click') {
+        if (event.data.charId) {
+          const c = findCharacter(event.data.charId);
+          if (c) { openChat(c); }
+        }
+      }
+    });
+    return reg;
+  } catch (e) {
+    console.error('[PWA] Service Worker 注册失败:', e);
+    return null;
+  }
+}
+
+// ── 获取或生成 VAPID 密钥（从后端） ──
+async function ensureVapidKey() {
+  if (_vapidPublicKey) return _vapidPublicKey;
+  try {
+    const resp = await fetch(API_BASE + '/api/push/vapid-public-key');
+    const data = await resp.json();
+    if (data.publicKey) {
+      _vapidPublicKey = data.publicKey;
+      localStorage.setItem('tsb_vapid_public_key', _vapidPublicKey);
+      return _vapidPublicKey;
+    }
+  } catch (e) {
+    console.warn('[PWA] 无法获取 VAPID 公钥:', e);
+  }
+  return null;
+}
+
+// ── 订阅推送 ──
+async function subscribeToPush() {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const vapidKey = await ensureVapidKey();
+    if (!vapidKey) {
+      console.error('[PWA] 缺少 VAPID 公钥，无法订阅');
+      return false;
+    }
+
+    // 先检查已有订阅
+    let sub = await reg.pushManager.getSubscription();
+    if (sub) {
+      console.log('[PWA] 已有推送订阅');
+      _pushSubscription = sub;
+    } else {
+      // 新建订阅
+      const convertedKey = urlBase64ToUint8Array(vapidKey);
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedKey
+      });
+      console.log('[PWA] 推送订阅成功');
+      _pushSubscription = sub;
+    }
+
+    // 发送订阅信息到后端
+    await fetch(API_BASE + '/api/push/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sub.toJSON())
+    });
+
+    _pushEnabled = true;
+    localStorage.setItem('tsb_push_enabled', 'true');
+    updatePushStatusUI();
+    return true;
+  } catch (e) {
+    console.error('[PWA] 订阅推送失败:', e);
+    _pushEnabled = false;
+    localStorage.setItem('tsb_push_enabled', 'false');
+    updatePushStatusUI();
+    return false;
+  }
+}
+
+// ── 取消订阅 ──
+async function unsubscribeFromPush() {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription();
+    if (sub) {
+      await sub.unsubscribe();
+      // 通知后端
+      await fetch(API_BASE + '/api/push/unsubscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ endpoint: sub.endpoint })
+      });
+      console.log('[PWA] 推送订阅已取消');
+    }
+    _pushSubscription = null;
+    _pushEnabled = false;
+    localStorage.setItem('tsb_push_enabled', 'false');
+    updatePushStatusUI();
+    return true;
+  } catch (e) {
+    console.error('[PWA] 取消订阅失败:', e);
+    return false;
+  }
+}
+
+// ── 切换推送开关 ──
+async function togglePushNotifications() {
+  if (_pushEnabled) {
+    if (confirm('确定关闭系统推送通知？关闭后角色发消息不会弹出手机通知。')) {
+      await unsubscribeFromPush();
+      showToast('已关闭推送通知');
+    }
+  } else {
+    // 请求通知权限
+    if (!('Notification' in window)) {
+      showToast('你的浏览器不支持通知');
+      return;
+    }
+    if (Notification.permission === 'denied') {
+      showToast('通知权限已被拒绝，请在浏览器设置中开启');
+      return;
+    }
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') {
+      showToast('需要允许通知权限才能推送');
+      return;
+    }
+    const ok = await subscribeToPush();
+    if (ok) {
+      showToast('推送通知已开启！角色发消息时手机会弹窗');
+    } else {
+      showToast('推送开启失败，请检查网络');
+    }
+  }
+}
+
+// ── 更新推送开关 UI ──
+function updatePushStatusUI() {
+  const statusEl = document.getElementById('push-status-text');
+  if (!statusEl) return;
+  if (_pushEnabled) {
+    statusEl.textContent = '已开启 · 点击关闭';
+    statusEl.style.color = 'var(--ink2)';
+  } else {
+    statusEl.textContent = '点击开启';
+    statusEl.style.color = '';
+  }
+}
+
+// ── 发送 Web Push（通过后端 API） ──
+async function sendWebPush(title, body, options = {}) {
+  if (!_pushEnabled) return;
+  try {
+    await fetch(API_BASE + '/api/push/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: title,
+        body: body,
+        icon: options.icon || '/icon-192.png',
+        tag: options.tag || 'tsubaki-msg',
+        charId: options.charId || null,
+        requireInteraction: options.requireInteraction || false
+      })
+    });
+    console.log('[PWA] Web Push 已发送:', title);
+  } catch (e) {
+    console.error('[PWA] Web Push 发送失败:', e);
+  }
+}
+
+// ── Base64 URL 转 Uint8Array（Web Push 需要） ──
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = atob(base64);
+  const output = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; i++) {
+    output[i] = rawData.charCodeAt(i);
+  }
+  return output;
+}
+
+// ── PWA 安装提示 ──
+let _deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _deferredPrompt = e;
+  console.log('[PWA] 可以安装了');
+});
+window.addEventListener('appinstalled', () => {
+  console.log('[PWA] 应用已安装');
+  _deferredPrompt = null;
+  showToast('已添加到主屏幕！现在可以开启推送通知了');
+});
+
+// ── 初始化 PWA ──
+async function initPWA() {
+  await registerSW();
+  updatePushStatusUI();
+  // 如果之前已开启推送，恢复订阅状态
+  if (_pushEnabled && 'Notification' in window && Notification.permission === 'granted') {
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.getSubscription();
+      if (sub) {
+        _pushSubscription = sub;
+        console.log('[PWA] 推送状态已恢复');
+      } else {
+        // 订阅丢失，重新订阅
+        await subscribeToPush();
+      }
+    } catch (e) {
+      console.warn('[PWA] 恢复推送状态失败:', e);
+    }
+  }
+}
+
 init();
+initPWA();
 
 
 </script>
