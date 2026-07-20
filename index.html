@@ -3798,6 +3798,15 @@ function toggleChainOfThought(){
   showToast(contact.noChainOfThought ? '已开启思维链规避，AI将隐藏思考过程' : '已关闭思维链规避');
 }
 
+function setMaxReplyBubbles(val){
+  if(!currentChar || currentChar.isSystem) return;
+  const contact = contacts.find(c=>c.id===currentChar.id);
+  if(!contact) return;
+  contact.maxReplyBubbles = parseInt(val);
+  persist();
+  openChatMenu(); // 刷新菜单
+}
+
 // ── 思维链剥离：过滤 AI 回复中的思考过程 ──
 function stripChainOfThought(text){
   // 1. XML 标签包裹的思考
@@ -7807,7 +7816,8 @@ async function requestAIReply(h){
     // (mimics the real behavior of sending several short messages in a row)
     const chatMode = contacts.find(c=>c.id===currentChar?.id)?.chatMode || 'mixed';
     if(chatMode === 'casual' && featureFlags.multiBubble !== false){
-      const parts = cleanReply.split(/\n+/).map(p=>p.trim()).filter(Boolean).slice(0, 5);
+      const maxBubbles = contact?.maxReplyBubbles ?? 5;
+      const parts = cleanReply.split(/\n+/).map(p=>p.trim()).filter(Boolean).slice(0, maxBubbles);
       for(let i=0; i<parts.length; i++){
         const bubble = {text:parts[i], mine:false, time:getTime(), timestamp:Date.now() + i*500};
         if(shouldBeVoice && i===0) bubble.isVoice = true;
@@ -8140,6 +8150,18 @@ function openChatMenu(){
         <div class="s-icon ink"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="4 7 12 15 20 7"/></svg></div>
         <div class="s-text"><div class="s-title">隐藏AI思考过程</div><div class="s-sub">${noCoT ? '已开启，自动过滤思维链' : '开启后防止AI输出思考过程'}</div></div>
         <div class="s-toggle ${noCoT?'on':''}" id="menu-nocot-toggle" onclick="event.stopPropagation();toggleChainOfThought()"></div>
+      </div>
+    </div>`;
+    // ── 回复句数控制 ──
+    const maxBubbles = contact?.maxReplyBubbles ?? 5;
+    actions += `<div class="sec-label">回复句数上限</div>
+    <div class="s-card" style="margin-bottom:16px">
+      <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+        <div class="s-icon slate"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+        <div class="s-text"><div class="s-title">每次最多回复</div><div class="s-sub">${maxBubbles} 句（休闲模式下生效）</div></div>
+        <select class="field-inp" style="width:auto;font-size:12px;padding:5px 8px;margin-right:12px" onchange="setMaxReplyBubbles(this.value)">
+          ${[1,2,3,4,5,6,8,10].map(n=>`<option value="${n}" ${maxBubbles===n?'selected':''}>${n} 句</option>`).join('')}
+        </select>
       </div>
     </div>`;
     // ── 自动消息 ──
