@@ -7846,6 +7846,7 @@ async function requestAIReply(h){
     // In casual mode, split multi-paragraph replies into separate message bubbles
     // (mimics the real behavior of sending several short messages in a row)
     const chatMode = contacts.find(c=>c.id===currentChar?.id)?.chatMode || 'mixed';
+    let newMsg = null;
     if(chatMode === 'casual' && featureFlags.multiBubble !== false){
       const maxBubbles = contact?.maxReplyBubbles ?? 5;
       const parts = cleanReply.split(/\n+/).map(p=>p.trim()).filter(Boolean).slice(0, maxBubbles);
@@ -7853,9 +7854,10 @@ async function requestAIReply(h){
         const bubble = {text:parts[i], mine:false, time:getTime(), timestamp:Date.now() + i*500};
         if(shouldBeVoice && i===0) bubble.isVoice = true;
         h.msgs.push(bubble);
+        if(i===0) newMsg = bubble;
       }
     } else {
-      const newMsg = {text:cleanReply, mine:false, time:getTime(), timestamp:Date.now()};
+      newMsg = {text:cleanReply, mine:false, time:getTime(), timestamp:Date.now()};
       if(shouldBeVoice) newMsg.isVoice = true;
       h.msgs.push(newMsg);
     }
