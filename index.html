@@ -98,7 +98,9 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 
 #settings-app,#encounter-app,#lifefaces-app,#miniapps-app,#world-app,#langlearn-app,#diary-app,#tanban-app,#store-app,#studyroom-app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--smoke);}
 
-.app-statusbar{height:50px;background:var(--white);display:flex;align-items:center;justify-content:space-between;padding:0 22px;flex-shrink:0;border-bottom:1px solid var(--silver);}
+.app-statusbar{height:40px;background:var(--white);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0;border-bottom:1px solid var(--silver);}
+.app-statusbar .asb-time{font-size:12px;color:var(--ink3);}
+.app-statusbar .app-close-btn{width:28px;height:28px;border:none;background:none;font-size:18px;color:var(--ink3);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%;}
 .asb-time{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.02em;}
 .app-close-btn{width:32px;height:32px;border:none;background:var(--smoke);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ink3);transition:background 0.2s;}
 .app-close-btn:active{background:var(--silver);}
@@ -176,8 +178,8 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .enc-page{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--smoke);}
 .enc-page.active{display:flex;}
 
-.enc-header{padding:50px 20px 14px;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.06);flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;}
-.enc-header-title{font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-0.02em;line-height:1.1;}
+.enc-header{padding:16px 20px 12px;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.06);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.enc-header-title{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.02em;line-height:1.2;}
 .enc-header-btn{width:34px;height:34px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);border-radius:50%;transition:all 0.15s;}
 .enc-header-btn:active{background:var(--smoke);}
 
@@ -198,8 +200,8 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .pin-badge{font-size:9px;color:var(--ink4);letter-spacing:0.06em;}
 
 /* ── Discover (我的角色) ── */
-.discover-header{padding:50px 20px 16px;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.06);flex-shrink:0;}
-.discover-header .enc-header-title{font-size:28px;font-weight:700;}
+.discover-header{padding:16px 20px 12px;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.06);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.discover-header .enc-header-title{font-size:20px;font-weight:700;}
 .empty-discover{padding:80px 30px;text-align:center;color:var(--ink4);font-size:14px;line-height:2;}
 .empty-discover svg{margin-bottom:20px;opacity:0.2;}
 
@@ -8033,7 +8035,12 @@ async function startVoiceRecord(){
   }
 }
 
+let _voiceStopping = false;   // 防止重复触发
+
 async function stopVoiceRecord(){
+  if(_voiceStopping) return;
+  _voiceStopping = true;
+  
   const bar = document.getElementById('voice-record-bar');
   const cancelHint = document.getElementById('voice-record-cancel');
   const waveEl = document.getElementById('voice-record-wave');
@@ -8043,79 +8050,92 @@ async function stopVoiceRecord(){
   cancelHint.classList.remove('show');
   waveEl.classList.remove('show');
   
-  // 停止浏览器语音识别（保留作为降级）
   if(_voiceRecognition){
     try{ _voiceRecognition.stop(); }catch(e){}
     _voiceRecognition = null;
   }
   
-  if(!_voiceRecorder) return;
+  if(!_voiceRecorder || _voiceRecorder.state !== 'recording'){
+    _voiceStopping = false;
+    return;
+  }
   
   const wasCancelled = _voiceCancelThreshold;
-  const browserTranscript = _voiceTranscript.trim();  // 浏览器识别结果（降级用）
+  const browserTranscript = _voiceTranscript.trim();
+  _voiceTranscript = '';
   
-  _voiceRecorder.onstop = async () => {
-    if(_voiceStream){
-      _voiceStream.getTracks().forEach(t => t.stop());
-      _voiceStream = null;
-    }
-    
-    if(wasCancelled){
-      _voiceChunks = [];
-      _voiceRecorder = null;
-      _voiceTranscript = '';
-      return;
-    }
-    
-    const duration = Math.round((Date.now() - _voiceStartTime) / 1000);
-    if(duration < 1){
-      showToast('录音时间太短');
-      _voiceChunks = [];
-      _voiceRecorder = null;
-      _voiceTranscript = '';
-      return;
-    }
-    
-    const blob = new Blob(_voiceChunks, {type: _voiceRecorder.mimeType});
+  // 停止录音，等待 onstop
+  _voiceRecorder.stop();
+  await new Promise(resolve => { _voiceRecorder.onstop = resolve; });
+  
+  if(_voiceStream){
+    _voiceStream.getTracks().forEach(t => t.stop());
+    _voiceStream = null;
+  }
+  
+  if(wasCancelled){
     _voiceChunks = [];
     _voiceRecorder = null;
-    _voiceTranscript = '';
-    
-    // ── 优先使用 Puter.js Whisper（高精度、零注册、免费），失败则降级到浏览器识别 ──
-    let finalText = browserTranscript;
-    try{
-      // Puter.js: 免费无限，零注册，Whisper/GPT-4o 级别精度
-      const result = await puter.ai.speech2txt(blob);
-      if(result && result.text && result.text.trim()){
-        finalText = result.text.trim();
-      }
-    }catch(e){
-      console.log('Puter STT 未可用，使用浏览器识别:', e.message);
-    }
-    
-    // ── 发送消息 ──
-    const ctx = getActiveChatContext();
-    if(!ctx) return;
-    ctx.msgs.push({
-      text: finalText || '[语音]',
-      mine: true,
-      time: getTime(),
-      timestamp: Date.now(),
-      isVoice: true,
-      voiceData: await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); }),
-      voiceDuration: duration
-    });
-    persist();
-    ctx.rerender();
-    if(!ctx.isGroup){
-      const h = ctx.history;
-      if(h) setTimeout(()=>requestAIReply(h), 400);
-    }
-    const msgsEl = document.getElementById('cv-msgs');
-    if(msgsEl) setTimeout(() => { msgsEl.scrollTop = msgsEl.scrollHeight; }, 100);
-  };
+    _voiceStopping = false;
+    return;
+  }
   
-  _voiceRecorder.stop();
+  const duration = Math.round((Date.now() - _voiceStartTime) / 1000);
+  if(duration < 1){
+    showToast('录音时间太短');
+    _voiceChunks = [];
+    _voiceRecorder = null;
+    _voiceStopping = false;
+    return;
+  }
+  
+  const blob = new Blob(_voiceChunks, {type: _voiceRecorder.mimeType});
+  _voiceChunks = [];
+  _voiceRecorder = null;
+  _voiceStopping = false;
+  
+  // ── 先发消息（用浏览器识别文字），不阻塞 ──
+  const ctx = getActiveChatContext();
+  if(!ctx) return;
+  
+  const voiceBase64 = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+  
+  const msg = {
+    text: browserTranscript || '[语音]',
+    mine: true,
+    time: getTime(),
+    timestamp: Date.now(),
+    isVoice: true,
+    voiceData: voiceBase64,
+    voiceDuration: duration
+  };
+  ctx.msgs.push(msg);
+  persist();
+  ctx.rerender();
+  
+  const msgsEl = document.getElementById('cv-msgs');
+  if(msgsEl) setTimeout(() => { msgsEl.scrollTop = msgsEl.scrollHeight; }, 100);
+  
+  // ── 后台尝试 Puter.js Whisper 高精度识别（不阻塞发送）──
+  (async () => {
+    try{
+      const result = await Promise.race([
+        puter.ai.speech2txt(blob),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
+      ]);
+      if(result && result.text && result.text.trim()){
+        msg.text = result.text.trim();
+        persist();
+        ctx.rerender();
+      }
+    }catch(e){ /* 静默降级，保留浏览器识别结果 */ }
+  })();
+  
+  // 触发 AI 回复
+  if(!ctx.isGroup){
+    const h = ctx.history;
+    if(h) setTimeout(()=>requestAIReply(h), 400);
+  }
 }
 
 // ── 旧的TTS语音消息（保留兼容，但不再从+菜单调用）──
@@ -11819,27 +11839,60 @@ async function togglePushNotifications() {
       await unsubscribeFromPush();
       showToast('已关闭推送通知');
     }
-  } else {
-    // 请求通知权限
-    if (!('Notification' in window)) {
-      showToast('你的浏览器不支持通知');
-      return;
+    return;
+  }
+  
+  // 检查 HTTPS（通知需要安全上下文）
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    showToast('推送通知需要 HTTPS 连接，请使用 https:// 访问');
+    return;
+  }
+  
+  if (!('Notification' in window)) {
+    showToast('你的浏览器不支持通知');
+    return;
+  }
+  
+  // 被浏览器阻止 — 给出详细指引
+  if (Notification.permission === 'denied') {
+    const isEdge = /Edg/i.test(navigator.userAgent);
+    const isChrome = /Chrome/i.test(navigator.userAgent) && !isEdge;
+    const isSafari = /Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+    let guide = '通知权限已被浏览器阻止。\n\n';
+    if (isEdge) {
+      guide += '恢复方法：\n1. 点击地址栏左侧的锁图标\n2. 找到「通知」→ 改为「允许」\n3. 刷新页面后重试';
+    } else if (isChrome) {
+      guide += '恢复方法：\n1. 点击地址栏左侧的锁图标\n2. 找到「通知」→ 改为「允许」\n3. 刷新页面后重试';
+    } else if (isSafari) {
+      guide += '恢复方法：\n1. 打开 Safari 菜单 → 设置 → 网站\n2. 找到「通知」→ 允许本网站\n3. 刷新页面后重试';
+    } else {
+      guide += '请在浏览器设置中允许本网站的通知权限，然后刷新页面重试。';
     }
-    if (Notification.permission === 'denied') {
-      showToast('通知权限已被拒绝，请在浏览器设置中开启');
-      return;
-    }
+    alert(guide);
+    return;
+  }
+  
+  // 请求权限
+  try {
     const perm = await Notification.requestPermission();
-    if (perm !== 'granted') {
-      showToast('需要允许通知权限才能推送');
+    if (perm === 'denied') {
+      showToast('通知权限未通过，可以稍后在浏览器地址栏左侧重新开启');
       return;
     }
+    if (perm === 'default') {
+      showToast('未选择通知权限（可能被浏览器静默阻止），请点击地址栏左侧的锁图标手动开启');
+      return;
+    }
+    // perm === 'granted'
     const ok = await subscribeToPush();
     if (ok) {
       showToast('推送通知已开启！角色发消息时手机会弹窗');
     } else {
       showToast('推送开启失败，请检查网络');
     }
+  } catch(e) {
+    console.error('通知权限请求异常:', e);
+    showToast('通知权限请求失败，可能是浏览器阻止了弹窗');
   }
 }
 
