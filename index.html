@@ -4274,6 +4274,14 @@ function renderStoreMine(ct){
 function renderStoreUpload(ct){
   var html = '<div class="store-section-title" style="cursor:pointer" onclick="switchStoreTab(\'mine\')">← 返回</div>';
   html += '<div class="store-section-title">上传应用</div>';
+  html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">封面图片</label>';
+  html += '<div style="display:flex;align-items:center;gap:12px">';
+  html += '<div id="upload-cover-preview" style="width:80px;height:80px;border-radius:12px;background:var(--silver);display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;flex-shrink:0">⊡</div>';
+  html += '<div style="flex:1">';
+  html += '<button class="store-card-btn" style="width:100%;padding:10px;font-size:13px;margin-bottom:4px" onclick="document.getElementById(\'upload-cover-file\').click()">从相册选择图片</button>';
+  html += '<input type="file" id="upload-cover-file" accept="image/*" style="display:none" onchange="onUploadCoverSelected(this)">';
+  html += '<div style="font-size:10px;color:var(--ink4)">支持 JPG/PNG/WebP，建议 512×512</div>';
+  html += '</div></div></div>';
   html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">应用名称 *</label>';
   html += '<input type="text" id="upload-name" placeholder="给你的应用取个名字" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box"></div>';
   html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">简短描述 *</label>';
@@ -4291,7 +4299,11 @@ function renderStoreUpload(ct){
   html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">主题色</label>';
   html += '<input type="text" id="upload-color" placeholder="#607d8b" value="#607d8b" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box"></div>';
   html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">HTML 源代码 *</label>';
-  html += '<textarea id="upload-source" placeholder="粘贴你的 HTML/CSS/JS 代码..." style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:12px;font-family:monospace;box-sizing:border-box;min-height:180px;resize:vertical"></textarea></div>';
+  html += '<div style="display:flex;gap:8px;margin-bottom:6px">';
+  html += '<button class="store-card-btn" style="flex:1;padding:10px;font-size:13px" onclick="document.getElementById(\'upload-source-file\').click()">📂 导入 HTML 文件</button>';
+  html += '<input type="file" id="upload-source-file" accept=".html,.htm,.txt,.js,.css" style="display:none" onchange="onUploadSourceFileSelected(this)">';
+  html += '</div>';
+  html += '<textarea id="upload-source" placeholder="粘贴你的 HTML/CSS/JS 代码...（或点击上方按钮导入文件）" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:12px;font-family:monospace;box-sizing:border-box;min-height:180px;resize:vertical"></textarea></div>';
   html += '<button class="store-card-btn" style="width:100%;padding:12px;font-size:14px;background:var(--ink);color:white" onclick="submitStoreUpload()">提交审核</button>';
   html += '<div style="text-align:center;padding:12px 0;font-size:11px;color:var(--ink4)">提交后将由椿岛团队审核，通过后即可在应用商店上架</div>';
   ct.innerHTML = html;
@@ -4307,16 +4319,47 @@ async function submitStoreUpload(){
   var source = document.getElementById('upload-source').value.trim();
   if(!name){ showToast('请填写应用名称'); return; }
   if(!desc){ showToast('请填写简短描述'); return; }
-  if(!source){ showToast('请粘贴源代码'); return; }
+  if(!source){ showToast('请粘贴源代码或导入文件'); return; }
   try{
+    var body = {name:name,description:desc,full_description:fulldesc,category:cat,icon_emoji:icon,color:color,hero_color:color,source_code:source};
+    if(_uploadCoverData){ body.cover_image = _uploadCoverData; }
     var r = await fetch((window.__CHUNDAO_API_BASE||'/api')+'/store/apps/upload',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:name,description:desc,full_description:fulldesc,category:cat,icon_emoji:icon,color:color,hero_color:color,source_code:source})
+      body:JSON.stringify(body)
     });
     var d = await r.json();
-    if(d.success){ storeAddUpload(d.id); showToast('提交成功，等待审核'); switchStoreTab('mine'); }
+    if(d.success){ _uploadCoverData = null; storeAddUpload(d.id); showToast('提交成功，等待审核'); switchStoreTab('mine'); }
     else { showToast(d.message||'提交失败'); }
   }catch(e){ showToast('网络错误，请重试'); }
+}
+
+// ── 封面图片选择 ──
+var _uploadCoverData = null;
+function onUploadCoverSelected(input){
+  var file = input.files[0];
+  if(!file) return;
+  if(file.size > 2 * 1024 * 1024){ showToast('图片不能超过 2MB'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    _uploadCoverData = e.target.result;
+    var preview = document.getElementById('upload-cover-preview');
+    if(preview){ preview.innerHTML = '<img src="'+_uploadCoverData+'" style="width:100%;height:100%;object-fit:cover">'; }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── 源代码文件导入 ──
+function onUploadSourceFileSelected(input){
+  var file = input.files[0];
+  if(!file) return;
+  if(file.size > 5 * 1024 * 1024){ showToast('文件不能超过 5MB'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var textarea = document.getElementById('upload-source');
+    if(textarea){ textarea.value = e.target.result; }
+    showToast('已导入：'+file.name);
+  };
+  reader.readAsText(file);
 }
 
 // ── Store App ──
