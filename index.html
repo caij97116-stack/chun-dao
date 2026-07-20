@@ -804,8 +804,8 @@ textarea.field-inp{resize:vertical;min-height:80px;line-height:1.5;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* ══ 顶部通知弹窗（微信风格） ══ */
-.notification-popup{position:fixed;top:0;left:0;width:min(390px,100vw);z-index:99999;transform:translateY(-120%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);pointer-events:none;}
-.notification-popup.show{transform:translateY(0);pointer-events:all;}
+.notification-popup{position:fixed;top:0;left:0;width:min(390px,100vw);z-index:99999;transform:translateY(-120%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1),opacity 0.35s ease;pointer-events:none;opacity:0;}
+.notification-popup.show{transform:translateY(0);pointer-events:all;opacity:1;}
 .notif-card{background:rgba(30,30,30,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin:8px 12px;border-radius:16px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);cursor:pointer;}
 .notif-card:active{background:rgba(50,50,50,0.95);}
 .notif-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;}
