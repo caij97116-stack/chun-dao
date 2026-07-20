@@ -43,6 +43,7 @@ self.addEventListener('push', (event) => {
     tag: data.tag || 'tsubaki-msg',
     requireInteraction: data.requireInteraction || false,
     vibrate: data.vibrate || [200, 100, 200],
+    timestamp: data.timestamp || Date.now(),
     data: {
       url: data.url || '/',
       charId: data.charId || null

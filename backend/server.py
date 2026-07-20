@@ -149,6 +149,7 @@ class PushSendRequest(BaseModel):
     tag: str = "tsubaki-msg"
     charId: str = None
     requireInteraction: bool = False
+    timestamp: int = 0
 
 @app.get("/")
 async def root():
@@ -439,6 +440,7 @@ async def push_send(req: PushSendRequest):
         "url": "/",
         "charId": req.charId,
         "requireInteraction": req.requireInteraction,
+        "timestamp": req.timestamp,
         "vibrate": [200, 100, 200]
     }
 

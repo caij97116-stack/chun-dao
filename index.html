@@ -3523,7 +3523,8 @@ function showNotification(title, preview, avatar){
   // PWA Web Push：通过 Service Worker 发送系统级推送
   sendWebPush(title || '新消息', preview || '', {
     icon: (avatar && (avatar.startsWith('http')||avatar.startsWith('/'))) ? avatar : undefined,
-    charId: currentChar?.id || null
+    charId: currentChar?.id || null,
+    timestamp: Date.now()
   });
 }
 function dismissNotification(){
@@ -11044,7 +11045,8 @@ async function sendWebPush(title, body, options = {}) {
         icon: options.icon || '/icon-192.png',
         tag: options.tag || 'tsubaki-msg',
         charId: options.charId || null,
-        requireInteraction: options.requireInteraction || false
+        requireInteraction: options.requireInteraction || false,
+        timestamp: options.timestamp || Date.now()
       })
     });
     console.log('[PWA] Web Push 已发送:', title);
