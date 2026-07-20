@@ -3788,6 +3788,41 @@ function toggleImageGen(){
   showToast(currentChar.imageGen ? '已开启 AI 生图（聊天中可生成图片）' : '已关闭 AI 生图');
 }
 
+function toggleChainOfThought(){
+  if(!currentChar || currentChar.isSystem) return;
+  const contact = contacts.find(c=>c.id===currentChar.id);
+  if(!contact) return;
+  contact.noChainOfThought = !contact.noChainOfThought;
+  persist();
+  closeChatMenu();
+  showToast(contact.noChainOfThought ? '已开启思维链规避，AI将隐藏思考过程' : '已关闭思维链规避');
+}
+
+// ── 思维链剥离：过滤 AI 回复中的思考过程 ──
+function stripChainOfThought(text){
+  // 1. XML 标签包裹的思考
+  text = text.replace(/<thinking>[\s\S]*?<\/thinking>/gi, '');
+  text = text.replace(/<thought>[\s\S]*?<\/thought>/gi, '');
+  text = text.replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, '');
+  // 2. 方括号包裹的思考
+  text = text.replace(/\[思考\][\s\S]*?\[\/思考\]/gi, '');
+  text = text.replace(/\[THINKING\][\s\S]*?\[\/THINKING\]/gi, '');
+  text = text.replace(/\[推理\][\s\S]*?\[\/推理\]/gi, '');
+  text = text.replace(/\[REASONING\][\s\S]*?\[\/REASONING\]/gi, '');
+  text = text.replace(/【思考】[\s\S]*?【\/思考】/gi, '');
+  // 3. Markdown 章节式思考（DeepSeek 风格）
+  text = text.replace(/###\s*思考过程[\s\S]*?(?=###\s*回答|###\s*回复|###\s*最终|$)/gi, '');
+  text = text.replace(/###\s*Thought[\s\S]*?(?=###\s*Answer|###\s*Response|###\s*Final|$)/gi, '');
+  text = text.replace(/###\s*推理过程[\s\S]*?(?=###\s*回答|###\s*回复|###\s*最终|$)/gi, '');
+  // 4. 分隔线式思考链
+  text = text.replace(/^好的，让我思考一下[。，]?[\s\S]*?(?=好的，|根据|综合|总体|总|所以|因此|我|对于|回答|回复|您好|你好|哈喽|嗨|嗯|啊|哦|哇|[a-zA-Z])/gim, '');
+  text = text.replace(/^让我想一想[。，]?[\s\S]*?(?=好的，|根据|综合|总体|总|所以|因此|我|对于|回答|回复|您好|你好|哈喽|嗨|嗯|啊|哦|哇|[a-zA-Z])/gim, '');
+  // 5. 清理可能残留的空白和空行
+  text = text.replace(/^[\s\n]+/, '').replace(/[\s\n]+$/, '');
+  text = text.replace(/\n{3,}/g, '\n\n');
+  return text.trim();
+}
+
 function updateImageGenUI(){
   // 菜单动态生成，无需更新 topbar 按钮
   const menuToggle = document.getElementById('menu-imagegen-toggle');
@@ -7740,6 +7775,10 @@ async function requestAIReply(h){
     systemPrompt += '\n\n' + buildChatModeInstruction(chatMode);
     systemPrompt += '\n\n' + MINIAPP_PROMPT_BLOCK;
   }
+  // 思维链规避：禁止 AI 输出思考过程
+  if(contact?.noChainOfThought){
+    systemPrompt += '\n\n【重要指令】请直接输出你的回复内容，不要输出任何思考过程、推理过程、分析过程或内心独白。不要使用 <thinking>、[思考]、### 思考过程 等标记来包裹思考内容。就像正常的对话一样，只输出最终的回答。';
+  }
   const apiMsgs = h.msgs.filter(m=>!m.isSystemNote);
   const maxTokens = chatMode==='novel' ? 2000 : (chatMode==='casual' ? 300 : 800);
 
@@ -7756,6 +7795,9 @@ async function requestAIReply(h){
           messages: apiMsgs.slice(-10).map(m=>({role: m.mine?'user':'assistant', content:m.text})) };
     const data = await safeFetchJSON(preset.endpoint, {method:'POST', headers, body: JSON.stringify(body)});
     const reply = data.content?.[0]?.text || data.choices?.[0]?.message?.content || '（无响应）';
+    // 思维链规避：后处理过滤
+    const cleanReply = contact?.noChainOfThought ? stripChainOfThought(reply) : reply;
+    if(!cleanReply) throw new Error('AI 回复被思维链过滤后为空，请重试');
     document.getElementById('typing-row')?.remove();
     // Voice message randomization: only for voice-authorized contacts, with a
     // real TTS config present, and only sometimes (not every message — mimics
@@ -7765,14 +7807,14 @@ async function requestAIReply(h){
     // (mimics the real behavior of sending several short messages in a row)
     const chatMode = contacts.find(c=>c.id===currentChar?.id)?.chatMode || 'mixed';
     if(chatMode === 'casual' && featureFlags.multiBubble !== false){
-      const parts = reply.split(/\n+/).map(p=>p.trim()).filter(Boolean).slice(0, 5);
+      const parts = cleanReply.split(/\n+/).map(p=>p.trim()).filter(Boolean).slice(0, 5);
       for(let i=0; i<parts.length; i++){
         const bubble = {text:parts[i], mine:false, time:getTime(), timestamp:Date.now() + i*500};
         if(shouldBeVoice && i===0) bubble.isVoice = true;
         h.msgs.push(bubble);
       }
     } else {
-      const newMsg = {text:reply, mine:false, time:getTime(), timestamp:Date.now()};
+      const newMsg = {text:cleanReply, mine:false, time:getTime(), timestamp:Date.now()};
       if(shouldBeVoice) newMsg.isVoice = true;
       h.msgs.push(newMsg);
     }
@@ -7783,7 +7825,7 @@ async function requestAIReply(h){
     // 微信式弹窗通知：不在聊天页时弹出AI消息
     const chatView = document.getElementById('chat-view');
     if(!chatView || !chatView.classList.contains('open')){
-      const preview = reply.length > 80 ? reply.slice(0,80)+'…' : reply;
+      const preview = cleanReply.length > 80 ? cleanReply.slice(0,80)+'…' : cleanReply;
       showNotification(currentChar?.name || 'AI', preview, currentChar?.avatar || '🤖');
     }
     // Auto-translate if the message contains non-Chinese text (no API key needed)
@@ -8089,6 +8131,16 @@ function openChatMenu(){
           </select>
         </div>
       </div>` : ''}
+    </div>`;
+    // ── 思维链规避 ──
+    const noCoT = !!contact?.noChainOfThought;
+    actions += `<div class="sec-label">思维链规避</div>
+    <div class="s-card" style="margin-bottom:16px">
+      <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+        <div class="s-icon ink"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="4 7 12 15 20 7"/></svg></div>
+        <div class="s-text"><div class="s-title">隐藏AI思考过程</div><div class="s-sub">${noCoT ? '已开启，自动过滤思维链' : '开启后防止AI输出思考过程'}</div></div>
+        <div class="s-toggle ${noCoT?'on':''}" id="menu-nocot-toggle" onclick="event.stopPropagation();toggleChainOfThought()"></div>
+      </div>
     </div>`;
     // ── 自动消息 ──
     const autoMsgOn = (currentChar.autoMsgMin || 0) > 0;
