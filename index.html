@@ -421,6 +421,7 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .voice-msg-wave.playing span:nth-child(2){animation-delay:0.1s;} .voice-msg-wave.playing span:nth-child(3){animation-delay:0.2s;} .voice-msg-wave.playing span:nth-child(4){animation-delay:0.15s;} .voice-msg-wave.playing span:nth-child(5){animation-delay:0.05s;}
 @keyframes voicewave-pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
 @keyframes voicewave-bounce{from{height:4px;}to{height:15px;}}
+.msg-voice-transcript{font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.5;white-space:pre-wrap;word-break:break-word;}
 .msg-miniapp-card{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px 12px;margin-top:8px;cursor:pointer;transition:opacity 0.15s;}
 .msg-row.theirs .msg-miniapp-card{background:rgba(0,0,0,0.04);border-color:var(--silver);}
 .msg-miniapp-card:active{opacity:0.75;}
@@ -736,6 +737,28 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .chat-textarea{flex:1;border:none;background:var(--white);border-radius:20px;padding:9px 14px;font-size:14px;color:var(--ink);outline:none;resize:none;max-height:90px;font-family:inherit;line-height:1.4;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
 .chat-send{width:38px;height:38px;border-radius:50%;background:var(--ink);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;}
 .chat-send:active{transform:scale(0.9);}
+
+/* Voice input – WeChat-style toggle + record bar */
+.voice-toggle-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--silver);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);flex-shrink:0;transition:transform 0.15s;}
+.voice-toggle-btn:active{background:var(--silver);}
+.voice-toggle-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+.voice-record-bar{flex:1;height:38px;border-radius:20px;background:var(--white);border:1.5px solid var(--silver);display:none;align-items:center;justify-content:center;font-size:14px;color:var(--ink2);cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;box-shadow:0 1px 4px rgba(0,0,0,0.06);transition:background 0.1s,transform 0.1s;}
+.voice-record-bar.show{display:flex;}
+.voice-record-bar:active, .voice-record-bar.recording{background:var(--silver);border-color:var(--ink2);transform:scale(0.97);}
+.voice-record-bar.recording{color:#e53935;font-weight:600;}
+.voice-record-cancel{display:none;position:absolute;bottom:130px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.78);color:#fff;padding:12px 24px;border-radius:24px;font-size:13px;z-index:300;pointer-events:none;}
+.voice-record-cancel.show{display:block;}
+.voice-record-wave{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);gap:4px;z-index:290;pointer-events:none;}
+.voice-record-wave.show{display:flex;}
+.voice-record-wave span{width:4px;border-radius:2px;background:#e53935;animation:recwave 0.8s ease-in-out infinite;}
+.voice-record-wave span:nth-child(1){height:16px;animation-delay:0s;}
+.voice-record-wave span:nth-child(2){height:24px;animation-delay:0.1s;}
+.voice-record-wave span:nth-child(3){height:20px;animation-delay:0.2s;}
+.voice-record-wave span:nth-child(4){height:28px;animation-delay:0.15s;}
+.voice-record-wave span:nth-child(5){height:12px;animation-delay:0.3s;}
+.voice-record-wave span:nth-child(6){height:22px;animation-delay:0.25s;}
+.voice-record-wave span:nth-child(7){height:18px;animation-delay:0.05s;}
+@keyframes recwave{0%,100%{transform:scaleY(0.5);opacity:0.5;}50%{transform:scaleY(1.2);opacity:1;}}
 
 /* ══ MODALS ══ */
 .modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:flex-end;justify-content:center;z-index:200;backdrop-filter:blur(4px);}
@@ -1058,6 +1081,7 @@ input[type=file]{display:none;}
 .verify-skip{font-size:11px;color:rgba(255,255,255,0.25);background:none;border:none;cursor:pointer;font-family:inherit;letter-spacing:0.08em;padding:8px;margin-top:8px;}
 
 </style>
+<script src="https://js.puter.com/v2/"></script>
 <body>
 
 <div class="phone" id="phone">
@@ -2590,10 +2614,6 @@ input[type=file]{display:none;}
       <div class="chat-plus-icon" style="background:#e53935"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><polyline points="16 21 12 17 8 21"/><line x1="12" y1="12" x2="12" y2="12"/></svg></div>
       <span>红包</span>
     </div>
-    <div class="chat-plus-item" onclick="closeChatPlus();sendVoiceNote()">
-      <div class="chat-plus-icon" style="background:#607d8b"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
-      <span>语音消息</span>
-    </div>
   </div>
 </div>
 
@@ -2771,9 +2791,15 @@ input[type=file]{display:none;}
     <button class="chat-plus-btn" onclick="toggleChatPlusMenu()" id="chat-plus-btn">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     </button>
+    <button class="voice-toggle-btn" id="voice-toggle-btn" onclick="toggleVoiceMode()" title="切换语音输入">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+    </button>
     <textarea class="chat-textarea" id="cv-input" placeholder="说点什么…" rows="1"></textarea>
-    <button class="chat-send" onclick="cvSend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    <div class="voice-record-bar" id="voice-record-bar">按住 说话</div>
+    <button class="chat-send" onclick="cvSend()" id="chat-send-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
   </div>
+  <div class="voice-record-cancel" id="voice-record-cancel">松开取消</div>
+  <div class="voice-record-wave" id="voice-record-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -7876,7 +7902,223 @@ function confirmSendRedPacket(){
 }
 
 
-// ── 发送语音消息（调用TTS朗读输入框内容）──
+// ══════════ WECHAT-STYLE VOICE INPUT (MediaRecorder + SpeechRecognition) ══════════
+// Toggle between text input and voice recording mode
+let _voiceMode = false;
+let _voiceRecorder = null;
+let _voiceStream = null;
+let _voiceChunks = [];
+let _voiceStartTime = 0;
+let _voiceCancelThreshold = false;
+let _voiceRecognition = null;      // SpeechRecognition instance
+let _voiceTranscript = '';         // accumulated transcription
+
+function toggleVoiceMode(){
+  _voiceMode = !_voiceMode;
+  const toggleBtn = document.getElementById('voice-toggle-btn');
+  const textarea = document.getElementById('cv-input');
+  const recordBar = document.getElementById('voice-record-bar');
+  const sendBtn = document.getElementById('chat-send-btn');
+  
+  if(_voiceMode){
+    toggleBtn.classList.add('active');
+    textarea.style.display = 'none';
+    recordBar.classList.add('show');
+    sendBtn.style.display = 'none';
+    if(document.getElementById('chat-plus-panel').classList.contains('open')){
+      closeChatPlus();
+    }
+  } else {
+    toggleBtn.classList.remove('active');
+    textarea.style.display = '';
+    recordBar.classList.remove('show');
+    sendBtn.style.display = '';
+  }
+}
+
+// Initialize voice recording events on the record bar
+(function initVoiceRecord(){
+  const bar = document.getElementById('voice-record-bar');
+  const cancelHint = document.getElementById('voice-record-cancel');
+  const waveEl = document.getElementById('voice-record-wave');
+  
+  bar.addEventListener('touchstart', function(e){
+    e.preventDefault();
+    startVoiceRecord();
+  }, {passive: false});
+  bar.addEventListener('touchmove', function(e){
+    const touch = e.touches[0];
+    const barRect = bar.getBoundingClientRect();
+    _voiceCancelThreshold = (touch.clientY < barRect.top - 60);
+    if(_voiceCancelThreshold){
+      cancelHint.classList.add('show');
+      bar.classList.remove('recording');
+      bar.textContent = '松开取消';
+    } else {
+      cancelHint.classList.remove('show');
+      bar.classList.add('recording');
+      bar.textContent = '松开 发送';
+    }
+  });
+  bar.addEventListener('touchend', function(e){
+    e.preventDefault();
+    stopVoiceRecord();
+  });
+  
+  bar.addEventListener('mousedown', function(e){
+    e.preventDefault();
+    startVoiceRecord();
+  });
+  bar.addEventListener('mouseup', function(e){
+    e.preventDefault();
+    stopVoiceRecord();
+  });
+  bar.addEventListener('mouseleave', function(e){
+    if(_voiceRecorder && _voiceRecorder.state === 'recording'){
+      stopVoiceRecord();
+    }
+  });
+})();
+
+async function startVoiceRecord(){
+  if(_voiceRecorder) return;
+  try{
+    _voiceStream = await navigator.mediaDevices.getUserMedia({audio: true});
+    _voiceChunks = [];
+    _voiceStartTime = Date.now();
+    _voiceCancelThreshold = false;
+    _voiceTranscript = '';
+    
+    _voiceRecorder = new MediaRecorder(_voiceStream, {mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm'});
+    _voiceRecorder.ondataavailable = e => { if(e.data.size > 0) _voiceChunks.push(e.data); };
+    _voiceRecorder.start();
+    
+    // ── 同时启动语音识别，让AI能"听懂"玩家说的话 ──
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SpeechRecognition){
+      _voiceRecognition = new SpeechRecognition();
+      _voiceRecognition.lang = 'zh-CN';           // 默认中文，可自动检测
+      _voiceRecognition.continuous = true;         // 持续识别
+      _voiceRecognition.interimResults = true;     // 实时显示中间结果
+      _voiceRecognition.onresult = function(event){
+        let interim = '';
+        let final = '';
+        for(let i = event.resultIndex; i < event.results.length; i++){
+          const r = event.results[i];
+          if(r.isFinal){ final += r[0].transcript; }
+          else { interim += r[0].transcript; }
+        }
+        if(final) _voiceTranscript += final;
+        // 实时更新录音条上的文字提示
+        const bar = document.getElementById('voice-record-bar');
+        const display = (_voiceTranscript + interim).trim();
+        if(display && bar.classList.contains('recording')){
+          bar.textContent = display.slice(0, 30) + (display.length > 30 ? '…' : '');
+        }
+      };
+      _voiceRecognition.onerror = function(e){
+        // 静默处理，语音识别失败不影响录音发送
+        console.log('语音识别: '+e.error);
+      };
+      _voiceRecognition.start();
+    }
+    
+    const bar = document.getElementById('voice-record-bar');
+    const waveEl = document.getElementById('voice-record-wave');
+    bar.classList.add('recording');
+    bar.textContent = '松开 发送';
+    waveEl.classList.add('show');
+  }catch(e){
+    showToast('无法访问麦克风：'+e.message);
+  }
+}
+
+async function stopVoiceRecord(){
+  const bar = document.getElementById('voice-record-bar');
+  const cancelHint = document.getElementById('voice-record-cancel');
+  const waveEl = document.getElementById('voice-record-wave');
+  
+  bar.classList.remove('recording');
+  bar.textContent = '按住 说话';
+  cancelHint.classList.remove('show');
+  waveEl.classList.remove('show');
+  
+  // 停止浏览器语音识别（保留作为降级）
+  if(_voiceRecognition){
+    try{ _voiceRecognition.stop(); }catch(e){}
+    _voiceRecognition = null;
+  }
+  
+  if(!_voiceRecorder) return;
+  
+  const wasCancelled = _voiceCancelThreshold;
+  const browserTranscript = _voiceTranscript.trim();  // 浏览器识别结果（降级用）
+  
+  _voiceRecorder.onstop = async () => {
+    if(_voiceStream){
+      _voiceStream.getTracks().forEach(t => t.stop());
+      _voiceStream = null;
+    }
+    
+    if(wasCancelled){
+      _voiceChunks = [];
+      _voiceRecorder = null;
+      _voiceTranscript = '';
+      return;
+    }
+    
+    const duration = Math.round((Date.now() - _voiceStartTime) / 1000);
+    if(duration < 1){
+      showToast('录音时间太短');
+      _voiceChunks = [];
+      _voiceRecorder = null;
+      _voiceTranscript = '';
+      return;
+    }
+    
+    const blob = new Blob(_voiceChunks, {type: _voiceRecorder.mimeType});
+    _voiceChunks = [];
+    _voiceRecorder = null;
+    _voiceTranscript = '';
+    
+    // ── 优先使用 Puter.js Whisper（高精度、零注册、免费），失败则降级到浏览器识别 ──
+    let finalText = browserTranscript;
+    try{
+      // Puter.js: 免费无限，零注册，Whisper/GPT-4o 级别精度
+      const result = await puter.ai.speech2txt(blob);
+      if(result && result.text && result.text.trim()){
+        finalText = result.text.trim();
+      }
+    }catch(e){
+      console.log('Puter STT 未可用，使用浏览器识别:', e.message);
+    }
+    
+    // ── 发送消息 ──
+    const ctx = getActiveChatContext();
+    if(!ctx) return;
+    ctx.msgs.push({
+      text: finalText || '[语音]',
+      mine: true,
+      time: getTime(),
+      timestamp: Date.now(),
+      isVoice: true,
+      voiceData: await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); }),
+      voiceDuration: duration
+    });
+    persist();
+    ctx.rerender();
+    if(!ctx.isGroup){
+      const h = ctx.history;
+      if(h) setTimeout(()=>requestAIReply(h), 400);
+    }
+    const msgsEl = document.getElementById('cv-msgs');
+    if(msgsEl) setTimeout(() => { msgsEl.scrollTop = msgsEl.scrollHeight; }, 100);
+  };
+  
+  _voiceRecorder.stop();
+}
+
+// ── 旧的TTS语音消息（保留兼容，但不再从+菜单调用）──
 async function sendVoiceNote(){
   const inp = document.getElementById('cv-input');
   const text = inp?.value.trim();
@@ -7885,7 +8127,7 @@ async function sendVoiceNote(){
   if(!config){ showToast('请先在「设置 → 语音合成API」配置语音服务'); return; }
   showToast('正在生成语音…');
   try{
-    await synthesizeSpeech(config, text); // pre-cache
+    await synthesizeSpeech(config, text);
     const ctx = getActiveChatContext();
     if(!ctx) return;
     ctx.msgs.push({text, mine:true, time:getTime(), timestamp:Date.now(), isVoice:true});
@@ -7933,11 +8175,12 @@ function ensureMsgIds(msgs){
 function renderMsgBubbleContent(m){
   if(m.isVoice){
     const dur = m.voiceDuration || (Math.max(2, Math.min(18, Math.round((m.text||'').length / 4))));
+    const hasTranscript = m.text && m.text !== '[语音]';
     return `<div class="voice-msg-bubble" data-mid="${m.mid}" onclick="event.stopPropagation();playVoiceMessage('${m.mid}')">
       <svg class="voice-msg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
       <div class="voice-msg-wave" id="voicewave-${m.mid}"><span></span><span></span><span></span><span></span><span></span></div>
       <span class="voice-msg-dur">${dur}″</span>
-    </div>${m.autoTranslation ? `<div class="msg-auto-trans">${escHtml(m.autoTranslation)}</div>` : ''}`;
+    </div>${hasTranscript ? `<div class="msg-voice-transcript">${escHtml(m.text)}</div>` : ''}${m.autoTranslation ? `<div class="msg-auto-trans">${escHtml(m.autoTranslation)}</div>` : ''}`;
   }
   // Declare text variable first so all card parsers below can use it
   let text = m.text;
@@ -8362,21 +8605,25 @@ async function requestAIReply(h){
 }
 
 // ══════════ MESSAGE TRANSLATION VIEW (长按查看文字与翻译) ══════════
-// Uses MyMemory free translation API — no API key required, 1000 free requests/day.
-// Falls back to the main AI API if MyMemory is unavailable.
+// Uses DeepLX public API via backend proxy — DeepL (36 langs, best quality) + Google (100+ langs, dialects).
+// DeepL preferred, auto-falls back to Google for unsupported languages/dialects.
 async function translateText(text, targetLang){
   try{
-    const encoded = encodeURIComponent(text.slice(0, 500)); // MyMemory limit
-    const url = `https://api.mymemory.translated.net/get?q=${encoded}&langpair=auto|${targetLang}`;
-    const resp = await fetch(url, {signal: AbortSignal.timeout(6000)});
+    const url = VERIFY_API_BASE + '/translate';
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text: text, target_lang: targetLang === 'zh-CN' ? 'zh' : targetLang, source_lang: 'auto'}),
+      signal: AbortSignal.timeout(8000)
+    });
     const data = await resp.json();
-    if(data.responseStatus===200 && data.responseData?.translatedText){
+    if(data.translation){
       return {
-        translation: data.responseData.translatedText,
-        detectedLang: data.responseData.detectedLanguage || ''
+        translation: data.translation,
+        detectedLang: data.detected_lang || ''
       };
     }
-  }catch(e){ /* fall through to AI fallback */ }
+  }catch(e){ /* fall through */ }
   return null;
 }
 
@@ -8392,10 +8639,8 @@ async function openMsgTranslation(mid){
     return;
   }
   body.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--ink4);font-size:13px">正在识别语言并翻译…</div>';
-  // First try free MyMemory (no API key needed), target Chinese.
-  // If the text appears to be Chinese already, translate to English instead.
   const looksLikeChinese = /[\u4e00-\u9fff]/.test(m.text);
-  const targetLang = looksLikeChinese ? 'en-GB' : 'zh-CN';
+  const targetLang = looksLikeChinese ? 'en' : 'zh';
   const result = await translateText(m.text, targetLang);
   if(result){
     m.translationLang = result.detectedLang || (looksLikeChinese ? '中文' : '外语');
@@ -8404,24 +8649,7 @@ async function openMsgTranslation(mid){
     renderTranslationResult(m);
     return;
   }
-  // Fallback to AI if MyMemory fails
-  const preset = getActivePreset();
-  if(!preset){
-    body.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--ink4);font-size:13px;line-height:1.8">翻译服务暂时无法连接，且未配置主API作为备选</div>';
-    return;
-  }
-  try{
-    const systemPrompt = '你是语言识别与翻译助手。给定文字，识别语言，并给出'+(looksLikeChinese?'英文':'中文')+'翻译。只输出JSON，不加任何其他文字：{"language":"语言名称","translation":"翻译结果"}';
-    const reply = await callAIRaw(preset, systemPrompt, [{role:'user', content:m.text}], 300);
-    const cleaned = reply.trim().replace(/^```json\s*|```$/g,'');
-    const parsed = JSON.parse(cleaned);
-    m.translationLang = parsed.language || '';
-    m.translationText = parsed.translation || '（翻译失败）';
-    persist();
-    renderTranslationResult(m);
-  }catch(e){
-    body.innerHTML = '<div style="text-align:center;padding:40px 20px;color:#a33;font-size:13px">翻译失败：'+escHtml(e.message)+'</div>';
-  }
+  body.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--ink4);font-size:13px;line-height:1.8">翻译服务暂不可用，请稍后重试</div>';
 }
 
 function renderTranslationResult(m){
@@ -8444,7 +8672,7 @@ async function maybeAutoTranslate(m){
   const hasLatin   = /[a-zA-Zà-žА-я\u0370-\u03ff\u3040-\u30ff]/.test(m.text);
   if(hasChinese && !hasLatin) return; // pure Chinese, skip
   if(!hasLatin && !hasChinese) return; // probably symbols/numbers only
-  const result = await translateText(m.text, 'zh-CN');
+  const result = await translateText(m.text, 'zh');
   if(result && result.translation && result.translation !== m.text){
     m.autoTranslation = result.translation;
     m.autoTranslationLang = result.detectedLang || '外语';
@@ -8490,6 +8718,17 @@ async function playVoiceMessage(mid){
   if(!m) return;
   const waveEl = document.getElementById('voicewave-'+mid);
 
+  // If this is a recorded voice message (voiceData), play the actual recording
+  if(m.voiceData){
+    if(_voiceAudioEl) _voiceAudioEl.pause();
+    _voiceAudioEl = new Audio(m.voiceData);
+    _voiceAudioEl.play();
+    if(waveEl) waveEl.classList.add('playing');
+    _voiceAudioEl.onended = () => waveEl?.classList.remove('playing');
+    return;
+  }
+
+  // Legacy TTS voice message — use cached or synthesize
   if(_voicePlaybackCache[mid]){
     if(_voiceAudioEl) _voiceAudioEl.pause();
     _voiceAudioEl = new Audio(_voicePlaybackCache[mid]);

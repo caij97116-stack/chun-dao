@@ -4,6 +4,7 @@ import string
 import os
 import json
 import logging
+import httpx
 from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, HTTPException, Query, Request, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
@@ -389,6 +390,67 @@ async def delete_store_app(app_id: int):
             raise HTTPException(status_code=404, detail="应用不存在")
         conn.execute("DELETE FROM store_apps WHERE id=?", (app_id,))
     return {"success": True}
+
+# ══════════ Translation API (DeepLX 双引擎) ══════════
+# 引擎1: DeepL — 36种语言，中日英质量最高，优先使用
+# 引擎2: Google — 100+语言含方言，DeepL不支持时自动回退
+# 公共实例: https://dplx.xi-xu.me (Cloudflare全球加速，免费零部署)
+
+DEEPLX_BASE = os.environ.get("DEEPLX_BASE", "https://dplx.xi-xu.me")
+
+class TranslateRequest(BaseModel):
+    text: str
+    target_lang: str = "zh"          # 目标语言代码，如 zh/en/ja/ko/fr/de/...
+    source_lang: str = "auto"        # 源语言，auto=自动检测
+
+async def _call_deeplx(client: httpx.AsyncClient, engine: str, text: str, source: str, target: str):
+    """调用 DeepLX 翻译引擎 (engine: 'deepl' 或 'google')"""
+    url = f"{DEEPLX_BASE}/{engine}"
+    resp = await client.post(
+        url,
+        json={"text": text, "source_lang": source, "target_lang": target},
+        headers={"Content-Type": "application/json"}
+    )
+    if resp.status_code == 200:
+        data = resp.json()
+        return data.get("data", ""), data.get("source_lang", "")
+    return None, None
+
+@app.post("/api/translate")
+async def translate_text(req: TranslateRequest):
+    """双引擎翻译：DeepL优先 → Google兜底"""
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            # 引擎1: DeepL — 质量最高，中日英互译首选
+            result, detected = await _call_deeplx(
+                client, "deepl", req.text, req.source_lang, req.target_lang
+            )
+            engine = "deepl"
+            
+            # 引擎2: Google — DeepL失败时自动回退（方言/小语种）
+            if result is None:
+                logging.info(f"DeepL 翻译失败，回退到 Google 引擎")
+                result, detected = await _call_deeplx(
+                    client, "google", req.text, req.source_lang, req.target_lang
+                )
+                engine = "google"
+            
+            if result is None:
+                raise HTTPException(status_code=502, detail="翻译服务暂时不可用")
+            
+            return {
+                "translation": result,
+                "detected_lang": detected or "",
+                "engine": engine,
+                "source_text": req.text
+            }
+    except httpx.ConnectError:
+        raise HTTPException(status_code=503, detail="翻译服务不可达")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"翻译异常: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ══════════ Push Notification APIs ══════════
 
