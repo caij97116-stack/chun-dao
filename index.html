@@ -3807,6 +3807,31 @@ function setMaxReplyBubbles(val){
   openChatMenu(); // 刷新菜单
 }
 
+// ── 记忆增强：构建对话摘要，让 AI 记住更早的对话内容 ──
+function buildMemorySummary(msgs, recentCount){
+  if(msgs.length <= recentCount) return null;
+  const olderMsgs = msgs.slice(0, -recentCount);
+  if(olderMsgs.length === 0) return null;
+  // 提取关键信息：每轮对话的用户消息和 AI 回复的前 50 字
+  const summaryLines = [];
+  for(let i = 0; i < olderMsgs.length; i++){
+    const m = olderMsgs[i];
+    if(m.isSystemNote) continue;
+    const role = m.mine ? '用户' : '角色';
+    const snippet = (m.text||'').replace(/\n/g, ' ').slice(0, 50);
+    if(!snippet.trim()) continue;
+    // 合并连续的同一角色消息
+    const last = summaryLines[summaryLines.length - 1];
+    if(last && last.startsWith(role + '：')){
+      summaryLines[summaryLines.length - 1] = last + ' ' + snippet;
+    } else {
+      summaryLines.push(role + '：' + snippet);
+    }
+  }
+  if(summaryLines.length === 0) return null;
+  return '【以下是你与用户之前的对话要点摘要，请记住这些关键信息来保持对话的连贯性】\n' + summaryLines.join('\n');
+}
+
 // ── 思维链剥离：过滤 AI 回复中的思考过程 ──
 function stripChainOfThought(text){
   // 1. XML 标签包裹的思考
@@ -7116,7 +7141,7 @@ async function requestGroupAIReplies(g){
         : {'Content-Type':'application/json','x-api-key':preset.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
       // Build conversation history with speaker names prefixed so the model can
       // distinguish who said what in a multi-party context.
-      const histMsgs = g.msgs.filter(m=>!m.isSystemNote).slice(-14).map(m=>{
+      const histMsgs = g.msgs.filter(m=>!m.isSystemNote).slice(-20).map(m=>{
         if(m.mine) return {role:'user', content:m.text};
         const sp = findCharacter(m.speakerId);
         return {role:'assistant', content: (sp?'['+sp.name+'] ':'') + m.text};
@@ -7791,6 +7816,12 @@ async function requestAIReply(h){
   const apiMsgs = h.msgs.filter(m=>!m.isSystemNote);
   const maxTokens = chatMode==='novel' ? 2000 : (chatMode==='casual' ? 300 : 800);
 
+  // ── 记忆增强：注入近期对话摘要 ──
+  const memorySummary = buildMemorySummary(apiMsgs, 20);
+  if(memorySummary){
+    systemPrompt = memorySummary + '\n\n' + systemPrompt;
+  }
+
   try{
     if(!preset) throw new Error('请先在设置中配置并选择一个 API 预设');
     const isOpenAIStyle = preset.format === 'openai';
@@ -7799,9 +7830,9 @@ async function requestAIReply(h){
       : {'Content-Type':'application/json','x-api-key':preset.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
     const body = isOpenAIStyle
       ? { model: preset.model, max_tokens:maxTokens,
-          messages: [{role:'system',content:systemPrompt}, ...apiMsgs.slice(-10).map(m=>({role:m.mine?'user':'assistant', content:m.text}))] }
+          messages: [{role:'system',content:systemPrompt}, ...apiMsgs.slice(-20).map(m=>({role:m.mine?'user':'assistant', content:m.text}))] }
       : { model: preset.model, max_tokens:maxTokens, system: systemPrompt,
-          messages: apiMsgs.slice(-10).map(m=>({role: m.mine?'user':'assistant', content:m.text})) };
+          messages: apiMsgs.slice(-20).map(m=>({role: m.mine?'user':'assistant', content:m.text})) };
     const data = await safeFetchJSON(preset.endpoint, {method:'POST', headers, body: JSON.stringify(body)});
     const reply = data.content?.[0]?.text || data.choices?.[0]?.message?.content || '（无响应）';
     // 思维链规避：后处理过滤
