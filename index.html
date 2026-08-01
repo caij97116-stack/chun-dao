@@ -184,15 +184,20 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .enc-page{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--smoke);}
 .enc-page.active{display:flex;}
 
-.enc-header{padding:16px 20px 12px;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.06);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
-.enc-header-title{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.02em;line-height:1.2;}
-.enc-header-btn{width:34px;height:34px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);border-radius:50%;transition:all 0.15s;}
-.enc-header-btn:active{background:var(--smoke);}
+.enc-top-row{display:flex;align-items:center;gap:10px;padding:12px 16px 10px;background:var(--white);flex-shrink:0;}
+.enc-add-btn{width:36px;height:36px;border:none;background:var(--smoke);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);border-radius:50%;flex-shrink:0;transition:all 0.15s;}
+.enc-add-btn:active{background:var(--silver);transform:scale(0.92);}
+
+
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--smoke);border-radius:24px;padding:9px 14px;border:1px solid transparent;transition:all 0.2s;}
+.search-bar:focus-within{background:var(--white);border-color:var(--ink);box-shadow:0 0 0 3px rgba(0,0,0,0.04);}
+.search-bar input{flex:1;border:none;background:none;font-size:14px;color:var(--ink);outline:none;font-family:inherit;}
+.search-bar input::placeholder{color:var(--ink4);}
 
 /* ── Chat List ── */
-.chat-list{flex:1;overflow-y:auto;background:#fff;}
+.chat-list{flex:1;overflow-y:auto;background:#fff;padding-top:4px;}
 .chat-list::-webkit-scrollbar{display:none;}
-.chat-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background 0.1s;background:#fff;border-bottom:0.5px solid rgba(0,0,0,0.04);}
+.chat-item{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;transition:background 0.1s;background:#fff;border-bottom:0.5px solid rgba(0,0,0,0.04);}
 .chat-item:active{background:#f5f5f5;}
 .chat-avatar{width:50px;height:50px;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative;background:var(--ink);display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:300;}
 .chat-avatar img{width:100%;height:100%;object-fit:cover;}
@@ -233,8 +238,8 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .chat-search-item .search-time{font-size:10px;color:var(--ink4);margin-bottom:3px;}
 
 /* ── Discover (我的角色) ── */
-.discover-header{padding:16px 20px 12px;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.06);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
-.discover-header .enc-header-title{font-size:20px;font-weight:700;}
+.discover-header{padding:20px 20px 16px;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.04);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.discover-title{font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-0.02em;line-height:1.2;}
 .empty-discover{padding:80px 30px;text-align:center;color:var(--ink4);font-size:14px;line-height:2;}
 .empty-discover svg{margin-bottom:20px;opacity:0.2;}
 
@@ -369,7 +374,7 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 /* ══ CHAT VIEW ══ */
 #chat-view{position:absolute;inset:0;background:#ededed;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1);z-index:60;}
 #chat-view.open{transform:translateX(0);}
-.chat-topbar{background:#f7f7f7;border-bottom:0.5px solid rgba(0,0,0,0.08);padding:48px 14px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.chat-topbar{background:#f7f7f7;border-bottom:0.5px solid rgba(0,0,0,0.08);padding:48px 16px 14px;display:flex;align-items:center;gap:12px;flex-shrink:0;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
 .chat-back{width:36px;height:36px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink);border-radius:50%;}
 .chat-back:active{background:rgba(0,0,0,0.06);}
 .chat-topbar-info{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
@@ -439,7 +444,7 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .idsw-option-tag{font-size:11px;color:var(--ink4);margin-top:2px;}
 .idsw-current-badge{font-size:10px;background:var(--ink);color:white;padding:2px 8px;border-radius:6px;letter-spacing:0.04em;flex-shrink:0;}
 
-.chat-msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:12px;background:#ededed;}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px 14px;display:flex;flex-direction:column;gap:14px;background:#ededed;}
 .chat-msgs::-webkit-scrollbar{display:none;}
 .msg-row{display:flex;animation:msgIn 0.2s ease both;}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
@@ -447,9 +452,9 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .msg-row.theirs{justify-content:flex-start;}
 .msg-av{width:38px;height:38px;border-radius:6px;overflow:hidden;flex-shrink:0;margin-right:10px;align-self:flex-start;background:var(--ink);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;}
 .msg-av img{width:100%;height:100%;object-fit:cover;}
-.msg-bub{max-width:72%;padding:10px 14px;border-radius:8px;font-size:var(--chat-font-size,15px);line-height:1.55;color:var(--ink);position:relative;word-break:break-word;}
-.msg-row.mine .msg-bub{background:#95ec69;color:#000;border-radius:8px 2px 8px 8px;}
-.msg-row.theirs .msg-bub{background:#fff;border-radius:2px 8px 8px 8px;box-shadow:0 1px 2px rgba(0,0,0,0.06);}
+.msg-bub{max-width:72%;padding:11px 15px;border-radius:10px;font-size:var(--chat-font-size,15px);line-height:1.55;color:var(--ink);position:relative;word-break:break-word;}
+.msg-row.mine .msg-bub{background:#95ec69;color:#000;border-radius:10px 4px 10px 10px;}
+.msg-row.theirs .msg-bub{background:#fff;border-radius:4px 10px 10px 10px;box-shadow:0 1px 2px rgba(0,0,0,0.06);}
 .msg-bub-voice{padding:10px 14px;min-width:80px;}
 .voice-msg-bubble{display:flex;align-items:center;gap:8px;cursor:pointer;}
 .voice-msg-icon{flex-shrink:0;opacity:0.85;}
@@ -463,13 +468,13 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 @keyframes voicewave-pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
 @keyframes voicewave-bounce{from{height:4px;}to{height:15px;}}
 .msg-voice-transcript{font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.5;white-space:pre-wrap;word-break:break-word;}
-.msg-miniapp-card{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.08);border-radius:10px;padding:10px 12px;margin-top:8px;cursor:pointer;transition:opacity 0.15s;}
-.msg-row.theirs .msg-miniapp-card{background:rgba(0,0,0,0.04);border-color:var(--silver);}
-.msg-miniapp-card:active{opacity:0.75;}
-.msg-miniapp-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.msg-miniapp-info{flex:1;}
-.msg-miniapp-name{font-size:13px;font-weight:600;}
-.msg-miniapp-hint{font-size:10.5px;opacity:0.6;margin-top:1px;}
+.msg-miniapp-card{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.06);border-radius:12px;padding:12px 14px;margin-top:8px;cursor:pointer;transition:all 0.15s;}
+.msg-row.theirs .msg-miniapp-card{background:rgba(0,0,0,0.03);border-color:var(--silver);}
+.msg-miniapp-card:active{opacity:0.75;transform:scale(0.98);}
+.msg-miniapp-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.msg-miniapp-info{flex:1;min-width:0;}
+.msg-miniapp-name{font-size:13.5px;font-weight:600;letter-spacing:-0.01em;}
+.msg-miniapp-hint{font-size:11px;opacity:0.5;margin-top:2px;}
 
 .msg-row.theirs .msg-auto-trans{color:var(--ink4);border-top-color:var(--smoke);}
 
@@ -484,13 +489,15 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .chat-plus-item span{font-size:10.5px;color:var(--ink3);text-align:center;}
 
 /* Special message cards */
-.msg-special-card{border-radius:14px;padding:14px 16px;margin-top:4px;text-align:center;min-width:140px;}
-.msg-transfer-card{background:linear-gradient(135deg,#43a047,#2e7d32);color:white;cursor:default;}
-.msg-redpacket-card{background:linear-gradient(135deg,#e53935,#b71c1c);color:white;cursor:pointer;}
-.msg-redpacket-card:active{opacity:0.85;}
-.msg-location-card{background:var(--smoke);color:var(--ink);text-align:left;padding:12px 14px;cursor:pointer;}
-.msg-location-card:active{opacity:0.8;}
-.msg-card-tag{display:inline-block;margin-top:8px;font-size:10px;opacity:0.75;border:1px solid rgba(255,255,255,0.45);border-radius:6px;padding:2px 8px;}
+.msg-special-card{border-radius:14px;padding:16px 18px;margin-top:4px;min-width:150px;max-width:240px;position:relative;overflow:hidden;}
+.msg-transfer-card{background:var(--white);border:1px solid var(--silver);color:var(--ink);cursor:default;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+.msg-transfer-card .transfer-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#e8edf2,#d5dde5);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.msg-redpacket-card{background:var(--white);border:1px solid var(--silver);color:var(--ink);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+.msg-redpacket-card:active{opacity:0.88;transform:scale(0.97);background:var(--smoke);}
+.msg-redpacket-card .rp-icon-wrap{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#fce4e4,#f8d0d0);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.msg-location-card{background:var(--white);color:var(--ink);text-align:left;padding:14px 16px;cursor:pointer;border-radius:14px;margin-top:4px;border:1px solid var(--silver);box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.msg-location-card:active{opacity:0.8;background:var(--smoke);}
+.msg-card-tag{display:inline-block;font-size:10px;color:var(--ink4);border:1px solid var(--silver);border-radius:8px;padding:2px 10px;letter-spacing:0.04em;flex-shrink:0;}
 .msg-poke-bubble{font-size:13px;color:var(--ink4);font-style:italic;padding:4px 0;}
 
 /* Poke shake animation */
@@ -498,8 +505,8 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 #chat-view.poke-shake{animation:poke-shake 0.5s ease;}
 
 /* Now-playing chat card */
-.msg-nowplaying-card{background:linear-gradient(135deg,rgba(219,67,67,0.85),rgba(120,30,100,0.85));cursor:pointer;padding:12px 14px;border-radius:16px;margin-top:4px;}
-.msg-nowplaying-card:active{opacity:0.85;}
+.msg-nowplaying-card{background:linear-gradient(135deg,#e91e63 0%,#9c27b0 100%);cursor:pointer;border-radius:14px;margin-top:4px;box-shadow:0 2px 8px rgba(156,39,176,0.2);}
+.msg-nowplaying-card:active{opacity:0.88;transform:scale(0.97);}
 
 /* Music friends tab */
 .music-friends-row{display:flex;gap:16px;padding:8px 0 18px;overflow-x:auto;}
@@ -2111,22 +2118,21 @@ input[type=file]{display:none;}
       <button class="app-close-btn" onclick="closeApp()">×</button>
     </div>
     <div class="enc-page active" id="enc-chats" style="display:flex">
-      <div class="enc-header">
-        <div class="enc-header-title">与你相遇</div>
-        <button class="enc-header-btn" onclick="openQuickAddMenu()">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <div class="enc-top-row">
+        <div class="search-bar" style="flex:1;margin:0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="chat-search" placeholder="搜索" oninput="renderChatList(this.value)">
+        </div>
+        <button class="enc-add-btn" onclick="openQuickAddMenu()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
-      </div>
-      <div class="search-bar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input id="chat-search" placeholder="搜索" oninput="renderChatList(this.value)">
       </div>
       <div class="chat-list" id="chat-list"></div>
     </div>
 
     <div class="enc-page" id="enc-discover">
       <div class="discover-header">
-        <div class="enc-header-title">我的角色</div>
+        <div class="discover-title">我的角色</div>
       </div>
       <div class="character-grid" id="char-grid"></div>
       <button class="fab-create" onclick="openCreateCharModal()">
@@ -11081,11 +11087,11 @@ function renderMsgBubbleContent(m){
   const transferMatch = text.match(/^\[TRANSFER:(\d+):(.*?)\]$/);
   if(transferMatch){
     return `<div class="msg-special-card msg-transfer-card" onclick="openTransferDetail('${transferMatch[1]}','${escHtml(transferMatch[2]).replace(/'/g,"\\'")}')">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span style="font-size:28px">💴</span>
-        <div style="flex:1">
-          <div style="font-size:16px;font-weight:700">${transferMatch[1]} 椿元</div>
-          <div style="font-size:11.5px;opacity:0.75;margin-top:2px">${escHtml(transferMatch[2])}</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="transfer-icon">💴</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;line-height:1.2">${transferMatch[1]} 椿元</div>
+          <div style="font-size:12px;color:var(--ink4);margin-top:3px;line-height:1.3">${escHtml(transferMatch[2]) || '转账'}</div>
         </div>
         <div class="msg-card-tag">转账</div>
       </div>
@@ -11099,23 +11105,24 @@ function renderMsgBubbleContent(m){
     const isMine = m.mine;
     if(isMine){
       return `<div class="msg-special-card msg-redpacket-card" onclick="openRedPacketDetail('${amount}','${escHtml(cover).replace(/'/g,"\\'")}','${escHtml(note).replace(/'/g,"\\'")}')">
-        <div style="display:flex;align-items:center;gap:12px">
-          <span style="font-size:28px">${cover}</span>
-          <div style="flex:1">
-            <div style="font-size:13px;font-weight:600">${escHtml(note)}</div>
-            <div style="font-size:11px;opacity:0.75;margin-top:2px">红包 · ${amount} 椿元</div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div class="rp-icon-wrap">${cover}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;line-height:1.3">${escHtml(note)}</div>
+            <div style="font-size:12px;color:var(--ink4);margin-top:3px">红包 · ${amount} 椿元</div>
           </div>
+          <div class="msg-card-tag">已发送</div>
         </div>
       </div>`;
     }
     return `<div class="msg-special-card msg-redpacket-card" onclick="receiveRedPacket(this,'${amount}','${escHtml(cover).replace(/'/g,"\\'")}')">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span style="font-size:28px">${cover}</span>
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:600">${escHtml(note)}</div>
-          <div style="font-size:11px;opacity:0.75;margin-top:2px">点击领取红包</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="rp-icon-wrap">${cover}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;line-height:1.3">${escHtml(note)}</div>
+          <div style="font-size:12px;color:var(--ink4);margin-top:3px">点击领取红包</div>
         </div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
     </div>`;
   }
@@ -11127,11 +11134,11 @@ function renderMsgBubbleContent(m){
     const label = name || '我的位置';
     const mapUrl = `https://uri.amap.com/marker?position=${lng},${lat}&name=${encodeURIComponent(label)}`;
     return `<div class="msg-special-card msg-location-card" onclick="window.open('${mapUrl}','_blank')">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:24px">📍</span>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:28px;line-height:1;flex-shrink:0">📍</span>
         <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:600;color:var(--ink)">${escHtml(label)}</div>
-          <div style="font-size:11px;opacity:0.6;margin-top:2px">${lat}, ${lng} · 点击在地图中查看</div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);line-height:1.3">${escHtml(label)}</div>
+          <div style="font-size:11px;color:var(--ink4);margin-top:2px">点击在地图中查看</div>
         </div>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
@@ -11149,12 +11156,11 @@ function renderMsgBubbleContent(m){
   if(npMatch){
     const tName = npMatch[1], tArtist = npMatch[2];
     return `<div class="msg-special-card msg-nowplaying-card" onclick="event.stopPropagation();syncCharTrack('${escHtml(tName).replace(/'/g,"\\'")}','${escHtml(tArtist).replace(/'/g,"\\'")}')">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="font-size:28px">🎵</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:32px;line-height:1;flex-shrink:0">🎵</div>
         <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.95);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(tName)}</div>
-          <div style="font-size:11.5px;color:rgba(255,255,255,0.7);margin-top:1px">${escHtml(tArtist)}</div>
-          <div style="font-size:10.5px;color:rgba(255,255,255,0.5);margin-top:4px">点击同步播放</div>
+          <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.95);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(tName)}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:2px">${escHtml(tArtist)}</div>
         </div>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"><polygon points="6 4 18 12 6 20 6 4"/></svg>
       </div>
