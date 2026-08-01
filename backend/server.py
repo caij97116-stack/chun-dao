@@ -1672,9 +1672,29 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 .toast-error{background:var(--danger);color:#fff}
 @keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:640px){.container{padding:16px 12px}header h1{font-size:20px}.stat-card .stat-value{font-size:28px}.form-row{flex-direction:column}table{font-size:12px}.preview-frame{height:350px}}
+.login-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-overlay.hidden{display:none}
+.login-box{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:40px 36px;width:min(400px,90vw);text-align:center}
+.login-box h2{font-size:22px;font-weight:600;margin-bottom:6px;letter-spacing:.04em}
+.login-box .login-sub{font-size:13px;color:var(--text2);margin-bottom:28px}
+.login-box input{width:100%;background:#0f1117;border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:15px;color:var(--text);outline:none;font-family:inherit;text-align:center;letter-spacing:.1em;transition:border-color .2s}
+.login-box input:focus{border-color:var(--accent)}
+.login-box .login-btn{width:100%;margin-top:16px;padding:12px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;letter-spacing:.04em;transition:all .2s}
+.login-box .login-btn:hover{background:var(--accent-hover)}
+.login-error{color:var(--danger);font-size:13px;margin-top:10px;min-height:20px}
 </style>
 </head>
 <body>
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <h2>椿岛管理后台</h2>
+    <div class="login-sub">请输入管理密码以继续</div>
+    <input type="password" id="login-password" placeholder="管理密码" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">验证进入</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+<div id="admin-main" style="display:none">
 <div class="container">
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('codes')">测试码管理</button>
@@ -1924,7 +1944,26 @@ async function deleteStoreApp(id){
 }
 
 refreshAll();
+
+function doLogin(){
+  const pwd = document.getElementById('login-password').value;
+  if(pwd === '1q2w3e4raz'){
+    sessionStorage.setItem('chundao_admin_auth','1');
+    document.getElementById('login-overlay').classList.add('hidden');
+    document.getElementById('admin-main').style.display='block';
+  } else {
+    document.getElementById('login-error').textContent = '密码错误，请重试';
+    document.getElementById('login-password').value = '';
+  }
+}
+(function(){
+  if(sessionStorage.getItem('chundao_admin_auth')==='1'){
+    document.getElementById('login-overlay').classList.add('hidden');
+    document.getElementById('admin-main').style.display='block';
+  }
+})();
 </script>
+</div>
 </body>
 </html>"""
 
