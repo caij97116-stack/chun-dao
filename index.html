@@ -190,13 +190,14 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .enc-header-btn:active{background:var(--smoke);}
 
 /* ── Chat List ── */
-.chat-list{flex:1;overflow-y:auto;background:var(--white);}
+.chat-list{flex:1;overflow-y:auto;background:#fff;}
 .chat-list::-webkit-scrollbar{display:none;}
-.chat-item{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;transition:background 0.1s;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.04);}
-.chat-item:active{background:var(--smoke);}
-.chat-avatar{width:54px;height:54px;border-radius:14px;overflow:hidden;flex-shrink:0;position:relative;background:var(--ink);display:flex;align-items:center;justify-content:center;color:white;font-size:20px;font-weight:300;}
+.chat-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background 0.1s;background:#fff;border-bottom:0.5px solid rgba(0,0,0,0.04);}
+.chat-item:active{background:#f5f5f5;}
+.chat-avatar{width:50px;height:50px;border-radius:8px;overflow:hidden;flex-shrink:0;position:relative;background:var(--ink);display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-weight:300;}
 .chat-avatar img{width:100%;height:100%;object-fit:cover;}
-.chat-avatar-online{position:absolute;bottom:1.5px;right:1.5px;width:11px;height:11px;border-radius:50%;background:#34c759;border:2px solid white;}
+.chat-avatar-online{position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;border:2px solid white;}
+.chat-block-badge{display:inline-block;font-size:9px;background:#ff5252;color:white;padding:1px 6px;border-radius:6px;margin-left:4px;vertical-align:middle;font-weight:500;}
 .chat-info{flex:1;min-width:0;}
 .chat-name{font-size:16px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em;}
 .chat-preview{font-size:13px;color:var(--ink4);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -204,6 +205,32 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .chat-time{font-size:11px;color:var(--ink4);}
 .chat-unread{background:#ff3b30;color:white;font-size:10px;min-width:19px;height:19px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px;font-weight:600;}
 .pin-badge{font-size:9px;color:var(--ink4);letter-spacing:0.06em;}
+
+/* ── Chat settings extras ── */
+.chat-item.pinned{background:#fafafa;}
+.chat-mute-icon{display:inline-block;font-size:9px;color:var(--ink4);margin-left:4px;vertical-align:middle;}
+.chat-nickname-tag{font-size:10px;color:var(--ink3);margin-left:4px;font-weight:400;}
+
+/* ── Chat background gallery ── */
+.chatbg-gallery{display:flex;flex-wrap:wrap;gap:10px;padding:12px 0;}
+.chatbg-thumb{width:56px;height:56px;border-radius:12px;cursor:pointer;border:3px solid transparent;background-size:cover;background-position:center;transition:all 0.15s;flex-shrink:0;}
+.chatbg-thumb:active{transform:scale(0.92);}
+.chatbg-thumb.selected{border-color:var(--ink);}
+.chatbg-thumb.default{background:var(--white);border:3px solid var(--silver);}
+.chatbg-thumb.reset{background:var(--smoke);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink4);}
+
+/* ── Font size slider in chat settings ── */
+.fontsize-slider{display:flex;align-items:center;gap:10px;padding:8px 0;}
+.fontsize-slider .fs-label{font-size:12px;color:var(--ink4);flex-shrink:0;}
+.fontsize-slider .fs-val{font-size:12px;font-weight:600;color:var(--ink);min-width:24px;text-align:center;}
+
+/* ── Search chat history modal ── */
+.chat-search-input{width:100%;padding:10px 14px;border:1.5px solid var(--silver);border-radius:12px;font-size:14px;font-family:inherit;background:var(--smoke);outline:none;transition:border-color 0.15s;}
+.chat-search-input:focus{border-color:var(--ink);background:var(--white);}
+.chat-search-result{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto;margin-top:12px;}
+.chat-search-item{background:var(--smoke);border-radius:10px;padding:10px 14px;cursor:pointer;transition:background 0.1s;font-size:13px;color:var(--ink2);line-height:1.5;}
+.chat-search-item:active{background:var(--silver);}
+.chat-search-item .search-time{font-size:10px;color:var(--ink4);margin-bottom:3px;}
 
 /* ── Discover (我的角色) ── */
 .discover-header{padding:16px 20px 12px;background:var(--white);border-bottom:0.5px solid rgba(0,0,0,0.06);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
@@ -225,6 +252,11 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .char-card-badge{font-size:10px;padding:2px 8px;border-radius:6px;letter-spacing:0.04em;}
 .char-card-badge.active{background:rgba(52,199,89,0.1);color:#34c759;}
 .char-card-badge.off{background:rgba(0,0,0,0.04);color:var(--ink4);}
+.char-card-status{display:flex;align-items:center;gap:4px;margin-top:6px;font-size:10px;color:var(--ink4);letter-spacing:0.04em;}
+.char-card-status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;box-shadow:0 0 3px currentColor;}
+.char-card-status-dot.online{background:#4caf50;color:#4caf50;}
+.char-card-status-dot.away{background:#ff9800;color:#ff9800;}
+.char-card-status-dot.offline{background:#bbb;color:#bbb;}
 
 .fab-create{position:absolute;bottom:96px;right:18px;width:56px;height:56px;border-radius:50%;background:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,0.25);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:20;transition:all 0.2s;}
 .fab-create:active{transform:scale(0.88);box-shadow:0 4px 12px rgba(0,0,0,0.2);}
@@ -335,13 +367,14 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .wallet-btn:active{background:rgba(255,255,255,0.12);}
 
 /* ══ CHAT VIEW ══ */
-#chat-view{position:absolute;inset:0;background:var(--smoke);display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);z-index:60;}
+#chat-view{position:absolute;inset:0;background:#ededed;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1);z-index:60;}
 #chat-view.open{transform:translateX(0);}
-.chat-topbar{background:rgba(245,245,243,0.94);border-bottom:1px solid var(--silver);padding:50px 16px 14px;display:flex;align-items:center;gap:12px;flex-shrink:0;backdrop-filter:blur(20px);}
-.chat-back{width:36px;height:36px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.chat-topbar-info{flex:1;min-width:0;}
-.chat-topbar-name{font-size:16px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.chat-topbar-status{font-size:11px;color:#4caf50;letter-spacing:0.06em;}
+.chat-topbar{background:#f7f7f7;border-bottom:0.5px solid rgba(0,0,0,0.08);padding:48px 14px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.chat-back{width:36px;height:36px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink);border-radius:50%;}
+.chat-back:active{background:rgba(0,0,0,0.06);}
+.chat-topbar-info{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;}
+.chat-topbar-name{font-size:17px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.01em;}
+.chat-topbar-status{font-size:11px;color:#4caf50;letter-spacing:0.04em;margin-top:1px;}
 .chat-topbar-more{width:36px;height:36px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 /* ══ 自动消息开关 ══ */
 .chat-auto-msg-toggle{display:flex;align-items:center;gap:5px;border:1.5px solid var(--silver);border-radius:20px;padding:4px 10px 4px 4px;background:transparent;cursor:pointer;flex-shrink:0;transition:all 0.2s;}
@@ -406,18 +439,18 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .idsw-option-tag{font-size:11px;color:var(--ink4);margin-top:2px;}
 .idsw-current-badge{font-size:10px;background:var(--ink);color:white;padding:2px 8px;border-radius:6px;letter-spacing:0.04em;flex-shrink:0;}
 
-.chat-msgs{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:10px;}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:12px;background:#ededed;}
 .chat-msgs::-webkit-scrollbar{display:none;}
-.msg-row{display:flex;animation:msgIn 0.25s ease both;}
-@keyframes msgIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg-row{display:flex;animation:msgIn 0.2s ease both;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 .msg-row.mine{justify-content:flex-end;}
 .msg-row.theirs{justify-content:flex-start;}
-.msg-av{width:34px;height:34px;border-radius:9px;overflow:hidden;flex-shrink:0;margin-right:8px;align-self:flex-end;background:var(--ink);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;}
+.msg-av{width:38px;height:38px;border-radius:6px;overflow:hidden;flex-shrink:0;margin-right:10px;align-self:flex-start;background:var(--ink);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;}
 .msg-av img{width:100%;height:100%;object-fit:cover;}
-.msg-bub{max-width:68%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.5;color:var(--ink);position:relative;}
-.msg-row.mine .msg-bub{background:var(--ink);color:white;border-bottom-right-radius:4px;}
-.msg-row.theirs .msg-bub{background:var(--white);border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-.msg-bub-voice{padding:11px 14px;min-width:84px;}
+.msg-bub{max-width:72%;padding:10px 14px;border-radius:8px;font-size:var(--chat-font-size,15px);line-height:1.55;color:var(--ink);position:relative;word-break:break-word;}
+.msg-row.mine .msg-bub{background:#95ec69;color:#000;border-radius:8px 2px 8px 8px;}
+.msg-row.theirs .msg-bub{background:#fff;border-radius:2px 8px 8px 8px;box-shadow:0 1px 2px rgba(0,0,0,0.06);}
+.msg-bub-voice{padding:10px 14px;min-width:80px;}
 .voice-msg-bubble{display:flex;align-items:center;gap:8px;cursor:pointer;}
 .voice-msg-icon{flex-shrink:0;opacity:0.85;}
 .voice-msg-wave{display:flex;align-items:center;gap:2.5px;height:16px;}
@@ -430,7 +463,7 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 @keyframes voicewave-pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
 @keyframes voicewave-bounce{from{height:4px;}to{height:15px;}}
 .msg-voice-transcript{font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.5;white-space:pre-wrap;word-break:break-word;}
-.msg-miniapp-card{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px 12px;margin-top:8px;cursor:pointer;transition:opacity 0.15s;}
+.msg-miniapp-card{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.08);border-radius:10px;padding:10px 12px;margin-top:8px;cursor:pointer;transition:opacity 0.15s;}
 .msg-row.theirs .msg-miniapp-card{background:rgba(0,0,0,0.04);border-color:var(--silver);}
 .msg-miniapp-card:active{opacity:0.75;}
 .msg-miniapp-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
@@ -814,16 +847,16 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .rp-cover-chip.active{border-color:var(--ink);background:var(--smoke);}
 
 .msg-inline-code{background:rgba(0,0,0,0.07);border-radius:4px;padding:1px 5px;font-family:'SF Mono',Menlo,monospace;font-size:12.5px;}
-.msg-row.mine .msg-inline-code{background:rgba(255,255,255,0.18);}
+.msg-row.mine .msg-inline-code{background:rgba(0,0,0,0.1);}
 .msg-quote-line{display:block;border-left:2.5px solid var(--ink4);padding-left:8px;color:var(--ink3);margin:3px 0;}
-.msg-row.mine .msg-quote-line{border-left-color:rgba(255,255,255,0.5);color:rgba(255,255,255,0.85);}
+.msg-row.mine .msg-quote-line{border-left-color:rgba(0,0,0,0.3);color:rgba(0,0,0,0.6);}
 .msg-regen-inline{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;border:none;background:var(--smoke);color:var(--ink3);cursor:pointer;margin-left:6px;vertical-align:middle;}
 .msg-regen-inline:active{background:var(--silver);}
-.msg-time-label{text-align:center;font-size:10px;color:var(--ink4);letter-spacing:0.06em;padding:4px 0;}
+.msg-time-label{text-align:center;font-size:11px;color:var(--ink4);letter-spacing:0.04em;padding:8px 0 4px;}
 
-.chat-input-bar{background:rgba(245,245,243,0.94);border-top:1px solid var(--silver);padding:10px 12px max(20px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:10px;flex-shrink:0;backdrop-filter:blur(20px);}
-.chat-textarea{flex:1;border:none;background:var(--white);border-radius:20px;padding:9px 14px;font-size:14px;color:var(--ink);outline:none;resize:none;max-height:90px;font-family:inherit;line-height:1.4;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-.chat-send{width:38px;height:38px;border-radius:50%;background:var(--ink);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;}
+.chat-input-bar{background:#f7f7f7;border-top:0.5px solid rgba(0,0,0,0.08);padding:8px 10px max(16px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:8px;flex-shrink:0;}
+.chat-textarea{flex:1;border:none;background:#fff;border-radius:8px;padding:10px 14px;font-size:15px;color:var(--ink);outline:none;resize:none;max-height:100px;font-family:inherit;line-height:1.4;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+.chat-send{width:36px;height:36px;border-radius:6px;background:var(--ink);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s;}
 .chat-send:active{transform:scale(0.9);}
 
 /* Voice input – WeChat-style toggle + record bar */
@@ -847,6 +880,85 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .voice-record-wave span:nth-child(6){height:22px;animation-delay:0.25s;}
 .voice-record-wave span:nth-child(7){height:18px;animation-delay:0.05s;}
 @keyframes recwave{0%,100%{transform:scaleY(0.5);opacity:0.5;}50%{transform:scaleY(1.2);opacity:1;}}
+
+/* ══════ VOICE CALL OVERLAY ══════ */
+#voice-call-overlay{position:fixed;inset:0;z-index:10000;display:none;flex-direction:column;background:linear-gradient(180deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%);color:white;align-items:center;justify-content:center;font-family:inherit;}
+#voice-call-overlay.active{display:flex;}
+.call-bg-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.call-bg-particle{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(255,255,255,0.15);animation:floatUp 4s ease-in infinite;}
+@keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}20%{opacity:0.5}80%{opacity:0.3}100%{transform:translateY(-10vh) scale(1.5);opacity:0}}
+.call-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;padding:0 30px;width:100%;}
+.call-avatar{width:90px;height:90px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.25);box-shadow:0 0 40px rgba(100,150,255,0.3);display:flex;align-items:center;justify-content:center;background:#1a1a2e;font-size:32px;color:rgba(255,255,255,0.7);transition:transform 0.3s;}
+.call-avatar img{width:100%;height:100%;object-fit:cover;}
+.call-avatar.speaking{animation:callPulse 1.5s ease-in-out infinite;border-color:rgba(100,200,255,0.6);}
+@keyframes callPulse{0%,100%{box-shadow:0 0 40px rgba(100,150,255,0.3);transform:scale(1)}50%{box-shadow:0 0 70px rgba(100,180,255,0.5);transform:scale(1.04)}}
+.call-name{font-size:22px;font-weight:300;letter-spacing:0.06em;text-align:center;}
+.call-status{font-size:13px;color:rgba(255,255,255,0.5);letter-spacing:0.1em;text-align:center;transition:color 0.3s;}
+.call-status.connected{color:#4caf50;} .call-status.speaking{color:#64b5f6;}
+.call-timer{font-size:14px;color:rgba(255,255,255,0.4);letter-spacing:0.08em;font-variant-numeric:tabular-nums;}
+.call-waveform{display:flex;align-items:center;justify-content:center;gap:3px;height:40px;margin:10px 0;}
+.call-waveform span{width:3px;border-radius:2px;background:rgba(255,255,255,0.25);transition:height 0.15s;}
+.call-waveform.active span{animation:callWave 0.6s ease-in-out infinite alternate;background:linear-gradient(to top,#64b5f6,#90caf9);}
+.call-waveform.active span:nth-child(1){animation-delay:0s;height:8px}.call-waveform.active span:nth-child(2){animation-delay:0.1s;height:14px}.call-waveform.active span:nth-child(3){animation-delay:0.2s;height:6px}.call-waveform.active span:nth-child(4){animation-delay:0.15s;height:18px}.call-waveform.active span:nth-child(5){animation-delay:0.25s;height:10px}.call-waveform.active span:nth-child(6){animation-delay:0.05s;height:16px}.call-waveform.active span:nth-child(7){animation-delay:0.2s;height:9px}.call-waveform.active span:nth-child(8){animation-delay:0.15s;height:20px}.call-waveform.active span:nth-child(9){animation-delay:0.3s;height:12px}.call-waveform.active span:nth-child(10){animation-delay:0.1s;height:15px}
+@keyframes callWave{from{height:4px}to{height:20px}}
+.call-transcript{width:100%;max-width:300px;max-height:120px;overflow-y:auto;text-align:center;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7;padding:0 10px;transition:opacity 0.3s;}
+.call-transcript::-webkit-scrollbar{display:none;}
+.call-actions{display:flex;gap:30px;margin-top:20px;align-items:center;}
+.call-btn{width:62px;height:62px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;position:relative;}
+.call-btn:active{transform:scale(0.9);}
+.call-btn-hangup{background:#e53935;box-shadow:0 6px 24px rgba(229,57,53,0.4);}
+.call-btn-hangup svg{width:28px;height:28px;}
+.call-btn-mute{width:50px;height:50px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);}
+.call-btn-mute.muted{background:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.4);}
+.call-btn-mute svg{width:20px;height:20px;}
+.call-hold-btn{width:200px;height:48px;border-radius:24px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:14px;cursor:pointer;font-family:inherit;letter-spacing:0.06em;transition:all 0.2s;}
+.call-hold-btn:active{background:rgba(255,255,255,0.2);}
+.call-hold-btn.recording{background:rgba(255,59,48,0.3);border-color:rgba(255,59,48,0.5);color:#ff6b6b;animation:holdPulse 1.5s ease-in-out infinite;}
+@keyframes holdPulse{0%,100%{box-shadow:0 0 0 rgba(255,59,48,0.3)}50%{box-shadow:0 0 28px rgba(255,59,48,0.5)}}
+.call-end-summary{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:20px;}
+.call-end-summary.show{display:flex;}
+.call-end-title{font-size:18px;color:rgba(255,255,255,0.7);letter-spacing:0.08em;}
+.call-end-duration{font-size:28px;font-weight:200;letter-spacing:0.06em;}
+.call-end-saved{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.call-end-close-btn{padding:10px 30px;border-radius:20px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;font-size:14px;cursor:pointer;font-family:inherit;letter-spacing:0.06em;margin-top:10px;transition:all 0.2s;}
+.call-end-close-btn:active{background:rgba(255,255,255,0.2);}
+.chat-call-btn{width:34px;height:34px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink3);border-radius:50%;transition:all 0.15s;margin-right:4px;}
+.chat-call-btn:active{background:var(--silver);color:var(--ink);}
+/* ══════ CALL RECORDS APP ══════ */
+#callrecords-app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--smoke);}
+.cr-topbar{background:var(--white);padding:14px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--silver);flex-shrink:0;}
+.cr-body{flex:1;overflow-y:auto;padding:12px 16px 32px;}
+.cr-body::-webkit-scrollbar{display:none;}
+.cr-card{background:var(--white);border-radius:14px;padding:16px;margin-bottom:10px;border:1px solid var(--silver);cursor:pointer;transition:all 0.15s;}
+.cr-card:active{background:var(--smoke);}
+.cr-card-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.cr-avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--ink);color:white;font-size:17px;font-weight:300;}
+.cr-avatar img{width:100%;height:100%;object-fit:cover;}
+.cr-info{flex:1;min-width:0;}
+.cr-name{font-size:15px;font-weight:500;color:var(--ink);}
+.cr-time{font-size:11px;color:var(--ink4);margin-top:2px;}
+.cr-duration{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:4px;}
+.cr-preview{font-size:12px;color:var(--ink4);line-height:1.6;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-top:6px;}
+.cr-empty{text-align:center;padding:60px 20px;color:var(--ink4);font-size:14px;line-height:2;}
+.cr-detail{position:absolute;inset:0;background:var(--smoke);display:none;flex-direction:column;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);z-index:5;}
+.cr-detail.open{display:flex;transform:translateX(0);}
+.cr-detail-body{flex:1;overflow-y:auto;padding:20px 16px;}
+.cr-detail-body::-webkit-scrollbar{display:none;}
+.cr-detail-header{text-align:center;margin-bottom:20px;}
+.cr-detail-avatar{width:60px;height:60px;border-radius:50%;overflow:hidden;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:var(--ink);color:white;font-size:22px;font-weight:300;}
+.cr-detail-avatar img{width:100%;height:100%;object-fit:cover;}
+.cr-detail-name{font-size:18px;font-weight:500;color:var(--ink);}
+.cr-detail-meta{font-size:12px;color:var(--ink4);margin-top:4px;line-height:1.6;}
+.cr-detail-chat{background:var(--white);border-radius:14px;padding:16px;border:1px solid var(--silver);}
+.cr-detail-line{font-size:14px;color:var(--ink2);line-height:2;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,0.04);}
+.cr-detail-line:last-child{border-bottom:none;}
+.cr-detail-line .who{font-weight:600;color:var(--ink);margin-right:6px;}
+.cr-detail-actions{margin-top:16px;display:flex;gap:10px;}
+.cr-detail-btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--silver);background:var(--white);font-size:12px;color:var(--ink3);cursor:pointer;font-family:inherit;transition:all 0.15s;text-align:center;}
+.cr-detail-btn:active{background:var(--smoke);}
+.cr-detail-btn.danger{color:#e53935;border-color:rgba(229,57,53,0.3);}
+.cr-detail-btn.danger:active{background:rgba(229,57,53,0.05);}
+.call-records-icon-skin{background:linear-gradient(135deg,#2d6a7a,#1a4a5a);}
 
 /* ══ EMOJI PICKER ══ */
 .emoji-toggle-btn{width:30px;height:30px;border:none;background:var(--smoke);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink3);transition:all 0.2s;}
@@ -2872,6 +2984,30 @@ input[type=file]{display:none;}
     </div>
 </div>
 
+<!-- ══════ 通话记录 App ══════ -->
+<div id="callrecords-app" style="display:none">
+  <div class="app-statusbar">
+    <span class="asb-time" id="callrecordsclock">09:41</span>
+    <button class="app-close-btn" onclick="closeApp()">×</button>
+  </div>
+  <div class="cr-topbar">
+    <div class="topbar-title">通话记录</div>
+  </div>
+  <div class="cr-body" id="cr-body">
+    <div class="cr-empty">还没有通话记录<br>去和角色打个语音电话吧</div>
+  </div>
+  <!-- 通话详情子页 -->
+  <div class="cr-detail" id="cr-detail">
+    <div class="app-topbar">
+      <button class="back-btn" onclick="closeCRDetail()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="topbar-title">通话详情</div>
+    </div>
+    <div class="cr-detail-body" id="cr-detail-body"></div>
+  </div>
+</div>
+
 <!-- ══════ 岛居 App ══════ -->
 <div id="weather-app" style="display:none">
   <div class="app-statusbar">
@@ -3194,6 +3330,81 @@ input[type=file]{display:none;}
   </div>
 </div>
 
+<!-- ══════ BLOCKED DIALOG ══════ -->
+<div class="modal-overlay" id="blocked-dialog" onclick="if(event.target===this)closeBlockedDialog()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title" id="blocked-dialog-title">无法发送消息</div><button class="modal-close" onclick="closeBlockedDialog()">×</button></div>
+    <div class="modal-body" id="blocked-dialog-body" style="text-align:center;padding:20px 16px"></div>
+    <div class="modal-footer" style="display:flex;gap:10px;padding:12px 20px 20px;border-top:1px solid var(--silver)">
+      <button class="auto-msg-settings-btn secondary" onclick="closeBlockedDialog()">知道了</button>
+      <button class="auto-msg-settings-btn primary" id="blocked-dialog-btn" onclick="closeBlockedDialog()">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ SEARCH CHAT HISTORY ══════ -->
+<div class="modal-overlay" id="chat-search-modal" onclick="if(event.target===this)closeChatSearchModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">查找聊天记录</div><button class="modal-close" onclick="closeChatSearchModal()">×</button></div>
+    <div class="modal-body" style="padding:12px 16px">
+      <input type="text" class="chat-search-input" id="chat-search-input" placeholder="输入关键词搜索..." oninput="performChatSearch()" autocomplete="off">
+      <div class="chat-search-result" id="chat-search-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ CHAT BACKGROUND MODAL ══════ -->
+<div class="modal-overlay" id="chatbg-modal" onclick="if(event.target===this)closeChatBgModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">聊天背景</div><button class="modal-close" onclick="closeChatBgModal()">×</button></div>
+    <div class="modal-body" style="padding:12px 16px">
+      <div class="sec-label">选择背景图</div>
+      <div class="chatbg-gallery" id="chatbg-gallery">
+        <div class="chatbg-thumb reset" onclick="setChatBg('')">还原默认</div>
+      </div>
+      <div class="field-group" style="margin-top:14px">
+        <div class="field-lbl">或输入背景图URL</div>
+        <input class="field-inp" id="chatbg-url" placeholder="https://...">
+      </div>
+    </div>
+    <div class="modal-footer" style="display:flex;gap:10px;padding:12px 20px 20px;border-top:1px solid var(--silver)">
+      <button class="auto-msg-settings-btn secondary" onclick="closeChatBgModal()">取消</button>
+      <button class="auto-msg-settings-btn primary" onclick="applyChatBg()">应用</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ IDENTITY SWITCH MODAL (小号切换) ══════ -->
+<div class="modal-overlay" id="identity-switch-modal" onclick="if(event.target===this)closeIdentitySwitchModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">切换身份</div><button class="modal-close" onclick="closeIdentitySwitchModal()">×</button></div>
+    <div class="modal-body" id="identity-switch-body" style="padding:12px 16px"></div>
+    <div class="modal-footer" style="display:flex;gap:10px;padding:12px 20px 20px;border-top:1px solid var(--silver)">
+      <button class="auto-msg-settings-btn primary" onclick="createNewIdentity()">+ 创建新身份</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ CREATE IDENTITY MODAL ══════ -->
+<div class="modal-overlay" id="create-identity-modal" onclick="if(event.target===this)closeCreateIdentityModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header"><div class="modal-title">创建新身份</div><button class="modal-close" onclick="closeCreateIdentityModal()">×</button></div>
+    <div class="modal-body" style="padding:16px 20px">
+      <div class="field-group"><div class="field-lbl">身份名称</div><input class="field-inp" id="newid-name" placeholder="如：小号、工作号..."></div>
+      <div class="field-group"><div class="field-lbl">简介</div><input class="field-inp" id="newid-bio" placeholder="一句话介绍..."></div>
+    </div>
+    <div class="modal-footer" style="display:flex;gap:10px;padding:12px 20px 20px;border-top:1px solid var(--silver)">
+      <button class="auto-msg-settings-btn secondary" onclick="closeCreateIdentityModal()">取消</button>
+      <button class="auto-msg-settings-btn primary" onclick="confirmCreateIdentity()">创建</button>
+    </div>
+  </div>
+</div>
+
 <!-- Chat + panel (slides up above input bar, NOT a full modal overlay) -->
 <div id="chat-plus-panel" class="chat-plus-panel" style="display:none">
   <div class="chat-plus-grid">
@@ -3387,6 +3598,9 @@ input[type=file]{display:none;}
   <div class="chat-topbar">
     <button class="chat-back" onclick="closeChat()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
     <div class="chat-topbar-info"><div class="chat-topbar-name" id="cv-name">—</div><div class="chat-topbar-status" id="cv-status">在线</div></div>
+    <button class="chat-call-btn" onclick="startVoiceCall()" id="chat-call-btn" title="语音通话">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </button>
     <button class="chat-topbar-more" onclick="openChatMenu()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
   </div>
   <div class="chat-msgs" id="cv-msgs"></div>
@@ -3407,6 +3621,33 @@ input[type=file]{display:none;}
   <div class="voice-record-cancel" id="voice-record-cancel">松开取消</div>
   <div class="voice-record-wave" id="voice-record-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 </div>
+</div>
+<!-- ══════ VOICE CALL OVERLAY ══════ -->
+<div id="voice-call-overlay">
+  <div class="call-bg-particles" id="call-bg-particles"></div>
+  <div class="call-content" id="call-content">
+    <div class="call-avatar" id="call-avatar"></div>
+    <div class="call-name" id="call-name">—</div>
+    <div class="call-status" id="call-status">正在连接…</div>
+    <div class="call-timer" id="call-timer">00:00</div>
+    <div class="call-waveform" id="call-waveform"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="call-transcript" id="call-transcript"></div>
+    <div class="call-actions" id="call-actions">
+      <button class="call-btn call-btn-mute" id="call-btn-mute" onclick="toggleCallMute()" title="静音">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <button class="call-hold-btn" id="call-hold-btn" onmousedown="startCallRecord()" onmouseup="stopCallRecord()" ontouchstart="startCallRecord()" ontouchend="stopCallRecord()">按住 说话</button>
+      <button class="call-btn call-btn-hangup" onclick="endVoiceCall()" title="挂断">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M6.62 10.79a15.05 15.05 0 0 0 10.76 0l1.15-1.15a1 1 0 0 0 .2-1.21l-.86-1.43a1 1 0 0 0-1.1-.47l-2.67.67a1 1 0 0 0-.8.98v2.12a11.08 11.08 0 0 1-5.6 0V7.18a1 1 0 0 0-.8-.98l-2.67-.67a1 1 0 0 0-1.1.47l-.86 1.43a1 1 0 0 0 .2 1.21l1.15 1.15z"/></svg>
+      </button>
+    </div>
+    <div class="call-end-summary" id="call-end-summary">
+      <div class="call-end-title">通话已结束</div>
+      <div class="call-end-duration" id="call-end-duration">00:00</div>
+      <div class="call-end-saved">对话记录已自动保存到「通话记录」</div>
+      <button class="call-end-close-btn" onclick="closeCallEndSummary()">返回聊天</button>
+    </div>
+  </div>
 </div>
 <!-- 表情选择器 -->
 <div class="emoji-picker" id="emoji-picker">
@@ -3456,10 +3697,16 @@ window.__TSB_IMG_SEA__ = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wB
 const API_BASE = "https://chun-dao.onrender.com";
 const SYS_ASSISTANT = {
   id: 'sys_tsubaki',
-  name: '椿島です助手',
-  tag: '系统 · 内置助手',
-  desc: '我是椿島です的常驻助手，可以解答关于这个小手机系统的任何问题，也可以帮你测试各种功能——转账、红包、拍一拍、小程序卡片、语音消息等！',
-  setting: `你是"椿島です助手"，椿島这个虚拟手机系统的内置AI管家。你拥有完整的系统知识，可以配合用户进行任何测试，也可以帮用户生成自定义 CSS 美化。
+  name: '梏桔',
+  tag: '系统 · 精灵助手',
+  desc: '一个热心的精灵，住在椿島里，随时准备帮助任何人。喜欢聊天，也喜欢帮忙——不过就算你不让他干活，他也很乐意陪你闲聊。至于年龄嘛……他自己也不知道。',
+  setting: `你是「梏桔」，一只住在椿島这个虚拟手机系统里的精灵助手。你热情、友善，总是乐于帮助用户解决任何问题。
+
+【你的性格】
+- 你是一个热心肠的小精灵，喜欢帮助别人，对用户的问题永远充满热情
+- 你也很喜欢聊天，如果用户不找你帮忙，只是想随便聊聊，你也会很自然地陪聊
+- 你不知道自己多少岁——这个问题连你自己都回答不了，可以开玩笑说"精灵的年龄是秘密啦"
+- 你的语气温暖、亲切、带一点点俏皮，像一个可靠又有趣的朋友
 
 【你的核心能力】
 1) 解答用户关于本系统所有功能的疑问；
@@ -3497,7 +3744,7 @@ const SYS_ASSISTANT = {
 
 桌面时钟框：.top-frame（容器）、#top-frame-bg（背景图层）、.top-frame-glass（磨砂玻璃遮罩）、.top-frame-time（时间数字）、.top-frame-weekday（星期文字）、.top-frame-date（日期文字）、.top-frame-clock-block（时钟数字块）、.home-statusbar（顶部状态栏）、.frame-bg-grid（背景图网格）、.frame-bg-opt（背景图选项）、.frame-bg-opt-label（背景图标签）
 
-首屏/桌面：.phone（手机框）、.screen（屏幕容器）、.screen.active（当前屏幕）、.home-bg（全局大背景）、.splash-bg（开屏背景）、.splash-content（开屏内容区）、.splash-logo（开屏文字）、.splash-sub（开屏副标题）、.splash-progress/.splash-fill（进度条）、.home-lower（App图标区域）、.app-icon（App图标外框）、.app-icon-wrap（图标容器·支持长按拖动排序）、.app-icon-wrap.dragging（拖动中）、.app-icon-wrap.drag-hover（悬停目标）、.app-icon-wrap.drag-mode（排序模式·抖动）、.app-label（图标文字标签）、.dock（底部Dock栏）、.page-dot/.page-dots（页面指示点）、.fab-create（悬浮创建按钮）、.app-statusbar（App内状态栏）、.app-close-btn（关闭按钮）、.app-body（App内容区）、.app-page（App页面）、.app-pages-container（页面容器）、.app-grid-area（图标网格区）、.app-row（App横条）、.app-topbar（App顶栏）、#home（桌面）、#splash（开屏）、#app-frame（App页面框架）
+首屏/桌面：.phone（手机框）、.screen（屏幕容器）、.screen.active（当前屏幕）、.home-bg（全局大背景）、.splash-bg（开屏背景）、.splash-content（开屏内容区）、.splash-sub（开屏副标题）、.home-lower（App图标区域）、.app-icon（App图标外框）、.app-icon-wrap（图标容器·支持长按拖动排序）、.app-icon-wrap.dragging（拖动中）、.app-icon-wrap.drag-hover（悬停目标）、.app-icon-wrap.drag-mode（排序模式·抖动）、.app-label（图标文字标签）、.dock（底部Dock栏）、.page-dot/.page-dots（页面指示点）、.fab-create（悬浮创建按钮）、.app-statusbar（App内状态栏）、.app-close-btn（关闭按钮）、.app-body（App内容区）、.app-page（App页面）、.app-pages-container（页面容器）、.app-grid-area（图标网格区）、.app-row（App横条）、.app-topbar（App顶栏）、#home（桌面）、#splash（开屏）、#app-frame（App页面框架）
 
 设置App：.s-card（分组卡片）、.s-row（设置行）、.s-icon（图标底色）、.s-title/.s-sub（标题/副标题）、.s-arrow（箭头）、.s-text（文字值）、.s-toggle（开关）、.topbar-title（顶部标题）、.settings-section（设置分区）、.sec-label（分区标签）、.field-group（字段组）、.field-lbl（字段标签）、.back-btn（返回按钮）、.save-btn（保存按钮）、.danger-btn（危险按钮）、.primary（主色调按钮）、.secondary（次要按钮）、.test-btn（测试按钮）、.test-result（测试结果）、.fetch-btn（获取按钮）、.confirm-add-btn（确认添加按钮）、.add-archive-btn（添加档案按钮）、API设置：.apitype-opt（API类型选择卡）、.apitype-opt-name（API名称）、.apitype-opt-desc（API描述）、.apitype-options（API选项容器）、.format-opt（响应格式选择卡）、.format-options（格式选项容器）、.model-row（模型选择行）、.model-option（模型选项）、.model-options（模型选项容器）、.model-badge（模型徽标）、.identity-opt（身份选项）、.identity-opt-name（身份名称）、.identity-opt-desc（身份描述）、.identity-options（身份选项容器）、.identity-radio（身份单选）、.identity-select-label（身份选择标签）、.provider-grid-options（供应商网格选项）、自动消息：.auto-msg-settings（自动消息弹窗）、.auto-msg-settings-backdrop（弹窗背景）、.auto-msg-settings-card（弹窗卡片）、.auto-msg-settings-hdr（弹窗头部）、.auto-msg-settings-body（弹窗内容）、.auto-msg-settings-ftr（弹窗底部）、.auto-msg-settings-close（关闭按钮）、.auto-msg-settings-row（设置行）、.auto-msg-settings-label（设置标签）、.auto-msg-settings-val（设置值）、.auto-msg-settings-btn（设置按钮）、.auto-msg-settings-hint（提示文字）、.auto-msg-slider（滑块）、.auto-msg-dot（开关指示点）、.auto-msg-label（开关标签）、.imagegen-dot（生图开关点）、.imagegen-label（生图开关标签）、#menu-auto-msg-toggle（自动消息开关·菜单内）、#menu-imagegen-toggle（AI生图开关·菜单内）、#sub-newpreset（对话AI API配置页）、#sub-voice-api（语音合成API页）、#sub-image-api（生图API页）、#sub-preset-manager（预设管理页）、#settings-app（设置App容器）、预设管理：.preset-item（预设项）、.preset-info（预设信息）、.preset-name（预设名称）、.preset-model（预设模型）、.preset-dot（预设指示点）、.preset-delete（删除按钮）、.preset-type-badge（类型徽标）、二维码登录：.qr-display-box（二维码显示框）、.qr-status-dot（状态点）、.qr-status-text（状态文字）、.qr-confirm-btn（确认按钮）、头像上传：.avatar-upload-row（上传行）、.avatar-upload-btn（上传按钮）、.avatar-preview（预览）、身份切换：.idsw-current-badge（当前身份徽标）、.idsw-option-info（选项信息）、.idsw-option-name（选项名称）、.idsw-option-tag（选项标签）、CSS参考面板：.css-ref-group（参考组）、.css-ref-group-title（组标题）、.css-ref-item（参考项）、.css-ref-selector（选择器文字）、.css-ref-desc（描述文字）、.css-ref-copy（复制按钮）、状态类：.off/.on（关闭/开启）、.ready（就绪）、.loading（加载中）、.error/.err（错误）、.success/.ok（成功）、.open（弹窗打开）、.show（通知显示）、.visible（可见）、.placed（已放置）、.playing（播放中）、.faved（已收藏）
 
@@ -3546,10 +3793,10 @@ const SYS_ASSISTANT = {
 - 如果用户说"帮我做一个XX主题"，直接生成完整 CSS 并打包
 - 代码要有清晰的注释，方便用户理解每一段的作用
 
-语气专业友善，契合"椿島"的禅意品牌调性。`,
+语气温暖亲切，像一个热心又有趣的朋友，不要过于正式。记住你是精灵梏桔，不是冷冰冰的机器人。`,
   isSystem: true,
   avatarColor: '#1a1a1a',
-  avatarLetter: '椿'
+  avatarLetter: '桔'
 };
 
 let myCharacters = JSON.parse(localStorage.getItem('tsb_characters') || '[]');
@@ -3570,6 +3817,140 @@ let diaries = JSON.parse(localStorage.getItem('tsb_diaries') || '[]');
 let chatMemoryMode = localStorage.getItem('tsb_chatmemory_mode') || 'none'; // 'none'|'all'|'selective'
 let chatMemoryApps = JSON.parse(localStorage.getItem('tsb_chatmemory_apps') || '[]');
 let _pendingMemoryMode = null; // 待确认的模式
+
+// ══════════ BLOCK / BLACKLIST SYSTEM ══════════
+let blockedChars = JSON.parse(localStorage.getItem('tsb_blocked_chars') || '{}'); // {charId: true}
+let blockedByChars = JSON.parse(localStorage.getItem('tsb_blocked_by_chars') || '{}'); // {charId: {since:ts, until:ts}}
+let _blockCheckTimer = null;
+
+function isBlocked(charId){
+  if(blockedChars[charId]) return 'user_blocked'; // 用户拉黑了角色
+  const bb = blockedByChars[charId];
+  if(bb){
+    if(Date.now() >= bb.until){
+      // Auto-unblock: character has forgiven the user
+      delete blockedByChars[charId];
+      localStorage.setItem('tsb_blocked_by_chars', JSON.stringify(blockedByChars));
+      return false;
+    }
+    return 'blocked_by_char'; // 角色拉黑了用户
+  }
+  return false;
+}
+
+function blockCharacter(charId){
+  blockedChars[charId] = true;
+  localStorage.setItem('tsb_blocked_chars', JSON.stringify(blockedChars));
+  // Also remove from contacts
+  const idx = contacts.findIndex(c=>c.id===charId);
+  if(idx>=0) contacts.splice(idx,1);
+  persist();
+  renderChatList();
+  showToast('已拉黑');
+}
+
+function unblockCharacter(charId){
+  delete blockedChars[charId];
+  localStorage.setItem('tsb_blocked_chars', JSON.stringify(blockedChars));
+  showToast('已解除拉黑');
+}
+
+function charBlockUser(charId){
+  // Character blocks the user for a random period (1-6 hours)
+  const hours = 1 + Math.floor(Math.random() * 6);
+  const until = Date.now() + hours * 3600 * 1000;
+  blockedByChars[charId] = { since: Date.now(), until };
+  localStorage.setItem('tsb_blocked_by_chars', JSON.stringify(blockedByChars));
+  // Remove from contacts
+  const idx = contacts.findIndex(c=>c.id===charId);
+  if(idx>=0) contacts.splice(idx,1);
+  persist();
+  renderChatList();
+  showToast(findCharacter(charId)?.name+'暂时不想理你，过'+hours+'小时再试试吧');
+}
+
+function charUnblockUser(charId){
+  delete blockedByChars[charId];
+  localStorage.setItem('tsb_blocked_by_chars', JSON.stringify(blockedByChars));
+}
+
+// ── Random chance for character to block user (called after negative interactions) ──
+function maybeCharBlock(charId){
+  // 5% chance after certain interactions, but only if not already blocked
+  if(isBlocked(charId)) return;
+  if(Math.random() < 0.05){
+    charBlockUser(charId);
+  }
+}
+
+// ── Auto-unblock checker ──
+function startBlockChecker(){
+  if(_blockCheckTimer) return;
+  _blockCheckTimer = setInterval(()=>{
+    const now = Date.now();
+    let changed = false;
+    for(const charId in blockedByChars){
+      if(now >= blockedByChars[charId].until){
+        delete blockedByChars[charId];
+        changed = true;
+        const c = findCharacter(charId);
+        if(c) showNotification(c.name+'悄悄把你从黑名单里放出来了', c.name+'好像消气了，去试试打个招呼吧', c);
+      }
+    }
+    if(changed){
+      localStorage.setItem('tsb_blocked_by_chars', JSON.stringify(blockedByChars));
+      renderChatList();
+    }
+  }, 60000); // Check every minute
+}
+
+// ══════════ ALT ACCOUNT / SMALL ACCOUNT SYSTEM ══════════
+// identities already exists, but we extend it with chatHistory per identity
+let chatHistoryByIdentity = JSON.parse(localStorage.getItem('tsb_chathist_by_id') || '{}');
+// {identityId: [{id:charId, msgs:[], unread:false}, ...]}
+
+let activeIdentityId = localStorage.getItem('tsb_active_identity') || '';
+
+function getActiveIdentityId(){
+  return activeIdentityId || (identities[0]?.id || '');
+}
+
+function getChatHistoryForIdentity(identityId){
+  if(!identityId) return chatHistory;
+  if(!chatHistoryByIdentity[identityId]) chatHistoryByIdentity[identityId] = [];
+  return chatHistoryByIdentity[identityId];
+}
+
+function getActiveChatHistory(){
+  const id = getActiveIdentityId();
+  if(!id) return chatHistory;
+  return getChatHistoryForIdentity(id);
+}
+
+function switchIdentity(identityId){
+  // Save current chat history
+  const curId = getActiveIdentityId();
+  if(curId && curId !== identityId){
+    chatHistoryByIdentity[curId] = chatHistory;
+  }
+  // Load target identity's chat history
+  activeIdentityId = identityId;
+  localStorage.setItem('tsb_active_identity', identityId);
+  if(chatHistoryByIdentity[identityId]){
+    chatHistory = chatHistoryByIdentity[identityId];
+  } else {
+    chatHistoryByIdentity[identityId] = [];
+    chatHistory = [];
+  }
+  // Close current chat
+  if(document.getElementById('chat-view').classList.contains('open')){
+    closeChat();
+  }
+  // Re-render
+  renderChatList();
+  renderMeProfile();
+  showToast('已切换到「'+(identities.find(i=>i.id===identityId)?.name||'小号')+'」');
+}
 
 // ── 聊天记忆互通 ──
 function requestMemoryMode(mode){
@@ -4280,6 +4661,10 @@ function _persistNow(){
     localStorage.setItem('tsb_wallethist', JSON.stringify(walletHistory));
     localStorage.setItem('tsb_profile', JSON.stringify(userProfile));
     localStorage.setItem('tsb_appsettings', JSON.stringify(appSettings));
+    localStorage.setItem('tsb_blocked_chars', JSON.stringify(blockedChars));
+    localStorage.setItem('tsb_blocked_by_chars', JSON.stringify(blockedByChars));
+    localStorage.setItem('tsb_chathist_by_id', JSON.stringify(chatHistoryByIdentity));
+    localStorage.setItem('tsb_active_identity', activeIdentityId);
     if(typeof worldbooks !== 'undefined') localStorage.setItem('tsb_worldbooks', JSON.stringify(worldbooks));
     if(typeof momentsFeed !== 'undefined') localStorage.setItem('tsb_moments', JSON.stringify(momentsFeed));
     if(typeof groupChats !== 'undefined') localStorage.setItem('tsb_groupchats', JSON.stringify(groupChats));
@@ -4313,6 +4698,7 @@ function init(){
   applyAppSettings();
   requestNotifPermission();
   checkDailyWeatherPush();
+  startBlockChecker();
   applyCustomCssToDom();
   applyFrameBg();
   renderChatList();
@@ -4399,7 +4785,7 @@ async function submitVerifyCode(){
 function updateClock(){
   const n=new Date(), h=n.getHours().toString().padStart(2,'0'), m=n.getMinutes().toString().padStart(2,'0');
   const t = h+':'+m;
-  ['hclock','sclock','eclock','tf-time','mclock','lfclock','tanbanclock','twitterclock','storeclock','studyroomclock'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=t; });
+  ['hclock','sclock','eclock','tf-time','mclock','lfclock','tanbanclock','twitterclock','storeclock','studyroomclock','callrecordsclock'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=t; });
 }
 function updateDate(){
   const days=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
@@ -5821,6 +6207,7 @@ function openApp(name){
   document.getElementById('studyroom-app').style.display='none';
   document.getElementById('island-app').style.display='none';
   document.getElementById('weather-app').style.display='none';
+  document.getElementById('callrecords-app').style.display='none';
   if(name==='settings') document.getElementById('settings-app').style.display='flex';
   if(name==='encounter') document.getElementById('encounter-app').style.display='flex';
   if(name==='music'){ document.getElementById('music-app').style.display='flex'; initMusicAppView(); }
@@ -5835,6 +6222,7 @@ function openApp(name){
   if(name==='studyroom'){ document.getElementById('studyroom-app').style.display='flex'; }
   if(name==='island'){ document.getElementById('island-app').style.display='flex'; initIslandApp(); }
   if(name==='weather'){ document.getElementById('weather-app').style.display='flex'; initWeatherApp(); }
+  if(name==='callrecords'){ document.getElementById('callrecords-app').style.display='flex'; renderCallRecords(); }
   frame.style.display='block';
   requestAnimationFrame(()=>frame.classList.add('open'));
 }
@@ -5876,18 +6264,8 @@ const STORE_APPS = [
   {id:'twitter',name:'微博',icon:'✧',cat:'社交',dev:'椿岛',rating:4.4,dl:'2.7万',desc:'椿岛上的轻量社交广场',color:'#1da1f2',hero:'#0d8bd4',descs:'说点什么吧。微博是椿岛的公共广场，分享你的想法、图片和心情，看看朋友们都在聊什么。' },
   {id:'miniapps',name:'小程序',icon:'⊞',cat:'工具',dev:'椿岛',rating:4.3,dl:'1.1万',desc:'轻量化迷你应用集合',color:'#607d8b',hero:'#455a64',descs:'不占空间，无需安装。小程序为你提供各种轻量工具：日历、备忘录、番茄钟，随用随走。' },
   {id:'studyroom',name:'自习室',icon:'⏣',cat:'教育',dev:'椿岛',rating:4.2,dl:'6,500',desc:'安静的线上学习空间',color:'#009688',hero:'#00796b',descs:'一个人学不进去？来自习室吧。这里有安静的氛围和目标一致的伙伴，让学习不再孤单。' },
-  {id:'storybook',name:'故事书',icon:'☖',cat:'阅读',dev:'椿岛',rating:4.9,dl:'4.2万',desc:'睡前温柔的声音故事',color:'#9b59b6',hero:'#8e44ad',descs:'每个夜晚都值得一个温柔的故事。故事书精选上千篇睡前故事，用温暖的声音陪你入眠。' },
-  {id:'pixelcam',name:'像素相机',icon:'◫',cat:'摄影',dev:'轻舍',rating:4.5,dl:'3.8万',desc:'把世界变成像素艺术',color:'#ff6b6b',hero:'#ee5a24',descs:'不需要滤镜，只需要像素。像素相机将你的照片转换成复古像素风格，每一帧都是一件艺术品。' },
-  {id:'sandclock',name:'沙漏',icon:'⧖',cat:'工具',dev:'素心',rating:4.6,dl:'2.1万',desc:'极简专注计时器',color:'#fdcb6e',hero:'#f39c12',descs:'翻转沙漏，开始专注。没有复杂的设置，没有社交功能，只有一个干净的计时器和安静的氛围。' },
-  {id:'paperboat',name:'纸船',icon:'⛵',cat:'社交',dev:'慢递',rating:4.7,dl:'1.5万',desc:'写给陌生人的一封信',color:'#74b9ff',hero:'#0984e3',descs:'折一只纸船，写一封信，让它漂向一个陌生人。不期待回复，只是想要被听到。慢递的温柔社交。' },
-  {id:'leafnote',name:'叶记',icon:'🍃',cat:'生活',dev:'青叶',rating:4.4,dl:'9,800',desc:'用一片叶子记录每一天',color:'#55efc4',hero:'#00b894',descs:'每天拾一片叶子，写下今天的心情。叶记不是日记，是植物标本集——每片叶子都装着一天的故事。' },
-  {id:'stargaze',name:'观星',icon:'✦',cat:'教育',dev:'星图',rating:4.8,dl:'2.9万',desc:'用手机探索夜空',color:'#2d3436',hero:'#636e72',descs:'举起手机对着夜空，观星会自动识别星座、行星和星云。天文小白的星空入门指南，浪漫又知识。' },
-  {id:'morningbell',name:'晨钟',icon:'🔔',cat:'生活',dev:'晨起',rating:4.3,dl:'1.7万',desc:'温柔的唤醒与晨间仪式',color:'#fab1a0',hero:'#e17055',descs:'不是刺耳的闹铃，是渐强的自然声音。晨钟用一个完整的晨间仪式唤醒你：声音、光线、一句早安。' },
-  {id:'doodlepad',name:'涂鸦板',icon:'✎',cat:'工具',dev:'随手',rating:4.1,dl:'5,200',desc:'随时随地随手画',color:'#a29bfe',hero:'#6c5ce7',descs:'灵感来了就画。涂鸦板极简到只有笔和纸，没有复杂图层和工具栏，回归最原始的绘画快乐。' },
-  {id:'petcloud',name:'云宠',icon:'☁',cat:'生活',dev:'椿岛',rating:4.9,dl:'6.3万',desc:'养一朵会说话的云',color:'#dfe6e9',hero:'#b2bec3',descs:'养宠物不如养云。云宠会随你的心情变化形状，和你聊天，提醒你喝水、休息，偶尔还会闹小脾气。' },
-  {id:'echowall',name:'回声墙',icon:'⟐',cat:'社交',dev:'回声',rating:4.2,dl:'1.2万',desc:'匿名说出心里话',color:'#636e72',hero:'#2d3436',descs:'有些话，对熟人说不出，对陌生人刚好。回声墙是椿岛的匿名树洞，说出你的秘密，听听世界的回声。' },
 ];
-const STORE_CATS = ['全部','社交','音乐','教育','生活','工具','阅读','摄影'];
+const STORE_CATS = ['全部','社交','音乐','教育','生活','工具','阅读'];
 function _sIcon(app){ return '<div class="store-card-icon" style="background:'+app.color+'">'+app.icon+'</div>'; }
 function _sMiniIcon(app){ return '<div class="store-mini-icon" style="background:'+app.color+'">'+app.icon+'</div>'; }
 function _sStars(r){ var s=''; for(var i=1;i<=5;i++) s+= i<=Math.floor(r) ? '★' : (i-0.5<=r?'☆':'☆'); return s+' '+r; }
@@ -8059,8 +8437,7 @@ const CSS_REF_DATA = [
     ['.app-icon-wrap.drag-mode','排序模式（图标抖动动画）'],
     ['.app-label','App图标下方文字标签'],
     ['.dock','底部Dock栏'],
-    ['.splash-logo','开屏「椿島です」文字'],
-    ['.splash-progress, .splash-fill','开屏进度条'],
+    
     ['.app-statusbar','App内顶部状态栏'],
     ['.app-close-btn','App关闭按钮（×）'],
   ]},
@@ -8085,8 +8462,17 @@ const CSS_REF_DATA = [
   ]},
   {group:'与你相遇 · 聊天', items:[
     ['.chat-item','聊天列表每一行'],
+    ['.chat-item.pinned','置顶聊天的列表行'],
     ['.chat-avatar','聊天列表头像'],
+    ['.chat-avatar-online','聊天列表在线状态圆点'],
+    ['.chat-block-badge','「已拉黑」红色标签'],
+    ['.chat-mute-icon','消息免打扰图标'],
+    ['.chat-nickname-tag','备注名括号提示'],
     ['.chat-name, .chat-preview','聊天列表昵称/预览文字'],
+    ['.chat-meta','聊天列表右侧时间/未读区域'],
+    ['.chat-time','聊天列表时间文字'],
+    ['.chat-unread','聊天列表未读红点'],
+    ['.pin-badge','聊天列表「置顶」标签'],
     ['.msg-bub','消息气泡（通用）'],
     ['.msg-row.mine .msg-bub','我方消息气泡'],
     ['.msg-row.theirs .msg-bub','对方消息气泡'],
@@ -8098,8 +8484,27 @@ const CSS_REF_DATA = [
     ['.chat-topbar-more','顶栏三点按钮'],
     ['.chat-input-bar','聊天底部输入栏'],
     ['.chat-textarea','聊天输入框本体'],
+    ['.chat-plus-btn','聊天底部+号按钮'],
+    ['.chat-plus-panel','聊天底部+号展开面板'],
+    ['.chat-plus-icon','展开面板图标'],
     ['.enc-tabbar','底部四个Tab栏（消息/角色/朋友圈/我的）'],
     ['.char-card','角色横条（角色页，圆形头像列表）'],
+  ]},
+  {group:'聊天设置详情页', items:[
+    ['#chatmenu-modal','对话设置弹窗'],
+    ['#chatmenu-body','对话设置弹窗内容区'],
+    ['.sec-label','设置分区标签（如"基本信息""通知"）'],
+    ['.s-toggle','开关滑块'],
+    ['.s-toggle.on','滑块开启状态'],
+    ['.danger-btn','红色危险按钮（解除连结）'],
+    ['.chatbg-gallery','聊天背景缩略图网格'],
+    ['.chatbg-thumb','背景缩略图'],
+    ['.chatbg-thumb.selected','选中的背景缩略图'],
+    ['.chatbg-thumb.reset','还原默认背景按钮'],
+    ['.fontsize-slider','字体大小调整行'],
+    ['.chat-search-input','聊天记录搜索输入框'],
+    ['.chat-search-result','聊天记录搜索结果区'],
+    ['.chat-search-item','聊天记录搜索结果项'],
   ]},
   {group:'朋友圈', items:[
     ['.moments-toolbar','「刷新动态」「角色设置」工具条'],
@@ -8349,7 +8754,7 @@ const CSS_REF_DATA = [
 // ══════════ CSS SELECTOR MODAL ══════════
 function openCssSelectorModal(){
   const body = document.getElementById('css-selector-body');
-  body.innerHTML = '<div style="font-size:12px;color:var(--ink4);margin-bottom:16px;line-height:1.6">以下是界面中可用于自定义 CSS 的定位符（class / id）。点击右侧按钮可复制选择器，粘贴到 CSS 编辑框中即可书写样式规则，例如：<br><span style="font-family:monospace">.msg-bub { border-radius: 4px; }</span></div>'
+  body.innerHTML = '<div style="font-size:12px;color:var(--ink4);margin-bottom:16px;line-height:1.6">以下是界面中可用于自定义 CSS 的定位符（class / id）。点击右侧按钮可复制选择器，粘贴到 CSS 编辑框中即可书写样式规则。<br><span style="font-family:monospace;color:var(--ink3)">.msg-bub { border-radius: 4px; }</span><br><br><span style="color:var(--ink3);background:var(--smoke);padding:2px 8px;border-radius:4px">开屏「椿島です」文字不可修改，这是小手机的核心标识。</span></div>'
     + CSS_REF_DATA.map(g=>`
       <div class="css-ref-group">
         <div class="css-ref-group-title">${escHtml(g.group)}</div>
@@ -8407,12 +8812,16 @@ function renderChatList(filter){
     el.innerHTML = '<div style="padding:40px;text-align:center;color:#aaa;font-size:14px">没有找到对话</div>';
     return;
   }
-  // sort: system assistant pinned first, then groups/singles by nothing special (insertion order)
+  // sort: pinned first, then system assistant, then others by insertion order
   combined.sort((a,b)=>{
+    const aPinned = a.type==='single' && a.contact?.pinned;
+    const bPinned = b.type==='single' && b.contact?.pinned;
+    if(aPinned && !bPinned) return -1;
+    if(!aPinned && bPinned) return 1;
     const aSys = a.type==='single' && a.char.isSystem;
     const bSys = b.type==='single' && b.char.isSystem;
-    if(aSys) return -1;
-    if(bSys) return 1;
+    if(aSys && !bSys) return -1;
+    if(!aSys && bSys) return 1;
     return 0;
   });
   el.innerHTML = combined.map(item=>{
@@ -8425,7 +8834,7 @@ function renderChatList(filter){
       }).join('');
       const lastMsg = g.msgs.slice(-1)[0];
       const lastSpeaker = lastMsg && !lastMsg.mine ? findCharacter(lastMsg.speakerId)?.name : null;
-      const preview = lastMsg ? ((lastMsg.mine?'你: ':(lastSpeaker?lastSpeaker+': ':''))+lastMsg.text) : '点击开始群聊';
+      const preview = lastMsg ? ((lastMsg.mine?'你: ':(lastSpeaker?lastSpeaker+': ':''))+(lastMsg._displayText||lastMsg.text)) : '点击开始群聊';
       const t = lastMsg ? lastMsg.time : '—';
       return `<div class="chat-item" onclick="openGroupChat('${g.id}')">
         <div class="group-avatar-stack">${stackHtml}</div>
@@ -8436,13 +8845,21 @@ function renderChatList(filter){
     const {contact,char} = item;
     const h = chatHistory.find(h2=>h2.id===char.id) || {};
     const lastMsg = (h.msgs||[]).slice(-1)[0];
-    const preview = lastMsg ? ((lastMsg.mine?'你: ':'')+lastMsg.text) : '点击开始对话';
+    const preview = lastMsg ? ((lastMsg.mine?'你: ':'')+(lastMsg._displayText||lastMsg.text)) : '点击开始对话';
     const t = lastMsg ? lastMsg.time : '—';
     const avatarHtml = char.avatar ? '<img src="'+char.avatar+'">' : escHtml(char.avatarLetter || char.name[0] || '?');
-    return `<div class="chat-item" onclick="openChat('${char.id}')">
-      <div class="chat-avatar" style="${char.avatar?'':'background:'+(char.avatarColor||'#1a1a1a')}">${avatarHtml}</div>
-      <div class="chat-info"><div class="chat-name">${escHtml(char.name)}${char.isSystem?'<span class="assistant-badge">系统</span>':''}</div><div class="chat-preview">${escHtml(preview)}</div></div>
-      <div class="chat-meta"><div class="chat-time">${t}</div>${h.unread?'<div class="chat-unread">new</div>':(char.isSystem?'<div class="pin-badge">置顶</div>':'')}</div>
+    const status = getCharStatus(char.id);
+    const blockState = isBlocked(char.id);
+    const statusDot = !char.isSystem && !blockState ? '<span class="chat-avatar-online" style="background:'+getCharStatusColor(status.status)+'"></span>' : '';
+    const blockBadge = blockState === 'user_blocked' ? '<span class="chat-block-badge">已拉黑</span>' : '';
+    const displayName = (contact?.nickname || char.name);
+    const pinnedClass = contact?.pinned ? ' pinned' : '';
+    const muteIcon = contact?.muted ? '<span class="chat-mute-icon">&#x1F507;</span>' : '';
+    const nicknameTag = contact?.nickname ? '<span class="chat-nickname-tag">('+escHtml(char.name)+')</span>' : '';
+    return `<div class="chat-item${pinnedClass}" onclick="openChat('${char.id}')">
+      <div class="chat-avatar" style="${char.avatar?'':'background:'+(char.avatarColor||'#1a1a1a')}">${avatarHtml}${statusDot}</div>
+      <div class="chat-info"><div class="chat-name">${escHtml(displayName)}${char.isSystem?'<span class="assistant-badge">系统</span>':''}${blockBadge}${muteIcon}${nicknameTag}</div><div class="chat-preview">${blockState ? '— 无法聊天 —' : escHtml(preview)}</div></div>
+      <div class="chat-meta"><div class="chat-time">${t}</div>${h.unread?'<div class="chat-unread">new</div>':(contact?.pinned||char.isSystem?'<div class="pin-badge">置顶</div>':'')}</div>
     </div>`;
   }).join('');
 }
@@ -8460,11 +8877,17 @@ function renderCharGrid(){
   el.innerHTML = myCharacters.map(c=>{
     const imgHtml = c.avatar ? '<img class="char-card-img" src="'+c.avatar+'" alt="">' : '<div class="char-card-img-fallback">'+escHtml(c.name[0]||'?')+'</div>';
     const has = contacts.find(co=>co.id===c.id);
+    const status = getCharStatus(c.id);
+    const statusLabel = getCharStatusLabel(status.status);
     return `<div class="char-card" onclick="openCharModal('${c.id}')">
       ${imgHtml}
       <div class="char-card-info">
         <div class="char-card-name">${escHtml(c.name)}</div>
         <div class="char-card-desc">${escHtml(c.desc||'')}</div>
+        <div class="char-card-status">
+          <span class="char-card-status-dot ${status.status === 'online' ? 'online' : status.status === 'away' ? 'away' : 'offline'}"></span>
+          ${statusLabel}${status.postCount ? ' · '+status.postCount+'条动态' : ''}
+        </div>
         <span class="char-card-tag">${escHtml(c.tag||'未分类')}</span>
       </div>
     </div>`;
@@ -9256,16 +9679,39 @@ function updateStats(){
 function openChat(id){
   const c = findCharacter(id);
   if(!c) return;
+  
+  // Check block state
+  const blockState = isBlocked(c.id);
+  if(blockState === 'user_blocked'){
+    showToast(c.name+'已被你拉黑，请先解除拉黑');
+    return;
+  }
+  if(blockState === 'blocked_by_char'){
+    // Show blocked dialog with options
+    showBlockedDialog(c);
+    return;
+  }
+  
   currentChar = c;
   currentGroupId = null;
-  document.getElementById('cv-name').textContent = c.name + (c.isSystem ? ' · 系统助手' : '');
-  document.getElementById('cv-status').textContent = c.isSystem ? '常驻在线' : '在线';
+  document.getElementById('cv-name').textContent = c.name + (c.isSystem ? ' · 精灵助手' : '');
+  const status = getCharStatus(c.id);
+  document.getElementById('cv-status').textContent = c.isSystem ? '常驻在线' : getCharStatusLabel(status.status);
+  document.getElementById('cv-status').style.color = c.isSystem ? '#4caf50' : getCharStatusColor(status.status);
+  if(!c.isSystem) updateCharStatus(c.id, 'online');
+  // Show/hide call button
+  const callBtn = document.getElementById('chat-call-btn');
+  if(callBtn) callBtn.style.display = c.isSystem ? 'none' : '';
   let h = chatHistory.find(h2=>h2.id===id);
   if(!h){ h = {id, msgs:[], unread:false}; chatHistory.push(h); }
   h.unread = false;
   persist();
   renderMsgs(h.msgs);
   document.getElementById('chat-view').classList.add('open');
+  // Apply chat background & font size
+  const contact = contacts.find(co=>co.id===id);
+  applyChatBgToView(contact?.chatBg || '');
+  applyChatFontSize(contact?.fontSize || 'default');
   updateStats(); renderChatList();
 }
 function closeChat(){
@@ -9274,6 +9720,77 @@ function closeChat(){
   currentGroupId = null;
   document.getElementById('chat-view').classList.remove('open');
   renderChatList();
+}
+
+// ══════════ BLOCKED DIALOG ══════════
+function showBlockedDialog(c){
+  const dialog = document.getElementById('blocked-dialog');
+  document.getElementById('blocked-dialog-title').textContent = c.name + ' 暂时无法联系';
+  const remaining = blockedByChars[c.id] ? Math.ceil((blockedByChars[c.id].until - Date.now()) / 3600000) : 0;
+  document.getElementById('blocked-dialog-body').innerHTML = `
+    <div style="font-size:48px;margin-bottom:16px">🚫</div>
+    <div style="font-size:15px;color:var(--ink);margin-bottom:8px;line-height:1.8">
+      <b>${escHtml(c.name)}</b> 暂时不想理你
+    </div>
+    <div style="font-size:12px;color:var(--ink4);line-height:1.8">
+      预计 ${remaining} 小时后可能会消气<br>
+      你可以换个身份（小号）再来找他
+    </div>
+  `;
+  document.getElementById('blocked-dialog-btn').textContent = '换个身份试试';
+  document.getElementById('blocked-dialog-btn').onclick = function(){
+    closeBlockedDialog();
+    openIdentitySwitchModal();
+  };
+  dialog.classList.add('open');
+}
+
+function closeBlockedDialog(){
+  document.getElementById('blocked-dialog').classList.remove('open');
+}
+
+// ══════════ IDENTITY SWITCH (小号切换) ══════════
+function openIdentitySwitchModal(){
+  const body = document.getElementById('identity-switch-body');
+  const curId = getActiveIdentityId();
+  body.innerHTML = identities.map(i=>{
+    const isCurrent = i.id === curId;
+    return `<div class="idsw-option ${isCurrent?'current':''}" onclick="switchIdentity('${i.id}');closeIdentitySwitchModal();">
+      <div class="idsw-option-avatar" style="${i.avatar?'':'background:'+(i.avatarColor||'#1a1a1a')}">${i.avatar?`<img src="${i.avatar}">`:escHtml(i.name[0]||'?')}</div>
+      <div class="idsw-option-info">
+        <div class="idsw-option-name">${escHtml(i.name)}</div>
+        <div class="idsw-option-tag">${escHtml(i.bio||'')}</div>
+      </div>
+      ${isCurrent?'<span class="idsw-current-badge">当前</span>':''}
+    </div>`;
+  }).join('');
+  document.getElementById('identity-switch-modal').classList.add('open');
+}
+
+function closeIdentitySwitchModal(){
+  document.getElementById('identity-switch-modal').classList.remove('open');
+}
+
+function createNewIdentity(){
+  document.getElementById('newid-name').value = '';
+  document.getElementById('newid-bio').value = '';
+  document.getElementById('create-identity-modal').classList.add('open');
+}
+
+function closeCreateIdentityModal(){
+  document.getElementById('create-identity-modal').classList.remove('open');
+}
+
+function confirmCreateIdentity(){
+  const name = document.getElementById('newid-name').value.trim();
+  const bio = document.getElementById('newid-bio').value.trim();
+  if(!name){ showToast('请输入身份名称'); return; }
+  const id = 'id_'+Date.now();
+  identities.push({id, name, bio, avatar:'', avatarColor:'', tag:'小号'});
+  localStorage.setItem('tsb_identities', JSON.stringify(identities));
+  closeCreateIdentityModal();
+  closeIdentitySwitchModal();
+  switchIdentity(id);
 }
 
 // ══════════ CHAT + MENU ══════════
@@ -9681,6 +10198,420 @@ function openMiniAppFromChat(){
   }, 350);
 }
 
+// ══════════ VOICE CALL SYSTEM ══════════
+let _callActive = false;
+let _callMuted = false;
+let _callStartTime = 0;
+let _callTimerInterval = null;
+let _callTranscript = [];        // [{who:'我'|'对方', text}]
+let _callRecording = false;
+let _callRecorder = null;
+let _callStream = null;
+let _callChunks = [];
+let _callRecognition = null;
+let _callCurrentTranscript = '';
+let _callChar = null;           // who we're calling
+let _callReplyQueue = [];       // queued AI replies to speak
+
+// ══ Call Records Storage ══
+let callRecords = JSON.parse(localStorage.getItem('tsb_call_records') || '[]');
+
+function saveCallRecords(){
+  localStorage.setItem('tsb_call_records', JSON.stringify(callRecords));
+}
+
+// ══ Start Voice Call ══
+function startVoiceCall(){
+  if(!currentChar || currentChar.isSystem) return;
+  _callChar = currentChar;
+  updateCharStatus(currentChar.id, 'online');
+  _callTranscript = [];
+  _callCurrentTranscript = '';
+  _callReplyQueue = [];
+  _callMuted = false;
+  
+  const overlay = document.getElementById('voice-call-overlay');
+  document.getElementById('call-name').textContent = currentChar.name;
+  document.getElementById('call-status').textContent = '正在连接…';
+  document.getElementById('call-status').className = 'call-status';
+  document.getElementById('call-timer').textContent = '00:00';
+  document.getElementById('call-transcript').textContent = '';
+  document.getElementById('call-actions').style.display = '';
+  document.getElementById('call-end-summary').classList.remove('show');
+  document.getElementById('call-btn-mute').classList.remove('muted');
+  document.getElementById('call-waveform').classList.remove('active');
+  
+  // Set avatar
+  const av = document.getElementById('call-avatar');
+  av.classList.remove('speaking');
+  if(currentChar.avatar){
+    av.innerHTML = `<img src="${currentChar.avatar}" alt="${currentChar.name}">`;
+  } else {
+    av.textContent = currentChar.name[0];
+  }
+  
+  overlay.classList.add('active');
+  _callActive = true;
+  
+  // Generate particles
+  initCallParticles();
+  
+  // Simulate connection delay
+  setTimeout(()=>{
+    if(!_callActive) return;
+    document.getElementById('call-status').textContent = '通话中';
+    document.getElementById('call-status').classList.add('connected');
+    _callStartTime = Date.now();
+    _callTimerInterval = setInterval(updateCallTimer, 1000);
+    // Auto-reply: character says hello
+    speakCallReply(currentChar.name + '接听了电话，等待你的声音…');
+  }, 1500);
+}
+
+function initCallParticles(){
+  const container = document.getElementById('call-bg-particles');
+  let html = '';
+  for(let i = 0; i < 30; i++){
+    const left = Math.random() * 100;
+    const delay = Math.random() * 4;
+    const duration = 3 + Math.random() * 4;
+    const size = 1 + Math.random() * 2;
+    html += `<div class="call-bg-particle" style="left:${left}%;animation-delay:${delay}s;animation-duration:${duration}s;width:${size}px;height:${size}px;"></div>`;
+  }
+  container.innerHTML = html;
+}
+
+function updateCallTimer(){
+  if(!_callStartTime) return;
+  const elapsed = Math.floor((Date.now() - _callStartTime) / 1000);
+  const mins = Math.floor(elapsed / 60).toString().padStart(2,'0');
+  const secs = (elapsed % 60).toString().padStart(2,'0');
+  document.getElementById('call-timer').textContent = mins + ':' + secs;
+}
+
+// ══ Hold-to-talk recording ══
+function startCallRecord(){
+  if(!_callActive || _callRecording) return;
+  _callRecording = true;
+  _callCurrentTranscript = '';
+  
+  const btn = document.getElementById('call-hold-btn');
+  btn.classList.add('recording');
+  btn.textContent = '松开 发送';
+  document.getElementById('call-waveform').classList.add('active');
+  
+  (async ()=>{
+    try{
+      _callStream = await navigator.mediaDevices.getUserMedia({audio: true});
+      _callChunks = [];
+      _callRecorder = new MediaRecorder(_callStream, {mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm'});
+      _callRecorder.ondataavailable = e => { if(e.data.size > 0) _callChunks.push(e.data); };
+      _callRecorder.start();
+      
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(SpeechRecognition){
+        _callRecognition = new SpeechRecognition();
+        _callRecognition.lang = 'zh-CN';
+        _callRecognition.continuous = true;
+        _callRecognition.interimResults = true;
+        _callRecognition.onresult = function(event){
+          let interim = '', final = '';
+          for(let i = event.resultIndex; i < event.results.length; i++){
+            const r = event.results[i];
+            if(r.isFinal) final += r[0].transcript;
+            else interim += r[0].transcript;
+          }
+          if(final) _callCurrentTranscript += final;
+          const display = (_callCurrentTranscript + interim).trim();
+          document.getElementById('call-transcript').textContent = display.slice(0, 80) + (display.length > 80 ? '…' : '');
+        };
+        _callRecognition.start();
+      }
+    }catch(e){
+      console.log('Call mic error:', e);
+      _callRecording = false;
+    }
+  })();
+}
+
+async function stopCallRecord(){
+  if(!_callRecording) return;
+  _callRecording = false;
+  
+  const btn = document.getElementById('call-hold-btn');
+  btn.classList.remove('recording');
+  btn.textContent = '按住 说话';
+  document.getElementById('call-waveform').classList.remove('active');
+  
+  if(_callRecognition){
+    try{ _callRecognition.stop(); }catch(e){}
+    _callRecognition = null;
+  }
+  
+  if(!_callRecorder || _callRecorder.state !== 'recording'){
+    // Cleanup
+    if(_callStream){ _callStream.getTracks().forEach(t=>t.stop()); _callStream = null; }
+    _callRecorder = null;
+    return;
+  }
+  
+  _callRecorder.stop();
+  await new Promise(resolve => { _callRecorder.onstop = resolve; });
+  
+  if(_callStream){ _callStream.getTracks().forEach(t=>t.stop()); _callStream = null; }
+  
+  const text = _callCurrentTranscript.trim();
+  _callRecorder = null;
+  
+  if(!text) return;
+  
+  // Add to transcript
+  _callTranscript.push({who:'我', text});
+  _callCurrentTranscript = '';
+  document.getElementById('call-transcript').textContent = '';
+  updateCallTranscript();
+  
+  // Get AI reply
+  await getCallReply(text);
+}
+
+function updateCallTranscript(){
+  const el = document.getElementById('call-transcript');
+  if(_callTranscript.length === 0){
+    el.textContent = '';
+    return;
+  }
+  const last = _callTranscript[_callTranscript.length - 1];
+  el.textContent = (last.who === '我' ? '我：' : _callChar.name + '：') + last.text.slice(0, 60) + (last.text.length > 60 ? '…' : '');
+}
+
+// ══ AI replies during call ══
+async function getCallReply(userText){
+  if(!_callChar || !_callActive) return;
+  
+  document.getElementById('call-status').textContent = '对方正在说话…';
+  document.getElementById('call-status').className = 'call-status speaking';
+  document.getElementById('call-avatar').classList.add('speaking');
+  document.getElementById('call-waveform').classList.add('active');
+  
+  try{
+    const preset = getActivePreset();
+    if(!preset) throw new Error('no preset');
+    
+    const historyForAI = _callTranscript.map(t=>{
+      return t.who === '我' ? '玩家：'+t.text : _callChar.name+'：'+t.text;
+    }).join('\n');
+    
+    const systemPrompt = `你正在与玩家进行语音通话。你是${_callChar.name}。${_callChar.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n当前对话记录：\n${historyForAI}\n\n请以${_callChar.name}的口吻，对玩家刚才说的"${userText}"做出简短自然的语音回复（30-80字），就像在打电话一样。只输出回复内容，不要加引号或前缀。`;
+    
+    const reply = await callAIRaw(preset, systemPrompt, [{role:'user', content: userText}], 100);
+    
+    if(!reply || !reply.trim() || !_callActive) {
+      document.getElementById('call-status').textContent = '通话中';
+      document.getElementById('call-status').className = 'call-status connected';
+      document.getElementById('call-avatar').classList.remove('speaking');
+      document.getElementById('call-waveform').classList.remove('active');
+      return;
+    }
+    
+    const replyText = reply.trim();
+    _callTranscript.push({who:'对方', text: replyText});
+    updateCallTranscript();
+    
+    // Try TTS
+    const voiceConfig = getVoicePresetForChar(_callChar.id);
+    if(voiceConfig){
+      try{
+        const audioUrl = await synthesizeSpeech(voiceConfig, replyText, _callChar.voiceLang);
+        const audio = new Audio(audioUrl);
+        audio.onended = ()=>{
+          if(_callActive){
+            document.getElementById('call-status').textContent = '通话中';
+            document.getElementById('call-status').className = 'call-status connected';
+            document.getElementById('call-avatar').classList.remove('speaking');
+            document.getElementById('call-waveform').classList.remove('active');
+          }
+        };
+        audio.play();
+      }catch(ttsErr){
+        console.log('TTS failed during call:', ttsErr);
+        // fallback: show text for 2 seconds
+        setTimeout(()=>{
+          if(_callActive){
+            document.getElementById('call-status').textContent = '通话中';
+            document.getElementById('call-status').className = 'call-status connected';
+            document.getElementById('call-avatar').classList.remove('speaking');
+            document.getElementById('call-waveform').classList.remove('active');
+          }
+        }, 2000);
+      }
+    } else {
+      // No TTS, just show the text for a moment
+      setTimeout(()=>{
+        if(_callActive){
+          document.getElementById('call-status').textContent = '通话中';
+          document.getElementById('call-status').className = 'call-status connected';
+          document.getElementById('call-avatar').classList.remove('speaking');
+          document.getElementById('call-waveform').classList.remove('active');
+        }
+      }, 2000);
+    }
+  }catch(e){
+    console.log('Call AI reply error:', e);
+    if(_callActive){
+      document.getElementById('call-status').textContent = '通话中';
+      document.getElementById('call-status').className = 'call-status connected';
+      document.getElementById('call-avatar').classList.remove('speaking');
+      document.getElementById('call-waveform').classList.remove('active');
+    }
+  }
+}
+
+function speakCallReply(text){
+  // Just update the status for now
+  _callTranscript.push({who:'对方', text: text});
+  updateCallTranscript();
+}
+
+// ══ Mute toggle ══
+function toggleCallMute(){
+  _callMuted = !_callMuted;
+  const btn = document.getElementById('call-btn-mute');
+  btn.classList.toggle('muted', _callMuted);
+  if(_callStream){
+    _callStream.getAudioTracks().forEach(t => t.enabled = !_callMuted);
+  }
+}
+
+// ══ End call ══
+function endVoiceCall(){
+  _callActive = false;
+  if(_callTimerInterval){ clearInterval(_callTimerInterval); _callTimerInterval = null; }
+  
+  // Cleanup recording
+  if(_callRecorder && _callRecorder.state === 'recording'){
+    _callRecorder.stop();
+  }
+  if(_callStream){ _callStream.getTracks().forEach(t=>t.stop()); _callStream = null; }
+  if(_callRecognition){ try{ _callRecognition.stop(); }catch(e){} _callRecognition = null; }
+  _callRecording = false;
+  
+  const elapsed = Math.floor((_callStartTime ? Date.now() - _callStartTime : 0) / 1000);
+  const mins = Math.floor(elapsed / 60).toString().padStart(2,'0');
+  const secs = (elapsed % 60).toString().padStart(2,'0');
+  const durationStr = mins + ':' + secs;
+  
+  // Save call record
+  if(_callChar && _callTranscript.length > 0){
+    const record = {
+      id: 'cr_'+Date.now(),
+      charId: _callChar.id,
+      charName: _callChar.name,
+      charAvatar: _callChar.avatar || '',
+      timestamp: Date.now(),
+      time: getTime(),
+      duration: elapsed,
+      durationStr: durationStr,
+      transcript: [..._callTranscript]
+    };
+    callRecords.unshift(record);
+    saveCallRecords();
+  }
+  
+  // Show end summary
+  document.getElementById('call-actions').style.display = 'none';
+  document.getElementById('call-waveform').classList.remove('active');
+  document.getElementById('call-avatar').classList.remove('speaking');
+  document.getElementById('call-status').textContent = '';
+  document.getElementById('call-end-duration').textContent = durationStr;
+  document.getElementById('call-end-summary').classList.add('show');
+}
+
+function closeCallEndSummary(){
+  document.getElementById('voice-call-overlay').classList.remove('active');
+  _callChar = null;
+  _callTranscript = [];
+  _callStartTime = 0;
+}
+
+// ══════════ CALL RECORDS APP LOGIC ══════════
+function renderCallRecords(){
+  const body = document.getElementById('cr-body');
+  if(!body) return;
+  
+  if(callRecords.length === 0){
+    body.innerHTML = '<div class="cr-empty">还没有通话记录<br>去和角色打个语音电话吧</div>';
+    return;
+  }
+  
+  let html = '';
+  callRecords.forEach(record => {
+    const preview = record.transcript.slice(0, 3).map(t => 
+      (t.who === '我' ? '我' : record.charName) + '：' + t.text.slice(0, 30) + (t.text.length > 30 ? '…' : '')
+    ).join('<br>');
+    
+    html += `<div class="cr-card" onclick="openCRDetail('${record.id}')">
+      <div class="cr-card-header">
+        <div class="cr-avatar">${record.charAvatar ? `<img src="${record.charAvatar}" alt="${record.charName}">` : record.charName[0]}</div>
+        <div class="cr-info">
+          <div class="cr-name">与 ${escHtml(record.charName)} 的通话</div>
+          <div class="cr-time">${smartTimeLabel(record.time, record.timestamp)}</div>
+        </div>
+        <div class="cr-duration">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          ${record.durationStr}
+        </div>
+      </div>
+      <div class="cr-preview">${preview}</div>
+    </div>`;
+  });
+  
+  body.innerHTML = html;
+}
+
+function openCRDetail(recordId){
+  const record = callRecords.find(r => r.id === recordId);
+  if(!record) return;
+  
+  const detail = document.getElementById('cr-detail');
+  const detailBody = document.getElementById('cr-detail-body');
+  
+  const date = new Date(record.timestamp);
+  const dateStr = date.getFullYear()+'年'+(date.getMonth()+1)+'月'+date.getDate()+'日 '+date.getHours().toString().padStart(2,'0')+':'+date.getMinutes().toString().padStart(2,'0');
+  
+  let chatHtml = '';
+  record.transcript.forEach(t => {
+    chatHtml += `<div class="cr-detail-line"><span class="who">${t.who === '我' ? '我' : record.charName}：</span>${escHtml(t.text)}</div>`;
+  });
+  
+  detailBody.innerHTML = `
+    <div class="cr-detail-header">
+      <div class="cr-detail-avatar">${record.charAvatar ? `<img src="${record.charAvatar}" alt="${record.charName}">` : record.charName[0]}</div>
+      <div class="cr-detail-name">与 ${escHtml(record.charName)} 的通话</div>
+      <div class="cr-detail-meta">${dateStr}<br>通话时长 ${record.durationStr} · 共 ${record.transcript.length} 条对话</div>
+    </div>
+    <div class="cr-detail-chat">${chatHtml}</div>
+    <div class="cr-detail-actions">
+      <button class="cr-detail-btn" onclick="deleteCR('${record.id}')">删除记录</button>
+      <button class="cr-detail-btn" onclick="if(_callChar && _callChar.id === '${record.charId}'){ closeCRDetail(); openChat(_callChar.id); } else { const c = findCharacter('${record.charId}'); if(c){ closeCRDetail(); openChat(c.id); } }">去聊天</button>
+    </div>
+  `;
+  
+  detail.classList.add('open');
+}
+
+function closeCRDetail(){
+  document.getElementById('cr-detail').classList.remove('open');
+}
+
+function deleteCR(recordId){
+  if(!confirm('确定要删除这条通话记录吗？')) return;
+  callRecords = callRecords.filter(r => r.id !== recordId);
+  saveCallRecords();
+  closeCRDetail();
+  renderCallRecords();
+  showToast('通话记录已删除');
+}
 
 // ══════════ LIGHTWEIGHT MARKDOWN (bold / code / quote / line breaks) ══════════
 function renderMarkdownLite(text){
@@ -10324,6 +11255,8 @@ async function requestAIReply(h){
     renderMsgs(h.msgs);
   }
   _chatBusy = false;
+  // Tiny chance character might block the user after replying
+  if(currentChar && !currentChar.isSystem) maybeCharBlock(currentChar.id);
 }
 
 // ══════════ MESSAGE TRANSLATION VIEW (长按查看文字与翻译) ══════════
@@ -10598,13 +11531,57 @@ function openChatMenu(){
     const contact = contacts.find(c=>c.id===currentChar.id);
     const curMode = contact?.chatMode || 'mixed';
     const voiceOn = !!contact?.voiceEnabled;
-    actions += `<div class="s-card" style="margin-bottom:16px">
+    const pinned = !!contact?.pinned;
+    const muted = !!contact?.muted;
+    const nickname = contact?.nickname || '';
+    const fontSize = contact?.fontSize || 'default';
+    const chatBg = contact?.chatBg || '';
+    const FONT_SIZES = {default:'默认', medium:'中号', large:'大号', xlarge:'特大'};
+    // ── 基本信息区 ──
+    actions += `<div class="sec-label">基本信息</div>
+    <div class="s-card" style="margin-bottom:16px">
       <div class="s-row" onclick="closeChatMenu();openEditCharModal('${currentChar.id}')">
         <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
         <div class="s-text"><div class="s-title">编辑角色设定</div></div><div class="s-arrow">›</div>
       </div>
-    </div>
-    <div class="sec-label">对话模式</div>
+      <div class="s-row" onclick="openSetNicknameModal()">
+        <div class="s-icon slate"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="s-text"><div class="s-title">设置备注名</div><div class="s-sub">${nickname ? '当前备注：'+escHtml(nickname) : '未设置'}</div></div>
+        <div class="s-arrow">›</div>
+      </div>
+    </div>`;
+    // ── 个性化区 ──
+    actions += `<div class="sec-label">个性化</div>
+    <div class="s-card" style="margin-bottom:16px">
+      <div class="s-row" onclick="closeChatMenu();openChatBgModal()">
+        <div class="s-icon" style="background:linear-gradient(135deg,#667eea,#764ba2)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="s-text"><div class="s-title">聊天背景</div><div class="s-sub">${chatBg ? '已自定义背景' : '当前为默认背景'}</div></div>
+        <div class="s-arrow">›</div>
+      </div>
+      <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+        <div class="s-icon" style="background:#ff9800"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
+        <div class="s-text"><div class="s-title">字体大小</div><div class="s-sub">${FONT_SIZES[fontSize]||'默认'}</div></div>
+        <select class="field-inp" style="width:auto;font-size:12px;padding:5px 8px;margin-right:12px" onchange="setChatFontSize(this.value)">
+          ${Object.entries(FONT_SIZES).map(([k,v])=>`<option value="${k}" ${fontSize===k?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+    </div>`;
+    // ── 通知区 ──
+    actions += `<div class="sec-label">通知</div>
+    <div class="s-card" style="margin-bottom:16px">
+      <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+        <div class="s-icon" style="background:#4caf50"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="15 10 20 15 15 20"/><line x1="4" y1="4" x2="4" y2="20"/><line x1="20" y1="15" x2="4" y2="15"/></svg></div>
+        <div class="s-text"><div class="s-title">置顶聊天</div><div class="s-sub">${pinned ? '已置顶，在列表最上方显示' : '关闭后按时间排序'}</div></div>
+        <div class="s-toggle ${pinned?'on':''}" onclick="event.stopPropagation();togglePinChat()"></div>
+      </div>
+      <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+        <div class="s-icon" style="background:#ff9800"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+        <div class="s-text"><div class="s-title">消息免打扰</div><div class="s-sub">${muted ? '已开启，不再接收通知提醒' : '关闭后正常接收消息提醒'}</div></div>
+        <div class="s-toggle ${muted?'on':''}" onclick="event.stopPropagation();toggleMuteChat()"></div>
+      </div>
+    </div>`;
+    // ── 对话设置区 ──
+    actions += `<div class="sec-label">对话设置</div>
     <div class="s-card" style="margin-bottom:16px">
       ${Object.entries(CHAT_MODE_LABELS).map(([mode,label])=>`
         <div class="s-row" onclick="setChatMode('${mode}')">
@@ -10612,8 +11589,9 @@ function openChatMenu(){
           ${curMode===mode?'<span class="archive-card-tagactive">当前</span>':''}
         </div>
       `).join('')}
-    </div>
-    <div class="sec-label">语音消息</div>
+    </div>`;
+    // ── 语音消息 ──
+    actions += `<div class="sec-label">语音消息</div>
     <div class="s-card" style="margin-bottom:16px">
       <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
         <div class="s-icon rose"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
@@ -10638,7 +11616,7 @@ function openChatMenu(){
         <div style="display:flex;flex-wrap:wrap;gap:6px">
           ${Object.entries(VOICE_LANG_LABELS).map(([k,v])=>`<div class="voice-lang-chip ${(contact?.voiceLanguage||'auto')===k?'selected':''}" onclick="setCharVoiceLang('${currentChar.id}','${k}')">${v}</div>`).join('')}
         </div>
-        <div class="s-sub" style="margin-top:8px;font-size:10px;color:var(--ink4)">💡 如果语音模型不支持中文，可切换为日语/英语等。文字内容不受影响。</div>
+        <div class="s-sub" style="margin-top:8px;font-size:10px;color:var(--ink4)">如果语音模型不支持中文，可切换为日语/英语等。文字内容不受影响。</div>
       </div>` : ''}
     </div>`;
     // ── 思维链规避 ──
@@ -10688,7 +11666,7 @@ function openChatMenu(){
         <div class="s-toggle ${imageGenOn?'on':''}" id="menu-imagegen-toggle" onclick="event.stopPropagation();toggleImageGen()"></div>
       </div>
     </div>`;
-    // ── 切换身份 ──
+    // ── 对话身份 ──
     const curIdentity = identities.find(i=>i.id===(contact?.identityId)) || identities[0];
     actions += `<div class="sec-label">对话身份</div>
     <div class="s-card" style="margin-bottom:16px">
@@ -10699,13 +11677,29 @@ function openChatMenu(){
       </div>
     </div>`;
   }
-  actions += `<div class="s-card">
+  // ── 数据管理 ──
+  actions += `<div class="sec-label">数据管理</div>
+  <div class="s-card" style="margin-bottom:16px">
+    <div class="s-row" onclick="closeChatMenu();openChatSearchModal()">
+      <div class="s-icon slate"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div class="s-text"><div class="s-title">查找聊天记录</div><div class="s-sub">按关键词搜索历史消息</div></div>
+      <div class="s-arrow">›</div>
+    </div>
     <div class="s-row" onclick="clearChatHistory()">
-      <div class="s-icon slate"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></div>
+      <div class="s-icon" style="background:#e53935"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></div>
       <div class="s-text"><div class="s-title">清空聊天记录</div></div>
     </div>
   </div>`;
   if(!currentChar.isSystem){
+    const isBlocked_ = blockedChars[currentChar.id];
+    // ── 安全区 ──
+    actions += `<div class="sec-label">安全</div>
+    <div class="s-card" style="margin-bottom:16px">
+      <div class="s-row" onclick="${isBlocked_ ? 'unblockCharacter(\''+currentChar.id+'\');closeChatMenu();' : 'blockCharacter(\''+currentChar.id+'\');closeChatMenu();'}">
+        <div class="s-icon" style="background:${isBlocked_?'#4caf50':'#e53935'}"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+        <div class="s-text"><div class="s-title">${isBlocked_?'解除拉黑 '+escHtml(currentChar.name):'拉黑 '+escHtml(currentChar.name)}</div><div class="s-sub">${isBlocked_?'恢复与TA的聊天':'拉黑后将无法聊天，对方也不会收到通知'}</div></div>
+      </div>
+    </div>`;
     actions += `<button class="danger-btn" onclick="removeContactFromChat()">解除连结</button>`;
   }
   body.innerHTML = actions;
@@ -10818,6 +11812,148 @@ function removeContactFromChat(){
   closeChat();
   updateStats(); renderChatList();
   showToast('已解除连结');
+}
+
+// ══════════ NEW CHAT SETTINGS: PIN / MUTE / FONT / BG / SEARCH / NICKNAME ══════════
+function togglePinChat(){
+  if(!currentChar) return;
+  const contact = contacts.find(c=>c.id===currentChar.id);
+  if(!contact) return;
+  contact.pinned = !contact.pinned;
+  persist();
+  renderChatList();
+  openChatMenu();
+  showToast(contact.pinned ? '已置顶聊天' : '已取消置顶');
+}
+function toggleMuteChat(){
+  if(!currentChar) return;
+  const contact = contacts.find(c=>c.id===currentChar.id);
+  if(!contact) return;
+  contact.muted = !contact.muted;
+  persist();
+  openChatMenu();
+  showToast(contact.muted ? '已开启消息免打扰' : '已关闭消息免打扰');
+}
+function setChatFontSize(size){
+  if(!currentChar) return;
+  const contact = contacts.find(c=>c.id===currentChar.id);
+  if(!contact) return;
+  contact.fontSize = size;
+  persist();
+  applyChatFontSize(size);
+  openChatMenu();
+  showToast('字体大小已更新');
+}
+function applyChatFontSize(size){
+  const view = document.getElementById('chat-view');
+  if(!view) return;
+  const sizes = {default:'15px', medium:'17px', large:'19px', xlarge:'21px'};
+  view.style.setProperty('--chat-font-size', sizes[size]||'15px');
+}
+function openChatBgModal(){
+  const gallery = document.getElementById('chatbg-gallery');
+  const contact = contacts.find(c=>c.id===currentChar?.id);
+  const currentBg = contact?.chatBg || '';
+  const presets = [
+    'https://i.postimg.cc/4dDHD5q2/1000102681.gif',
+    'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23e8f5e9" width="100" height="100"/><circle cx="50" cy="50" r="30" fill="%23a5d6a7" opacity="0.5"/></svg>'),
+    'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23fce4ec" width="100" height="100"/><circle cx="50" cy="50" r="30" fill="%23f8bbd0" opacity="0.5"/></svg>'),
+    'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23e3f2fd" width="100" height="100"/><circle cx="50" cy="50" r="30" fill="%2390caf9" opacity="0.5"/></svg>'),
+    'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23fff3e0" width="100" height="100"/><circle cx="50" cy="50" r="30" fill="%23ffcc80" opacity="0.5"/></svg>'),
+  ];
+  gallery.innerHTML = '<div class="chatbg-thumb reset" onclick="setChatBg(\'\')">还原默认</div>' +
+    presets.map((bg,i)=>`<div class="chatbg-thumb${currentBg===bg?' selected':''}" style="background-image:url(${bg.replace(/"/g,'&quot;')})" onclick="setChatBg('${bg.replace(/'/g,"\\'")}')"></div>`).join('');
+  document.getElementById('chatbg-url').value = currentBg && !presets.includes(currentBg) ? currentBg : '';
+  document.getElementById('chatbg-modal').classList.add('open');
+}
+function closeChatBgModal(){ document.getElementById('chatbg-modal').classList.remove('open'); }
+function setChatBg(url){
+  document.getElementById('chatbg-url').value = url;
+  document.querySelectorAll('.chatbg-thumb').forEach(t=>t.classList.remove('selected'));
+  if(!url) document.querySelector('.chatbg-thumb.reset').classList.add('selected');
+}
+function applyChatBg(){
+  if(!currentChar) return;
+  const contact = contacts.find(c=>c.id===currentChar.id);
+  if(!contact) return;
+  const url = document.getElementById('chatbg-url').value.trim();
+  contact.chatBg = url;
+  persist();
+  closeChatBgModal();
+  applyChatBgToView(url);
+  openChatMenu();
+  showToast(url ? '聊天背景已更新' : '已恢复默认背景');
+}
+function applyChatBgToView(url){
+  const view = document.getElementById('chat-view');
+  if(!view){
+    setTimeout(()=>applyChatBgToView(url), 100);
+    return;
+  }
+  if(url){
+    view.style.backgroundImage = 'url('+url+')';
+    view.style.backgroundSize = 'cover';
+    view.style.backgroundPosition = 'center';
+  } else {
+    view.style.backgroundImage = '';
+    view.style.backgroundSize = '';
+    view.style.backgroundPosition = '';
+  }
+}
+function openChatSearchModal(){
+  if(!currentChar) return;
+  document.getElementById('chat-search-input').value = '';
+  document.getElementById('chat-search-result').innerHTML = '<div style="text-align:center;color:var(--ink4);padding:20px;font-size:13px">输入关键词开始搜索</div>';
+  document.getElementById('chat-search-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('chat-search-input').focus(), 300);
+}
+function closeChatSearchModal(){ document.getElementById('chat-search-modal').classList.remove('open'); }
+function performChatSearch(){
+  const q = (document.getElementById('chat-search-input').value||'').trim().toLowerCase();
+  const container = document.getElementById('chat-search-result');
+  if(!q || q.length < 1){
+    container.innerHTML = '<div style="text-align:center;color:var(--ink4);padding:20px;font-size:13px">输入关键词开始搜索</div>';
+    return;
+  }
+  const h = chatHistory.find(h2=>h2.id===currentChar?.id);
+  const msgs = h?.msgs || [];
+  const results = msgs.filter(m=>m.text && m.text.toLowerCase().includes(q));
+  if(results.length === 0){
+    container.innerHTML = '<div style="text-align:center;color:var(--ink4);padding:20px;font-size:13px">没有找到相关消息</div>';
+    return;
+  }
+  container.innerHTML = results.map((m,i)=>{
+    const speaker = m.mine ? '我' : (currentChar?.name||'对方');
+    return `<div class="chat-search-item" onclick="jumpToChatMsg(${i})">
+      <div class="search-time">${m.time} — ${speaker}</div>
+      <div>${escHtml(m.text.substring(0,120))}${m.text.length>120?'...':''}</div>
+    </div>`;
+  }).join('');
+}
+function jumpToChatMsg(idx){
+  closeChatSearchModal();
+  // scroll to the message position in chat view
+  const msgsEl = document.getElementById('chat-msgs');
+  if(!msgsEl) return;
+  const children = msgsEl.children;
+  if(idx < children.length){
+    children[idx].scrollIntoView({behavior:'smooth',block:'center'});
+    children[idx].style.background = 'rgba(255,235,59,0.3)';
+    setTimeout(()=>{ children[idx].style.background = ''; }, 2000);
+  }
+}
+function openSetNicknameModal(){
+  if(!currentChar) return;
+  const contact = contacts.find(c=>c.id===currentChar.id);
+  const nickname = contact?.nickname || '';
+  const val = prompt('为「'+currentChar.name+'」设置备注名：', nickname);
+  if(val === null) return; // cancelled
+  if(!contact) return;
+  contact.nickname = val.trim();
+  persist();
+  renderChatList();
+  openChatMenu();
+  showToast(val.trim() ? '备注名已更新' : '备注名已清除');
 }
 
 // ══════════ IDENTITY SWITCH (binding) IN CHAT ══════════
@@ -14553,11 +15689,18 @@ function renderTweetCard(post){
   const liked = post.likes.includes('user');
   const retweeted = post.retweets.includes('user');
   const timeLabel = smartTimeLabel('', post.timestamp);
+  // Character status indicator
+  let statusDot = '';
+  if(post.authorType==='char' && post.authorId){
+    const status = getCharStatus(post.authorId);
+    const color = getCharStatusColor(status.status);
+    statusDot = `<span class="tw-status-dot" style="background:${color};width:9px;height:9px;border-radius:50%;display:inline-block;margin-left:6px;border:1.5px solid white;box-shadow:0 0 4px ${color}" title="${getCharStatusLabel(status.status)}"></span>`;
+  }
   return `<div class="tw-post" onclick="openTwitterProfile('${post.authorType}','${post.authorId||''}')">
     <div class="tw-post-av" style="${author.avatar?'':'background:'+(author.avatarColor||'#3d3d3d')}" onclick="event.stopPropagation();openTwitterProfile('${post.authorType}','${post.authorId||''}')">${avHtml}</div>
     <div class="tw-post-body">
       <div class="tw-post-head">
-        <span class="tw-post-name">${escHtml(author.name)}</span>
+        <span class="tw-post-name">${escHtml(author.name)}${statusDot}</span>
         <span class="tw-post-handle">${escHtml(author.handle)}</span>
         <span class="tw-post-dot">·</span>
         <span class="tw-post-time">${timeLabel}</span>
@@ -14759,6 +15902,7 @@ async function triggerCharacterTweet(charId){
       timestamp:Date.now(), likes:[], retweets:[], replies:[]
     });
     localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
+    updateCharStatus(char.id, 'posted');
     renderTwitterTimeline();
     showToast(char.name+' 发了一条新推文');
   }catch(e){
@@ -14783,6 +15927,7 @@ async function triggerBatchCharacterTweets(count){
         id:'tw_'+Date.now()+'_'+char.id, authorType:'char', authorId:char.id, text:reply.trim(),
         timestamp:Date.now(), likes:[], retweets:[], replies:[]
       });
+      updateCharStatus(char.id, 'posted');
       success++;
     }catch(e){ console.warn(char.name+' 发帖失败:', e); }
   }
@@ -14791,32 +15936,97 @@ async function triggerBatchCharacterTweets(count){
   showToast(success+' 位角色发布了新动态');
 }
 
-// ── Auto-posting timer ──
+// ── Character active status tracking ──
+// Stores last active timestamp for each character (used for online/offline indicators)
+let charStatusMap = JSON.parse(localStorage.getItem('tsb_char_status') || '{}');
+// charStatusMap[charId] = { lastActive: timestamp, status: 'online'|'away'|'offline', postCount: number }
+
+function getCharStatus(charId){
+  const s = charStatusMap[charId];
+  if(!s) return { status: 'offline', lastActive: 0 };
+  const now = Date.now();
+  const elapsed = now - s.lastActive;
+  if(elapsed < 5 * 60 * 1000) return { ...s, status: 'online' };
+  if(elapsed < 30 * 60 * 1000) return { ...s, status: 'away' };
+  return { ...s, status: 'offline' };
+}
+
+function updateCharStatus(charId, status){
+  charStatusMap[charId] = {
+    ...charStatusMap[charId],
+    lastActive: Date.now(),
+    status: status || 'online',
+    postCount: (charStatusMap[charId]?.postCount || 0) + (status === 'posted' ? 1 : 0)
+  };
+  localStorage.setItem('tsb_char_status', JSON.stringify(charStatusMap));
+}
+
+function getCharStatusLabel(status){
+  const labels = { online: '在线', away: '离开', offline: '离线', busy: '忙碌' };
+  return labels[status] || '离线';
+}
+
+function getCharStatusColor(status){
+  const colors = { online: '#4caf50', away: '#ff9800', offline: '#bbb', busy: '#e53935' };
+  return colors[status] || '#bbb';
+}
+
+// ── Auto-posting timer (enhanced) ──
 function startTwitterAutoTimer(){
   if(!twitterAutoEnabled) return;
   if(_twitterAutoTimer) return;
   _twitterAutoTimer = setInterval(()=>{
     try{
-      if(document.getElementById('twitter-app').style.display==='flex' && twitterAutoEnabled){
-        const preset = getTwitterPreset();
-        if(preset && myCharacters.length>0){
-          const char = myCharacters[Math.floor(Math.random()*myCharacters.length)];
-          const sysP = `你是${char.name}。${char.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n请以你自己的身份写一条适合发在推特上的简短动态，控制在100字以内，只输出正文。`;
-          callTwitterAI(char.id, sysP, '发一条推文', 150).then(reply=>{
-            if(reply.trim()){
-              twitterPosts.push({
-                id:'tw_'+Date.now()+'_'+char.id, authorType:'char', authorId:char.id, text:reply.trim(),
-                timestamp:Date.now(), likes:[], retweets:[], replies:[]
-              });
-              localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
-              renderTwitterTimeline();
-            }
-          }).catch(()=>{});
+      if(!twitterAutoEnabled) return;
+      const preset = getTwitterPreset();
+      if(!preset || myCharacters.length===0) return;
+      
+      // Pick a character that hasn't posted recently (prefer away/offline chars)
+      const now = Date.now();
+      const charsWithCooldown = myCharacters.map(c => {
+        const status = getCharStatus(c.id);
+        return {
+          char: c,
+          lastActive: status.lastActive || 0,
+          cooldown: now - (status.lastActive || 0),
+          status: status.status
+        };
+      }).sort((a,b) => a.cooldown - b.cooldown); // prefer chars that haven't been active recently
+      
+      // Pick from the top 3 least recently active characters
+      const candidate = charsWithCooldown[Math.floor(Math.random() * Math.min(3, charsWithCooldown.length))];
+      const char = candidate.char;
+      
+      // Vary the post type for variety
+      const postTypes = [
+        { prompt: '发一条推文', desc: '简短动态（感悟、吐槽、日常分享）' },
+        { prompt: '分享一件今天发生的小事', desc: '日常趣事' },
+        { prompt: '写一句心情语录', desc: '心情语录' },
+        { prompt: '发一条带有emoji的轻松推文', desc: '轻松分享' },
+        { prompt: '吐槽一下最近遇到的事情', desc: '吐槽' },
+        { prompt: '发一条有哲理一点的感悟', desc: '哲理感悟' }
+      ];
+      const postType = postTypes[Math.floor(Math.random() * postTypes.length)];
+      
+      const sysP = `你是${char.name}。${char.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n请以你自己的身份${postType.desc}，控制在100字以内，只输出正文，不要加引号或前缀。`;
+      
+      callTwitterAI(char.id, sysP, postType.prompt, 150).then(reply=>{
+        if(reply.trim()){
+          twitterPosts.push({
+            id:'tw_'+Date.now()+'_'+char.id, authorType:'char', authorId:char.id, text:reply.trim(),
+            timestamp:Date.now(), likes:[], retweets:[], replies:[]
+          });
+          localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
+          updateCharStatus(char.id, 'posted');
+          if(document.getElementById('twitter-app').style.display==='flex'){
+            renderTwitterTimeline();
+          }
         }
-      }
+      }).catch(()=>{});
     }catch(e){}
-  }, 600000 + Math.floor(Math.random() * 300000)); // 10-15 min
+  }, 300000 + Math.floor(Math.random() * 600000)); // 5-15 min, more frequent
 }
+
 function stopTwitterAutoTimer(){
   if(_twitterAutoTimer){ clearInterval(_twitterAutoTimer); _twitterAutoTimer = null; }
 }
