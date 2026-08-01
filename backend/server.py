@@ -1177,6 +1177,233 @@ async def lookup_word(word: str, lang: str = Query("en", description="语言: en
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ══════════ Twitter/X Real Content API (twikit GuestClient, no API key required) ══════════
+# 使用 twikit 的 GuestClient 模式，无需 API Key 或登录，只读访问公开推文
+# 读取操作：搜索推文、获取趋势、获取用户推文
+
+try:
+    from twikit.guest import GuestClient as TwikitGuestClient
+    HAS_TWIKIT = True
+except ImportError:
+    HAS_TWIKIT = False
+    logging.warning("twikit 未安装，真实推特功能不可用。pip install twikit")
+
+_twikit_client = None
+_twikit_client_activating = False
+
+async def _get_twikit_client():
+    """获取或创建 twikit GuestClient 单例（懒加载 + 自动激活）"""
+    global _twikit_client, _twikit_client_activating
+    if not HAS_TWIKIT:
+        return None
+    if _twikit_client is not None:
+        return _twikit_client
+    if _twikit_client_activating:
+        for _ in range(10):
+            await asyncio.sleep(0.5)
+            if _twikit_client is not None:
+                return _twikit_client
+        return None
+    _twikit_client_activating = True
+    try:
+        client = TwikitGuestClient('en-US')
+        # Set shorter timeout for activation
+        loop = asyncio.get_event_loop()
+        await asyncio.wait_for(client.activate(), timeout=15.0)
+        _twikit_client = client
+        logging.info("twikit GuestClient 已激活")
+        return _twikit_client
+    except asyncio.TimeoutError:
+        logging.error("twikit GuestClient 激活超时（可能网络不通）")
+        return None
+    except Exception as e:
+        logging.error(f"twikit GuestClient 激活失败: {e}")
+        return None
+    finally:
+        _twikit_client_activating = False
+
+def _twikit_tweet_to_dict(tweet):
+    """将 twikit Tweet 对象转为前端友好的字典"""
+    try:
+        user = tweet.user
+        return {
+            "id": getattr(tweet, 'id', ''),
+            "text": getattr(tweet, 'text', '') or getattr(tweet, 'full_text', ''),
+            "created_at": str(getattr(tweet, 'created_at', '')),
+            "user": {
+                "name": getattr(user, 'name', ''),
+                "screen_name": getattr(user, 'screen_name', ''),
+                "profile_image_url": getattr(user, 'profile_image_url', ''),
+                "followers_count": getattr(user, 'followers_count', 0),
+            },
+            "like_count": getattr(tweet, 'favorite_count', 0),
+            "retweet_count": getattr(tweet, 'retweet_count', 0),
+            "reply_count": getattr(tweet, 'reply_count', 0),
+            "view_count": getattr(tweet, 'view_count', 0),
+            "lang": getattr(tweet, 'lang', ''),
+            "source": "twitter",
+            "is_quote_status": getattr(tweet, 'is_quote_status', False),
+        }
+    except Exception:
+        return None
+
+class TwitterSearchRequest(BaseModel):
+    query: str
+    product: str = "Latest"  # Latest / Top
+    count: int = 20
+
+@app.get("/api/twitter/status")
+async def twitter_status():
+    """检查真实推特服务状态"""
+    if not HAS_TWIKIT:
+        return {"available": False, "message": "twikit 未安装"}
+    client = await _get_twikit_client()
+    if client is None:
+        return {"available": False, "message": "GuestClient 激活失败"}
+    return {"available": True, "message": "GuestClient 已就绪", "mode": "guest"}
+
+@app.get("/api/twitter/trends")
+async def twitter_trends(count: int = Query(10, ge=1, le=30)):
+    """获取推特热门趋势"""
+    if not HAS_TWIKIT:
+        raise HTTPException(status_code=501, detail="twikit 未安装")
+    client = await _get_twikit_client()
+    if client is None:
+        raise HTTPException(status_code=503, detail="推特服务暂时不可用，请稍后重试")
+    try:
+        trends = await client.get_trends('trending')
+        result = []
+        for trend in trends[:count]:
+            result.append({
+                "name": getattr(trend, 'name', ''),
+                "url": getattr(trend, 'url', ''),
+                "tweet_count": getattr(trend, 'tweet_count', None),
+                "query": getattr(trend, 'query', ''),
+            })
+        return {"success": True, "trends": result, "count": len(result)}
+    except Exception as e:
+        logging.error(f"获取推特趋势失败: {e}")
+        raise HTTPException(status_code=502, detail=f"获取趋势失败: {str(e)}")
+
+@app.post("/api/twitter/search")
+async def twitter_search(req: TwitterSearchRequest):
+    """搜索真实推文"""
+    if not HAS_TWIKIT:
+        raise HTTPException(status_code=501, detail="twikit 未安装")
+    client = await _get_twikit_client()
+    if client is None:
+        raise HTTPException(status_code=503, detail="推特服务暂时不可用，请稍后重试")
+    try:
+        tweets = await client.search_tweet(req.query, req.product)
+        result = []
+        for tweet in tweets[:req.count]:
+            d = _twikit_tweet_to_dict(tweet)
+            if d:
+                result.append(d)
+        return {"success": True, "tweets": result, "count": len(result), "query": req.query}
+    except Exception as e:
+        logging.error(f"搜索推特失败: {e}")
+        raise HTTPException(status_code=502, detail=f"搜索失败: {str(e)}")
+
+@app.get("/api/twitter/search")
+async def twitter_search_get(
+    q: str = Query(..., description="搜索关键词"),
+    product: str = Query("Latest", description="Latest 或 Top"),
+    count: int = Query(20, ge=1, le=50)
+):
+    """搜索真实推文 (GET 方式)"""
+    if not HAS_TWIKIT:
+        raise HTTPException(status_code=501, detail="twikit 未安装")
+    client = await _get_twikit_client()
+    if client is None:
+        raise HTTPException(status_code=503, detail="推特服务暂时不可用，请稍后重试")
+    try:
+        tweets = await client.search_tweet(q, product)
+        result = []
+        for tweet in tweets[:count]:
+            d = _twikit_tweet_to_dict(tweet)
+            if d:
+                result.append(d)
+        return {"success": True, "tweets": result, "count": len(result), "query": q}
+    except Exception as e:
+        logging.error(f"搜索推特失败: {e}")
+        raise HTTPException(status_code=502, detail=f"搜索失败: {str(e)}")
+
+@app.get("/api/twitter/user/{screen_name}")
+async def twitter_user(
+    screen_name: str,
+    tweet_type: str = Query("Tweets", description="Tweets / Replies / Media / Likes"),
+    count: int = Query(20, ge=1, le=50)
+):
+    """获取用户信息和推文"""
+    if not HAS_TWIKIT:
+        raise HTTPException(status_code=501, detail="twikit 未安装")
+    client = await _get_twikit_client()
+    if client is None:
+        raise HTTPException(status_code=503, detail="推特服务暂时不可用，请稍后重试")
+    try:
+        user = await client.get_user_by_screen_name(screen_name)
+        user_info = {
+            "id": getattr(user, 'id', ''),
+            "name": getattr(user, 'name', ''),
+            "screen_name": getattr(user, 'screen_name', ''),
+            "description": getattr(user, 'description', ''),
+            "profile_image_url": getattr(user, 'profile_image_url', ''),
+            "profile_banner_url": getattr(user, 'profile_banner_url', ''),
+            "followers_count": getattr(user, 'followers_count', 0),
+            "friends_count": getattr(user, 'friends_count', 0),
+            "statuses_count": getattr(user, 'statuses_count', 0),
+            "location": getattr(user, 'location', ''),
+            "verified": getattr(user, 'verified', False),
+            "created_at": str(getattr(user, 'created_at', '')),
+        }
+        tweets_data = []
+        try:
+            tweets = await client.get_user_tweets(user_info['id'], tweet_type)
+            for tweet in tweets[:count]:
+                d = _twikit_tweet_to_dict(tweet)
+                if d:
+                    tweets_data.append(d)
+        except Exception as e:
+            logging.warning(f"获取用户推文失败: {e}")
+        return {
+            "success": True,
+            "user": user_info,
+            "tweets": tweets_data,
+            "tweet_count": len(tweets_data)
+        }
+    except Exception as e:
+        logging.error(f"获取用户信息失败: {e}")
+        raise HTTPException(status_code=502, detail=f"获取用户信息失败: {str(e)}")
+
+@app.get("/api/twitter/feed")
+async def twitter_feed(
+    q: str = Query("trending", description="搜索关键词，默认 trending 获取热门内容"),
+    product: str = Query("Top", description="Latest 或 Top"),
+    count: int = Query(10, ge=1, le=30)
+):
+    """
+    获取真实推特内容流（用于混入虚拟推文时间线）
+    默认搜索 trending 获取热门推文作为背景内容
+    """
+    if not HAS_TWIKIT:
+        raise HTTPException(status_code=501, detail="twikit 未安装")
+    client = await _get_twikit_client()
+    if client is None:
+        raise HTTPException(status_code=503, detail="推特服务暂时不可用，请稍后重试")
+    try:
+        tweets = await client.search_tweet(q, product)
+        result = []
+        for tweet in tweets[:count]:
+            d = _twikit_tweet_to_dict(tweet)
+            if d:
+                result.append(d)
+        return {"success": True, "tweets": result, "count": len(result), "query": q}
+    except Exception as e:
+        logging.error(f"获取推特内容流失败: {e}")
+        raise HTTPException(status_code=502, detail=f"获取失败: {str(e)}")
+
+
 ADMIN_HTML = """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>

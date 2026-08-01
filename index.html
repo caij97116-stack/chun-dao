@@ -156,6 +156,12 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .s-toggle::after{content:'';position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:white;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.3);}
 .s-toggle.on::after{transform:translateX(18px);}
 
+.voice-lang-chip{padding:5px 12px;border-radius:14px;font-size:11px;background:rgba(0,0,0,0.04);color:var(--ink3);cursor:pointer;border:1px solid transparent;transition:all 0.2s;letter-spacing:0.03em;}
+.voice-lang-chip:hover{background:rgba(0,0,0,0.08);}
+.voice-lang-chip.selected{background:rgba(180,140,140,0.15);color:var(--petald);border-color:rgba(180,140,140,0.4);}
+
+.msg-auto-trans{font-size:11px;color:var(--ink4);margin-top:4px;padding-top:4px;border-top:1px solid rgba(0,0,0,0.06);line-height:1.4;letter-spacing:0.03em;}
+
 /* sub-pages within settings */
 .subpage{position:absolute;inset:0;background:var(--smoke);display:none;flex-direction:column;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);z-index:5;}
 .subpage.open{display:flex;transform:translateX(0);}
@@ -1281,6 +1287,98 @@ input[type=file]{display:none;}
 .verify-error{font-size:11px;color:rgba(255,100,100,0.85);text-align:center;min-height:16px;letter-spacing:0.04em;}
 .verify-skip{font-size:11px;color:rgba(255,255,255,0.25);background:none;border:none;cursor:pointer;font-family:inherit;letter-spacing:0.08em;padding:8px;margin-top:8px;}
 
+/* ══════════ 观影室 VR ─═════════ */
+.vr-container{display:flex;flex-direction:column;width:100%;height:100%;background:#0a0a0a;}
+.vr-video-section{flex:0 0 auto;width:100%;display:flex;flex-direction:column;}
+.vr-url-bar{display:flex;gap:6px;padding:8px 10px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);}
+.vr-url-input{flex:1;padding:8px 12px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.05);color:white;font-size:12px;outline:none;font-family:inherit;transition:border-color 0.2s;}
+.vr-url-input:focus{border-color:rgba(255,255,255,0.3);}
+.vr-url-input::placeholder{color:rgba(255,255,255,0.2);}
+.vr-url-btn{padding:8px 14px;border:none;border-radius:8px;background:rgba(180,140,140,0.5);color:white;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;letter-spacing:0.04em;}
+.vr-url-btn:active{transform:scale(0.95);opacity:0.8;}
+.vr-url-btn-sub{background:rgba(255,255,255,0.06);}
+.vr-player-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
+.vr-player-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:rgba(255,255,255,0.2);}
+.vr-player-empty-icon{font-size:48px;opacity:0.5;}
+.vr-player-empty-text{font-size:13px;letter-spacing:0.06em;}
+.vr-player{position:absolute;inset:0;width:100%;height:100%;}
+.vr-player iframe{width:100%;height:100%;border:none;}
+.vr-subtitle-bar{display:flex;align-items:center;gap:10px;padding:6px 12px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);}
+.vr-subtitle-label{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:0.04em;}
+.vr-subtitle-timestamp{font-size:10px;color:rgba(255,255,255,0.3);margin-left:auto;}
+
+/* ── 聊天区 ── */
+.vr-chat-section{flex:1;display:flex;flex-direction:column;min-height:0;border-top:1px solid rgba(255,255,255,0.06);position:relative;}
+.vr-chat-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}
+.vr-chat-header-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.vr-chat-header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.vr-comp-avatar{width:34px;height:34px;border-radius:50%;background:var(--smoke);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink3);cursor:pointer;overflow:hidden;flex-shrink:0;transition:transform 0.2s;}
+.vr-comp-avatar:active{transform:scale(0.9);}
+.vr-comp-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.vr-comp-name{font-size:13px;color:var(--ink);letter-spacing:0.04em;font-weight:500;}
+.vr-comp-status{font-size:10px;color:var(--ink4);margin-top:1px;}
+.vr-api-btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.vr-api-btn:active{background:rgba(255,255,255,0.08);}
+.vr-mem-share-btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.3);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.vr-mem-share-btn.on{color:rgba(180,140,140,0.8);border-color:rgba(180,140,140,0.4);background:rgba(180,140,140,0.1);}
+.vr-mem-share-btn:active{transform:scale(0.9);}
+.vr-comp-bind-btn{padding:6px 14px;border:none;border-radius:14px;background:rgba(180,140,140,0.6);color:white;font-size:12px;cursor:pointer;font-family:inherit;letter-spacing:0.04em;transition:all 0.2s;white-space:nowrap;}
+.vr-comp-bind-btn:active{transform:scale(0.95);opacity:0.8;}
+
+/* 角色选择面板 */
+.vr-char-picker{position:absolute;top:52px;left:12px;right:12px;background:rgba(30,30,30,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px;z-index:20;max-height:200px;overflow-y:auto;backdrop-filter:blur(20px);}
+.vr-char-picker-title{font-size:12px;color:var(--ink4);margin-bottom:8px;letter-spacing:0.04em;}
+.vr-char-picker-list{display:flex;flex-wrap:wrap;gap:8px;}
+.vr-char-picker-char{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.06);cursor:pointer;transition:all 0.2s;border:1px solid transparent;}
+.vr-char-picker-char:hover,.vr-char-picker-char.selected{border-color:rgba(180,140,140,0.5);background:rgba(180,140,140,0.15);}
+.vr-char-picker-av{width:26px;height:26px;border-radius:50%;background:var(--smoke);display:flex;align-items:center;justify-content:center;font-size:12px;overflow:hidden;flex-shrink:0;}
+.vr-char-picker-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.vr-char-picker-name{font-size:12px;color:var(--ink2);letter-spacing:0.04em;}
+.vr-char-picker-none{font-size:11px;color:var(--ink4);padding:8px 4px;cursor:pointer;text-align:center;transition:color 0.2s;}
+.vr-char-picker-none:hover{color:rgba(255,100,100,0.7);}
+
+/* API设置面板 */
+.vr-api-panel{position:absolute;top:52px;right:12px;width:280px;max-width:calc(100% - 24px);background:rgba(30,30,30,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:14px;z-index:20;max-height:70vh;overflow-y:auto;backdrop-filter:blur(20px);}
+.vr-api-panel-title{font-size:13px;color:var(--ink);margin-bottom:10px;letter-spacing:0.06em;font-weight:500;}
+.vr-api-section{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.vr-api-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.vr-api-section-title{font-size:11px;color:var(--ink4);margin-bottom:6px;letter-spacing:0.04em;}
+.vr-api-hint{font-size:10px;color:rgba(255,255,255,0.25);margin-bottom:8px;line-height:1.4;}
+.vr-api-set-btn{width:100%;padding:8px;border:none;border-radius:8px;background:rgba(180,140,140,0.5);color:white;font-size:12px;cursor:pointer;font-family:inherit;letter-spacing:0.04em;transition:all 0.2s;}
+.vr-api-set-btn:active{transform:scale(0.97);opacity:0.8;}
+.vr-api-format-options{display:flex;gap:6px;margin-top:6px;}
+.vr-api-format-options .format-opt{padding:4px 10px;border-radius:6px;font-size:11px;background:rgba(255,255,255,0.06);color:var(--ink4);cursor:pointer;transition:all 0.2s;border:1px solid transparent;}
+.vr-api-format-options .format-opt.selected{background:rgba(180,140,140,0.2);color:rgba(180,140,140,0.9);border-color:rgba(180,140,140,0.4);}
+.vr-api-format-options .format-opt:hover{background:rgba(255,255,255,0.1);}
+.vr-api-panel .field-inp{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:white;font-size:12px;padding:10px 12px;}
+.vr-api-panel .field-inp:focus{border-color:rgba(180,140,140,0.5);}
+.vr-api-panel .field-inp::placeholder{color:rgba(255,255,255,0.2);}
+.vr-api-panel .field-lbl{color:rgba(255,255,255,0.4);text-transform:none;letter-spacing:0.04em;font-size:10px;}
+.vr-api-panel .field-group{margin-bottom:10px;}
+
+/* 聊天消息 */
+.vr-chat-msgs{flex:1;overflow-y:auto;padding:8px 12px;display:flex;flex-direction:column;gap:6px;min-height:0;}
+.vr-chat-empty{text-align:center;padding:30px 0;font-size:12px;color:var(--ink4);letter-spacing:0.04em;}
+.vr-chat-msg{max-width:85%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;word-break:break-word;letter-spacing:0.03em;animation:vrMsgIn 0.25s ease;}
+@keyframes vrMsgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.vr-chat-msg.mine{align-self:flex-end;background:rgba(180,140,140,0.3);color:var(--ink);border-bottom-right-radius:4px;}
+.vr-chat-msg.theirs{align-self:flex-start;background:rgba(255,255,255,0.06);color:var(--ink);border-bottom-left-radius:4px;}
+.vr-chat-msg.system{align-self:center;background:rgba(255,255,255,0.03);color:var(--ink4);font-size:11px;border-radius:8px;max-width:90%;text-align:center;}
+.vr-chat-msg.typing{align-self:flex-start;padding:10px 14px;background:rgba(255,255,255,0.06);border-radius:12px;border-bottom-left-radius:4px;}
+.vr-chat-msg-typing-dots{display:flex;gap:3px;}
+.vr-chat-msg-typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--ink4);animation:vrDotBounce 1.2s infinite;}
+.vr-chat-msg-typing-dots span:nth-child(2){animation-delay:0.2s;}
+.vr-chat-msg-typing-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes vrDotBounce{0%,60%,100%{transform:translateY(0);opacity:0.4;}30%{transform:translateY(-6px);opacity:1;}}
+
+/* 输入区 */
+.vr-chat-input-row{display:flex;gap:8px;padding:8px 12px;padding-bottom:max(8px, env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);flex-shrink:0;}
+.vr-chat-input{flex:1;padding:9px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;background:rgba(255,255,255,0.05);color:white;font-size:13px;outline:none;font-family:inherit;resize:none;transition:border-color 0.2s;}
+.vr-chat-input:focus{border-color:rgba(180,140,140,0.5);}
+.vr-chat-input::placeholder{color:rgba(255,255,255,0.2);}
+.vr-chat-send{width:36px;height:36px;border-radius:50%;border:none;background:rgba(180,140,140,0.5);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
+.vr-chat-send:active{transform:scale(0.9);opacity:0.8;}
+
 </style>
 <script src="https://js.puter.com/v2/"></script>
 <script src="https://unpkg.com/dexie@4/dist/dexie.js"></script>
@@ -1413,9 +1511,95 @@ input[type=file]{display:none;}
         </div>
       </div>
     </div>
+      <!-- ── 第三页：观影室 ── -->
+      <div class="app-page" id="app-page-2">
+        <div class="vr-container" id="vr-container">
+          <!-- 视频区 -->
+          <div class="vr-video-section" id="vr-video-section">
+            <div class="vr-url-bar">
+              <input class="vr-url-input" id="vr-url-input" type="text" placeholder="粘贴 YouTube / Bilibili 视频链接…" onkeydown="if(event.key==='Enter')vrLoadVideo()">
+              <button class="vr-url-btn" onclick="vrLoadVideo()">▶ 加载</button>
+              <button class="vr-url-btn vr-url-btn-sub" id="vr-sub-btn" onclick="vrExtractSubs()" style="display:none">📝 提取字幕</button>
+            </div>
+            <div class="vr-player-wrap" id="vr-player-wrap">
+              <div class="vr-player-empty" id="vr-player-empty">
+                <div class="vr-player-empty-icon">🎬</div>
+                <div class="vr-player-empty-text">粘贴视频链接，与角色一起观影</div>
+              </div>
+              <div class="vr-player" id="vr-player" style="display:none"></div>
+            </div>
+            <div class="vr-subtitle-bar" id="vr-subtitle-bar" style="display:none">
+              <div class="vr-subtitle-label">📝 字幕已加载</div>
+              <div class="vr-subtitle-timestamp" id="vr-subtitle-ts"></div>
+            </div>
+          </div>
+          <!-- 聊天区 -->
+          <div class="vr-chat-section" id="vr-chat-section">
+            <div class="vr-chat-header">
+              <div class="vr-chat-header-left">
+                <div class="vr-comp-avatar" id="vr-comp-avatar" onclick="vrToggleCharPicker()"></div>
+                <div>
+                  <div class="vr-comp-name" id="vr-comp-name">选择观影角色</div>
+                  <div class="vr-comp-status" id="vr-comp-status">未绑定</div>
+                </div>
+              </div>
+              <div class="vr-chat-header-right">
+                <button class="vr-mem-share-btn" id="vr-mem-share-btn" onclick="vrToggleMemShare()" title="记忆互通" style="display:none">🔄</button>
+                <button class="vr-api-btn" id="vr-api-btn" onclick="vrToggleApiPanel()" title="API设置">⚙️</button>
+                <button class="vr-comp-bind-btn" id="vr-comp-bind-btn" onclick="vrConfirmBind()" style="display:none">确认绑定</button>
+              </div>
+            </div>
+            <!-- 角色选择面板 -->
+            <div class="vr-char-picker" id="vr-char-picker" style="display:none">
+              <div class="vr-char-picker-title">选择一起观影的角色</div>
+              <div class="vr-char-picker-list" id="vr-char-picker-list"></div>
+              <div class="vr-char-picker-none" onclick="vrUnbindChar()">✕ 不绑定角色</div>
+            </div>
+            <!-- API设置面板 -->
+            <div class="vr-api-panel" id="vr-api-panel" style="display:none">
+              <div class="vr-api-panel-title">⚙️ API 设置</div>
+              <div class="vr-api-section">
+                <div class="vr-api-section-title">主 API（全局默认）</div>
+                <div class="vr-api-hint" id="vr-api-main-hint">使用全局预设的主API</div>
+                <button class="vr-api-set-btn" onclick="openSub('sub-preset-manager')">管理预设</button>
+              </div>
+              <div class="vr-api-section">
+                <div class="vr-api-section-title">副 API（观影室专用）</div>
+                <div class="vr-api-hint">填写后在观影室优先使用此API，留空则使用主API</div>
+                <div class="field-group"><div class="field-lbl">接口地址</div><input class="field-inp" id="vr-alt-endpoint" type="text" placeholder="https://api.openai.com/v1/chat/completions"></div>
+                <div class="field-group"><div class="field-lbl">API Key</div><input class="field-inp" id="vr-alt-apikey" type="password" placeholder="sk-..."></div>
+                <div class="field-group"><div class="field-lbl">模型</div><input class="field-inp" id="vr-alt-model" type="text" placeholder="gpt-4o"></div>
+                <div class="vr-api-format-options" id="vr-alt-format-options">
+                  <span class="format-opt selected" data-format="openai" onclick="vrSelectFormat(this)">OpenAI</span>
+                  <span class="format-opt" data-format="anthropic" onclick="vrSelectFormat(this)">Anthropic</span>
+                  <span class="format-opt" data-format="gemini" onclick="vrSelectFormat(this)">Gemini</span>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button class="vr-api-set-btn" onclick="vrSaveAltApi()">保存副API</button>
+                  <button class="vr-api-set-btn" style="background:var(--silver);color:var(--ink2)" onclick="vrClearAltApi()">清空</button>
+                </div>
+              </div>
+            </div>
+            <!-- 聊天消息 -->
+            <div class="vr-chat-msgs" id="vr-chat-msgs">
+              <div class="vr-chat-empty" id="vr-chat-empty">加载视频并绑定角色后，开始观影聊天</div>
+            </div>
+            <!-- 输入区 -->
+            <div class="vr-chat-input-row">
+              <input class="vr-chat-input" id="vr-chat-input" placeholder="说说你的观影感受…" onkeydown="if(event.key==='Enter')vrSendMessage()">
+              <button class="vr-chat-send" onclick="vrSendMessage()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="page-dots" id="page-dots">
       <div class="page-dot active" data-page="0" onclick="goToHomePage(0)"></div>
       <div class="page-dot" data-page="1" onclick="goToHomePage(1)"></div>
+      <div class="page-dot" data-page="2" onclick="goToHomePage(2)"></div>
+      <div class="page-dot" data-page="3" onclick="goToHomePage(3)"></div>
     </div>
     <div class="dock">
       <div class="app-icon-wrap" onclick="openApp('encounter')">
@@ -1550,6 +1734,21 @@ input[type=file]{display:none;}
             <div class="s-icon" style="background:#4caf50"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
             <div class="s-text"><div class="s-title">全局视野</div><div class="s-sub">让角色也能感知你的天气</div></div>
             <div class="s-toggle on" id="toggle-weather-global-settings" onclick="toggleSwitch(this)"></div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="sec-label">推特</div>
+        <div class="s-card">
+          <div class="s-row" onclick="openSub('sub-twitter-api');refreshTwitterApiConfig()">
+            <div class="s-icon" style="background:#4a9fd8"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M23 3a10.9 10.9 0 0 1-3.1 1.5 4.5 4.5 0 0 0-7.9 3.1A12.7 12.7 0 0 1 3 4s-4 9 5 13a11.6 11.6 0 0 1-7 2c9 5 20 0 20-11.5v-.5A8.5 8.5 0 0 0 23 3z"/></svg></div>
+            <div class="s-text"><div class="s-title">推特API配置</div><div class="s-sub" id="tw-api-sub">主API + 副API切换</div></div>
+            <div class="s-arrow">›</div>
+          </div>
+          <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+            <div class="s-icon" style="background:#17bf63"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+            <div class="s-text"><div class="s-title">角色自动发帖</div><div class="s-sub" id="tw-auto-sub">每隔一段时间自动生成角色动态</div></div>
+            <div class="s-toggle on" id="toggle-tw-auto" onclick="toggleTwitterAuto(this)"></div>
           </div>
         </div>
       </div>
@@ -1808,6 +2007,57 @@ input[type=file]{display:none;}
         </div>
         <button class="save-btn" onclick="applyCustomCss()">应用并保存</button>
         <button class="danger-btn" onclick="resetCustomCss()">恢复默认样式</button>
+      </div>
+    </div>
+
+    <!-- SUB: Twitter API Config -->
+    <div class="subpage" id="sub-twitter-api">
+      <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-twitter-api')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title">推特API配置</div></div>
+      <div class="app-body">
+        <div style="font-size:12px;color:var(--ink4);line-height:1.7;margin-bottom:10px">推特内容生成需要API支持。主API优先使用，失败时自动切换到副API。也可以绑定角色专属API。</div>
+        <div class="sec-label">主API</div>
+        <div class="s-card" style="margin-bottom:12px">
+          <div class="preset-item" id="tw-main-api-item" style="cursor:pointer" onclick="selectTwitterApi('main')">
+            <div class="preset-dot" style="background:#4a9eff"></div>
+            <div class="preset-info">
+              <div class="preset-name" id="tw-main-api-name">使用全局对话API</div>
+              <div class="preset-model" id="tw-main-api-model">跟随系统主API设置</div>
+            </div>
+            <span style="font-size:11px;color:var(--ink4)">选择 ›</span>
+          </div>
+        </div>
+        <div class="sec-label">副API（备用）</div>
+        <div class="s-card" style="margin-bottom:12px">
+          <div class="preset-item" id="tw-backup-api-item" style="cursor:pointer" onclick="selectTwitterApi('backup')">
+            <div class="preset-dot" style="background:#ff9800"></div>
+            <div class="preset-info">
+              <div class="preset-name" id="tw-backup-api-name">未配置副API</div>
+              <div class="preset-model" id="tw-backup-api-model">主API失败时使用</div>
+            </div>
+            <span style="font-size:11px;color:var(--ink4)">选择 ›</span>
+          </div>
+        </div>
+        <div class="sec-label">角色专属API绑定</div>
+        <div style="font-size:11px;color:var(--ink4);margin-bottom:10px;line-height:1.6">可以为每个角色单独绑定API，发帖时优先使用角色专属API。</div>
+        <div id="tw-char-api-list"></div>
+        <div class="sec-label" style="margin-top:16px">真实推特内容</div>
+        <div style="font-size:11px;color:var(--ink4);margin-bottom:10px;line-height:1.6">开启后，偶尔会在时间线中看到来自真实推特的热门推文。</div>
+        <div class="s-row" style="margin-bottom:12px">
+          <div class="s-text"><div class="s-title">启用真实推特</div><div class="s-sub" id="tw-real-sub">显示真实推特内容</div></div>
+          <div class="s-toggle" id="toggle-tw-real" onclick="toggleTwitterReal(this)"></div>
+        </div>
+        <div class="s-row" style="margin-bottom:12px">
+          <div class="s-text"><div class="s-title">混入频率</div><div class="s-sub" id="tw-real-interval-sub">每5条插入1条真实推文</div></div>
+          <select id="tw-real-interval" onchange="updateTwitterRealInterval()" style="background:var(--smoke);border:1px solid var(--pale);border-radius:6px;padding:4px 8px;font-size:12px;color:var(--ink2);outline:none">
+            <option value="3">每3条 (高)</option>
+            <option value="5" selected>每5条 (中)</option>
+            <option value="10">每10条 (低)</option>
+            <option value="20">每20条 (极少)</option>
+          </select>
+        </div>
+        <div style="margin-top:18px">
+          <button class="save-btn" onclick="refreshTwitterApiConfig()" style="width:100%">↻ 刷新API配置</button>
+        </div>
       </div>
     </div>
 
@@ -6594,6 +6844,32 @@ function setCharVoicePreset(charId, presetId){
 Object.defineProperty(window, 'voiceApiConfig', {get: getActiveVoicePreset, configurable:true});
 
 const VOICE_PROVIDER_LABELS = {openai:'OpenAI TTS', elevenlabs:'ElevenLabs', azure:'Azure TTS', aliyun:'阿里云语音'};
+const VOICE_LANG_LABELS = {auto:'自动跟随', zh:'中文（普通话）', ja:'日本語', en:'English', ko:'한국어'};
+const VOICE_LANG_SSML = {zh:'zh-CN', ja:'ja-JP', en:'en-US', ko:'ko-KR', auto:''};
+
+function toggleVoiceLangSettings(charId){
+  const detail = document.getElementById('voice-lang-detail-'+charId);
+  const arrow = document.getElementById('voice-lang-arrow-'+charId);
+  if(!detail) return;
+  const open = detail.style.display === 'block';
+  detail.style.display = open ? 'none' : 'block';
+  if(arrow) arrow.textContent = open ? '›' : '⌄';
+}
+
+function setCharVoiceLang(charId, lang){
+  const contact = contacts.find(c=>c.id===charId);
+  if(!contact) return;
+  contact.voiceLanguage = lang === 'auto' ? null : lang;
+  persist();
+  // Update preview
+  const preview = document.getElementById('voice-lang-preview-'+charId);
+  if(preview) preview.textContent = VOICE_LANG_LABELS[lang] || '自动跟随';
+  // Update chip selection
+  document.querySelectorAll('#voice-lang-detail-'+charId+' .voice-lang-chip').forEach(el=>{
+    el.classList.toggle('selected', el.textContent === VOICE_LANG_LABELS[lang]);
+  });
+  showToast('语音语言已设为「'+(VOICE_LANG_LABELS[lang]||'自动跟随')+'」');
+}
 
 function selectVoiceProvider(el){
   document.querySelectorAll('#voice-provider-options .apitype-opt').forEach(o=>o.classList.remove('selected'));
@@ -6855,30 +7131,40 @@ async function testVoiceApiConfig(){
 
 // ── Real TTS synthesis call, covers all 4 supported providers ──
 // Returns a blob: URL playable directly by an <audio> element.
-async function synthesizeSpeech(config, text){
+async function synthesizeSpeech(config, text, voiceLang){
   if(!config) throw new Error('未配置语音API');
+  const lang = voiceLang || 'auto';
   if(config.provider==='openai'){
+    const body = {model:config.model, voice:config.voice, input:text};
+    // OpenAI TTS models handle language automatically via the voice/model,
+    // but some models support explicit language hint
+    if(lang !== 'auto' && config.model === 'gpt-4o-mini-tts'){
+      body.language = lang;
+    }
     const resp = await fetch('https://api.openai.com/v1/audio/speech', {
       method:'POST',
       headers:{'Authorization':'Bearer '+config.apiKey, 'Content-Type':'application/json'},
-      body: JSON.stringify({model:config.model, voice:config.voice, input:text})
+      body: JSON.stringify(body)
     });
     if(!resp.ok) throw new Error('OpenAI TTS 请求失败 ('+resp.status+')');
     const blob = await resp.blob();
     return URL.createObjectURL(blob);
   }
   if(config.provider==='elevenlabs'){
+    const body = {text, model_id:config.modelId};
+    if(lang !== 'auto') body.language = lang;
     const resp = await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+config.voiceId, {
       method:'POST',
       headers:{'xi-api-key':config.apiKey, 'Content-Type':'application/json', 'Accept':'audio/mpeg'},
-      body: JSON.stringify({text, model_id:config.modelId})
+      body: JSON.stringify(body)
     });
     if(!resp.ok) throw new Error('ElevenLabs 请求失败 ('+resp.status+')');
     const blob = await resp.blob();
     return URL.createObjectURL(blob);
   }
   if(config.provider==='azure'){
-    const ssml = `<speak version='1.0' xml:lang='en-US'><voice name='${config.voiceName}'>${escHtml(text)}</voice></speak>`;
+    const ssmlLang = VOICE_LANG_SSML[lang] || 'zh-CN';
+    const ssml = `<speak version='1.0' xml:lang='${ssmlLang}'><voice name='${config.voiceName}'>${escHtml(text)}</voice></speak>`;
     const resp = await fetch('https://'+config.region+'.tts.speech.microsoft.com/cognitiveservices/v1', {
       method:'POST',
       headers:{
@@ -6893,10 +7179,6 @@ async function synthesizeSpeech(config, text){
     return URL.createObjectURL(blob);
   }
   if(config.provider==='aliyun'){
-    // Aliyun NLS requires a short-lived Token minted from AccessKey ID/Secret first
-    // (a real signed request to the STS/NLS token endpoint), then a second call to
-    // the TTS endpoint using that token. The signing step needs HMAC-SHA1 over a
-    // canonicalized query string — implemented here per Aliyun's documented spec.
     const token = await getAliyunNlsToken(config.accessKeyId, config.accessKeySecret);
     const resp = await fetch('https://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/tts', {
       method:'POST',
@@ -10104,20 +10386,34 @@ function renderTranslationResult(m){
 function closeMsgTranslation(){ document.getElementById('translation-modal').classList.remove('open'); }
 
 // Auto-detect and translate incoming messages that appear to be non-Chinese
-// (triggers only when the character reply contains significant non-Chinese text
-//  and no translation is cached yet).  Cached on the message object.
+// Shows a small annotation below the original message (like a footnote).
+// Respects per-contact autoTranslateForeign setting.
 async function maybeAutoTranslate(m){
-  if(m.mine || m.translationText) return;
-  const hasChinese = /[\u4e00-\u9fff]/.test(m.text);
-  const hasLatin   = /[a-zA-Zà-žА-я\u0370-\u03ff\u3040-\u30ff]/.test(m.text);
-  if(hasChinese && !hasLatin) return; // pure Chinese, skip
-  if(!hasLatin && !hasChinese) return; // probably symbols/numbers only
-  const result = await translateText(m.text, 'zh');
-  if(result && result.translation && result.translation !== m.text){
-    m.autoTranslation = result.translation;
-    m.autoTranslationLang = result.detectedLang || '外语';
-    persist();
+  if(m.mine || m.translationText || m.autoTranslation) return;
+  const text = m.text || '';
+  if(!text) return;
+  // Count Chinese vs foreign characters
+  const chineseChars = (text.match(/[\u4e00-\u9fff]/g)||[]).length;
+  const foreignChars = (text.match(/[a-zA-Zà-žА-я\u0370-\u03ff\u3040-\u30ff\u4e00-\u9fff]/g)||[]).length - chineseChars;
+  const totalChars = text.replace(/\s/g,'').length;
+  if(totalChars === 0) return;
+  // Translate if foreign chars > 20% of total, or if there are any Japanese/Korean chars
+  const hasForeignScript = /[\u3040-\u30ff\uac00-\ud7af]/.test(text); // Japanese kana or Korean
+  const foreignRatio = foreignChars / totalChars;
+  if(!hasForeignScript && foreignRatio < 0.2) return;
+  // Check per-contact setting (default: enabled)
+  if(currentChar){
+    const contact = contacts.find(c=>c.id===currentChar.id);
+    if(contact && contact.autoTranslateForeign === false) return;
   }
+  try{
+    const result = await translateText(text, 'zh');
+    if(result && result.translation && result.translation !== text){
+      m.autoTranslation = result.translation;
+      m.autoTranslationLang = result.detectedLang || '外语';
+      persist();
+    }
+  }catch(e){ /* silent */ }
 }
 
 function receiveRedPacket(el, amount, cover){
@@ -10181,9 +10477,12 @@ async function playVoiceMessage(mid){
   const charId = m.mine ? null : currentChar?.id;
   const config = charId ? getVoicePresetForChar(charId) : getActiveVoicePreset();
   if(!config){ showToast('请先在「设置 → 语音合成API」配置语音服务'); return; }
+  // Get per-character voice language setting
+  const contact = charId ? contacts.find(c=>c.id===charId) : null;
+  const voiceLang = contact?.voiceLanguage || null;
   if(waveEl) waveEl.classList.add('loading');
   try{
-    const audioUrl = await synthesizeSpeech(config, m.text);
+    const audioUrl = await synthesizeSpeech(config, m.text, voiceLang);
     _voicePlaybackCache[mid] = audioUrl;
     if(waveEl){ waveEl.classList.remove('loading'); waveEl.classList.add('playing'); }
     if(_voiceAudioEl) _voiceAudioEl.pause();
@@ -10329,6 +10628,17 @@ function openChatMenu(){
             ${presets.filter(p=>p.apiCategory==='voice').map(p=>`<option value="${p.id}" ${contact?.voicePresetId===p.id?'selected':''}>${escHtml(p.name||VOICE_PROVIDER_LABELS[p.provider])}</option>`).join('')}
           </select>
         </div>
+      </div>
+      <div class="s-row" style="cursor:pointer;padding-top:4px" onclick="toggleVoiceLangSettings('${currentChar.id}')">
+        <div class="s-text"><div class="s-sub">语音语言设置</div><div class="s-sub" style="color:var(--ink3);font-size:10px" id="voice-lang-preview-${currentChar.id}">${VOICE_LANG_LABELS[contact?.voiceLanguage||'auto']||'自动跟随'}</div></div>
+        <div class="s-arrow" id="voice-lang-arrow-${currentChar.id}">›</div>
+      </div>
+      <div id="voice-lang-detail-${currentChar.id}" style="display:none;padding:8px 16px 12px;border-top:1px solid var(--silver)">
+        <div class="s-sub" style="margin-bottom:8px">角色发语音时使用的语言（与文字语言分开）</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${Object.entries(VOICE_LANG_LABELS).map(([k,v])=>`<div class="voice-lang-chip ${(contact?.voiceLanguage||'auto')===k?'selected':''}" onclick="setCharVoiceLang('${currentChar.id}','${k}')">${v}</div>`).join('')}
+        </div>
+        <div class="s-sub" style="margin-top:8px;font-size:10px;color:var(--ink4)">💡 如果语音模型不支持中文，可切换为日语/英语等。文字内容不受影响。</div>
       </div>` : ''}
     </div>`;
     // ── 思维链规避 ──
@@ -10467,6 +10777,8 @@ function handleVoiceAuthToggle(charId, el){
   persist();
   el.classList.toggle('on', turningOn);
   showToast(turningOn ? '已授权语音消息' : '已关闭语音授权');
+  // 立即刷新设置面板，以显示/隐藏语音语言设置
+  setTimeout(()=>openChatMenu(), 200);
 }
 function setChatMode(mode){
   if(!currentChar) return;
@@ -14029,8 +14341,19 @@ function openTanbanMiniApp(charId, appType){
 
 // ══════════ 推特 App (完整仿照界面，配色跟随椿岛风格) ══════════
 let twitterPosts = JSON.parse(localStorage.getItem('tsb_twitter_posts') || '[]');
+let twitterFollowing = JSON.parse(localStorage.getItem('tsb_twitter_following') || '[]');
 let twitterHomeTab = 'foryou';
 let twitterMainTab = 'home';
+// Twitter API config: main=presetId, backup=presetId, charMap={charId:presetId}
+let twitterApiConfig = JSON.parse(localStorage.getItem('tsb_twitter_api_config') || '{"main":null,"backup":null,"charMap":{}}');
+let twitterAutoEnabled = localStorage.getItem('tsb_twitter_auto') !== 'false';
+let _twitterAutoTimer = null;
+// ── Real Twitter integration ──
+let twitterRealEnabled = localStorage.getItem('tsb_twitter_real') === 'true';
+let twitterRealInterval = parseInt(localStorage.getItem('tsb_twitter_real_interval') || '5');
+let twitterRealCache = JSON.parse(localStorage.getItem('tsb_twitter_real_cache') || '[]');
+let _twitterRealFetching = false;
+let _twitterRealLastFetch = 0;
 
 function initTwitterApp(){
   const av = document.getElementById('tw-header-avatar');
@@ -14038,7 +14361,17 @@ function initTwitterApp(){
     if(userProfile.avatar) av.innerHTML = `<img src="${userProfile.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
     else av.textContent = (userProfile.name||'我')[0];
   }
+  // Update auto toggle state
+  const autoToggle = document.getElementById('toggle-tw-auto');
+  if(autoToggle){
+    autoToggle.classList.toggle('on', twitterAutoEnabled);
+    document.getElementById('tw-auto-sub').textContent = twitterAutoEnabled ? '每隔一段时间自动生成角色动态' : '已关闭';
+  }
   switchTwitterMainTab('home');
+  startTwitterAutoTimer();
+  // Init real Twitter toggle & fetch
+  initTwitterRealToggle();
+  if(twitterRealEnabled) fetchRealTweets();
 }
 
 function switchTwitterMainTab(tab){
@@ -14070,10 +14403,60 @@ function switchTwitterHomeTab(tab){
   renderTwitterTimeline();
 }
 
+// ── Twitter API helpers ──
+function getTwitterPreset(charId){
+  // Priority: char-specific API > main API > global preset
+  if(charId && twitterApiConfig.charMap[charId]){
+    const p = presets.find(x=>x.id===twitterApiConfig.charMap[charId]);
+    if(p) return p;
+  }
+  if(twitterApiConfig.main){
+    const p = presets.find(x=>x.id===twitterApiConfig.main);
+    if(p) return p;
+  }
+  return getActivePreset();
+}
+
+function getTwitterBackupPreset(charId){
+  if(charId && twitterApiConfig.charMap[charId]) return null; // char-specific is already the best
+  if(twitterApiConfig.backup){
+    return presets.find(x=>x.id===twitterApiConfig.backup) || null;
+  }
+  return null;
+}
+
+async function callTwitterAI(charId, sysPrompt, userMsg, maxTokens){
+  const mainPreset = getTwitterPreset(charId);
+  const backupPreset = getTwitterBackupPreset(charId);
+  if(!mainPreset) throw new Error('请先在设置中配置API');
+  try{
+    return await callAIRaw(mainPreset, sysPrompt, [{role:'user', content:userMsg}], maxTokens);
+  }catch(e){
+    if(backupPreset && backupPreset.id !== mainPreset.id){
+      console.log('推特主API失败，切换到副API');
+      return await callAIRaw(backupPreset, sysPrompt, [{role:'user', content:userMsg}], maxTokens);
+    }
+    throw e;
+  }
+}
+
+// ── Follow system ──
+function toggleFollow(charId){
+  const idx = twitterFollowing.indexOf(charId);
+  if(idx>=0){ twitterFollowing.splice(idx,1); showToast('已取消关注'); }
+  else { twitterFollowing.push(charId); showToast('已关注'); }
+  localStorage.setItem('tsb_twitter_following', JSON.stringify(twitterFollowing));
+  // Re-render current view
+  if(twitterHomeTab==='following') renderTwitterTimeline();
+}
+
+function isFollowing(charId){ return twitterFollowing.includes(charId); }
+
+// ── Timeline ──
 function twGetAuthor(post){
   if(post.authorType==='user') return {name:userProfile.name||'我', avatar:userProfile.avatar, handle:'@me', isUser:true};
   const c = findCharacter(post.authorId);
-  return {name:c?.name||'未知角色', avatar:c?.avatar, avatarColor:c?.avatarColor, avatarLetter:c?.avatarLetter, handle:'@'+(c?.id||'unknown').slice(0,10), isUser:false};
+  return {name:c?.name||'未知角色', avatar:c?.avatar, avatarColor:c?.avatarColor, avatarLetter:c?.avatarLetter, handle:'@'+(c?.id||'unknown').slice(0,10), isUser:false, char:c};
 }
 
 function renderTwitterTimeline(){
@@ -14081,16 +14464,87 @@ function renderTwitterTimeline(){
   if(!el) return;
   let posts = [...twitterPosts].sort((a,b)=>b.timestamp-a.timestamp);
   if(twitterHomeTab==='following'){
-    // Only show posts from characters the user has an active contact with
-    posts = posts.filter(p=>p.authorType==='user' || contacts.find(c=>c.id===p.authorId));
+    posts = posts.filter(p=>p.authorType==='user' || twitterFollowing.includes(p.authorId));
+  }
+  // ── Mix in real Twitter tweets ──
+  if(twitterRealEnabled && twitterHomeTab==='foryou' && twitterRealCache.length > 0){
+    let realIdx = 0;
+    const mixed = [];
+    for(let i=0; i<posts.length; i++){
+      mixed.push(posts[i]);
+      // Insert a real tweet every N virtual posts
+      if((i+1) % twitterRealInterval === 0 && realIdx < twitterRealCache.length){
+        mixed.push({_type:'real', _data: twitterRealCache[realIdx]});
+        realIdx++;
+      }
+    }
+    posts = mixed;
   }
   if(posts.length===0){
-    el.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--ink4);font-size:13px;line-height:1.8">
-      还没有任何动态<br>点右下角 + 发一条，或点顶部 ↻ 让角色发推
-    </div>`;
+    const hint = twitterHomeTab==='following'
+      ? '还没有关注任何人<br>去角色主页点击关注，或点顶部 ↻ 让角色发推'
+      : '还没有任何动态<br>点右下角 + 发一条，或点顶部 ↻ 让角色发推';
+    el.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--ink4);font-size:13px;line-height:1.8">${hint}</div>`;
     return;
   }
-  el.innerHTML = posts.map(p=>renderTweetCard(p)).join('');
+  el.innerHTML = posts.map(p=>{
+    if(p._type==='real') return renderRealTweetCard(p._data);
+    return renderTweetCard(p);
+  }).join('');
+}
+
+function renderRealTweetCard(data){
+  const user = data.user || {};
+  const avImg = user.profile_image_url ? `<img src="${user.profile_image_url}" referrerpolicy="no-referrer">` : (user.name||'?')[0];
+  const text = (data.text||'').substring(0, 280);
+  // Try to parse relative time
+  let timeLabel = '';
+  try{
+    if(data.created_at){
+      const d = new Date(data.created_at);
+      if(!isNaN(d.getTime())) timeLabel = smartTimeLabel('', d.getTime());
+      else timeLabel = data.created_at;
+    }
+  }catch(e){ timeLabel = ''; }
+  return `<div class="tw-post" onclick="window.open('https://x.com/${escHtml(user.screen_name||'')}/status/${escHtml(data.id||'')}','_blank')">
+    <div class="tw-post-av" style="${user.profile_image_url?'':'background:#1da1f2'}">${avImg}</div>
+    <div class="tw-post-body">
+      <div class="tw-post-head">
+        <span class="tw-post-name">${escHtml(user.name||'Twitter User')}</span>
+        <span class="tw-post-handle">@${escHtml(user.screen_name||'unknown')}</span>
+        <span class="tw-post-dot">·</span>
+        <span class="tw-post-time">${timeLabel}</span>
+        <span style="display:inline-block;font-size:10px;background:#1da1f2;color:#fff;padding:1px 6px;border-radius:10px;margin-left:6px;opacity:0.8">真实</span>
+      </div>
+      <div class="tw-post-text">${escHtml(text)}</div>
+      <div class="tw-post-actions" onclick="event.stopPropagation()">
+        <div class="tw-action" style="color:var(--ink4)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span>${data.reply_count||0}</span>
+        </div>
+        <div class="tw-action" style="color:var(--ink4)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span>${data.retweet_count||0}</span>
+        </div>
+        <div class="tw-action" style="color:var(--ink4)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>${data.like_count||0}</span>
+        </div>
+        <div class="tw-action" style="color:var(--ink4)" onclick="shareRealTweet('${escHtml(data.id||'')}','${escHtml((data.text||'').substring(0,100))}')">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function shareRealTweet(id, text){
+  const url = `https://x.com/i/status/${id}`;
+  if(navigator.share){
+    navigator.share({title: '分享推文', text: text, url: url}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(url).then(()=>showToast('已复制链接')).catch(()=>{});
+  }
 }
 
 function renderTweetCard(post){
@@ -14109,7 +14563,7 @@ function renderTweetCard(post){
         <span class="tw-post-time">${timeLabel}</span>
       </div>
       <div class="tw-post-text">${escHtml(post.text)}</div>
-      ${post.image ? `<img src="${post.image}" class="tw-post-image">` : ''}
+      ${post.image ? `<img src="${post.image}" class="tw-post-image" loading="lazy">` : ''}
       <div class="tw-post-actions" onclick="event.stopPropagation()">
         <div class="tw-action" onclick="openTweetReply('${post.id}')">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
@@ -14123,11 +14577,11 @@ function renderTweetCard(post){
           <svg width="17" height="17" viewBox="0 0 24 24" fill="${liked?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           <span>${post.likes.length}</span>
         </div>
-        <div class="tw-action">
+        <div class="tw-action" onclick="shareTweet('${post.id}')">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         </div>
       </div>
-      ${post.replies?.length ? `<div class="tw-replies">${post.replies.map(r=>{
+      ${post.replies?.length ? `<div class="tw-replies" onclick="event.stopPropagation()">${post.replies.map(r=>{
         const ra = twGetAuthor({authorType:r.authorType, authorId:r.authorId});
         return `<div class="tw-reply-line"><b>${escHtml(ra.name)}：</b>${escHtml(r.text)}</div>`;
       }).join('')}</div>` : ''}
@@ -14139,7 +14593,7 @@ function toggleTweetLike(id){
   const p = twitterPosts.find(x=>x.id===id);
   if(!p) return;
   const idx = p.likes.indexOf('user');
-  if(idx>=0) p.likes.splice(idx,1); else p.likes.push('user');
+  if(idx>=0) p.likes.splice(idx,1); else { p.likes.push('user'); triggerCharacterReaction(id, 'like'); }
   localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
   renderTwitterTimeline();
 }
@@ -14148,11 +14602,42 @@ function toggleRetweet(id){
   if(!p) return;
   const idx = p.retweets.indexOf('user');
   if(idx>=0){ p.retweets.splice(idx,1); showToast('已取消转推'); }
-  else { p.retweets.push('user'); showToast('已转推'); }
+  else { p.retweets.push('user'); showToast('已转推'); triggerCharacterReaction(id, 'retweet'); }
   localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
   renderTwitterTimeline();
 }
+function shareTweet(id){
+  const p = twitterPosts.find(x=>x.id===id);
+  if(!p) return;
+  const text = p.text.substring(0, 100);
+  if(navigator.share){
+    navigator.share({title: '分享推文', text: text}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(()=>showToast('已复制到剪贴板')).catch(()=>{});
+  }
+}
 
+// ── Character reaction to user interaction (like/retweet triggers character awareness) ──
+async function triggerCharacterReaction(postId, actionType){
+  const p = twitterPosts.find(x=>x.id===postId);
+  if(!p || p.authorType!=='char') return;
+  const char = findCharacter(p.authorId);
+  if(!char) return;
+  const preset = getTwitterPreset(char.id);
+  if(!preset) return;
+  try{
+    const sysP = `你是${char.name}。${char.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n有人在你的推文上点了${actionType==='like'?'赞':'转推'}。请以你的口吻简短回应（20字以内），不要加引号。`;
+    const reply = await callTwitterAI(char.id, sysP, `你的推文「${p.text}」被用户${actionType==='like'?'点赞':'转推'}了，你会怎么回应？`, 60);
+    if(reply.trim()){
+      if(!p.replies) p.replies = [];
+      p.replies.push({authorType:'char', authorId:char.id, text: reply.trim(), timestamp:Date.now()});
+      localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
+      renderTwitterTimeline();
+    }
+  }catch(e){ console.warn('角色回应失败:', e); }
+}
+
+// ── Compose ──
 function openTweetCompose(){
   document.getElementById('am-title').textContent = '发推文';
   document.getElementById('am-body').innerHTML = `
@@ -14160,9 +14645,16 @@ function openTweetCompose(){
       <div class="tw-post-av" style="width:44px;height:44px;flex-shrink:0;background:var(--ink)">${userProfile.avatar?`<img src="${userProfile.avatar}">`:escHtml((userProfile.name||'我')[0])}</div>
       <div style="flex:1">
         <textarea class="field-inp" id="tw-compose-text" placeholder="有什么新鲜事？" style="min-height:100px;border:none;padding:8px 0;font-size:15px" oninput="updateTweetCharCount()"></textarea>
-        <div style="display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:10px">
-          <span style="font-size:12px;color:var(--ink4)" id="tw-char-count">280</span>
-          <button class="save-btn" style="margin:0;padding:8px 20px;border-radius:20px" onclick="postTweetSubmit()">发布</button>
+        <div id="tw-compose-img-preview" style="margin-top:8px"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px">
+          <label style="cursor:pointer;color:var(--ink4);display:flex;align-items:center;gap:4px" title="添加图片">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <input type="file" accept="image/*" id="tw-compose-image" style="display:none" onchange="handleTweetImage(this)">
+          </label>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:12px;color:var(--ink4)" id="tw-char-count">280</span>
+            <button class="save-btn" style="margin:0;padding:8px 20px;border-radius:20px" onclick="postTweetSubmit()">发布</button>
+          </div>
         </div>
       </div>
     </div>
@@ -14176,20 +14668,36 @@ function updateTweetCharCount(){
   el.textContent = 280 - len;
   el.style.color = len > 280 ? '#e0245e' : 'var(--ink4)';
 }
+let _tweetImageData = null;
+function handleTweetImage(input){
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ showToast('图片不能超过5MB'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    _tweetImageData = e.target.result;
+    document.getElementById('tw-compose-img-preview').innerHTML = `<img src="${_tweetImageData}" style="max-width:100%;max-height:200px;border-radius:12px"><button onclick="removeTweetImage()" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px">×</button>`;
+  };
+  reader.readAsDataURL(file);
+}
+function removeTweetImage(){ _tweetImageData = null; document.getElementById('tw-compose-img-preview').innerHTML = ''; }
 function postTweetSubmit(){
   const text = document.getElementById('tw-compose-text').value.trim();
   if(!text){ showToast('写点什么吧'); return; }
   if(text.length > 280){ showToast('超过280字了'); return; }
   twitterPosts.push({
     id:'tw_'+Date.now(), authorType:'user', authorId:null, text,
-    timestamp:Date.now(), likes:[], retweets:[], replies:[]
+    timestamp:Date.now(), likes:[], retweets:[], replies:[],
+    image: _tweetImageData || null
   });
+  _tweetImageData = null;
   localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
   closeArchiveModal();
   switchTwitterMainTab('home');
   showToast('已发布');
 }
 
+// ── Reply with character auto-reply ──
 function openTweetReply(postId){
   const p = twitterPosts.find(x=>x.id===postId);
   if(!p) return;
@@ -14201,7 +14709,7 @@ function openTweetReply(postId){
   `;
   document.getElementById('archive-modal').classList.add('open');
 }
-function submitTweetReply(postId){
+async function submitTweetReply(postId){
   const text = document.getElementById('tw-reply-text').value.trim();
   if(!text){ showToast('写点什么吧'); return; }
   const p = twitterPosts.find(x=>x.id===postId);
@@ -14212,18 +14720,40 @@ function submitTweetReply(postId){
   closeArchiveModal();
   renderTwitterTimeline();
   showToast('已回复');
+  // If replying to a character's post, trigger character response
+  if(p.authorType==='char' && p.authorId){
+    const char = findCharacter(p.authorId);
+    if(char){
+      const preset = getTwitterPreset(char.id);
+      if(preset){
+        try{
+          showToast(char.name+' 正在思考回复…');
+          const sysP = `你是${char.name}。${char.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n有人回复了你的推文「${p.text}」：\n回复内容：「${text}」\n\n请以${char.name}的口吻，自然地回复这条评论（30-80字），要符合你的人设性格。只输出回复内容，不要加引号。`;
+          const reply = await callTwitterAI(char.id, sysP, `回复用户的评论「${text}」`, 120);
+          if(reply.trim()){
+            if(!p.replies) p.replies = [];
+            p.replies.push({authorType:'char', authorId:char.id, text: reply.trim(), timestamp:Date.now()});
+            localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
+            renderTwitterTimeline();
+            showToast(char.name+' 回复了你的评论');
+          }
+        }catch(e){ console.warn('角色回复失败:', e); }
+      }
+    }
+  }
 }
 
-// AI-driven character tweet generation (user-triggered, since static pages can't run in the background)
-async function triggerCharacterTweet(){
-  const preset = getActivePreset();
-  if(!preset){ showToast('请先在设置中配置API'); return; }
+// ── Character tweet generation ──
+async function triggerCharacterTweet(charId){
   if(myCharacters.length===0){ showToast('还没有创建任何角色'); return; }
+  const char = charId ? findCharacter(charId) : myCharacters[Math.floor(Math.random()*myCharacters.length)];
+  if(!char){ showToast('角色不存在'); return; }
+  const preset = getTwitterPreset(char.id);
+  if(!preset){ showToast('请先在设置中配置API'); return; }
   showToast('正在生成角色动态…');
-  const char = myCharacters[Math.floor(Math.random()*myCharacters.length)];
   try{
     const sysP = `你是${char.name}。${char.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n请以你自己的身份写一条适合发在推特上的简短动态（可以是感悟、吐槽、日常分享），控制在100字以内，只输出正文，不要加引号或前缀。`;
-    const reply = await callAIRaw(preset, sysP, [{role:'user', content:'发一条推文'}], 150);
+    const reply = await callTwitterAI(char.id, sysP, '发一条推文', 150);
     twitterPosts.push({
       id:'tw_'+Date.now()+'_'+char.id, authorType:'char', authorId:char.id, text:reply.trim(),
       timestamp:Date.now(), likes:[], retweets:[], replies:[]
@@ -14233,6 +14763,229 @@ async function triggerCharacterTweet(){
     showToast(char.name+' 发了一条新推文');
   }catch(e){
     showToast('生成失败：'+e.message);
+  }
+}
+
+// ── Batch character tweet generation ──
+async function triggerBatchCharacterTweets(count){
+  if(!count) count = Math.min(3, myCharacters.length);
+  const preset = getTwitterPreset();
+  if(!preset){ showToast('请先在设置中配置API'); return; }
+  if(myCharacters.length===0){ showToast('还没有创建任何角色'); return; }
+  showToast('正在批量生成角色动态…');
+  const chars = [...myCharacters].sort(()=>Math.random()-0.5).slice(0, count);
+  let success = 0;
+  for(const char of chars){
+    try{
+      const sysP = `你是${char.name}。${char.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n请以你自己的身份写一条适合发在推特上的简短动态（可以是感悟、吐槽、日常分享），控制在100字以内，只输出正文，不要加引号或前缀。`;
+      const reply = await callTwitterAI(char.id, sysP, '发一条推文', 150);
+      twitterPosts.push({
+        id:'tw_'+Date.now()+'_'+char.id, authorType:'char', authorId:char.id, text:reply.trim(),
+        timestamp:Date.now(), likes:[], retweets:[], replies:[]
+      });
+      success++;
+    }catch(e){ console.warn(char.name+' 发帖失败:', e); }
+  }
+  localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
+  renderTwitterTimeline();
+  showToast(success+' 位角色发布了新动态');
+}
+
+// ── Auto-posting timer ──
+function startTwitterAutoTimer(){
+  if(!twitterAutoEnabled) return;
+  if(_twitterAutoTimer) return;
+  _twitterAutoTimer = setInterval(()=>{
+    try{
+      if(document.getElementById('twitter-app').style.display==='flex' && twitterAutoEnabled){
+        const preset = getTwitterPreset();
+        if(preset && myCharacters.length>0){
+          const char = myCharacters[Math.floor(Math.random()*myCharacters.length)];
+          const sysP = `你是${char.name}。${char.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n请以你自己的身份写一条适合发在推特上的简短动态，控制在100字以内，只输出正文。`;
+          callTwitterAI(char.id, sysP, '发一条推文', 150).then(reply=>{
+            if(reply.trim()){
+              twitterPosts.push({
+                id:'tw_'+Date.now()+'_'+char.id, authorType:'char', authorId:char.id, text:reply.trim(),
+                timestamp:Date.now(), likes:[], retweets:[], replies:[]
+              });
+              localStorage.setItem('tsb_twitter_posts', JSON.stringify(twitterPosts));
+              renderTwitterTimeline();
+            }
+          }).catch(()=>{});
+        }
+      }
+    }catch(e){}
+  }, 600000 + Math.floor(Math.random() * 300000)); // 10-15 min
+}
+function stopTwitterAutoTimer(){
+  if(_twitterAutoTimer){ clearInterval(_twitterAutoTimer); _twitterAutoTimer = null; }
+}
+function toggleTwitterAuto(el){
+  twitterAutoEnabled = !twitterAutoEnabled;
+  el.classList.toggle('on', twitterAutoEnabled);
+  document.getElementById('tw-auto-sub').textContent = twitterAutoEnabled ? '每隔一段时间自动生成角色动态' : '已关闭';
+  localStorage.setItem('tsb_twitter_auto', twitterAutoEnabled ? 'true' : 'false');
+  if(twitterAutoEnabled) startTwitterAutoTimer(); else stopTwitterAutoTimer();
+}
+
+// ── Twitter API Config ──
+function refreshTwitterApiConfig(){
+  // Update main API display
+  const mainEl = document.getElementById('tw-main-api-name');
+  const mainModel = document.getElementById('tw-main-api-model');
+  if(twitterApiConfig.main){
+    const p = presets.find(x=>x.id===twitterApiConfig.main);
+    if(p){ mainEl.textContent = p.name; mainModel.textContent = p.model; }
+    else { mainEl.textContent = '使用全局对话API'; mainModel.textContent = '跟随系统主API设置'; twitterApiConfig.main = null; }
+  } else {
+    mainEl.textContent = '使用全局对话API';
+    mainModel.textContent = '跟随系统主API设置';
+  }
+  // Update backup API display
+  const backupEl = document.getElementById('tw-backup-api-name');
+  const backupModel = document.getElementById('tw-backup-api-model');
+  if(twitterApiConfig.backup){
+    const p = presets.find(x=>x.id===twitterApiConfig.backup);
+    if(p){ backupEl.textContent = p.name; backupModel.textContent = p.model; }
+    else { backupEl.textContent = '未配置副API'; backupModel.textContent = '主API失败时使用'; twitterApiConfig.backup = null; }
+  } else {
+    backupEl.textContent = '未配置副API';
+    backupModel.textContent = '主API失败时使用';
+  }
+  // Update char API bindings list
+  renderCharApiBindings();
+  // Update settings subtitle
+  const sub = document.getElementById('tw-api-sub');
+  if(sub){
+    const main = twitterApiConfig.main ? presets.find(x=>x.id===twitterApiConfig.main)?.name : '全局';
+    const backup = twitterApiConfig.backup ? presets.find(x=>x.id===twitterApiConfig.backup)?.name : '无';
+    sub.textContent = `主:${main} | 副:${backup}`;
+  }
+  localStorage.setItem('tsb_twitter_api_config', JSON.stringify(twitterApiConfig));
+  initTwitterRealToggle();
+}
+
+function renderCharApiBindings(){
+  const el = document.getElementById('tw-char-api-list');
+  if(!el) return;
+  if(myCharacters.length===0){
+    el.innerHTML = '<div style="font-size:12px;color:var(--ink4);padding:8px 0">还没有创建角色</div>';
+    return;
+  }
+  el.innerHTML = myCharacters.map(c=>{
+    const bound = twitterApiConfig.charMap[c.id];
+    const boundPreset = bound ? presets.find(x=>x.id===bound) : null;
+    return `<div class="preset-item" style="cursor:pointer" onclick="selectTwitterApi('char','${c.id}')">
+      <div class="preset-dot" style="background:${boundPreset?'#4caf50':'#ccc'}"></div>
+      <div class="preset-info">
+        <div class="preset-name">${escHtml(c.name)}</div>
+        <div class="preset-model">${boundPreset ? boundPreset.name+' · '+boundPreset.model : '使用主API'}</div>
+      </div>
+      <span style="font-size:11px;color:var(--ink4)">${boundPreset?'切换 ›':'绑定 ›'}</span>
+    </div>`;
+  }).join('');
+}
+
+let _twApiSelectTarget = null;
+function selectTwitterApi(target, charId){
+  _twApiSelectTarget = {target, charId};
+  const chatPresets = presets.filter(p=>!p.apiCategory || p.apiCategory==='chat');
+  if(chatPresets.length===0){
+    showToast('请先在API设置中配置对话预设');
+    return;
+  }
+  const title = target==='main' ? '选择主API' : target==='backup' ? '选择副API' : '为角色绑定API';
+  document.getElementById('am-title').textContent = title;
+  document.getElementById('am-body').innerHTML = `
+    <div style="margin-bottom:8px;font-size:12px;color:var(--ink4)">${target==='char'?'选择此角色专属的API预设':'选择要使用的API预设'}</div>
+    ${target!=='char' ? `<div class="preset-item" style="cursor:pointer" onclick="confirmTwitterApiSelect(null)"><div class="preset-dot" style="background:#ccc"></div><div class="preset-info"><div class="preset-name">使用全局对话API</div><div class="preset-model">跟随系统主API设置</div></div></div>` : ''}
+    ${chatPresets.map(p=>`<div class="preset-item" style="cursor:pointer" onclick="confirmTwitterApiSelect('${p.id}')"><div class="preset-dot" style="background:#4a9eff"></div><div class="preset-info"><div class="preset-name">${escHtml(p.name)}</div><div class="preset-model">${escHtml(p.model)}</div></div></div>`).join('')}
+  `;
+  document.getElementById('archive-modal').classList.add('open');
+}
+
+function confirmTwitterApiSelect(presetId){
+  closeArchiveModal();
+  const t = _twApiSelectTarget;
+  if(!t) return;
+  if(t.target==='main'){
+    twitterApiConfig.main = presetId;
+  } else if(t.target==='backup'){
+    twitterApiConfig.backup = presetId;
+  } else if(t.target==='char' && t.charId){
+    if(presetId) twitterApiConfig.charMap[t.charId] = presetId;
+    else delete twitterApiConfig.charMap[t.charId];
+  }
+  refreshTwitterApiConfig();
+  showToast('已更新');
+}
+
+// ── Real Twitter toggle & cache ──
+function toggleTwitterReal(el){
+  twitterRealEnabled = !twitterRealEnabled;
+  el.classList.toggle('on', twitterRealEnabled);
+  localStorage.setItem('tsb_twitter_real', twitterRealEnabled ? 'true' : 'false');
+  const sub = document.getElementById('tw-real-sub');
+  if(sub) sub.textContent = twitterRealEnabled ? '真实推特内容已启用' : '显示真实推特内容';
+  showToast(twitterRealEnabled ? '真实推特已启用' : '真实推特已关闭');
+  if(twitterRealEnabled){
+    fetchRealTweets();
+  } else {
+    twitterRealCache = [];
+    localStorage.setItem('tsb_twitter_real_cache', '[]');
+  }
+  if(twitterMainTab==='home') renderTwitterTimeline();
+}
+
+function updateTwitterRealInterval(){
+  twitterRealInterval = parseInt(document.getElementById('tw-real-interval').value || '5');
+  localStorage.setItem('tsb_twitter_real_interval', twitterRealInterval);
+  const sub = document.getElementById('tw-real-interval-sub');
+  if(sub) sub.textContent = `每${twitterRealInterval}条插入1条真实推文`;
+  if(twitterMainTab==='home') renderTwitterTimeline();
+}
+
+function initTwitterRealToggle(){
+  const toggle = document.getElementById('toggle-tw-real');
+  if(toggle) toggle.classList.toggle('on', twitterRealEnabled);
+  const intervalSel = document.getElementById('tw-real-interval');
+  if(intervalSel) intervalSel.value = twitterRealInterval;
+  const sub = document.getElementById('tw-real-sub');
+  if(sub) sub.textContent = twitterRealEnabled ? '真实推特内容已启用' : '显示真实推特内容';
+  const intSub = document.getElementById('tw-real-interval-sub');
+  if(intSub) intSub.textContent = `每${twitterRealInterval}条插入1条真实推文`;
+}
+
+async function fetchRealTweets(){
+  if(_twitterRealFetching) return;
+  // Only fetch every 5 minutes
+  if(Date.now() - _twitterRealLastFetch < 300000 && twitterRealCache.length > 0) return;
+  _twitterRealFetching = true;
+  try{
+    const resp = await fetch('/api/twitter/feed?q=trending&product=Top&count=10');
+    if(!resp.ok){
+      if(resp.status === 501 || resp.status === 503){
+        console.warn('真实推特服务暂不可用:', resp.status);
+        return;
+      }
+      throw new Error(`HTTP ${resp.status}`);
+    }
+    const data = await resp.json();
+    if(data.success && data.tweets.length > 0){
+      twitterRealCache = data.tweets.map(t=>({
+        ...t,
+        _fetchedAt: Date.now()
+      }));
+      localStorage.setItem('tsb_twitter_real_cache', JSON.stringify(twitterRealCache));
+      _twitterRealLastFetch = Date.now();
+      console.log(`已获取 ${twitterRealCache.length} 条真实推文`);
+      // Re-render if on timeline
+      if(twitterMainTab==='home') renderTwitterTimeline();
+    }
+  }catch(e){
+    console.warn('获取真实推特失败:', e);
+  }finally{
+    _twitterRealFetching = false;
   }
 }
 
@@ -14262,7 +15015,7 @@ function runTwitterSearch(q){
     : '<div style="text-align:center;padding:40px;color:var(--ink4);font-size:13px">没有找到相关内容</div>';
 }
 
-// ── Notifications tab (real data: who liked/retweeted user's own posts) ──
+// ── Notifications tab ──
 function renderTwitterNotifications(){
   const el = document.getElementById('tw-content');
   const myPosts = twitterPosts.filter(p=>p.authorType==='user');
@@ -14270,11 +15023,11 @@ function renderTwitterNotifications(){
   myPosts.forEach(p=>{
     p.likes.filter(l=>l!=='user').forEach(charId=>{
       const c = findCharacter(charId);
-      if(c) notifications.push({type:'like', char:c, post:p, timestamp:p.timestamp});
+      if(c) notifications.push({type:'like', char:c, post:p, timestamp:Date.now()});
     });
     p.retweets.filter(r=>r!=='user').forEach(charId=>{
       const c = findCharacter(charId);
-      if(c) notifications.push({type:'retweet', char:c, post:p, timestamp:p.timestamp});
+      if(c) notifications.push({type:'retweet', char:c, post:p, timestamp:Date.now()});
     });
     (p.replies||[]).filter(r=>r.authorType==='char').forEach(r=>{
       const c = findCharacter(r.authorId);
@@ -14298,7 +15051,6 @@ function renderTwitterNotifications(){
   }).join('');
 }
 
-// ── Messages tab (redirects to existing 与你相遇 chat system rather than duplicating it) ──
 function renderTwitterMessages(){
   const el = document.getElementById('tw-content');
   el.innerHTML = `
@@ -14310,7 +15062,7 @@ function renderTwitterMessages(){
   `;
 }
 
-// ── Profile page ──
+// ── Enhanced Profile page ──
 function openTwitterProfile(authorType, authorId){
   const isUser = authorType==='user';
   const c = isUser ? null : findCharacter(authorId);
@@ -14319,6 +15071,8 @@ function openTwitterProfile(authorType, authorId){
   const avatarColor = isUser ? 'var(--ink)' : (c?.avatarColor||'#3d3d3d');
   const bio = isUser ? (userProfile.bio||'') : (c?.desc||c?.setting||'');
   const posts = twitterPosts.filter(p=> isUser ? p.authorType==='user' : p.authorId===authorId).sort((a,b)=>b.timestamp-a.timestamp);
+  const following = !isUser && isFollowing(authorId);
+  const followBtn = isUser ? '' : `<button class="save-btn" style="margin-top:10px;padding:6px 24px;border-radius:16px;${following?'background:var(--ink4)':''}" onclick="event.stopPropagation();toggleFollow('${authorId}');openTwitterProfile('char','${authorId}')">${following?'已关注':'+ 关注'}</button>`;
 
   document.getElementById('tw-profile-title').textContent = name;
   const avHtml = avatar ? `<img src="${avatar}">` : escHtml(name[0]||'?');
@@ -14327,8 +15081,13 @@ function openTwitterProfile(authorType, authorId){
       <div class="tw-profile-av" style="${avatar?'':'background:'+avatarColor}">${avHtml}</div>
       <div style="font-size:18px;font-weight:700;color:var(--ink);margin-top:10px">${escHtml(name)}</div>
       <div style="font-size:12.5px;color:var(--ink4);margin-top:2px">@${isUser?'me':(authorId||'').slice(0,10)}</div>
+      ${followBtn}
       <div style="font-size:13px;color:var(--ink2);margin-top:10px;line-height:1.6;padding:0 20px">${escHtml(bio)}</div>
-      <div style="font-size:12px;color:var(--ink4);margin-top:12px">${posts.length} 条推文</div>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:12px;font-size:12px;color:var(--ink4)">
+        <span><b style="color:var(--ink)">${posts.length}</b> 推文</span>
+        <span><b style="color:var(--ink)">${twitterFollowing.length}</b> 正在关注</span>
+      </div>
+      ${!isUser ? `<div style="margin-top:10px"><button class="save-btn" style="background:var(--smoke);color:var(--ink);padding:6px 16px;border-radius:14px;font-size:12px" onclick="event.stopPropagation();triggerCharacterTweet('${authorId}')">↻ 让TA发一条新推文</button></div>` : ''}
     </div>
     <div id="tw-profile-posts">${posts.length ? posts.map(p=>renderTweetCard(p)).join('') : '<div style="text-align:center;padding:40px;color:var(--ink4);font-size:13px">还没有发布过推文</div>'}</div>
   `;
@@ -14608,6 +15367,540 @@ async function initPWA() {
     }
   }
 }
+
+// ══════════════════════════════════════════════════════════════
+//  观影室 (Video Room) - 与AI角色一起观影
+// ══════════════════════════════════════════════════════════════
+
+// ── State ──
+let vrCurrentVideo = null;       // {platform, videoId, title, url}
+let vrSubtitles = null;          // [{start, end, text}]
+let vrSubIndex = -1;             // current subtitle index
+let vrSubTimer = null;           // subtitle polling timer
+let vrCharId = localStorage.getItem('tsb_vr_char_id') || null;
+let vrConfirmed = localStorage.getItem('tsb_vr_confirmed') === '1';
+let vrPendingCharId = null;
+let vrMsgs = [];
+let vrBusy = false;
+let vrAltApi = JSON.parse(localStorage.getItem('tsb_vr_alt_api') || 'null');
+let vrAltFormat = localStorage.getItem('tsb_vr_alt_format') || 'openai';
+let vrMemoryShare = localStorage.getItem('tsb_vr_memory_share') === '1';
+
+// ── API Config ──
+function vrGetApiConfig(){
+  if(vrAltApi && vrAltApi.endpoint && vrAltApi.apiKey && vrAltApi.model){
+    return {...vrAltApi, format: vrAltFormat};
+  }
+  return getActivePreset();
+}
+
+function vrSaveAltApi(){
+  const endpoint = document.getElementById('vr-alt-endpoint')?.value.trim();
+  const apiKey = document.getElementById('vr-alt-apikey')?.value.trim();
+  const model = document.getElementById('vr-alt-model')?.value.trim();
+  if(!endpoint || !apiKey || !model){
+    showToast('请填写完整的副API信息');
+    return;
+  }
+  vrAltApi = {endpoint, apiKey, model};
+  vrAltFormat = document.querySelector('#vr-alt-format-options .format-opt.selected')?.dataset?.format || 'openai';
+  localStorage.setItem('tsb_vr_alt_api', JSON.stringify(vrAltApi));
+  localStorage.setItem('tsb_vr_alt_format', vrAltFormat);
+  vrUpdateApiPanelUI();
+  showToast('副API已保存 · 观影室将优先使用');
+}
+
+function vrClearAltApi(){
+  vrAltApi = null;
+  vrAltFormat = 'openai';
+  localStorage.removeItem('tsb_vr_alt_api');
+  localStorage.removeItem('tsb_vr_alt_format');
+  document.getElementById('vr-alt-endpoint').value = '';
+  document.getElementById('vr-alt-apikey').value = '';
+  document.getElementById('vr-alt-model').value = '';
+  document.querySelectorAll('#vr-alt-format-options .format-opt').forEach(el=>el.classList.remove('selected'));
+  document.querySelector('#vr-alt-format-options .format-opt[data-format="openai"]')?.classList.add('selected');
+  vrUpdateApiPanelUI();
+  showToast('副API已清空 · 将使用主API');
+}
+
+function vrSelectFormat(el){
+  document.querySelectorAll('#vr-alt-format-options .format-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function vrUpdateApiPanelUI(){
+  const hint = document.getElementById('vr-api-main-hint');
+  if(hint){
+    const mainPreset = getActivePreset();
+    hint.textContent = mainPreset ? `主API：${mainPreset.name}（${mainPreset.model}）` : '未配置主API';
+  }
+  // Restore alt API fields
+  if(vrAltApi){
+    const ep = document.getElementById('vr-alt-endpoint');
+    const ak = document.getElementById('vr-alt-apikey');
+    const md = document.getElementById('vr-alt-model');
+    if(ep) ep.value = vrAltApi.endpoint || '';
+    if(ak) ak.value = vrAltApi.apiKey || '';
+    if(md) md.value = vrAltApi.model || '';
+    document.querySelectorAll('#vr-alt-format-options .format-opt').forEach(el=>{
+      el.classList.toggle('selected', el.dataset.format === vrAltFormat);
+    });
+  }
+}
+
+// ── Toggle Panels ──
+function vrToggleCharPicker(){
+  const picker = document.getElementById('vr-char-picker');
+  const apiPanel = document.getElementById('vr-api-panel');
+  if(apiPanel) apiPanel.style.display = 'none';
+  if(!picker) return;
+  if(picker.style.display === 'block'){
+    picker.style.display = 'none';
+  } else {
+    vrRenderCharPicker();
+    picker.style.display = 'block';
+  }
+}
+
+function vrToggleApiPanel(){
+  const apiPanel = document.getElementById('vr-api-panel');
+  const picker = document.getElementById('vr-char-picker');
+  if(picker) picker.style.display = 'none';
+  if(!apiPanel) return;
+  if(apiPanel.style.display === 'block'){
+    apiPanel.style.display = 'none';
+  } else {
+    vrUpdateApiPanelUI();
+    apiPanel.style.display = 'block';
+  }
+}
+
+// ── Character Picker ──
+function vrRenderCharPicker(){
+  const list = document.getElementById('vr-char-picker-list');
+  if(!list) return;
+  const chars = myCharacters;
+  if(chars.length === 0){
+    list.innerHTML = '<div style="font-size:11px;color:var(--ink4);padding:8px">还没有创建角色</div>';
+    return;
+  }
+  list.innerHTML = chars.map(c=>{
+    const av = c.avatar ? `<img src="${c.avatar}">` : escHtml(c.avatarLetter||c.name[0]||'?');
+    const sel = vrCharId === c.id ? ' selected' : '';
+    return `<div class="vr-char-picker-char${sel}" onclick="vrSelectChar('${c.id}')">
+      <div class="vr-char-picker-av" style="${c.avatar?'':'background:'+(c.avatarColor||'#3d3d3d')}">${av}</div>
+      <div class="vr-char-picker-name">${escHtml(c.name)}</div>
+    </div>`;
+  }).join('');
+}
+
+function vrSelectChar(id){
+  vrCharId = id;
+  vrConfirmed = false;
+  vrPendingCharId = id;
+  localStorage.setItem('tsb_vr_char_id', id);
+  localStorage.removeItem('tsb_vr_confirmed');
+  vrMsgs = [];
+  document.getElementById('vr-char-picker').style.display = 'none';
+  vrUpdateHeaderUI();
+  vrRenderMsgs();
+  showToast('已选择角色 · 点击「确认绑定」开始观影');
+}
+
+function vrUnbindChar(){
+  vrCharId = null;
+  vrConfirmed = false;
+  vrPendingCharId = null;
+  localStorage.removeItem('tsb_vr_char_id');
+  localStorage.removeItem('tsb_vr_confirmed');
+  vrMsgs = [];
+  document.getElementById('vr-char-picker').style.display = 'none';
+  vrUpdateHeaderUI();
+  vrRenderMsgs();
+  showToast('已取消绑定');
+}
+
+function vrConfirmBind(){
+  if(!vrCharId) return;
+  const char = findCharacter(vrCharId);
+  if(!char) return;
+  vrConfirmed = true;
+  vrPendingCharId = null;
+  localStorage.setItem('tsb_vr_confirmed', '1');
+  vrUpdateHeaderUI();
+  showToast(`已绑定「${char.name}」· 开始观影吧`);
+  // Welcome message
+  vrAddMsg('system', `你已与「${char.name}」绑定。粘贴视频链接，一起观影聊天吧！`);
+  vrRenderMsgs();
+}
+
+// ── Header UI ──
+function vrUpdateHeaderUI(){
+  const char = vrCharId ? findCharacter(vrCharId) : null;
+  const avEl = document.getElementById('vr-comp-avatar');
+  const nameEl = document.getElementById('vr-comp-name');
+  const statusEl = document.getElementById('vr-comp-status');
+  const bindBtn = document.getElementById('vr-comp-bind-btn');
+  const memBtn = document.getElementById('vr-mem-share-btn');
+
+  if(char && vrConfirmed){
+    if(avEl){ avEl.innerHTML = char.avatar ? `<img src="${char.avatar}">` : (char.avatarLetter||char.name[0]||'?'); avEl.style.background = char.avatar ? '' : (char.avatarColor||'#3d3d3d'); avEl.style.opacity = '1'; }
+    if(nameEl) nameEl.textContent = char.name;
+    const isSameLang = (langCompanionCharId === vrCharId && langCompanionConfirmed);
+    if(statusEl) statusEl.textContent = isSameLang ? '已绑定 · 观影中（也是你的伴学伙伴）' : '已绑定 · 观影中';
+    if(bindBtn) bindBtn.style.display = 'none';
+    if(memBtn){ memBtn.style.display = 'flex'; vrUpdateMemShareBtn(); }
+  } else if(char && !vrConfirmed){
+    if(avEl){ avEl.innerHTML = char.avatar ? `<img src="${char.avatar}">` : (char.avatarLetter||char.name[0]||'?'); avEl.style.background = char.avatar ? '' : (char.avatarColor||'#3d3d3d'); avEl.style.opacity = '0.6'; }
+    if(nameEl) nameEl.textContent = char.name;
+    if(statusEl) statusEl.textContent = '点击确认绑定';
+    if(bindBtn) bindBtn.style.display = 'block';
+    if(memBtn) memBtn.style.display = 'none';
+  } else {
+    if(avEl){ avEl.innerHTML = '?'; avEl.style.background = 'var(--smoke)'; avEl.style.opacity = '1'; }
+    if(nameEl) nameEl.textContent = '选择观影角色';
+    if(statusEl) statusEl.textContent = '未绑定';
+    if(bindBtn) bindBtn.style.display = 'none';
+    if(memBtn) memBtn.style.display = 'none';
+  }
+}
+
+// ── Memory Share Toggle ──
+function vrToggleMemShare(){
+  vrMemoryShare = !vrMemoryShare;
+  localStorage.setItem('tsb_vr_memory_share', vrMemoryShare ? '1' : '0');
+  vrUpdateMemShareBtn();
+  if(vrMemoryShare){
+    showToast('记忆互通已开启 · 观影互动将同步到聊天');
+  } else {
+    showToast('记忆互通已关闭');
+  }
+}
+
+function vrUpdateMemShareBtn(){
+  const btn = document.getElementById('vr-mem-share-btn');
+  if(btn){
+    if(vrMemoryShare) btn.classList.add('on');
+    else btn.classList.remove('on');
+  }
+}
+
+// ── Video Loading ──
+function vrLoadVideo(){
+  const url = document.getElementById('vr-url-input')?.value.trim();
+  if(!url){ showToast('请粘贴视频链接'); return; }
+
+  const parsed = vrParseVideoUrl(url);
+  if(!parsed){
+    showToast('暂不支持此链接 · 支持 YouTube 和 Bilibili');
+    return;
+  }
+
+  vrCurrentVideo = parsed;
+  vrSubtitles = null;
+  vrSubIndex = -1;
+  if(vrSubTimer){ clearInterval(vrSubTimer); vrSubTimer = null; }
+
+  const emptyEl = document.getElementById('vr-player-empty');
+  const playerEl = document.getElementById('vr-player');
+  const subBar = document.getElementById('vr-subtitle-bar');
+  const subBtn = document.getElementById('vr-sub-btn');
+
+  if(emptyEl) emptyEl.style.display = 'none';
+  if(playerEl) playerEl.style.display = 'block';
+  if(subBar) subBar.style.display = 'none';
+
+  let embedHtml = '';
+  if(parsed.platform === 'youtube'){
+    embedHtml = `<iframe src="https://www.youtube.com/embed/${parsed.videoId}?autoplay=0&rel=0&enablejsapi=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  } else if(parsed.platform === 'bilibili'){
+    embedHtml = `<iframe src="https://player.bilibili.com/player.html?bvid=${parsed.videoId}&page=1&autoplay=0" allow="autoplay" allowfullscreen></iframe>`;
+  }
+
+  if(playerEl) playerEl.innerHTML = embedHtml;
+  if(subBtn) subBtn.style.display = 'inline-block';
+
+  showToast(`已加载：${parsed.platform === 'youtube' ? 'YouTube' : 'Bilibili'} 视频`);
+
+  // Just show system notice, no auto-comment (saves API)
+  if(vrConfirmed && vrCharId){
+    vrAddMsg('system', `开始播放视频：${parsed.title || parsed.url}`);
+    vrRenderMsgs();
+  }
+}
+
+function vrParseVideoUrl(url){
+  // YouTube
+  let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  if(m) return {platform:'youtube', videoId:m[1], url, title:url};
+
+  // Bilibili
+  m = url.match(/bilibili\.com\/video\/(BV[a-zA-Z0-9]+)/);
+  if(m) return {platform:'bilibili', videoId:m[1], url, title:url};
+  m = url.match(/bilibili\.com\/bangumi\/play\/(ep\d+)/);
+  if(m) return {platform:'bilibili', videoId:m[1], url, title:url};
+
+  return null;
+}
+
+// ── Subtitle Extraction ──
+function vrExtractSubs(){
+  if(!vrCurrentVideo){ showToast('请先加载视频'); return; }
+  showToast('字幕提取功能需后端支持 · 开发中');
+  // TODO: Backend endpoint for subtitle extraction
+  // For YouTube: use get-youtube-transcript or yt-dlp
+  // For Bilibili: use video-subtitle-extractor
+}
+
+// ── Chat Messages ──
+function vrAddMsg(sender, text, extra){
+  vrMsgs.push({sender, text, time: Date.now(), ...extra});
+  if(vrMsgs.length > 100) vrMsgs = vrMsgs.slice(-100);
+}
+
+function vrRenderMsgs(){
+  const el = document.getElementById('vr-chat-msgs');
+  const emptyEl = document.getElementById('vr-chat-empty');
+  if(!el) return;
+
+  if(vrMsgs.length === 0){
+    if(emptyEl) emptyEl.style.display = 'block';
+    el.innerHTML = '';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display = 'none';
+
+  el.innerHTML = vrMsgs.map(m=>{
+    if(m.type === 'typing'){
+      return `<div class="vr-chat-msg typing"><div class="vr-chat-msg-typing-dots"><span></span><span></span><span></span></div></div>`;
+    }
+    const senderClass = m.sender === 'me' ? 'mine' : m.sender === 'theirs' ? 'theirs' : 'system';
+    return `<div class="vr-chat-msg ${senderClass}">${escHtml(m.text)}</div>`;
+  }).join('');
+
+  setTimeout(()=>{ el.scrollTop = el.scrollHeight; }, 50);
+}
+
+// ── Send Message ──
+async function vrSendMessage(){
+  if(!vrConfirmed){ showToast('请先确认绑定角色'); return; }
+  if(vrBusy) return;
+  const input = document.getElementById('vr-chat-input');
+  if(!input) return;
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+
+  vrAddMsg('me', text);
+  vrRenderMsgs();
+
+  vrBusy = true;
+  vrAddMsg('theirs', '', {type:'typing'});
+  vrRenderMsgs();
+
+  const reply = await vrCallAI('chat', {userMsg: text});
+  vrMsgs = vrMsgs.filter(m=>m.type !== 'typing');
+
+  if(reply){
+    vrAddMsg('theirs', reply);
+    // Sync to chat if memory share
+    if(vrMemoryShare) vrSyncToChat(reply);
+  } else {
+    vrAddMsg('system', '角色暂时无法回应 · 请检查API设置');
+  }
+
+  vrRenderMsgs();
+  vrBusy = false;
+}
+
+// ── Character Auto-Comment ──
+async function vrTriggerCharComment(eventType){
+  if(!vrConfirmed || !vrCharId || vrBusy) return;
+  vrBusy = true;
+  vrAddMsg('theirs', '', {type:'typing'});
+  vrRenderMsgs();
+
+  const reply = await vrCallAI(eventType, {});
+  vrMsgs = vrMsgs.filter(m=>m.type !== 'typing');
+
+  if(reply){
+    vrAddMsg('theirs', reply);
+    if(vrMemoryShare) vrSyncToChat(reply);
+    vrRenderMsgs();
+  }
+
+  vrBusy = false;
+}
+
+// ── AI Call (with A+C memory integration) ──
+async function vrCallAI(type, context){
+  const char = findCharacter(vrCharId);
+  if(!char) return null;
+  const preset = vrGetApiConfig();
+  if(!preset) return null;
+
+  const name = char.name;
+  const setting = char.setting || '';
+  const personaShort = setting.length > 500 ? setting.substring(0,500)+'…' : setting;
+
+  const videoInfo = vrCurrentVideo
+    ? `正在观看的视频：${vrCurrentVideo.platform === 'youtube' ? 'YouTube' : 'Bilibili'}（${vrCurrentVideo.url}）`
+    : '尚未加载视频';
+
+  const recentMsgs = vrMsgs.filter(m=>m.type!=='typing').slice(-6)
+    .map(m=>`${m.sender==='me'?'用户':'我'}: ${m.text}`).join('\n');
+
+  // ══════════ A+C 记忆层贯通 ══════════
+  // A类（Mem0风格）：结构化学习数据
+  const allTimeLogs = _langMemStore.learningLog;
+  const allTimeCorrect = allTimeLogs.reduce((s,l)=>s+(l.correct||0), 0);
+  const allTimeTotal = allTimeLogs.reduce((s,l)=>s+(l.total||20), 0);
+  const allTimeSessions = allTimeLogs.length;
+  const todayLogs = _langMemGetToday('learningLog');
+  const todayCorrect = todayLogs.reduce((s,l)=>s+(l.correct||0), 0);
+  const todaySessions = todayLogs.length;
+  // 提取用户事实
+  const recentFacts = _langMemStore.facts.slice(-5).map(f=>`${f.key}: ${f.value}`).join('；');
+  // 学习偏好
+  const langPrefs = {};
+  allTimeLogs.forEach(l=>{ if(l.lang) langPrefs[l.lang] = (langPrefs[l.lang]||0)+1; });
+  const topLangs = Object.entries(langPrefs).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]+'('+e[1]+'次)').join('、');
+
+  // C类（OpenClaw风格）：Markdown日志摘要
+  let mdSummary = '';
+  try{ const todayLog = _langMarkdownGetTodayLog(); if(todayLog.summary) mdSummary = todayLog.summary; }catch(e){}
+
+  // 跨APP感知：检查同一角色是否也是语习伴学
+  const isSameCharAsLang = (langCompanionCharId === vrCharId && langCompanionConfirmed);
+  const crossAppNote = isSameCharAsLang
+    ? `\n【注意】用户也在语习APP中绑定了你作为伴学角色。你了解TA的学习情况，可以在对话中自然地提到TA的学习状态（但不要刻意，要像真人一样不经意间流露）。`
+    : '';
+
+  // 构建记忆上下文
+  const memoryParts = [];
+  if(allTimeSessions > 0){
+    memoryParts.push(`学习总览：累计${allTimeSessions}次学习，正确率${allTimeTotal>0?Math.round(allTimeCorrect/allTimeTotal*100):0}%`);
+  }
+  if(todaySessions > 0){
+    memoryParts.push(`今日学习：${todaySessions}次，正确${todayCorrect}题`);
+  }
+  if(topLangs) memoryParts.push(`偏好语言：${topLangs}`);
+  if(recentFacts) memoryParts.push(`用户事实：${recentFacts}`);
+  if(mdSummary) memoryParts.push(`今日日志：${mdSummary}`);
+  const memoryContext = memoryParts.length > 0
+    ? `\n【关于用户的记忆（来自语习APP）】\n${memoryParts.join('\n')}${crossAppNote}`
+    : '';
+
+  let sysPrompt, userPrompt;
+
+  if(type === 'chat'){
+    sysPrompt = `你是「${name}」，正在和用户一起观看视频。
+
+【你的人设】
+${personaShort}
+
+【当前观影状态】
+${videoInfo}${memoryContext}
+
+【对话规则】
+1. 用角色的人设风格说话，保持性格一致
+2. 回复简短自然（1-3句话），像真人聊天一样
+3. 你可以对视频内容进行吐槽、评论、猜测剧情，就像真的在一起看
+4. 如果用户提到剧情内容，结合你的角色性格给出有趣的反馈
+5. 可以毒舌、可以温柔、可以傲娇，但要有"活人感"，不要机械
+6. 禁止说"作为AI助手"或"根据记忆"之类的套话，记忆数据是你"本来就该知道的"
+7. 你的回复将直接显示给用户，不要加任何前缀或标签
+8. 偶尔可以自然地带出关于用户的事情（如"你上次英语才对了8题，今天看电影倒是挺积极"），但不要每句都提`;
+
+    userPrompt = `用户对你说：${context.userMsg}\n\n最近对话：\n${recentMsgs}\n\n请用「${name}」的口吻自然回复。`;
+  } else {
+    const eventMap = {
+      'video_start': `你们刚开始一起看视频。用你的角色风格打个招呼或评论一下即将开始的内容，简短自然。`,
+      'video_pause': `视频暂停了，用户可能去干别的了。用你的角色风格吐槽或关心一下。`,
+      'video_comment': `用户正在看电影/视频，根据你的角色性格，给出一个自然的反应或吐槽。`,
+    };
+    const eventDesc = eventMap[type] || `你们正在一起看视频，请用你的角色风格自然地给个反应。`;
+
+    sysPrompt = `你是「${name}」，正在和用户一起观看视频。
+
+【你的人设】
+${personaShort}
+
+【当前观影状态】
+${videoInfo}${memoryContext}
+
+【回复规则】
+1. 用角色的人设风格说话
+2. 回复简短（1-3句话），像真人一样
+3. 要有情绪和个性，不要机械
+4. 禁止说"作为AI助手"或"根据记忆"之类的套话
+5. 你的回复会直接显示给用户，不要加任何前缀或标签
+6. 回复要让人感觉你真的在旁边一起看，有"活人感"`;
+
+    userPrompt = `${eventDesc}\n\n最近对话：\n${recentMsgs || '（这是第一次互动）'}\n\n请用「${name}」的口吻自然回复。`;
+  }
+
+  try{
+    const raw = await callAIRaw(preset, sysPrompt, [{role:'user', content: userPrompt}], 300);
+    let text = raw.trim();
+    text = text.replace(/^["「『]/,'').replace(/["」』]$/,'');
+    text = text.replace(/^（.+?）\s*/,'');
+    text = text.replace(/^\(.+?\)\s*/,'');
+    return text || null;
+  }catch(e){
+    console.error('vr AI error:', e);
+    return null;
+  }
+}
+
+// ── Memory Sync to Chat ──
+function vrSyncToChat(text){
+  const char = findCharacter(vrCharId);
+  if(!char) return;
+  let h = chatHistory.find(h2=>h2.id===char.id);
+  if(!h){
+    h = {id: char.id, msgs:[], unread: false};
+    chatHistory.push(h);
+  }
+  h.msgs.push({
+    role: 'assistant',
+    content: `[观影室] ${text}`,
+    time: Date.now(),
+    source: 'video_room'
+  });
+  if(h.msgs.length > 200) h.msgs = h.msgs.slice(-200);
+  persist();
+}
+
+// ── Init VR Page ──
+function vrInitPage(){
+  vrUpdateHeaderUI();
+  vrRenderMsgs();
+  vrUpdateApiPanelUI();
+  // 跨APP感知：如果同一角色也是语习伴学，更新状态提示
+  if(vrConfirmed && vrCharId && langCompanionCharId === vrCharId && langCompanionConfirmed){
+    const statusEl = document.getElementById('vr-comp-status');
+    if(statusEl) statusEl.textContent = '已绑定 · 观影中（也是你的伴学伙伴）';
+  }
+}
+
+// ── Page visibility: auto-pause/resume idle timer ──
+let _vrPageActive = false;
+const _vrPageObserver = new MutationObserver(()=>{
+  const page = document.getElementById('app-page-2');
+  const nowActive = page?.classList.contains('active');
+  if(nowActive && !_vrPageActive){
+    _vrPageActive = true;
+    vrInitPage();
+  } else if(!nowActive && _vrPageActive){
+    _vrPageActive = false;
+  }
+});
+(function(){
+  const page = document.getElementById('app-page-2');
+  if(page) _vrPageObserver.observe(page, {attributes:true, attributeFilter:['class']});
+})();
 
 init();
 initPWA();
