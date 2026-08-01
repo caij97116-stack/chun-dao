@@ -38,7 +38,7 @@ except ImportError:
 
 # Scrapling 轻量爬虫
 try:
-    from scrapling import PlaywrightScraper
+    from scrapling.parser import Adaptor
     HAS_SCRAPLING = True
 except ImportError:
     HAS_SCRAPLING = False
@@ -821,7 +821,7 @@ async def _scrape_via_scrapling(url: str, timeout: float) -> tuple:
 
 def _scrapling_sync(url: str, timeout: float):
     """Scrapling 同步抓取（在 executor 中运行）"""
-    from scrapling import Adaptor
+    from scrapling.parser import Adaptor
     import requests
     headers = {
         "User-Agent": "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36",
