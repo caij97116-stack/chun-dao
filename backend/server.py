@@ -1811,9 +1811,9 @@ async function loadCodes(){
     if(c.banned){ statusHtml = '<span class="badge badge-banned">已封禁</span>'; }
     else if(c.is_activated){ statusHtml = '<span class="badge badge-active">已激活</span>'; }
     else { statusHtml = '<span class="badge badge-inactive">未激活</span>'; }
-    let actions = '<button class="btn btn-sm btn-danger" onclick="deleteCode(\''+esc(c.code)+'\')">删除</button>';
-    if(c.banned){ actions += ' <button class="btn btn-sm btn-outline" onclick="unbanCode(\''+esc(c.code)+'\')">解封</button>'; }
-    else { actions += ' <button class="btn btn-sm btn-outline" onclick="banCode(\''+esc(c.code)+'\')">封禁</button>'; }
+    let actions = `<button class="btn btn-sm btn-danger" onclick="deleteCode('${esc(c.code)}')">删除</button>`;
+    if(c.banned){ actions += ` <button class="btn btn-sm btn-outline" onclick="unbanCode('${esc(c.code)}')">解封</button>`; }
+    else { actions += ` <button class="btn btn-sm btn-outline" onclick="banCode('${esc(c.code)}')">封禁</button>`; }
     return '<tr><td><span class="code-text">'+esc(c.code)+'</span></td><td>'+statusHtml+'</td><td style="color:var(--text2);font-size:12px">'+esc(c.notes||'-')+'</td><td style="color:var(--text2);font-size:12px">'+c.created_at+'</td><td style="color:var(--text2);font-size:12px">'+(c.activated_at||'-')+'</td><td>'+actions+'</td></tr>';
   }).join(''); }
 }

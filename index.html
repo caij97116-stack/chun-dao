@@ -49,7 +49,7 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 @keyframes progRun{to{width:100%;}}
 
 /* ══ HOME ══ */
-#home{background:#000;flex-direction:column;}
+#home{background:#000;flex-direction:column;overflow:hidden;}
 .home-bg{position:absolute;inset:0;background-image:var(--bg-gif);background-size:cover;background-position:center;filter:brightness(0.75) contrast(1.02) saturate(0.9);}
 .home-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.08) 0%,rgba(0,0,0,0.3) 100%);}
 .home-statusbar{position:relative;z-index:10;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;flex-shrink:0;}
@@ -66,9 +66,9 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .top-frame-date{font-size:10px;letter-spacing:0.25em;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-top:5px;}
 
 /* App area below the frame */
-.home-lower{flex:1;position:relative;z-index:10;display:flex;flex-direction:column;overflow:visible;}
+.home-lower{flex:1;position:relative;z-index:10;display:flex;flex-direction:column;}
 .app-grid-area{flex:1;position:relative;z-index:10;padding:18px 16px 8px;display:flex;flex-direction:column;gap:18px;overflow:hidden;}
-.app-pages-container{flex:1;position:relative;z-index:10;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.app-pages-container{flex:1;width:100%;min-width:0;position:relative;z-index:10;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .app-pages-container::-webkit-scrollbar{display:none;}
 .app-page{flex:0 0 100%;scroll-snap-align:start;display:flex;flex-direction:column;gap:18px;padding:18px 16px 8px;box-sizing:border-box;position:relative;}
 .page-dots{position:relative;z-index:10;display:flex;justify-content:center;align-items:center;gap:6px;padding:4px 0 10px;flex-shrink:0;}
@@ -6565,7 +6565,7 @@ function renderStoreMine(ct){
   html += '<button class="store-card-btn" style="width:100%;margin-bottom:12px;padding:12px;font-size:13px" onclick="switchStoreTab(\'upload\')">+ 上传新应用</button>';
   var uploads = storeGetUploads();
   if(uploads.length===0){ html += '<div style="text-align:center;padding:20px 0;color:var(--ink4);font-size:13px">还没有上传过应用</div>'; }
-  else { html += '<div style="text-align:center;padding:20px 0;color:var(--ink4);font-size:13px">已上传 '+uploads.length+' 个应用，可在管理后台查看审核状态</div>'; }
+  else { html += '<div style="text-align:center;padding:20px 0;color:var(--ink4);font-size:13px">已上传 '+uploads.length+' 个应用，等待审核中</div>'; }
   ct.innerHTML = html;
   loadStoreAppsFromAPI().then(function(apiApps){
     if(apiApps.length>0){
