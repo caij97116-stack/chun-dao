@@ -4,13 +4,45 @@ import string
 import os
 import json
 import logging
-import httpx
+import asyncio
+import re
+import tempfile
+import subprocess
 from datetime import datetime, timezone, timedelta
+from urllib.parse import urlparse, quote
 from fastapi import FastAPI, HTTPException, Query, Request, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from contextlib import contextmanager
+import httpx
+from bs4 import BeautifulSoup
+
+# OCR 手写识别
+try:
+    import pytesseract
+    from PIL import Image
+    import io
+    HAS_OCR = True
+except ImportError:
+    HAS_OCR = False
+    logging.warning("pytesseract/Pillow 未安装，OCR 手写识别不可用。pip install pytesseract Pillow")
+
+# Emoji 搜索
+try:
+    import emoji as emoji_lib
+    HAS_EMOJI = True
+except ImportError:
+    HAS_EMOJI = False
+    logging.warning("emoji 库未安装，Emoji API 不可用")
+
+# Scrapling 轻量爬虫
+try:
+    from scrapling import PlaywrightScraper
+    HAS_SCRAPLING = True
+except ImportError:
+    HAS_SCRAPLING = False
+    logging.warning("scrapling 未安装，将使用 httpx+BeautifulSoup 作为爬虫方案")
 
 # Web Push 依赖
 try:
@@ -547,6 +579,603 @@ async def push_send(req: PushSendRequest):
         logging.info(f"已清理 {len(removed_endpoints)} 个失效订阅")
 
     return {"success": True, "sent": sent_count, "failed": failed_count}
+
+# ══════════ Web Scraping API (Scrapling → httpx+BS4 → Jina Reader 三层降级) ══════════
+
+class ScrapeRequest(BaseModel):
+    url: str
+    timeout_ms: int = 8000
+
+class ScrapeResponse(BaseModel):
+    url: str
+    content: str
+    engine: str  # scrapling / httpx / jina / firecrawl
+
+async def _scrape_via_httpx(url: str, timeout: float) -> tuple:
+    """使用 httpx + BeautifulSoup 抓取网页文本"""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+    }
+    async with httpx.AsyncClient(timeout=timeout, follow_redirects=True, headers=headers) as client:
+        resp = await client.get(url)
+        resp.raise_for_status()
+        html = resp.text
+        soup = BeautifulSoup(html, "lxml")
+        # 移除脚本和样式
+        for tag in soup(["script", "style", "nav", "footer", "header", "aside"]):
+            tag.decompose()
+        # 提取正文
+        body = soup.find("body")
+        if not body:
+            body = soup
+        text = body.get_text(separator="\n", strip=True)
+        # 清理多余空行
+        lines = [line.strip() for line in text.split("\n") if line.strip()]
+        content = "\n".join(lines)
+        return content, resp.headers.get("content-type", "")
+
+async def _scrape_via_scrapling(url: str, timeout: float) -> tuple:
+    """使用 Scrapling 抓取网页（支持JS渲染）"""
+    if not HAS_SCRAPLING:
+        raise RuntimeError("Scrapling 未安装")
+    # Scrapling 的 PlaywrightScraper 需要浏览器
+    # 在 Render 上可能没有浏览器，降级使用普通模式
+    loop = asyncio.get_event_loop()
+    result = await loop.run_in_executor(None, _scrapling_sync, url, timeout)
+    return result, "text/html"
+
+def _scrapling_sync(url: str, timeout: float):
+    """Scrapling 同步抓取（在 executor 中运行）"""
+    from scrapling import Adaptor
+    import requests
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36",
+        "Accept-Language": "zh-CN,zh;q=0.9",
+    }
+    resp = requests.get(url, headers=headers, timeout=timeout)
+    resp.raise_for_status()
+    page = Adaptor(resp.text, url=url)
+    # 提取正文
+    content = page.get_page_text()
+    return content
+
+async def _scrape_via_jina(url: str, timeout: float) -> tuple:
+    """使用 Jina AI Reader 抓取（外部服务，无需本地依赖）"""
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        resp = await client.get(
+            f"https://r.jina.ai/{quote(url, safe='')}",
+            headers={"Accept": "text/markdown", "X-No-Cache": "true"}
+        )
+        resp.raise_for_status()
+        return resp.text, "text/markdown"
+
+async def _scrape_via_firecrawl(url: str, timeout: float, api_key: str = "") -> tuple:
+    """使用 Firecrawl API 抓取（支持JS渲染）"""
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        resp = await client.post(
+            "https://api.firecrawl.dev/v1/scrape",
+            json={"url": url, "formats": ["markdown"], "onlyMainContent": True, "timeout": min(int(timeout * 1000), 30000)},
+            headers=headers
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        if data.get("success") and data.get("data", {}).get("markdown"):
+            return data["data"]["markdown"], "text/markdown"
+        raise RuntimeError("Firecrawl 返回无内容")
+
+@app.post("/api/scrape")
+async def scrape_url(req: ScrapeRequest):
+    """
+    抓取链接内容，三层降级策略：
+    1. Scrapling（Python原生，轻量快速）
+    2. httpx + BeautifulSoup（纯Python，零额外依赖）
+    3. Jina AI Reader（外部服务，Markdown格式）
+    4. Firecrawl（外部服务，JS渲染兜底）
+    """
+    url = req.url.strip()
+    if not url:
+        raise HTTPException(status_code=400, detail="URL 不能为空")
+    
+    timeout = req.timeout_ms / 1000.0
+    content_limit = 5000
+    engines_tried = []
+    last_error = None
+    
+    # 引擎1: Scrapling
+    if HAS_SCRAPLING:
+        try:
+            content, _ = await _scrape_via_scrapling(url, timeout)
+            if content and len(content.strip()) > 50:
+                truncated = content[:content_limit] + ("\n\n…(内容过长已截断)" if len(content) > content_limit else "")
+                return {"url": url, "content": truncated, "engine": "scrapling"}
+            engines_tried.append("scrapling(内容过短)")
+        except Exception as e:
+            engines_tried.append(f"scrapling({str(e)[:50]})")
+            last_error = e
+    
+    # 引擎2: httpx + BeautifulSoup
+    try:
+        content, _ = await _scrape_via_httpx(url, timeout)
+        if content and len(content.strip()) > 50:
+            truncated = content[:content_limit] + ("\n\n…(内容过长已截断)" if len(content) > content_limit else "")
+            return {"url": url, "content": truncated, "engine": "httpx+bs4"}
+        engines_tried.append("httpx+bs4(内容过短)")
+    except Exception as e:
+        engines_tried.append(f"httpx+bs4({str(e)[:50]})")
+        last_error = e
+    
+    # 引擎3: Jina AI Reader
+    try:
+        content, _ = await _scrape_via_jina(url, timeout)
+        if content and len(content.strip()) > 50:
+            truncated = content[:content_limit] + ("\n\n…(内容过长已截断)" if len(content) > content_limit else "")
+            return {"url": url, "content": truncated, "engine": "jina"}
+        engines_tried.append("jina(内容过短)")
+    except Exception as e:
+        engines_tried.append(f"jina({str(e)[:50]})")
+        last_error = e
+    
+    # 引擎4: Firecrawl
+    try:
+        content, _ = await _scrape_via_firecrawl(url, timeout)
+        if content and len(content.strip()) > 50:
+            truncated = content[:content_limit] + ("\n\n…(内容过长已截断)" if len(content) > content_limit else "")
+            return {"url": url, "content": truncated, "engine": "firecrawl"}
+        engines_tried.append("firecrawl(内容过短)")
+    except Exception as e:
+        engines_tried.append(f"firecrawl({str(e)[:50]})")
+        last_error = e
+    
+    # 全部失败
+    raise HTTPException(
+        status_code=502,
+        detail=f"所有抓取引擎均失败: {' → '.join(engines_tried)}"
+    )
+
+# ══════════ Video Subtitle Extraction API (yt-dlp) ══════════
+
+class VideoSubtitlesRequest(BaseModel):
+    url: str
+    lang: str = "zh"  # 字幕语言，zh/en/ja 等
+
+@app.get("/api/video/subtitles")
+async def extract_video_subtitles(
+    url: str = Query(..., description="视频链接"),
+    lang: str = Query("zh", description="字幕语言代码")
+):
+    """
+    提取视频字幕/字幕信息
+    支持 YouTube、Bilibili 等主流平台
+    使用 yt-dlp 提取字幕
+    """
+    if not url.strip():
+        raise HTTPException(status_code=400, detail="URL 不能为空")
+    
+    try:
+        # 使用 yt-dlp 提取字幕
+        cmd = [
+            "yt-dlp",
+            "--skip-download",
+            "--write-subs",
+            "--write-auto-subs",
+            "--sub-lang", lang,
+            "--convert-subs", "srt",
+            "--print", "filename",
+            "--print", "title",
+            "--print", "duration_string",
+            "-o", "-",
+            url
+        ]
+        
+        loop = asyncio.get_event_loop()
+        
+        # 先获取视频信息
+        info_cmd = [
+            "yt-dlp",
+            "--dump-json",
+            "--no-playlist",
+            url
+        ]
+        
+        try:
+            result = await loop.run_in_executor(
+                None,
+                lambda: subprocess.run(info_cmd, capture_output=True, text=True, timeout=30)
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                info = json.loads(result.stdout)
+                
+                # 提取字幕
+                subtitles_list = []
+                subs = info.get("subtitles", {})
+                auto_subs = info.get("automatic_captions", {})
+                
+                # 合并手动和自动字幕
+                all_subs = {**auto_subs, **subs}
+                
+                for sub_lang, sub_entries in all_subs.items():
+                    for entry in sub_entries:
+                        if entry.get("ext") in ("vtt", "srt", "json3"):
+                            subtitles_list.append({
+                                "lang": sub_lang,
+                                "name": entry.get("name", sub_lang),
+                                "ext": entry.get("ext", ""),
+                                "url": entry.get("url", ""),
+                                "auto": sub_lang in auto_subs
+                            })
+                
+                return {
+                    "success": True,
+                    "title": info.get("title", ""),
+                    "duration": info.get("duration_string", ""),
+                    "thumbnail": info.get("thumbnail", ""),
+                    "uploader": info.get("uploader", ""),
+                    "webpage_url": info.get("webpage_url", url),
+                    "subtitles_available": subtitles_list,
+                    "subtitles_count": len(subtitles_list)
+                }
+        except subprocess.TimeoutExpired:
+            raise HTTPException(status_code=504, detail="获取视频信息超时")
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=502, detail="解析视频信息失败")
+            
+    except HTTPException:
+        raise
+    except FileNotFoundError:
+        raise HTTPException(status_code=501, detail="yt-dlp 未安装，请联系管理员")
+    except Exception as e:
+        logging.error(f"视频字幕提取失败: {e}")
+        raise HTTPException(status_code=500, detail=f"字幕提取失败: {str(e)}")
+
+@app.get("/api/video/subtitles/download")
+async def download_video_subtitles(
+    url: str = Query(..., description="视频链接"),
+    lang: str = Query("zh", description="字幕语言"),
+    sub_url: str = Query("", description="字幕文件URL（从 /api/video/subtitles 获取）")
+):
+    """
+    下载并解析字幕文件内容
+    返回 SRT/VTT 格式的字幕文本
+    """
+    if not url.strip():
+        raise HTTPException(status_code=400, detail="URL 不能为空")
+    
+    try:
+        if sub_url:
+            # 直接下载字幕URL
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                resp = await client.get(sub_url)
+                resp.raise_for_status()
+                raw_text = resp.text
+        else:
+            # 使用 yt-dlp 下载字幕
+            with tempfile.TemporaryDirectory() as tmpdir:
+                cmd = [
+                    "yt-dlp",
+                    "--skip-download",
+                    "--write-subs",
+                    "--write-auto-subs",
+                    "--sub-lang", lang,
+                    "--convert-subs", "srt",
+                    "-o", f"{tmpdir}/%(title)s.%(ext)s",
+                    "--no-playlist",
+                    url
+                ]
+                
+                loop = asyncio.get_event_loop()
+                await loop.run_in_executor(
+                    None,
+                    lambda: subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+                )
+                
+                # 查找生成的字幕文件
+                srt_files = []
+                for root, dirs, files in os.walk(tmpdir):
+                    for f in files:
+                        if f.endswith((".srt", ".vtt", ".lrc")):
+                            srt_files.append(os.path.join(root, f))
+                
+                if not srt_files:
+                    raise HTTPException(status_code=404, detail=f"未找到 {lang} 字幕")
+                
+                with open(srt_files[0], "r", encoding="utf-8") as f:
+                    raw_text = f.read()
+        
+        # 解析字幕文本为纯文本（去除时间戳）
+        clean_lines = []
+        for line in raw_text.split("\n"):
+            line = line.strip()
+            # 跳过序号、时间戳、空行、WebVTT头部
+            if not line or line.isdigit() or "-->" in line or line.startswith("WEBVTT") or line.startswith("Kind:") or line.startswith("Language:"):
+                continue
+            # 跳过 HTML 标签
+            clean = re.sub(r"<[^>]+>", "", line)
+            if clean:
+                clean_lines.append(clean)
+        
+        content = "\n".join(clean_lines)
+        truncated = content[:5000] + ("\n\n…(字幕过长已截断)" if len(content) > 5000 else "")
+        
+        return {
+            "success": True,
+            "content": truncated,
+            "raw_length": len(raw_text),
+            "clean_length": len(content)
+        }
+        
+    except HTTPException:
+        raise
+    except FileNotFoundError:
+        raise HTTPException(status_code=501, detail="yt-dlp 未安装")
+    except subprocess.TimeoutExpired:
+        raise HTTPException(status_code=504, detail="下载字幕超时")
+    except Exception as e:
+        logging.error(f"字幕下载失败: {e}")
+        raise HTTPException(status_code=500, detail=f"字幕下载失败: {str(e)}")
+
+# ══════════ Emoji Search API ══════════
+
+@app.get("/api/emoji/search")
+async def search_emoji(q: str = Query("", description="搜索关键词"), limit: int = Query(30, ge=1, le=100)):
+    """
+    搜索 Emoji
+    支持中文关键词搜索，如 "笑"、"哭"、"心"、"动物" 等
+    """
+    if not HAS_EMOJI:
+        raise HTTPException(status_code=501, detail="Emoji 功能未启用")
+    
+    if not q.strip():
+        # 返回常用分类
+        return {
+            "query": "",
+            "results": [
+                {"emoji": "😀", "name": "笑脸", "category": "表情"},
+                {"emoji": "😂", "name": "笑哭", "category": "表情"},
+                {"emoji": "❤️", "name": "红心", "category": "符号"},
+                {"emoji": "👍", "name": "赞", "category": "手势"},
+                {"emoji": "🎉", "name": "庆祝", "category": "活动"},
+                {"emoji": "🌟", "name": "星星", "category": "自然"},
+                {"emoji": "🔥", "name": "火", "category": "自然"},
+                {"emoji": "💯", "name": "一百分", "category": "符号"},
+                {"emoji": "😭", "name": "大哭", "category": "表情"},
+                {"emoji": "😊", "name": "微笑", "category": "表情"},
+                {"emoji": "🥺", "name": "恳求", "category": "表情"},
+                {"emoji": "💕", "name": "双心", "category": "符号"},
+                {"emoji": "✨", "name": "闪光", "category": "自然"},
+                {"emoji": "🥰", "name": "喜爱", "category": "表情"},
+                {"emoji": "😅", "name": "尴尬", "category": "表情"},
+            ]
+        }
+    
+    q_lower = q.strip().lower()
+    results = []
+    
+    # 使用 emoji 库搜索
+    # EMOJI_DATA 包含了所有 emoji 及其描述
+    for emoji_char, data in emoji_lib.EMOJI_DATA.items():
+        name = data.get("en", "").lower()
+        # 也检查中文名称（如果有的话）
+        alias_list = [a.lower() for a in data.get("alias", [])]
+        
+        if q_lower in name or any(q_lower in a for a in alias_list):
+            results.append({
+                "emoji": emoji_char,
+                "name": data.get("en", "").replace("_", " ").title(),
+                "aliases": data.get("alias", [])
+            })
+        
+        if len(results) >= limit:
+            break
+    
+    # 如果英文搜索没找到，尝试中文关键词映射
+    if not results:
+        zh_map = {
+            "笑": ["grinning", "smile", "laugh", "joy", "satisfied", "grin", "laughing"],
+            "哭": ["cry", "tear", "sob", "sad"],
+            "心": ["heart", "love", "kiss"],
+            "爱": ["heart", "love", "kiss", "couple"],
+            "动物": ["cat", "dog", "animal", "bird", "fish", "rabbit", "bear", "monkey"],
+            "花": ["flower", "blossom", "rose", "tulip", "cherry", "sunflower"],
+            "吃": ["food", "eat", "drink", "rice", "bread", "meat"],
+            "喝": ["drink", "coffee", "tea", "beer", "wine", "cocktail", "beverage"],
+            "音乐": ["music", "note", "song", "sound", "instrument"],
+            "运动": ["sport", "ball", "game", "run", "swim", "exercise"],
+            "交通": ["car", "bus", "train", "plane", "bike", "vehicle", "travel"],
+            "天气": ["sun", "rain", "cloud", "snow", "weather", "thunder", "wind"],
+            "星星": ["star", "sparkle", "glow"],
+            "火": ["fire", "flame", "hot"],
+            "钱": ["money", "dollar", "coin", "cash", "bank"],
+            "手": ["hand", "wave", "clap", "thumb", "fist", "point"],
+            "时间": ["clock", "time", "hour", "watch", "alarm"],
+            "书": ["book", "read", "library", "notebook"],
+            "手机": ["phone", "mobile", "cell", "iphone"],
+            "电脑": ["computer", "laptop", "pc", "desktop"],
+            "礼物": ["gift", "present", "box", "ribbon"],
+            "太阳": ["sun", "sunny", "sunrise", "sunset"],
+            "月亮": ["moon", "crescent", "night"],
+            "生气": ["angry", "mad", "rage", "furious", "angry"],
+            "惊讶": ["surprise", "shock", "astonish", "amaze"],
+            "睡觉": ["sleep", "sleepy", "tired", "yawn", "bed"],
+            "赞": ["thumbs", "up", "like", "ok", "good", "great", "approve"],
+        }
+        
+        keywords = zh_map.get(q.strip(), [q_lower])
+        for emoji_char, data in emoji_lib.EMOJI_DATA.items():
+            name = data.get("en", "").lower()
+            if any(kw in name for kw in keywords):
+                results.append({
+                    "emoji": emoji_char,
+                    "name": data.get("en", "").replace("_", " ").title(),
+                    "aliases": data.get("alias", [])
+                })
+            if len(results) >= limit:
+                break
+    
+    return {
+        "query": q,
+        "results": results,
+        "count": len(results)
+    }
+
+# ══════════ OCR Handwriting Recognition API ══════════
+# 前端 Tesseract.js 离线识别优先，本端点作为降级方案
+# 支持：日文假名、汉字、英文字母的手写识别
+
+class OCRRequest(BaseModel):
+    image_base64: str  # base64 编码的 PNG/JPEG 图片
+    lang_hint: str = "auto"  # 语言提示: ja/en/auto，帮助 Tesseract 选对语言包
+
+@app.post("/api/ocr/recognize")
+async def ocr_recognize(req: OCRRequest):
+    """
+    手写文字 OCR 识别
+    使用 pytesseract（系统 Tesseract OCR）进行识别
+    前端降级链：Tesseract.js(离线) → 本端点(后端OCR) → AI视觉(最终兜底)
+    """
+    if not HAS_OCR:
+        raise HTTPException(status_code=501, detail="OCR 服务未启用，请安装 pytesseract 和 Pillow")
+    
+    if not req.image_base64:
+        raise HTTPException(status_code=400, detail="图片数据不能为空")
+    
+    try:
+        # 解码 base64 图片
+        image_bytes = __import__('base64').b64decode(req.image_base64)
+        image = Image.open(io.BytesIO(image_bytes))
+        
+        # 预处理：放大图片（手写通常较小）、转灰度、增强对比度
+        w, h = image.size
+        if w < 200 or h < 80:
+            image = image.resize((w * 2, h * 2), Image.LANCZOS)
+        
+        # 转灰度 + 二值化增强手写笔迹
+        image = image.convert('L')
+        # 自适应阈值二值化
+        import numpy as np
+        img_array = np.array(image)
+        threshold = np.mean(img_array) * 0.85
+        image = Image.fromarray((img_array < threshold).astype(np.uint8) * 255)
+        
+        # 选择语言包
+        lang_map = {"ja": "jpn", "en": "eng", "auto": "eng+jpn"}
+        lang = lang_map.get(req.lang_hint, "eng+jpn")
+        
+        # OCR 识别
+        text = pytesseract.image_to_string(image, lang=lang, config='--psm 7 -c tessedit_char_whitelist=')
+        text = text.strip()
+        
+        if not text:
+            return {"success": False, "text": "", "message": "未能识别到文字"}
+        
+        return {"success": True, "text": text, "engine": "pytesseract"}
+        
+    except Exception as e:
+        logging.error(f"OCR 识别失败: {e}")
+        raise HTTPException(status_code=500, detail=f"OCR 识别失败: {str(e)}")
+
+
+# ══════════ Dictionary API (Free Dictionary + Jisho) ══════════
+
+@app.get("/api/dictionary/{word}")
+async def lookup_word(word: str, lang: str = Query("en", description="语言: en/ja")):
+    """
+    词典查询
+    - 英语: 使用 Free Dictionary API (https://api.dictionaryapi.dev)
+    - 日语: 使用 Jisho.org API (https://jisho.org)
+    """
+    word = word.strip()
+    if not word:
+        raise HTTPException(status_code=400, detail="请提供要查询的单词")
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            if lang == "ja":
+                # Jisho API for Japanese
+                resp = await client.get(
+                    f"https://jisho.org/api/v1/search/words",
+                    params={"keyword": word}
+                )
+                if resp.status_code != 200:
+                    raise HTTPException(status_code=502, detail="日语词典服务不可用")
+                
+                data = resp.json()
+                entries = []
+                for item in (data.get("data") or [])[:3]:
+                    jp = item.get("japanese", [{}])[0]
+                    senses = item.get("senses", [{}])[0]
+                    entries.append({
+                        "word": jp.get("word", jp.get("reading", word)),
+                        "reading": jp.get("reading", ""),
+                        "definitions": senses.get("english_definitions", []),
+                        "pos": "/".join(senses.get("parts_of_speech", [])),
+                    })
+                
+                return {
+                    "word": word,
+                    "lang": "ja",
+                    "entries": entries,
+                    "source": "jisho.org"
+                }
+            else:
+                # Free Dictionary API for English
+                resp = await client.get(
+                    f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
+                )
+                if resp.status_code == 404:
+                    return {"word": word, "lang": "en", "entries": [], "source": "dictionaryapi.dev", "message": "未找到该词"}
+                if resp.status_code != 200:
+                    raise HTTPException(status_code=502, detail="英语词典服务不可用")
+                
+                data = resp.json()
+                entries = []
+                for item in data[:2]:
+                    meanings = []
+                    for m in item.get("meanings", []):
+                        defs = []
+                        for d in m.get("definitions", [])[:3]:
+                            defs.append({
+                                "definition": d.get("definition", ""),
+                                "example": d.get("example", "")
+                            })
+                        meanings.append({
+                            "partOfSpeech": m.get("partOfSpeech", ""),
+                            "definitions": defs
+                        })
+                    
+                    # 音标
+                    phonetics = []
+                    for p in item.get("phonetics", [])[:2]:
+                        phonetics.append({
+                            "text": p.get("text", ""),
+                            "audio": p.get("audio", "")
+                        })
+                    
+                    entries.append({
+                        "word": item.get("word", word),
+                        "phonetics": phonetics,
+                        "meanings": meanings
+                    })
+                
+                return {
+                    "word": word,
+                    "lang": "en",
+                    "entries": entries,
+                    "source": "dictionaryapi.dev"
+                }
+                
+    except httpx.ConnectError:
+        raise HTTPException(status_code=503, detail="词典服务不可达")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"词典查询失败: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 ADMIN_HTML = """<!DOCTYPE html>
 <html lang="zh-CN">

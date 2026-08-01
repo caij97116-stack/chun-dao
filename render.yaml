@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: chun-dao
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DEEPLX_BASE
+        value: https://dplx.xi-xu.me

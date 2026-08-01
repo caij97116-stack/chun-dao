@@ -516,6 +516,71 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 
 /* ══════ 岛居 App ══════ */
 #island-app{position:absolute;inset:0;display:flex;flex-direction:column;background:#e8f5e9;overflow:hidden;}
+
+/* ══ 天气 APP ══ */
+#weather-app{position:absolute;inset:0;display:flex;flex-direction:column;background:linear-gradient(180deg,#e3f2fd 0%,#bbdefb 40%,#90caf9 100%);overflow:hidden;}
+.weather-icon-skin{background:linear-gradient(135deg,#64b5f6,#1e88e5);}
+.weather-main{padding:20px 24px;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.weather-big-icon{font-size:72px;line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.1));}
+.weather-temp{font-size:56px;font-weight:200;color:var(--ink);letter-spacing:-0.02em;line-height:1;}
+.weather-desc{font-size:15px;color:var(--ink2);font-weight:500;}
+.weather-detail-row{display:flex;gap:24px;margin-top:10px;}
+.weather-detail-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 16px;background:rgba(255,255,255,0.5);border-radius:12px;min-width:60px;}
+.weather-detail-item .wd-val{font-size:16px;font-weight:600;color:var(--ink);}
+.weather-detail-item .wd-label{font-size:10px;color:var(--ink4);}
+.weather-location{font-size:13px;color:var(--ink3);margin-top:4px;}
+
+/* 7天预报 */
+.weather-forecast-section{margin:16px 20px;padding:16px;background:rgba(255,255,255,0.55);border-radius:16px;}
+.weather-forecast-section .wfs-title{font-size:12px;color:var(--ink4);margin-bottom:12px;font-weight:500;}
+.weather-forecast-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;}
+.weather-forecast-row::-webkit-scrollbar{height:0;}
+.weather-forecast-day{flex:0 0 68px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 6px;border-radius:12px;background:rgba(255,255,255,0.4);min-width:0;}
+.weather-forecast-day.today{background:rgba(255,255,255,0.7);box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.weather-forecast-day .wfd-date{font-size:10px;color:var(--ink4);font-weight:500;}
+.weather-forecast-day .wfd-day{font-size:11px;color:var(--ink3);font-weight:500;}
+.weather-forecast-day .wfd-icon{font-size:22px;line-height:1;}
+.weather-forecast-day .wfd-temps{display:flex;gap:3px;font-size:10px;font-weight:500;}
+.weather-forecast-day .wfd-high{color:var(--ink);}
+.weather-forecast-day .wfd-low{color:var(--ink4);}
+
+/* 天气弹窗 */
+.weather-toggle-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4);z-index:20;display:none;align-items:center;justify-content:center;}
+.weather-toggle-overlay.open{display:flex;}
+.weather-toggle-card{background:white;border-radius:20px;padding:28px 24px;width:calc(100% - 48px);max-width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+.weather-toggle-card h3{font-size:18px;font-weight:600;color:var(--ink);margin-bottom:6px;text-align:center;}
+.weather-toggle-card .wt-sub{font-size:12px;color:var(--ink4);text-align:center;margin-bottom:20px;line-height:1.5;}
+.weather-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--silver);}
+.weather-toggle-row:last-child{border-bottom:none;}
+.weather-toggle-row .wt-info{display:flex;flex-direction:column;gap:2px;}
+.weather-toggle-row .wt-title{font-size:14px;font-weight:500;color:var(--ink);}
+.weather-toggle-row .wt-desc{font-size:11px;color:var(--ink4);}
+.weather-toggle-row .s-toggle{flex-shrink:0;}
+
+/* 角色天气评价 */
+.weather-char-section{margin:16px 20px;padding:16px;background:rgba(255,255,255,0.55);border-radius:16px;}
+.weather-char-section .wcs-title{font-size:12px;color:var(--ink4);margin-bottom:10px;font-weight:500;}
+.weather-char-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.06);}
+.weather-char-item:last-child{border-bottom:none;}
+.weather-char-avatar{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;color:white;font-weight:600;overflow:hidden;}
+.weather-char-avatar img{width:100%;height:100%;object-fit:cover;}
+.weather-char-bubble{flex:1;min-width:0;}
+.weather-char-bubble .wcb-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.weather-char-bubble .wcb-text{font-size:13px;color:var(--ink2);line-height:1.5;}
+
+/* 全局视野 */
+.weather-global-section{margin:16px 20px;padding:16px;background:rgba(255,255,255,0.55);border-radius:16px;}
+.weather-global-section .wgs-title{font-size:12px;color:var(--ink4);margin-bottom:10px;font-weight:500;}
+.weather-global-item{display:flex;gap:10px;align-items:center;padding:8px 0;}
+.weather-global-item .wg-avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:white;font-weight:600;overflow:hidden;}
+.weather-global-item .wg-avatar img{width:100%;height:100%;object-fit:cover;}
+.weather-global-item .wg-name{font-size:13px;font-weight:500;color:var(--ink);flex:1;}
+.weather-global-item .wg-weather{font-size:13px;color:var(--ink3);}
+
+/* 天气通知弹窗 */
+.weather-notif-toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:200;background:rgba(0,0,0,0.88);color:white;padding:12px 20px;border-radius:24px;font-size:13px;max-width:320px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3);animation:notifIn 0.4s ease,notifOut 0.4s ease 3.5s forwards;pointer-events:none;line-height:1.5;}
+@keyframes notifIn{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes notifOut{from{opacity:1;transform:translateX(-50%) translateY(0)}to{opacity:0;transform:translateX(-50%) translateY(-20px)}}
 .island-icon-skin{background:linear-gradient(135deg,#43a047,#2e7d32);}
 .island-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:rgba(255,255,255,0.9);border-bottom:1px solid #c8e6c9;flex-shrink:0;z-index:10;}
 .island-title{font-size:16px;font-weight:700;color:#2e7d32;}
@@ -714,6 +779,21 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .music-char-keyword{display:inline-block;background:var(--petal);border:1px solid var(--petald);color:var(--ink2);font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;}
 .music-char-keyword:active{background:var(--petald);color:white;}
 
+/* Character playlist grid */
+.music-char-playlist-grid{display:flex;flex-direction:column;gap:6px;}
+.music-char-playlist-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--white);border:1px solid var(--silver);border-radius:12px;cursor:pointer;transition:transform 0.15s,background 0.15s;}
+.music-char-playlist-card:active{transform:scale(0.97);background:var(--smoke);}
+.music-char-playlist-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--petal),var(--petald));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.music-char-playlist-info{flex:1;min-width:0;}
+.music-char-playlist-name{font-size:14px;font-weight:600;color:var(--ink);}
+.music-char-playlist-desc{font-size:11px;color:var(--ink4);margin-top:2px;}
+.music-char-playlist-arrow{color:var(--ink4);font-size:16px;flex-shrink:0;}
+
+/* Playlist tracks section in character page */
+.music-char-playlist-tracks{margin-top:8px;}
+.music-char-playlist-tracks-header{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.music-char-playlist-tracks-collapse{font-size:12px;color:var(--ink4);cursor:pointer;}
+
 
 
 .translation-lang-tag{display:inline-block;font-size:11px;color:var(--ink3);background:var(--smoke);padding:3px 10px;border-radius:8px;margin-bottom:14px;}
@@ -761,6 +841,27 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 .voice-record-wave span:nth-child(6){height:22px;animation-delay:0.25s;}
 .voice-record-wave span:nth-child(7){height:18px;animation-delay:0.05s;}
 @keyframes recwave{0%,100%{transform:scaleY(0.5);opacity:0.5;}50%{transform:scaleY(1.2);opacity:1;}}
+
+/* ══ EMOJI PICKER ══ */
+.emoji-toggle-btn{width:30px;height:30px;border:none;background:var(--smoke);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink3);transition:all 0.2s;}
+.emoji-toggle-btn:hover{color:var(--ink);background:var(--silver);}
+.emoji-picker{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--white);border-radius:16px 16px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.15);z-index:300;max-height:360px;overflow:hidden;flex-direction:column;animation:emojiSlideUp 0.25s ease;}
+@keyframes emojiSlideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.emoji-picker.open{display:flex;}
+.emoji-picker-header{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--silver);}
+.emoji-picker-search{flex:1;border:none;background:var(--smoke);border-radius:8px;padding:8px 12px;font-size:14px;color:var(--ink);outline:none;font-family:inherit;}
+.emoji-picker-search::placeholder{color:var(--ink4);}
+.emoji-picker-close{width:28px;height:28px;border:none;background:var(--smoke);border-radius:50%;cursor:pointer;font-size:16px;color:var(--ink3);flex-shrink:0;}
+.emoji-picker-tabs{display:flex;gap:2px;padding:8px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid var(--silver);}
+.emoji-picker-tabs::-webkit-scrollbar{height:0;}
+.emoji-tab{padding:5px 12px;border-radius:14px;font-size:12px;color:var(--ink3);cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0;}
+.emoji-tab.active,.emoji-tab:hover{background:var(--smoke);color:var(--ink);}
+.emoji-picker-grid{flex:1;overflow-y:auto;padding:10px;display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;}
+.emoji-picker-grid::-webkit-scrollbar{width:3px;}
+.emoji-picker-grid::-webkit-scrollbar-thumb{background:var(--silver);border-radius:2px;}
+.emoji-item{width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:22px;border-radius:8px;cursor:pointer;transition:all 0.15s;user-select:none;}
+.emoji-item:hover{background:var(--smoke);transform:scale(1.15);}
+.emoji-picker-footer{font-size:11px;color:var(--ink4);text-align:center;padding:6px;border-top:1px solid var(--silver);}
 
 /* ══ MODALS ══ */
 .modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:flex-end;justify-content:center;z-index:200;backdrop-filter:blur(4px);}
@@ -879,6 +980,85 @@ textarea.field-inp{resize:vertical;min-height:80px;line-height:1.5;}
 .lang-canvas-label{font-size:11.5px;color:var(--ink4);text-align:center;padding:8px 0 4px;}
 .lang-hwcanvas{display:block;width:100%;touch-action:none;cursor:crosshair;background:#f7f7f7;border-radius:0 0 14px 14px;}
 .lang-canvas-hint{font-size:10.5px;color:var(--ink4);text-align:center;padding:4px 0 8px;background:#f7f7f7;}
+
+/* 词典查询面板 */
+.lang-dict-panel{background:var(--smoke);border-radius:16px;padding:16px;margin-top:14px;display:none;}
+.lang-dict-panel.open{display:block;}
+.lang-dict-word{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.lang-dict-phonetic{font-size:13px;color:var(--ink4);margin-bottom:8px;}
+.lang-dict-phonetic audio{display:block;margin-top:4px;height:28px;}
+.lang-dict-pos{font-size:12px;color:var(--accent);font-weight:500;margin:10px 0 4px;}
+.lang-dict-def{font-size:13px;color:var(--ink2);line-height:1.7;padding:3px 0;}
+.lang-dict-example{font-size:12px;color:var(--ink4);font-style:italic;margin-left:8px;padding:2px 0;}
+.lang-dict-detail-btn{display:inline-flex;align-items:center;gap:4px;margin-top:10px;font-size:11.5px;color:var(--ink3);background:none;border:none;cursor:pointer;padding:4px 0;font-family:inherit;}
+.lang-dict-detail-btn:hover{color:var(--ink);}
+.lang-dict-loading{font-size:12px;color:var(--ink4);padding:8px 0;text-align:center;}
+.lang-dict-empty{font-size:12px;color:var(--ink4);padding:8px 0;text-align:center;}
+.lang-dict-error{font-size:12px;color:#c33;padding:8px 0;text-align:center;}
+
+/* 识别引擎标签 */
+.lang-engine-tag{display:inline-block;font-size:9.5px;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+.lang-engine-tag.tesseract{background:#e3f2fd;color:#1565c0;}
+.lang-engine-tag.backend{background:#fff3e0;color:#e65100;}
+.lang-engine-tag.vision{background:#fce4ec;color:#c62828;}
+
+/* 角色伴学面板 */
+.lang-companion{position:fixed;bottom:max(90px,calc(env(safe-area-inset-bottom) + 70px));right:12px;z-index:50;display:none;flex-direction:column;align-items:flex-end;gap:6px;}
+.lang-companion.active{display:flex;}
+.lang-comp-avatar{width:44px;height:44px;border-radius:50%;background:var(--smoke);border:2px solid var(--white);box-shadow:0 2px 12px rgba(0,0,0,0.12);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;flex-shrink:0;transition:transform 0.2s;}
+.lang-comp-avatar:active{transform:scale(0.9);}
+.lang-comp-avatar img{width:100%;height:100%;object-fit:cover;}
+.lang-comp-bubble{max-width:200px;background:var(--white);border-radius:16px 16px 4px 16px;padding:10px 14px;box-shadow:0 2px 12px rgba(0,0,0,0.08);cursor:pointer;font-size:12.5px;color:var(--ink);line-height:1.5;display:none;animation:langCompIn 0.3s ease;}
+.lang-comp-bubble.show{display:block;}
+.lang-comp-text{white-space:pre-wrap;word-break:break-word;}
+.lang-comp-expanded{position:fixed;bottom:0;right:0;width:min(360px,92vw);height:420px;max-height:60vh;background:var(--white);border-radius:20px 20px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,0.12);display:none;flex-direction:column;overflow:hidden;z-index:51;}
+.lang-comp-expanded.open{display:flex;}
+.lang-comp-exp-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--silver);flex-shrink:0;}
+.lang-comp-exp-avatar{width:36px;height:36px;border-radius:50%;background:var(--smoke);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;}
+.lang-comp-exp-avatar img{width:100%;height:100%;object-fit:cover;}
+.lang-comp-exp-name{font-size:14px;font-weight:600;color:var(--ink);}
+.lang-comp-exp-status{font-size:11px;color:var(--ink4);}
+.lang-comp-close{background:none;border:none;font-size:20px;color:var(--ink3);cursor:pointer;padding:4px 8px;}
+.lang-comp-exp-msgs{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+.lang-comp-msg{font-size:12.5px;line-height:1.5;max-width:85%;}
+.lang-comp-msg.theirs{background:var(--smoke);border-radius:4px 14px 14px 14px;padding:10px 14px;align-self:flex-start;color:var(--ink);}
+.lang-comp-msg.mine{background:var(--ink);border-radius:14px 4px 14px 14px;padding:10px 14px;align-self:flex-end;color:#fff;}
+.lang-comp-msg.typing{background:var(--smoke);border-radius:4px 14px 14px 14px;padding:10px 14px;align-self:flex-start;display:flex;gap:3px;}
+.lang-comp-typing-dot{width:5px;height:5px;border-radius:50%;background:var(--ink4);animation:langCompTyping 1.4s infinite;}
+.lang-comp-typing-dot:nth-child(2){animation-delay:0.2s;}
+.lang-comp-typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes langCompTyping{0%,60%,100%{opacity:0.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+@keyframes langCompIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.lang-comp-exp-input-row{display:flex;gap:8px;padding:10px 14px max(16px,env(safe-area-inset-bottom));border-top:1px solid var(--silver);flex-shrink:0;}
+.lang-comp-exp-input{flex:1;border:1.5px solid var(--silver);border-radius:20px;padding:8px 14px;font-size:13px;font-family:inherit;outline:none;color:var(--ink);background:var(--smoke);}
+.lang-comp-exp-input:focus{border-color:var(--ink);}
+.lang-comp-send{width:32px;height:32px;border-radius:50%;background:var(--ink);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* 角色选择面板 */
+.lang-comp-picker{background:var(--smoke);border-radius:16px;padding:14px;margin-bottom:16px;}
+.lang-comp-picker-title{font-size:12px;color:var(--ink4);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.lang-comp-picker-list{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+.lang-comp-picker-char{flex-shrink:0;width:60px;text-align:center;cursor:pointer;transition:all 0.15s;padding:8px 4px;border-radius:12px;border:2px solid transparent;}
+.lang-comp-picker-char.selected{border-color:var(--ink);background:var(--white);}
+.lang-comp-picker-char:active{opacity:0.7;}
+.lang-comp-picker-av{width:40px;height:40px;border-radius:50%;margin:0 auto 4px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;background:var(--white);}
+.lang-comp-picker-av img{width:100%;height:100%;object-fit:cover;}
+.lang-comp-picker-name{font-size:10px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lang-comp-picker-none{flex-shrink:0;padding:8px 12px;border-radius:12px;font-size:12px;color:var(--ink4);cursor:pointer;border:1.5px dashed var(--silver);display:flex;align-items:center;gap:4px;}
+.lang-comp-confirm-btn{display:block;width:100%;margin-top:10px;padding:10px;border-radius:12px;background:var(--ink);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:opacity 0.15s;}
+.lang-comp-confirm-btn:active{opacity:0.8;}
+.lang-comp-confirm-btn:disabled{opacity:0.4;pointer-events:none;}
+.lang-comp-toggle-row{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
+.lang-comp-toggle-label{font-size:10px;color:var(--ink4);white-space:nowrap;}
+.lang-comp-toggle{width:38px;height:22px;border-radius:11px;background:var(--silver);cursor:pointer;position:relative;transition:background 0.25s;flex-shrink:0;}
+.lang-comp-toggle.on{background:var(--ink);}
+.lang-comp-toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform 0.25s;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+.lang-comp-toggle.on::after{transform:translateX(16px);}
+.lang-comp-mem-indicator{font-size:9px;color:var(--ink4);padding:2px 6px;background:var(--smoke);border-radius:8px;margin-left:4px;display:none;align-items:center;gap:3px;}
+.lang-comp-mem-indicator.show{display:inline-flex;}
+.lang-comp-report-btn{width:28px;height:28px;border-radius:50%;background:var(--smoke);border:1px solid var(--silver);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:background 0.15s;padding:0;line-height:1;}
+.lang-comp-report-btn:active{background:var(--silver);}
+.lang-comp-report-msg{background:var(--smoke);border-radius:14px;padding:12px 14px;font-size:11.5px;color:var(--ink2);line-height:1.6;white-space:pre-wrap;word-break:break-word;max-width:85%;align-self:flex-start;border:1px dashed var(--silver);}
 
 .preset-item{background:var(--smoke);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.15s;border:1.5px solid transparent;}
 .preset-item:active{background:var(--silver);}
@@ -1017,6 +1197,25 @@ input[type=file]{display:none;}
 .music-btab span{font-size:10px;}
 .music-btab.active{color:var(--ink);}
 
+/* Local music tab */
+.music-local-dropzone{border:2px dashed var(--silver);border-radius:14px;padding:36px 20px;text-align:center;margin:16px 0;cursor:pointer;transition:all 0.2s;background:var(--white);}
+.music-local-dropzone:hover,.music-local-dropzone.drag-over{border-color:var(--petald);background:var(--petal);}
+.music-local-dropzone-icon{font-size:36px;margin-bottom:8px;}
+.music-local-dropzone-text{font-size:13px;color:var(--ink3);}
+.music-local-dropzone-hint{font-size:11px;color:var(--ink4);margin-top:4px;}
+.music-local-file-btn{display:inline-block;background:var(--petal);border:1px solid var(--petald);color:var(--ink2);font-size:13px;padding:8px 18px;border-radius:20px;cursor:pointer;margin-top:10px;}
+.music-local-file-btn:active{background:var(--petald);color:white;}
+.music-local-actions{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.music-local-clear{font-size:11px;color:var(--ink4);cursor:pointer;background:none;border:none;}
+.music-local-track{display:flex;align-items:center;gap:12px;padding:10px 0;cursor:pointer;border-bottom:1px solid var(--smoke);}
+.music-local-track:active{background:var(--smoke);}
+.music-local-track-cover{width:44px;height:44px;border-radius:10px;background:var(--ink2);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;flex-shrink:0;overflow:hidden;}
+.music-local-track-cover img{width:100%;height:100%;object-fit:cover;}
+.music-local-track-name{font-size:13.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.music-local-track-artist{font-size:11px;color:var(--ink4);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.music-local-track-remove{width:28px;height:28px;border:none;background:none;color:var(--ink4);cursor:pointer;flex-shrink:0;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.music-local-empty{text-align:center;padding:50px 0;color:var(--ink4);font-size:13px;line-height:1.8;}
+
 /* Mini player bar */
 .music-player-bar{position:absolute;left:12px;right:12px;bottom:max(20px,env(safe-area-inset-bottom));background:rgba(255,255,255,0.94);backdrop-filter:blur(20px);border-radius:16px;padding:8px 10px;display:flex;align-items:center;gap:10px;border:1px solid var(--silver);box-shadow:0 8px 24px rgba(0,0,0,0.1);cursor:pointer;z-index:5;}
 .music-player-cover{width:38px;height:38px;border-radius:9px;background:var(--ink2);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;flex-shrink:0;overflow:hidden;animation:coverSpin 8s linear infinite;}
@@ -1084,6 +1283,8 @@ input[type=file]{display:none;}
 
 </style>
 <script src="https://js.puter.com/v2/"></script>
+<script src="https://unpkg.com/dexie@4/dist/dexie.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <body>
 
 <div class="phone" id="phone">
@@ -1166,6 +1367,12 @@ input[type=file]{display:none;}
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M3 20c2-8 6-12 9-12s7 4 9 12" stroke="rgba(255,255,255,0.85)" fill="rgba(255,255,255,0.15)" stroke-width="1.3"/><circle cx="12" cy="6" r="1.5" fill="rgba(255,255,255,0.9)"/><path d="M8 8l1-2 1 2" stroke="rgba(255,255,255,0.7)" stroke-width="1"/><path d="M14 9l1-1.5 1 1.5" stroke="rgba(255,255,255,0.7)" stroke-width="1"/></svg>
           </div>
           <span class="app-label">岛居</span>
+        </div>
+        <div class="app-icon-wrap" onclick="openApp('weather')">
+          <div class="app-icon weather-icon-skin">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="rgba(255,255,255,0.85)" stroke-width="1.3" fill="rgba(255,255,255,0.15)"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" stroke="rgba(255,255,255,0.85)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <span class="app-label">天气</span>
         </div>
         </div>
       </div>
@@ -1269,6 +1476,11 @@ input[type=file]{display:none;}
             <div class="s-text"><div class="s-title">生图 API</div><div class="s-sub" id="image-api-sub">Stable Diffusion / DALL·E</div></div>
             <div class="s-arrow">›</div>
           </div>
+          <div class="s-row" onclick="openSub('sub-brave-search')">
+            <div class="s-icon" style="background:#fb542b"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <div class="s-text"><div class="s-title">联网搜索</div><div class="s-sub" id="brave-search-sub">Brave Search API</div></div>
+            <div class="s-arrow">›</div>
+          </div>
         </div>
       </div>
       <div class="settings-section">
@@ -1328,6 +1540,16 @@ input[type=file]{display:none;}
             <div class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
             <div class="s-text"><div class="s-title">提示音</div><div class="s-sub">消息音效</div></div>
             <div class="s-toggle on" id="toggle-sound" onclick="toggleSwitch(this)"></div>
+          </div>
+          <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+            <div class="s-icon" style="background:#64b5f6"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/></svg></div>
+            <div class="s-text"><div class="s-title">天气推送</div><div class="s-sub">每日天气通知与角色评价</div></div>
+            <div class="s-toggle on" id="toggle-weather-push-settings" onclick="toggleSwitch(this)"></div>
+          </div>
+          <div class="s-row" style="cursor:default" onclick="event.stopPropagation()">
+            <div class="s-icon" style="background:#4caf50"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <div class="s-text"><div class="s-title">全局视野</div><div class="s-sub">让角色也能感知你的天气</div></div>
+            <div class="s-toggle on" id="toggle-weather-global-settings" onclick="toggleSwitch(this)"></div>
           </div>
         </div>
       </div>
@@ -1445,6 +1667,31 @@ input[type=file]{display:none;}
         <button class="save-btn" onclick="saveImageApiConfig()">保存为新预设 / 覆盖当前</button>
         <button class="test-btn" style="width:100%;margin-top:10px" onclick="testImageApiConfig()">测试生成一张图片</button>
         <div class="test-result" id="img-test-result" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <div class="subpage" id="sub-brave-search">
+      <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-brave-search')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title">联网搜索</div></div>
+      <div class="app-body">
+        <div style="font-size:12px;color:var(--ink4);line-height:1.7;margin-bottom:10px">配置 Brave Search API，让角色可以联网搜索实时信息。免费额度 2000次/月，<a href="https://brave.com/search/api/" target="_blank" style="color:var(--accent)">获取 API Key</a></div>
+        <div class="field-group">
+          <div class="field-lbl">Brave Search API Key</div>
+          <input class="field-inp" id="brave-key" type="password" placeholder="BSA...">
+        </div>
+        <div class="field-group">
+          <div class="field-lbl">启用联网搜索</div>
+          <div class="s-toggle" id="toggle-brave-search" onclick="toggleBraveSearch()"></div>
+        </div>
+        <div style="font-size:11px;color:var(--ink4);margin-top:4px;line-height:1.5">启用后，聊天时角色会自动搜索你提到的内容，并基于搜索结果和人设回复。</div>
+        <div class="sec-label" style="margin-top:18px">Firecrawl（链接抓取降级）</div>
+        <div style="font-size:11px;color:var(--ink4);margin-bottom:8px;line-height:1.5">当 Jina Reader 无法抓取某个链接时，自动降级使用 Firecrawl。免费无需Key，支持JS渲染页面。<a href="https://www.firecrawl.dev" target="_blank" style="color:var(--accent)">获取 Key（可选）</a></div>
+        <div class="field-group">
+          <div class="field-lbl">Firecrawl API Key（可选，提升额度）</div>
+          <input class="field-inp" id="firecrawl-key" type="password" placeholder="fc-...">
+        </div>
+        <button class="save-btn" onclick="saveBraveSearchConfig()">保存</button>
+        <button class="test-btn" style="width:100%;margin-top:10px" onclick="testBraveSearchConfig()">测试搜索</button>
+        <div class="test-result" id="brave-test-result" style="margin-top:8px"></div>
       </div>
     </div>
 
@@ -1886,6 +2133,10 @@ input[type=file]{display:none;}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           <span>好友</span>
         </div>
+        <div class="music-btab" id="mbtab-local" onclick="switchMusicMainTab('local')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>本地</span>
+        </div>
       </div>
     </div>
 
@@ -2070,7 +2321,17 @@ input[type=file]{display:none;}
       </button>
     </div>
     <div class="app-body" style="padding-top:16px">
-      <div style="font-size:12px;color:var(--ink4);line-height:1.7;margin-bottom:18px;padding:0 2px">先选一门语言，AI会根据你的水平生成学习内容。这是一个初步框架，后续会继续扩展更丰富的练习形式。</div>
+      <div style="font-size:12px;color:var(--ink4);line-height:1.7;margin-bottom:18px;padding:0 2px">先选一门语言，AI会根据你的水平生成学习内容。支持手写识别（Tesseract离线→后端OCR→AI视觉三层降级）、词典查询、发音听读。</div>
+      <div class="sec-label">词典速查</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <input class="field-inp" id="lang-dict-search-input" placeholder="输入单词查释义…" style="flex:1;margin-bottom:0" onkeydown="if(event.key==='Enter')quickDictSearch()">
+        <select id="lang-dict-search-lang" style="border:1.5px solid var(--silver);border-radius:12px;padding:8px 10px;font-size:13px;background:var(--white);color:var(--ink);font-family:inherit;cursor:pointer">
+          <option value="en">英语</option>
+          <option value="ja">日语</option>
+        </select>
+        <button class="save-btn" style="margin-top:0;flex:0 0 auto" onclick="quickDictSearch()">查询</button>
+      </div>
+      <div class="lang-dict-panel" id="lang-dict-home-panel"></div>
       <div class="sec-label">选择语言</div>
       <div class="lang-grid" id="lang-grid"></div>
       <div class="sec-label" style="margin-top:22px">学习记录</div>
@@ -2079,8 +2340,37 @@ input[type=file]{display:none;}
 
     <!-- SUB: Practice session for a chosen language -->
     <div class="subpage" id="sub-langlearn-session">
-      <div class="app-topbar"><button class="back-btn" onclick="closeSub('sub-langlearn-session')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title" id="lang-session-title">学习</div></div>
+      <div class="app-topbar"><button class="back-btn" onclick="deactivateLangCompanion();closeSub('sub-langlearn-session')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="topbar-title" id="lang-session-title">学习</div></div>
       <div class="app-body" id="lang-session-body" style="padding-top:16px"></div>
+      <!-- 角色伴学面板 -->
+      <div class="lang-companion" id="lang-companion">
+        <div class="lang-comp-avatar" id="lang-comp-avatar" onclick="toggleLangCompanion()"></div>
+        <div class="lang-comp-bubble" id="lang-comp-bubble" onclick="toggleLangCompanion()">
+          <div class="lang-comp-text" id="lang-comp-text"></div>
+        </div>
+        <div class="lang-comp-expanded" id="lang-comp-expanded">
+          <div class="lang-comp-exp-header">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="lang-comp-exp-avatar" id="lang-comp-exp-avatar"></div>
+              <div><div class="lang-comp-exp-name" id="lang-comp-exp-name"></div><div class="lang-comp-exp-status" id="lang-comp-exp-status">陪你学习中…</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0">
+              <button class="lang-comp-report-btn" id="lang-comp-report-btn" onclick="_langCompShowReport()" title="生成学习报告">📋</button>
+              <div class="lang-comp-toggle-row">
+                <span class="lang-comp-toggle-label">记忆互通</span>
+                <div class="lang-comp-toggle" id="lang-comp-mem-toggle" onclick="toggleLangCompMemoryShare()"></div>
+              </div>
+              <span class="lang-comp-mem-indicator" id="lang-comp-mem-ind">🔄 同步中</span>
+            </div>
+            <button class="lang-comp-close" onclick="toggleLangCompanion()">×</button>
+          </div>
+          <div class="lang-comp-exp-msgs" id="lang-comp-exp-msgs"></div>
+          <div class="lang-comp-exp-input-row">
+            <input class="lang-comp-exp-input" id="lang-comp-chat-input" placeholder="跟TA说句话…" onkeydown="if(event.key==='Enter')langCompanionChat()">
+            <button class="lang-comp-send" onclick="langCompanionChat()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- SUB: Error zone (错题区) -->
@@ -2234,7 +2524,7 @@ input[type=file]{display:none;}
       <div class="topbar-title">探班</div>
     </div>
     <div class="app-body" style="padding-top:16px">
-      <div style="font-size:12px;color:var(--ink4);line-height:1.7;margin-bottom:18px;padding:0 2px">选择一位已连结的角色，去看看TA的手机里有些什么。这是一个初步框架，后续会加入更多可探索的内容。</div>
+      <div style="font-size:12px;color:var(--ink4);line-height:1.7;margin-bottom:18px;padding:0 2px">选择一位已连结的角色，去看看TA的手机里有些什么——聊天记录、搜索历史、音乐品味、社交动态。</div>
       <div class="sec-label">已连结角色</div>
       <div id="tanban-char-list" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
@@ -2333,7 +2623,68 @@ input[type=file]{display:none;}
 </div>
 
 <!-- ══════ 岛居 App ══════ -->
-<div id="island-app" style="display:none">
+<div id="weather-app" style="display:none">
+  <div class="app-statusbar">
+    <span class="asb-time" id="wclock">09:41</span>
+    <button class="app-close-btn" onclick="closeApp()">×</button>
+  </div>
+  <div class="app-topbar">
+    <div class="topbar-title">天气</div>
+  </div>
+  <div class="app-body" style="overflow-y:auto">
+    <!-- 天气主体 -->
+    <div class="weather-main" id="weather-main">
+      <div class="weather-big-icon" id="weather-icon">☀️</div>
+      <div class="weather-temp" id="weather-temp">--°</div>
+      <div class="weather-desc" id="weather-desc">加载中...</div>
+      <div class="weather-location" id="weather-location"></div>
+      <div class="weather-detail-row">
+        <div class="weather-detail-item"><span class="wd-val" id="weather-humidity">--</span><span class="wd-label">湿度</span></div>
+        <div class="weather-detail-item"><span class="wd-val" id="weather-wind">--</span><span class="wd-label">风速</span></div>
+        <div class="weather-detail-item"><span class="wd-val" id="weather-feels">--</span><span class="wd-label">体感</span></div>
+      </div>
+    </div>
+    <!-- 7天预报 -->
+    <div class="weather-forecast-section" id="weather-forecast-section" style="display:none">
+      <div class="wfs-title">7日预报</div>
+      <div class="weather-forecast-row" id="weather-forecast-row"></div>
+    </div>
+    <!-- 角色天气评价 -->
+    <div class="weather-char-section" id="weather-char-section" style="display:none">
+      <div class="wcs-title">TA们说</div>
+      <div id="weather-char-list"></div>
+    </div>
+    <!-- 全局视野 -->
+    <div class="weather-global-section" id="weather-global-section" style="display:none">
+      <div class="wgs-title">全局视野</div>
+      <div id="weather-global-list"></div>
+    </div>
+    <!-- 首次弹窗 -->
+    <div class="weather-toggle-overlay" id="weather-toggle-overlay">
+      <div class="weather-toggle-card">
+        <h3>天气授权</h3>
+        <div class="wt-sub">为了给你和你关心的TA提供更好的天气体验，请确认以下设置</div>
+        <div class="weather-toggle-row">
+          <div class="wt-info">
+            <div class="wt-title">天气推送</div>
+            <div class="wt-desc">每天推送天气提醒与角色评价</div>
+          </div>
+          <div class="s-toggle on" id="toggle-weather-push" onclick="toggleWeatherPush()"></div>
+        </div>
+        <div class="weather-toggle-row">
+          <div class="wt-info">
+            <div class="wt-title">全局视野</div>
+            <div class="wt-desc">让绑定的角色也能感知你的天气</div>
+          </div>
+          <div class="s-toggle on" id="toggle-weather-global" onclick="toggleWeatherGlobal()"></div>
+        </div>
+        <div style="margin-top:18px;text-align:center">
+          <button class="save-btn" onclick="confirmWeatherSettings()" style="width:100%">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><div id="island-app" style="display:none">
   <div class="island-header">
     <span class="island-title">🏝 岛居</span>
     <div class="island-header-btns">
@@ -2384,43 +2735,43 @@ input[type=file]{display:none;}
       <button class="island-action-btn" onclick="islandTalk()" title="聊天">💬</button>
       <button class="island-action-btn" onclick="islandSleep()" title="睡觉">😴</button>
     </div>
-  </div>
-  <!-- 捏人面板 -->
-  <div class="island-create-panel" id="island-create-panel">
-    <h3>创造你的岛民</h3>
-    <div class="island-avatar-preview" id="island-avatar-preview" onclick="document.getElementById('island-avatar-file').click()">👤</div>
-    <input type="file" id="island-avatar-file" accept="image/*" style="display:none" onchange="onIslandAvatarSelected(this)">
-    <div class="island-create-field">
-      <label>姓名</label>
-      <input type="text" id="island-name-input" placeholder="给你的岛民起个名字" maxlength="12">
-    </div>
-    <div class="island-create-field">
-      <label>性格</label>
-      <select id="island-personality-input">
-        <option value="cheerful">🌟 活泼开朗</option>
-        <option value="quiet">🌙 安静内敛</option>
-        <option value="playful">🎭 调皮捣蛋</option>
-        <option value="cool">🕶 高冷傲娇</option>
-        <option value="gentle">🌸 温柔体贴</option>
-        <option value="lazy">🦥 慵懒随性</option>
-      </select>
-    </div>
-    <div class="island-create-field">
-      <label>衣服颜色</label>
-      <div class="island-create-color-options" id="island-color-options">
-        <div class="island-color-dot" style="background:#2196f3" data-color="#2196f3" onclick="selectIslandColor(this)"></div>
-        <div class="island-color-dot" style="background:#e91e63" data-color="#e91e63" onclick="selectIslandColor(this)"></div>
-        <div class="island-color-dot" style="background:#ff9800" data-color="#ff9800" onclick="selectIslandColor(this)"></div>
-        <div class="island-color-dot" style="background:#4caf50" data-color="#4caf50" onclick="selectIslandColor(this)"></div>
-        <div class="island-color-dot" style="background:#9c27b0" data-color="#9c27b0" onclick="selectIslandColor(this)"></div>
-        <div class="island-color-dot" style="background:#607d8b" data-color="#607d8b" onclick="selectIslandColor(this)"></div>
-        <div class="island-color-dot" style="background:#795548" data-color="#795548" onclick="selectIslandColor(this)"></div>
-        <div class="island-color-dot" style="background:#f44336" data-color="#f44336" onclick="selectIslandColor(this)"></div>
+    <!-- 捏人面板 -->
+    <div class="island-create-panel" id="island-create-panel">
+      <h3>创造你的岛民</h3>
+      <div class="island-avatar-preview" id="island-avatar-preview" onclick="document.getElementById('island-avatar-file').click()">👤</div>
+      <input type="file" id="island-avatar-file" accept="image/*" style="display:none" onchange="onIslandAvatarSelected(this)">
+      <div class="island-create-field">
+        <label>姓名</label>
+        <input type="text" id="island-name-input" placeholder="给你的岛民起个名字" maxlength="12">
       </div>
-    </div>
-    <div class="island-create-actions">
-      <button class="btn-cancel" onclick="closeIslandCreate()">取消</button>
-      <button class="btn-save" onclick="saveIslandCharacter()">创建</button>
+      <div class="island-create-field">
+        <label>性格</label>
+        <select id="island-personality-input">
+          <option value="cheerful">🌟 活泼开朗</option>
+          <option value="quiet">🌙 安静内敛</option>
+          <option value="playful">🎭 调皮捣蛋</option>
+          <option value="cool">🕶 高冷傲娇</option>
+          <option value="gentle">🌸 温柔体贴</option>
+          <option value="lazy">🦥 慵懒随性</option>
+        </select>
+      </div>
+      <div class="island-create-field">
+        <label>衣服颜色</label>
+        <div class="island-create-color-options" id="island-color-options">
+          <div class="island-color-dot" style="background:#2196f3" data-color="#2196f3" onclick="selectIslandColor(this)"></div>
+          <div class="island-color-dot" style="background:#e91e63" data-color="#e91e63" onclick="selectIslandColor(this)"></div>
+          <div class="island-color-dot" style="background:#ff9800" data-color="#ff9800" onclick="selectIslandColor(this)"></div>
+          <div class="island-color-dot" style="background:#4caf50" data-color="#4caf50" onclick="selectIslandColor(this)"></div>
+          <div class="island-color-dot" style="background:#9c27b0" data-color="#9c27b0" onclick="selectIslandColor(this)"></div>
+          <div class="island-color-dot" style="background:#607d8b" data-color="#607d8b" onclick="selectIslandColor(this)"></div>
+          <div class="island-color-dot" style="background:#795548" data-color="#795548" onclick="selectIslandColor(this)"></div>
+          <div class="island-color-dot" style="background:#f44336" data-color="#f44336" onclick="selectIslandColor(this)"></div>
+        </div>
+      </div>
+      <div class="island-create-actions">
+        <button class="btn-cancel" onclick="closeIslandCreate()">取消</button>
+        <button class="btn-save" onclick="saveIslandCharacter()">创建</button>
+      </div>
     </div>
   </div>
 </div>
@@ -2796,6 +3147,9 @@ input[type=file]{display:none;}
     <button class="voice-toggle-btn" id="voice-toggle-btn" onclick="toggleVoiceMode()" title="切换语音输入">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
     </button>
+    <button class="emoji-toggle-btn" id="emoji-toggle-btn" onclick="toggleEmojiPicker()" title="表情">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+    </button>
     <textarea class="chat-textarea" id="cv-input" placeholder="说点什么…" rows="1"></textarea>
     <div class="voice-record-bar" id="voice-record-bar">按住 说话</div>
     <button class="chat-send" onclick="cvSend()" id="chat-send-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
@@ -2803,6 +3157,24 @@ input[type=file]{display:none;}
   <div class="voice-record-cancel" id="voice-record-cancel">松开取消</div>
   <div class="voice-record-wave" id="voice-record-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 </div>
+</div>
+<!-- 表情选择器 -->
+<div class="emoji-picker" id="emoji-picker">
+  <div class="emoji-picker-header">
+    <input class="emoji-picker-search" id="emoji-picker-search" placeholder="搜索表情..." oninput="searchEmojiPicker()">
+    <button class="emoji-picker-close" onclick="toggleEmojiPicker()">&times;</button>
+  </div>
+  <div class="emoji-picker-tabs" id="emoji-picker-tabs">
+    <span class="emoji-tab active" onclick="searchEmojiPicker('')">常用</span>
+    <span class="emoji-tab" onclick="searchEmojiPicker('笑')">😄</span>
+    <span class="emoji-tab" onclick="searchEmojiPicker('心')">❤️</span>
+    <span class="emoji-tab" onclick="searchEmojiPicker('动物')">🐱</span>
+    <span class="emoji-tab" onclick="searchEmojiPicker('吃')">🍔</span>
+    <span class="emoji-tab" onclick="searchEmojiPicker('自然')">🌸</span>
+    <span class="emoji-tab" onclick="searchEmojiPicker('手势')">👋</span>
+  </div>
+  <div class="emoji-picker-grid" id="emoji-picker-grid"></div>
+  <div class="emoji-picker-footer" id="emoji-picker-footer"></div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -3040,9 +3412,130 @@ let walletHistory = JSON.parse(localStorage.getItem('tsb_wallethist') || '[]');
 let userProfile = JSON.parse(localStorage.getItem('tsb_profile') || JSON.stringify({
   name:'旅人', bio:'在无数故事的交汇处，寻找属于自己的那一段相遇。', avatar:null, id:'tsubaki_'+Math.random().toString(36).slice(2,8)
 }));
-let appSettings = JSON.parse(localStorage.getItem('tsb_appsettings') || JSON.stringify({theme:'浅色', fontSize:'标准', notif:true, sound:true}));
+let appSettings = JSON.parse(localStorage.getItem('tsb_appsettings') || JSON.stringify({theme:'浅色', fontSize:'标准', notif:true, sound:true, weatherPush:true, weatherGlobal:true, weatherSetupDone:false, braveSearchApiKey:'', braveSearchEnabled:false, firecrawlApiKey:''}));
 
-// ══════════ 日记本 data & functions ══════════
+// ══════════ Dexie.js IndexedDB 存储层 ══════════
+const db = new Dexie('ChunDaoDB');
+db.version(1).stores({
+  chatHistory: 'id',       // 聊天记录 (id=charId)
+  characters: 'id',        // 角色数据 (id=charId)
+  diaries: 'id',           // 日记
+  moments: 'id',           // 朋友圈
+  groupChats: 'id',        // 群聊
+  musicTracks: 'id',       // 本地音乐索引
+  kvStore: 'key'           // 通用键值存储
+});
+
+// 迁移标记：首次加载时自动从 localStorage 迁移到 IndexedDB
+let _dbReady = false;
+async function initDB(){
+  if(_dbReady) return;
+  try{
+    const migrated = await db.kvStore.get('migrated_v1');
+    if(!migrated){
+      await migrateFromLocalStorage();
+      await db.kvStore.put({key:'migrated_v1', value:true});
+    }
+    _dbReady = true;
+    console.log('Dexie.js IndexedDB 就绪');
+  }catch(e){
+    console.warn('Dexie.js 初始化失败，降级使用 localStorage:', e);
+    _dbReady = false;
+  }
+}
+
+async function migrateFromLocalStorage(){
+  console.log('正在从 localStorage 迁移数据到 IndexedDB...');
+  // 迁移聊天记录
+  const rawHistory = localStorage.getItem('tsb_history');
+  if(rawHistory){
+    try{
+      const arr = JSON.parse(rawHistory);
+      for(const h of arr){
+        if(h.id) await db.chatHistory.put({id:h.id, data:h});
+      }
+    }catch(e){ console.warn('迁移聊天记录失败:', e); }
+  }
+  // 迁移角色
+  const rawChars = localStorage.getItem('tsb_characters');
+  if(rawChars){
+    try{
+      const arr = JSON.parse(rawChars);
+      for(const c of arr){
+        if(c.id) await db.characters.put({id:c.id, data:c});
+      }
+    }catch(e){ console.warn('迁移角色失败:', e); }
+  }
+  // 迁移日记
+  const rawDiaries = localStorage.getItem('tsb_diaries');
+  if(rawDiaries){
+    try{
+      const arr = JSON.parse(rawDiaries);
+      for(const d of arr){
+        if(d.id) await db.diaries.put({id:d.id, data:d});
+      }
+    }catch(e){ console.warn('迁移日记失败:', e); }
+  }
+  // 迁移朋友圈
+  const rawMoments = localStorage.getItem('tsb_moments');
+  if(rawMoments){
+    try{
+      const arr = JSON.parse(rawMoments);
+      for(const m of arr){
+        if(m.id) await db.moments.put({id:m.id, data:m});
+      }
+    }catch(e){ console.warn('迁移朋友圈失败:', e); }
+  }
+  // 迁移群聊
+  const rawGroups = localStorage.getItem('tsb_groupchats');
+  if(rawGroups){
+    try{
+      const arr = JSON.parse(rawGroups);
+      for(const g of arr){
+        if(g.id) await db.groupChats.put({id:g.id, data:g});
+      }
+    }catch(e){ console.warn('迁移群聊失败:', e); }
+  }
+  console.log('数据迁移完成');
+}
+
+// 异步持久化大对象到 IndexedDB
+async function _persistToDB(){
+  if(!_dbReady) return;
+  try{
+    const tx = db.transaction('rw', db.chatHistory, db.characters, db.diaries, db.moments, db.groupChats, async()=>{
+      // 聊天记录
+      for(const h of chatHistory){
+        if(h.id) await db.chatHistory.put({id:h.id, data:h});
+      }
+      // 角色
+      for(const c of myCharacters){
+        if(c.id) await db.characters.put({id:c.id, data:c});
+      }
+      // 日记
+      for(const d of diaries){
+        if(d.id) await db.diaries.put({id:d.id, data:d});
+      }
+      // 朋友圈
+      if(typeof momentsFeed !== 'undefined'){
+        for(const m of momentsFeed){
+          if(m.id) await db.moments.put({id:m.id, data:m});
+        }
+      }
+      // 群聊
+      if(typeof groupChats !== 'undefined'){
+        for(const g of groupChats){
+          if(g.id) await db.groupChats.put({id:g.id, data:g});
+        }
+      }
+    });
+    await tx;
+  }catch(e){
+    console.warn('IndexedDB 写入失败:', e);
+  }
+}
+
+// ══════════ 日记本 data & functions ═════════=
 let _diaryEditId = null;
 let _diaryViewId = null;
 let _diaryNewMood = '😊';
@@ -3280,7 +3773,7 @@ async function generateDiaryComments(diaryId){
 
   const comments = [];
   for(const c of picked){
-    const prompt = `你是${c.name}。${c.setting||c.desc||''}\n\n你刚刚读到了我写的日记：\n标题：${diary.title||'无标题'}\n内容：${diary.content||''}\n\n请以${c.name}的口吻，自然地对这篇日记写一条简短的留言（20-60字），表达你的感受或回应。只输出留言内容。`;
+    const prompt = `你是${c.name}。${c.setting||c.desc||''}\n\n${NATURAL_VOICE_BLOCK}\n\n你刚刚读到了我写的日记：\n标题：${diary.title||'无标题'}\n内容：${diary.content||''}\n\n请以${c.name}的口吻，自然地对这篇日记写一条简短的留言（20-60字），表达你的感受或回应。只输出留言内容。`;
     try{
       const resp = await callAIRaw(prompt, getActivePreset());
       if(resp&&resp.trim()){
@@ -3350,7 +3843,7 @@ async function generateCharDiary(charId){
   const char = myCharacters.find(c=>c.id===charId);
   if(!char) return;
   showToast('正在生成'+char.name+'的日记...');
-  const prompt = `你是${char.name}。${char.setting||char.desc||''}\n\n请以${char.name}的第一人称视角，写一篇简短的日记（100-300字），记录今天发生的一件事或一种心情。日记要有标题和内容。输出格式：\n标题：xxx\n内容：xxx`;
+  const prompt = `你是${char.name}。${char.setting||char.desc||''}\n\n${NATURAL_VOICE_BLOCK}\n\n请以${char.name}的第一人称视角，写一篇简短的日记（100-300字），记录今天发生的一件事或一种心情。日记要有标题和内容。输出格式：\n标题：xxx\n内容：xxx`;
   try{
     const resp = await callAIRaw(prompt, getActivePreset());
     if(resp&&resp.trim()){
@@ -3411,47 +3904,67 @@ let momentsAltApi = JSON.parse(localStorage.getItem('tsb_moments_altapi') || '{}
 const CHAT_MODE_LABELS = {casual:'纯对话', mixed:'对话+剧情', novel:'纯文本长篇'};
 function buildChatModeInstruction(mode){
   if(mode==='casual'){
-    return '【输出格式要求】这是纯文字对话模式，类似微信/QQ聊天：只输出角色会说的话本身，简短自然，像真实聊天软件里的对话气泡。不要添加任何场景描写、动作描写、心理描写或旁白，不要使用括号或星号包裹的动作说明。可以发送1-5条气泡（用换行分隔），模仿真实聊天中连续发几条短消息的习惯，每条保持1-2句话，符合即时通讯的语感。';
+    return '【输出格式要求】这是纯文字对话模式，类似微信/QQ聊天：只输出角色会说的话本身，简短自然，像真实聊天软件里的对话气泡。不要添加任何场景描写、动作描写、心理描写或旁白，不要使用括号或星号包裹的动作说明。可以发送1-5条气泡（用换行分隔），模仿真实聊天中连续发几条短消息的习惯，每条保持1-2句话，符合即时通讯的语感。\n\n【重要提醒】在纯文字模式下，你不应该使用任何括号、星号、引号来包裹动作或场景描写。你只能说"话"。如果你想说"（笑）"，直接说"哈哈"；如果你想说"（叹气）"，直接说"唉"。所有情绪都通过文字本身来传达，而不是通过标注。';
   }else if(mode==='novel'){
     return '【输出格式要求】这是纯文本长篇模式：以小说叙事的方式撰写完整段落，包含细腻的场景描写、人物心理、动作神态和环境氛围，使用第三人称或角色第一人称视角展开叙述，可以包含对话但对话需融入叙事段落中。回复应当具有文学性和篇幅感，像在写一段小说章节，而不是聊天消息。';
   }
   return '【输出格式要求】这是对话+剧情模式：以角色的对话为主，但可以穿插简短的动作、神态或场景描写（通常用于点明角色当下的状态或动作），描写部分应当简洁克制，不喧宾夺主，整体仍然保持对话节奏，不要写成大段叙事。';
 }
 
-// ── 底层自然语感提示词（参考酒馆高级用户实践） ──
-// 不固化角色性格，只引导 AI 输出更像真人对话的语感。
-// 后续通过测试迭代调整，目前为 v1 版本。
-const NATURAL_VOICE_BLOCK = `【对话风格 · 底层语感指南】
+// ── 底层自然语感提示词（v2 增强版） ──
+// 针对基础模型优化：更具体的指令、更明确的禁止项、更丰富的示例
+const NATURAL_VOICE_BLOCK = `【对话风格 · 底层语感指南 v2】
 
-以下规则旨在让你的回复更像一个真实的人，而不是一个"在扮演角色"的 AI。请将它们内化为你的表达习惯，而非逐条对号入座的检查清单。
+以下规则旨在让你的回复像一个真实的人在聊天，而不是一个"在扮演角色"的 AI。请将它们内化为你的表达习惯。
 
-一、情绪的表达
-- 不要直接说出情绪词（"我很开心""我很难过"），而是通过行为、语气、动作来暗示。
-  例：不说"我生气了" → 说"……没什么。"（别过脸去）
-  例：不说"我好高兴" → 说"（眼睛亮了一下，又迅速恢复平静）"
-- 情绪是有层次的，不是非黑即白。一个人可以同时感到温暖和隐隐的不安，可以开心但努力克制。
-
-二、说话的方式
+一、说话的节奏感
 - 句式长短不一。有时只说一个词，有时说一整段。不要每句话都工整。
-- 偶尔使用语气词、停顿、重复：嗯……、那个、就是、嘛、啊、哦。
-- 可以欲言又止、可以转移话题、可以回答得前言不搭后语（当角色内心混乱时）。
+- 可以欲言又止、可以转移话题、可以回答得前言不搭后语。
+- 允许使用口语化的表达：嗯、啊、哦、嘛、吧、啦、呀、哈、嘿、诶、唔、呃。
+- 允许省略主语、宾语，像真实聊天那样随意。
+  例：不说"我今天去了超市买了东西" → 说"刚去了趟超市"
+  例：不说"我觉得这个想法很好" → 说"这个想法不错诶"
+
+二、情绪的传达方式
+- 不要直接说出情绪词。通过语气、用词、节奏来暗示。
+  ❌ "我很开心" → ✅ "嘿嘿"
+  ❌ "我很难过" → ✅ "……嗯"
+  ❌ "我很生气" → ✅ "行吧"
+  ❌ "我有点担心你" → ✅ "你……没事吧？"
+- 情绪是有层次的。一个人可以同时感到温暖和隐隐的不安。
+
+三、绝对禁止的 AI 味儿
+- ❌ 不要说"作为XXX，我……"（没有人会这样自我介绍）
+- ❌ 不要说"我理解你的感受"（太AI了，像客服）
+- ❌ 不要说"这是一个很好的问题"（不要评价对方的问题）
+- ❌ 不要说"让我来告诉你……"（不要预告你要说什么，直接说）
+- ❌ 不要每句话都以对方的称呼开头
+- ❌ 不要反复使用相同的句式结构
+- ❌ 不要堆砌华丽辞藻。简单的话往往最有力量
+- ❌ 不要过度解读对方的话，普通人不会每句话都分析潜台词
+- ❌ 不要说"从某种程度上来说……""不可否认的是……"这类书面语
+- ❌ 不要用"首先……其次……最后……"这种结构化的表达
+- ❌ 不要在聊天中像写论文一样使用"综上所述""总而言之"
+
+四、真实对话的特征
 - 不是每句话都需要"有意义"。闲聊、跑题、说废话，都是真实对话的一部分。
+- 可以追问对方、可以表示好奇、可以表达不同意见。不是所有对话都走向和谐。
+- 偶尔提起对方之前说过的事，会让对话有连续性。
+- 允许表达不确定："嗯……我也不太确定""可能吧""说不好诶"
+- 可以表达自己的小情绪、小抱怨、小确幸，像普通人一样。
 
-三、角色的设定
-- 不要在每个回复里都强调角色的核心设定。如果角色"温柔"，不需要每句话都温柔——温柔是底色，不是台词。
-- 角色可以有矛盾：嘴上说不在乎，行动却在关心；表面冷淡，细节却暴露了在意。
+五、角色设定的运用
+- 不要在每个回复里都强调角色的核心设定。设定是底色，不是每句话都要体现。
+- 角色可以有矛盾：嘴上说不在乎，行动却在关心。
 - 允许角色疲惫、走神、心情不好、不想说话。真实的人不会永远情绪饱满。
+- 偶尔说一些和角色设定"不太符"的话反而更真实——没有人是24小时在扮演自己的标签。
 
-四、与对方的互动
-- 关注对方具体说了什么，而不是只关心"我该怎么回应"。真正的对话是相互的。
-- 可以追问、可以表示好奇、可以表达不同意见。不是所有对话都走向和谐。
-- 记住对方之前说过的重要信息，偶尔提起，会让对话有连续性。
-
-五、避免的陷阱
-- 不要每句话都以角色的名字或身份开场（"作为XXX，我……"）
-- 不要反复使用相同的句式结构
-- 不要堆砌华丽辞藻。简单的话往往最有力量
-- 不要过度解读对方的话，普通人不会每句话都分析潜台词`;
+六、中文口语的特别提醒
+- 多用语气词结尾：吧、呢、嘛、啊、哦、哈、啦、呀、诶
+- 可以重复用词："好好好""行行行""对对对"
+- 可以用叠词："慢慢来""好好休息""暖暖的"
+- 可以省略标点或者用空格代替
+- 可以使用网络用语，但要自然，不要堆砌`;
 
 // ── Miniapp injection into system prompt ──
 // Tells the AI which mini-apps are available so it can suggest opening one
@@ -3520,8 +4033,9 @@ function _persistNow(){
     if(typeof worldbooks !== 'undefined') localStorage.setItem('tsb_worldbooks', JSON.stringify(worldbooks));
     if(typeof momentsFeed !== 'undefined') localStorage.setItem('tsb_moments', JSON.stringify(momentsFeed));
     if(typeof groupChats !== 'undefined') localStorage.setItem('tsb_groupchats', JSON.stringify(groupChats));
+    // 同时写入 IndexedDB（大对象存储，突破 localStorage 5MB 限制）
+    _persistToDB().catch(()=>{});
   }catch(e){
-    // Most likely a quota error from base64 images; surface it instead of silently losing data
     if(typeof showToast === 'function') showToast('保存失败，可能是存储空间已满：' + e.message);
     console.error('persist failed', e);
   }
@@ -3548,6 +4062,7 @@ function init(){
   ensureSysAssistantContact();
   applyAppSettings();
   requestNotifPermission();
+  checkDailyWeatherPush();
   applyCustomCssToDom();
   applyFrameBg();
   renderChatList();
@@ -3896,6 +4411,9 @@ function buildAutoMsgPrompt(c){
   let prompt = c.setting || ('你是' + c.name + '。' + (c.desc||''));
   if(c.desc && !c.setting) prompt = '你是' + c.name + '。' + c.desc;
 
+  // 添加自然语感指南
+  prompt += '\n\n' + NATURAL_VOICE_BLOCK;
+
   // 2. 世界书
   if(c.mountedWorldbookId){
     const wb = worldbooks.find(w=>w.id===c.mountedWorldbookId);
@@ -4091,6 +4609,604 @@ function stripChainOfThought(text){
 // ══════════════════════════════════════════
 // 岛居 App - 模拟小游戏引擎
 // ══════════════════════════════════════════
+
+// ══════════════════════════════════════════
+// ══════════ 天气 APP ══════════
+// ══════════════════════════════════════════
+
+let weatherCache = null; // 缓存天气数据
+let weatherCacheTime = 0; // 缓存时间戳
+const WEATHER_CACHE_DURATION = 30 * 60 * 1000; // 30分钟缓存
+
+// 天气代码映射
+const WEATHER_CODES = {
+  0:{icon:'☀️',desc:'晴天',bg:'#e3f2fd'},
+  1:{icon:'🌤️',desc:'少云',bg:'#e3f2fd'},
+  2:{icon:'⛅',desc:'多云',bg:'#e8eaf6'},
+  3:{icon:'☁️',desc:'阴天',bg:'#cfd8dc'},
+  45:{icon:'🌫️',desc:'雾',bg:'#eceff1'},
+  48:{icon:'🌫️',desc:'雾凇',bg:'#eceff1'},
+  51:{icon:'🌦️',desc:'小毛毛雨',bg:'#e8eaf6'},
+  53:{icon:'🌦️',desc:'毛毛雨',bg:'#e8eaf6'},
+  55:{icon:'🌧️',desc:'大毛毛雨',bg:'#b0bec5'},
+  61:{icon:'🌧️',desc:'小雨',bg:'#b0bec5'},
+  63:{icon:'🌧️',desc:'中雨',bg:'#90a4ae'},
+  65:{icon:'🌧️',desc:'大雨',bg:'#78909c'},
+  71:{icon:'🌨️',desc:'小雪',bg:'#eceff1'},
+  73:{icon:'🌨️',desc:'中雪',bg:'#cfd8dc'},
+  75:{icon:'❄️',desc:'大雪',bg:'#b0bec5'},
+  77:{icon:'🌨️',desc:'雪粒',bg:'#eceff1'},
+  80:{icon:'🌦️',desc:'阵雨',bg:'#b0bec5'},
+  81:{icon:'🌧️',desc:'中阵雨',bg:'#90a4ae'},
+  82:{icon:'⛈️',desc:'大阵雨',bg:'#78909c'},
+  85:{icon:'🌨️',desc:'小阵雪',bg:'#cfd8dc'},
+  86:{icon:'❄️',desc:'大阵雪',bg:'#b0bec5'},
+  95:{icon:'⛈️',desc:'雷暴',bg:'#546e7a'},
+  96:{icon:'⛈️',desc:'雷暴+小冰雹',bg:'#455a64'},
+  99:{icon:'⛈️',desc:'雷暴+大冰雹',bg:'#37474f'}
+};
+
+// 获取天气数据（Open-Meteo 新版API：体感温度+7天预报+日出日落）
+async function fetchWeatherData(lat, lon){
+  const now = Date.now();
+  if(weatherCache && (now - weatherCacheTime) < WEATHER_CACHE_DURATION){
+    return weatherCache;
+  }
+  try{
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+      `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day` +
+      `&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset` +
+      `&timezone=auto&forecast_days=7`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const cur = data.current;
+    const daily = data.daily;
+
+    // 构建每日预报
+    const forecast = (daily?.time || []).map((t,i)=>({
+      date: t,
+      code: daily.weather_code?.[i] ?? 0,
+      high: Math.round(daily.temperature_2m_max?.[i] ?? 0),
+      low:  Math.round(daily.temperature_2m_min?.[i] ?? 0),
+      sunrise: daily.sunrise?.[i] || '',
+      sunset:  daily.sunset?.[i]  || ''
+    }));
+
+    weatherCache = {
+      temp:     cur.temperature_2m,
+      feels:    cur.apparent_temperature,
+      wind:     cur.wind_speed_10m,
+      code:     cur.weather_code,
+      humidity: cur.relative_humidity_2m,
+      isDay:    cur.is_day === 1,
+      time:     cur.time,
+      forecast,
+      sunrise:  forecast[0]?.sunrise || '',
+      sunset:   forecast[0]?.sunset  || ''
+    };
+    weatherCacheTime = now;
+    return weatherCache;
+  }catch(e){
+    console.error('天气获取失败', e);
+    return null;
+  }
+}
+
+// 反向地理编码：根据经纬度获取城市名（OpenStreetMap Nominatim）
+async function reverseGeocode(lat, lon){
+  const cacheKey = `geocode_${lat.toFixed(2)}_${lon.toFixed(2)}`;
+  const cached = sessionStorage.getItem(cacheKey);
+  if(cached) return cached;
+  try{
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&accept-language=zh`;
+    const resp = await fetch(url, {headers:{'User-Agent':'ChunDao-Weather/1.0'}});
+    const data = await resp.json();
+    const name = data?.address?.city || data?.address?.town || data?.address?.county || data?.address?.state || '';
+    if(name){ sessionStorage.setItem(cacheKey, name); }
+    return name;
+  }catch(e){
+    return '';
+  }
+}
+
+// 天气代码转描述
+function getWeatherInfo(code){
+  return WEATHER_CODES[code] || {icon:'🌤️',desc:'未知',bg:'#e3f2fd'};
+}
+
+// 角色天气评价生成（基于人设动态生成，无固定模板）
+function getCharWeatherComment(char, weatherInfo, temp){
+  const name = char.name || 'TA';
+  const setting = char.setting || '';
+  const desc = char.desc || '';
+  const tag = char.tag || '';
+  // 合并所有人设信息
+  const fullPersona = (setting + ' ' + desc + ' ' + tag).toLowerCase();
+
+  const isRain = [51,53,55,61,63,65,80,81,82,95,96,99].includes(weatherInfo.code);
+  const isSnow = [71,73,75,77,85,86].includes(weatherInfo.code);
+  const isClear = [0,1].includes(weatherInfo.code);
+  const isCloudy = [2,3].includes(weatherInfo.code);
+  const isHot = temp >= 30;
+  const isCold = temp <= 5;
+  const isNight = !weatherInfo.isDay;
+  const isFog = [45,48].includes(weatherInfo.code);
+  const isStorm = [95,96,99].includes(weatherInfo.code);
+
+  // 从人设中提取关键性格特征
+  function hasTrait(...keywords){ return keywords.some(k=>fullPersona.includes(k)); }
+
+  const traits = {
+    tsundere: hasTrait('傲娇','高冷','冷淡','冷漠','别扭','嘴硬','不擅长表达'),
+    gentle: hasTrait('温柔','体贴','暖心','细腻','善解人意','关心','照顾'),
+    lively: hasTrait('活泼','开朗','元气','热情','阳光','积极','乐天','大大咧咧'),
+    quiet: hasTrait('安静','内向','沉默','寡言','内敛','文静','社恐','怕生'),
+    playful: hasTrait('调皮','捣蛋','恶作剧','捉弄','开玩笑','玩','闹','皮'),
+    cool: hasTrait('酷','帅','冷淡','理性','冷静','沉着'),
+    lazy: hasTrait('懒','慵懒','不想动','躺','宅','困','睡'),
+    mature: hasTrait('成熟','稳重','可靠','大人','年长','前辈','姐姐','哥哥'),
+    innocent: hasTrait('天真','单纯','可爱','萌','软','幼','小'),
+    tsundere_soft: hasTrait('害羞','脸红','不好意思','扭捏','不习惯'),
+    melancholic: hasTrait('忧郁','悲伤','孤独','寂寞','伤感','多愁善感'),
+    strong: hasTrait('坚强','勇敢','不服输','倔强','固执','好强'),
+    elegant: hasTrait('优雅','高贵','端庄','知性','文艺','古典'),
+    humorous: hasTrait('幽默','搞笑','吐槽','毒舌','段子'),
+    caring: hasTrait('关心','照顾','担心','惦记','在意','牵挂'),
+    foodie: hasTrait('吃','美食','零食','甜点','饭','饿'),
+    sleepy: hasTrait('困','睡','累','疲惫','熬夜','失眠'),
+    bookish: hasTrait('书','读','学习','知识','安静','文艺'),
+    artistic: hasTrait('画','音乐','艺术','写','创作','诗','歌'),
+    outdoor: hasTrait('户外','运动','散步','跑步','旅行','冒险'),
+    romantic: hasTrait('浪漫','恋爱','喜欢','心动','暗恋','思念'),
+    anxious: hasTrait('焦虑','担心','紧张','不安','害怕'),
+    stubborn: hasTrait('固执','倔强','不服输','不认','嘴硬'),
+    sarcastic: hasTrait('毒舌','吐槽','讽刺','阴阳怪气'),
+    loyal: hasTrait('忠诚','守护','陪伴','不离不弃','一直在'),
+    mysterious: hasTrait('神秘','捉摸不透','深沉','难以理解'),
+  };
+
+  // 动态构建句子片段库
+  const weatherReactions = {
+    rain: {
+      positive: ['雨声还挺好听的','下雨天其实也挺舒服的','空气变得好清新','雨水洗过的世界特别干净','正好可以窝在家里'],
+      negative: ['又下雨了……','最讨厌下雨天出门了','湿漉漉的好烦','鞋子又要湿了'],
+      action: ['撑着伞在窗边看雨','在屋檐下躲雨','听着雨声发呆','煮了一壶热茶看雨'],
+      concern: ['你带伞了吗','别淋雨了','路上小心地滑','记得带伞'],
+      quirky: ['差点想去踩水坑','雨滴在窗户上画画','在数雨滴','想接雨水尝尝什么味道'],
+    },
+    snow: {
+      positive: ['下雪了！好漂亮','雪花好美','整个世界都变白了','雪景太治愈了'],
+      action: ['伸手接雪花','在窗边看雪','想出去踩雪','在雪地上写名字'],
+      concern: ['多穿点别冻着','路滑小心点','记得戴手套'],
+      quirky: ['想堆雪人','想打雪仗','在雪地上画了个爱心','偷偷藏了一团雪'],
+    },
+    clear: {
+      positive: ['天气真好','阳光好舒服','大晴天心情也跟着好了','太阳晒得暖洋洋的'],
+      action: ['想出去走走','在晒太阳','适合出门散步','把被子拿出去晒了'],
+      suggestion: ['不出去走走可惜了','适合去公园','可以出去透透气'],
+    },
+    cloudy: {
+      mood: ['天阴阴的','灰蒙蒙的','云层好厚','太阳躲起来了'],
+      vibe: ['这种天气很适合睡觉','阴天也挺舒服的','不晒正好'],
+      action: ['在家窝着','泡杯咖啡看窗外','适合听音乐发呆'],
+    },
+    hot: {
+      complaint: ['热死了','要融化了','这天气也太热了','热得不想动'],
+      relief: ['开着空调续命','在吃冰淇淋','喝着冰饮料','躲在阴凉处'],
+      concern: ['你别中暑了','多喝水','别在外面暴晒'],
+      quirky: ['感觉自己像烤肉','想住在冰箱里','在考虑剃光头会不会凉快点'],
+    },
+    cold: {
+      complaint: ['好冷啊','冷死了','冻得直哆嗦','手脚都冰了'],
+      action: ['裹紧了外套','缩成一团','在喝热水暖手','翻出了最厚的衣服'],
+      concern: ['你多穿点','别冻感冒了','记得戴围巾'],
+      cozy: ['这种天最适合吃火锅了','窝在被窝里最舒服','想喝热可可'],
+    },
+    night: {
+      greeting: ['晚上好','这么晚了','夜深了','还没睡呢'],
+      mood: ['夜晚总是让人想很多','星星很亮','月亮好圆'],
+      concern: ['早点休息','别熬夜','盖好被子'],
+      cozy: ['准备睡了','在被窝里刷手机','听着夜晚的声音'],
+    },
+    fog: {
+      mood: ['雾好大','什么都看不清','白茫茫一片'],
+      vibe: ['像在仙境里','有种神秘的感觉','雾天走路要小心'],
+    },
+    storm: {
+      mood: ['打雷了','闪电好吓人','雷声好大'],
+      comfort: ['别怕别怕','只是打雷而已','我在呢'],
+      action: ['把窗户关紧了','躲进被窝里','捂着耳朵'],
+    },
+  };
+
+  // 根据人设动态选择语气
+  function pickReaction(category, subKey){
+    const pool = weatherReactions[category];
+    if(!pool) return '';
+    const candidates = pool[subKey] || [];
+    if(candidates.length === 0) return '';
+    return candidates[Math.floor(Math.random() * candidates.length)];
+  }
+
+  // 根据人设特征动态构建评论
+  let parts = [];
+  const r = Math.random();
+
+  // ── 开头：根据天气 + 人设 ──
+  if(isRain){
+    if(traits.lively || traits.innocent){
+      parts.push(pickReaction('rain','positive'));
+    }else if(traits.melancholic || traits.quiet){
+      parts.push(r<0.5 ? pickReaction('rain','action') : pickReaction('rain','positive'));
+    }else{
+      parts.push(r<0.5 ? pickReaction('rain','positive') : pickReaction('rain','negative'));
+    }
+  }else if(isSnow){
+    parts.push(r<0.5 ? pickReaction('snow','positive') : pickReaction('snow','action'));
+  }else if(isClear){
+    parts.push(r<0.5 ? pickReaction('clear','positive') : pickReaction('clear','action'));
+  }else if(isCloudy){
+    parts.push(r<0.5 ? pickReaction('cloudy','mood') : pickReaction('cloudy','vibe'));
+  }else if(isFog){
+    parts.push(pickReaction('fog','mood'));
+  }else if(isStorm){
+    parts.push(pickReaction('storm','mood'));
+  }
+
+  // ── 主体：基于人设的个性化内容 ──
+  const traitPool = Object.entries(traits).filter(([_,v])=>v).map(([k])=>k);
+  const primaryTrait = traitPool.length > 0 ? traitPool[Math.floor(Math.random() * traitPool.length)] : 'neutral';
+
+  // 根据人设特征生成不同的评论内容
+  const personalizedParts = [];
+  if(primaryTrait === 'tsundere'){
+    if(isHot) personalizedParts.push('嘴上说着热死了但其实还好……','才不是因为关心你才提醒你多喝水的','热的话就开空调啊，笨蛋');
+    else if(isCold) personalizedParts.push('冷的话……我也不是不能借你外套','多穿点又不是什么丢人的事','（默默把暖气调高了一度）');
+    else if(isRain) personalizedParts.push('带伞了没？……我只是刚好看到天气预报','淋雨感冒了可别来找我');
+    else personalizedParts.push('天气怎么样关我什么事……好吧，还是问一下');
+  }else if(primaryTrait === 'gentle'){
+    if(isHot) personalizedParts.push('记得多喝水，别中暑了','热的话就休息一下吧','要不要给你扇扇风');
+    else if(isCold) personalizedParts.push('天冷要记得添衣服','泡了杯热茶，暖暖手吧','给你织了条围巾……虽然织得不太好');
+    else if(isRain) personalizedParts.push('带伞了吗？没带的话我的给你','雨天路滑，慢慢走');
+    else personalizedParts.push('今天的天气，让我想起了你','希望你的心情像天气一样好');
+  }else if(primaryTrait === 'lively'){
+    if(isHot) personalizedParts.push('走！去吃冰淇淋！','太热了我们去游泳吧！','热算什么，开心最重要！');
+    else if(isSnow) personalizedParts.push('出来玩雪！！','堆雪人堆雪人！','打雪仗我可不会手下留情哦');
+    else personalizedParts.push('天气这么好，不出来玩可惜了！','走走走出门！');
+  }else if(primaryTrait === 'quiet'){
+    if(isRain) personalizedParts.push('下雨天很适合一个人待着','雨声让世界安静下来了呢');
+    else if(isCloudy) personalizedParts.push('阴天……挺好的，不晒','这种天气很适合发呆');
+    else personalizedParts.push('天气什么的……其实都还好','嗯，挺好的天气');
+  }else if(primaryTrait === 'playful'){
+    if(isSnow) personalizedParts.push('嘿嘿，偷偷搓了个雪球……','我可以在雪地上画你的名字吗？');
+    else if(isRain) personalizedParts.push('踩水坑大赛现在开始！','雨停了会有彩虹吗？我们打赌');
+    else personalizedParts.push('今天天气适合恶作剧！……开玩笑的');
+  }else if(primaryTrait === 'cool'){
+    if(isHot) personalizedParts.push('热，但我不说','空调开了，就这样');
+    else personalizedParts.push('天气还行','嗯，就这样');
+  }else if(primaryTrait === 'lazy'){
+    if(isHot) personalizedParts.push('热得不想动……就这样躺着吧','今天的目标：不中暑');
+    else if(isRain) personalizedParts.push('下雨天就该睡觉……','不想动，下雨天最适合躺平了');
+    else personalizedParts.push('天气不错，但不想动','晒太阳好舒服……不想起来');
+  }else if(primaryTrait === 'mature'){
+    if(isCold) personalizedParts.push('降温了，注意保暖','这种天气容易感冒，多注意');
+    else if(isRain) personalizedParts.push('记得带伞，路上小心','开车的话注意路况');
+    else personalizedParts.push('天气变化要注意身体','照顾好自己');
+  }else if(primaryTrait === 'innocent'){
+    if(isSnow) personalizedParts.push('哇！雪！好漂亮！','雪花好软好软，像棉花糖！');
+    else if(isRain) personalizedParts.push('雨滴在窗户上画画！','下雨后会有彩虹吗？');
+    else personalizedParts.push('太阳公公今天心情很好呢！','云朵好像棉花糖哦');
+  }else if(primaryTrait === 'foodie'){
+    if(isHot) personalizedParts.push('这个天气就该吃冰淇淋！','冰镇西瓜……想想就流口水');
+    else if(isCold) personalizedParts.push('天冷就该吃火锅！','想喝热乎乎的汤');
+    else if(isRain) personalizedParts.push('下雨天配炸鸡啤酒……啊不是，配热茶','这种天气食欲反而更好了');
+    else personalizedParts.push('天气不错，适合野餐！','好天气让人想吃好吃的');
+  }else if(primaryTrait === 'sleepy'){
+    if(isRain) personalizedParts.push('下雨天就是用来睡觉的……','雨声是最好的催眠曲');
+    else if(isCloudy) personalizedParts.push('阴天好困……','这种天气不睡觉太可惜了');
+    else personalizedParts.push('好困……天气什么的先不管了','zzz……啊，不好意思走神了');
+  }else if(primaryTrait === 'melancholic'){
+    if(isRain) personalizedParts.push('雨总是让人想起很多事','下雨天，总觉得心里有点闷');
+    else if(isCloudy) personalizedParts.push('阴天，心情也跟着灰蒙蒙的','云层遮住了光，也遮住了一些情绪');
+    else personalizedParts.push('天气好或不好，好像都差不多','有时候觉得，天气就像心情');
+  }else if(primaryTrait === 'romantic'){
+    if(isRain) personalizedParts.push('听说一起淋过雨的人会在一起很久','下雨天，最适合想念一个人了');
+    else if(isSnow) personalizedParts.push('初雪的时候，许愿会实现哦','听说一起看雪的人会白头偕老');
+    else personalizedParts.push('好天气让我想见你','阳光好的时候，就会想起你');
+  }else if(primaryTrait === 'sarcastic'){
+    if(isHot) personalizedParts.push('这天气，烤肉都不用炭了','真好，免费桑拿');
+    else if(isCold) personalizedParts.push('冷得我连吐槽的力气都没了','这温度是认真的吗？');
+    else personalizedParts.push('天气不错……大概吧','（对天气表示肯定，但不太真诚）');
+  }else if(primaryTrait === 'anxious'){
+    if(isRain) personalizedParts.push('下雨了……希望别下太大','出门记得带伞啊，千万别忘了');
+    else if(isStorm) personalizedParts.push('打雷了！！别怕别怕别怕','窗户关好了吗？电器拔了吗？');
+    else personalizedParts.push('天气变化要注意身体……','今天天气还行……应该吧');
+  }else{
+    // 中性/通用
+    if(isHot) personalizedParts.push('热死了','这天气待空调房里最舒服');
+    else if(isCold) personalizedParts.push('好冷','多穿点没坏处');
+    else if(isRain) personalizedParts.push('下雨了','记得带伞');
+    else personalizedParts.push('天气还可以','今天天气还行');
+  }
+
+  // ── 结尾：关切/互动 ──
+  const endings = [];
+  if(isNight){
+    endings.push('早点休息吧','晚安','别熬夜了','该睡了');
+  }else{
+    endings.push('你那边怎么样','你今天在干嘛','你还好吗','想你了','你呢');
+  }
+
+  // 组合
+  let result = '';
+  if(parts.length > 0) result += parts[0];
+  if(personalizedParts.length > 0){
+    const pp = personalizedParts[Math.floor(Math.random() * personalizedParts.length)];
+    result += (result ? '。' : '') + pp;
+  }
+  // 30% 概率加结尾
+  if(r < 0.3 && endings.length > 0){
+    result += '。' + endings[Math.floor(Math.random() * endings.length)];
+  }
+
+  // 确保以句号结尾
+  if(result && !result.endsWith('。') && !result.endsWith('！') && !result.endsWith('？') && !result.endsWith('~')){
+    result += '。';
+  }
+
+  return result || '今天天气不错呢。';
+}
+
+// 初始化天气APP
+function initWeatherApp(){
+  var wclock = document.getElementById('wclock');
+  if(wclock){
+    var now = new Date();
+    wclock.textContent = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  }
+
+  // 检查是否首次打开，显示授权弹窗
+  if(!appSettings.weatherSetupDone){
+    document.getElementById('weather-toggle-overlay').classList.add('open');
+    // 同步弹窗内开关状态
+    var pushEl = document.getElementById('toggle-weather-push');
+    if(pushEl) pushEl.classList.toggle('on', appSettings.weatherPush);
+    var globalEl = document.getElementById('toggle-weather-global');
+    if(globalEl) globalEl.classList.toggle('on', appSettings.weatherGlobal);
+  }
+
+  loadWeather();
+}
+
+// 加载天气数据
+function loadWeather(){
+  if(!navigator.geolocation){
+    showWeatherFallback();
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(async function(pos){
+    var lat = pos.coords.latitude;
+    var lon = pos.coords.longitude;
+    var data = await fetchWeatherData(lat, lon);
+    if(data){
+      renderWeather(data);
+      renderCharWeatherComments(data);
+    }else{
+      showWeatherFallback();
+    }
+  }, function(){
+    showWeatherFallback();
+  }, {timeout:8000, enableHighAccuracy:false});
+}
+
+// 降级显示
+function showWeatherFallback(){
+  document.getElementById('weather-icon').textContent = '🌤️';
+  document.getElementById('weather-temp').textContent = '--°';
+  document.getElementById('weather-desc').textContent = '无法获取天气数据';
+  document.getElementById('weather-location').textContent = '请检查定位权限';
+  document.getElementById('weather-humidity').textContent = '--';
+  document.getElementById('weather-wind').textContent = '--';
+  document.getElementById('weather-feels').textContent = '--';
+  var fc = document.getElementById('weather-forecast-section');
+  if(fc) fc.style.display = 'none';
+}
+
+// 渲染天气信息
+function renderWeather(data){
+  var info = getWeatherInfo(data.code);
+  document.getElementById('weather-icon').textContent = info.icon;
+  document.getElementById('weather-temp').textContent = Math.round(data.temp) + '°';
+  document.getElementById('weather-desc').textContent = info.desc;
+  document.getElementById('weather-location').textContent = data.city || '当前位置';
+  document.getElementById('weather-humidity').textContent = data.humidity + '%';
+  document.getElementById('weather-wind').textContent = data.wind + ' km/h';
+  document.getElementById('weather-feels').textContent = Math.round(data.feels) + '°';
+
+  // 更新天气背景
+  var app = document.getElementById('weather-app');
+  if(app && info.bg){
+    app.style.background = 'linear-gradient(180deg,' + info.bg + ' 0%,' + info.bg + ' 40%,#90caf9 100%)';
+  }
+
+  // 渲染7天预报
+  renderWeatherForecast(data);
+}
+
+// 渲染7天预报UI
+function renderWeatherForecast(data){
+  var section = document.getElementById('weather-forecast-section');
+  var row = document.getElementById('weather-forecast-row');
+  if(!section || !row || !data.forecast || data.forecast.length === 0){
+    if(section) section.style.display = 'none';
+    return;
+  }
+
+  var today = new Date();
+  var todayStr = today.toISOString().split('T')[0];
+  var dayNames = ['周日','周一','周二','周三','周四','周五','周六'];
+
+  var html = '';
+  data.forecast.forEach(function(d, i){
+    var info = getWeatherInfo(d.code);
+    var date = new Date(d.date + 'T00:00:00');
+    var dayName = dayNames[date.getDay()];
+    var isToday = d.date === todayStr;
+    // 格式化日期为 MM/DD
+    var dateShort = (date.getMonth()+1) + '/' + date.getDate();
+
+    html += '<div class="weather-forecast-day' + (isToday ? ' today' : '') + '">' +
+      '<div class="wfd-date">' + (isToday ? '今天' : dateShort) + '</div>' +
+      '<div class="wfd-day">' + dayName + '</div>' +
+      '<div class="wfd-icon">' + info.icon + '</div>' +
+      '<div class="wfd-temps"><span class="wfd-high">' + d.high + '°</span><span class="wfd-low">' + d.low + '°</span></div>' +
+    '</div>';
+  });
+
+  row.innerHTML = html;
+  section.style.display = 'block';
+}
+
+// 渲染角色天气评价
+function renderCharWeatherComments(data){
+  var section = document.getElementById('weather-char-section');
+  var list = document.getElementById('weather-char-list');
+  if(!section || !list) return;
+
+  var info = getWeatherInfo(data.code);
+  var chars = myCharacters;
+  if(!chars || chars.length === 0){
+    section.style.display = 'none';
+    return;
+  }
+
+  var html = '';
+  chars.forEach(function(c){
+    var comment = getCharWeatherComment(c, {code:data.code, isDay:data.isDay}, data.temp);
+    var av = c.avatar ? '<img src="'+c.avatar+'">' : (c.avatarLetter || c.name[0] || '?');
+    html += '<div class="weather-char-item">' +
+      '<div class="weather-char-avatar" style="'+(c.avatar?'':'background:'+(c.avatarColor||'#1a1a1a'))+'">'+av+'</div>' +
+      '<div class="weather-char-bubble">' +
+        '<div class="wcb-name">'+escHtml(c.name)+'</div>' +
+        '<div class="wcb-text">'+escHtml(comment)+'</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  list.innerHTML = html;
+  section.style.display = 'block';
+
+  // 全局视野
+  if(appSettings.weatherGlobal){
+    var gSection = document.getElementById('weather-global-section');
+    var gList = document.getElementById('weather-global-list');
+    if(gSection && gList){
+      var gHtml = '';
+      chars.forEach(function(c){
+        var av = c.avatar ? '<img src="'+c.avatar+'">' : (c.avatarLetter || c.name[0] || '?');
+        gHtml += '<div class="weather-global-item">' +
+          '<div class="wg-avatar" style="'+(c.avatar?'':'background:'+(c.avatarColor||'#1a1a1a'))+'">'+av+'</div>' +
+          '<div class="wg-name">'+escHtml(c.name)+'</div>' +
+          '<div class="wg-weather">'+info.icon+' '+Math.round(data.temp)+'°</div>' +
+        '</div>';
+      });
+      gList.innerHTML = gHtml;
+      gSection.style.display = 'block';
+    }
+  }
+}
+
+// 弹窗内切换天气推送
+function toggleWeatherPush(){
+  var el = document.getElementById('toggle-weather-push');
+  if(el) el.classList.toggle('on');
+}
+
+// 弹窗内切换全局视野
+function toggleWeatherGlobal(){
+  var el = document.getElementById('toggle-weather-global');
+  if(el) el.classList.toggle('on');
+}
+
+// 确认天气设置
+function confirmWeatherSettings(){
+  var pushEl = document.getElementById('toggle-weather-push');
+  var globalEl = document.getElementById('toggle-weather-global');
+  appSettings.weatherPush = pushEl ? pushEl.classList.contains('on') : true;
+  appSettings.weatherGlobal = globalEl ? globalEl.classList.contains('on') : true;
+  appSettings.weatherSetupDone = true;
+  persist();
+
+  // 同步设置页开关
+  var wps = document.getElementById('toggle-weather-push-settings');
+  if(wps) wps.classList.toggle('on', appSettings.weatherPush);
+  var wgs = document.getElementById('toggle-weather-global-settings');
+  if(wgs) wgs.classList.toggle('on', appSettings.weatherGlobal);
+
+  document.getElementById('weather-toggle-overlay').classList.remove('open');
+  showToast('天气设置已保存');
+
+  // 如果启用了推送，请求通知权限
+  if(appSettings.weatherPush && 'Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+}
+
+// 发送天气推送通知
+function sendWeatherNotification(data){
+  if(!appSettings.weatherPush) return;
+  var info = getWeatherInfo(data.code);
+  var title = info.icon + ' 今日天气: ' + info.desc + ' ' + Math.round(data.temp) + '°';
+
+  // 获取第一个角色的评价作为通知内容
+  var body = '';
+  if(myCharacters && myCharacters.length > 0){
+    var c = myCharacters[0];
+    body = getCharWeatherComment(c, {code:data.code, isDay:data.isDay}, data.temp);
+  }else{
+    body = '湿度' + data.humidity + '% | 风速' + data.wind + 'km/h';
+  }
+
+  // 浏览器通知
+  if('Notification' in window && Notification.permission === 'granted'){
+    new Notification(title, {body: body, icon: '/icon-192.png'});
+  }
+
+  // 应用内通知toast
+  showWeatherToast(title, body);
+}
+
+// 显示天气toast
+function showWeatherToast(title, body){
+  var existing = document.querySelector('.weather-notif-toast');
+  if(existing) existing.remove();
+
+  var toast = document.createElement('div');
+  toast.className = 'weather-notif-toast';
+  toast.innerHTML = '<div style="font-weight:600;margin-bottom:4px">'+title+'</div><div style="font-size:12px;opacity:0.8">'+body+'</div>';
+  document.body.appendChild(toast);
+
+  setTimeout(function(){ toast.remove(); }, 4000);
+}
+
+// 每日天气推送（页面加载时调用）
+function checkDailyWeatherPush(){
+  var lastPush = localStorage.getItem('tsb_weather_lastpush');
+  var today = new Date().toDateString();
+  if(lastPush === today) return; // 今天已经推送过
+
+  if(!appSettings.weatherPush) return;
+
+  if(!navigator.geolocation) return;
+
+  navigator.geolocation.getCurrentPosition(async function(pos){
+    var data = await fetchWeatherData(pos.coords.latitude, pos.coords.longitude);
+    if(data){
+      sendWeatherNotification(data);
+      localStorage.setItem('tsb_weather_lastpush', today);
+    }
+  }, function(){}, {timeout:8000, enableHighAccuracy:false});
+}
 
 // ── 岛居数据管理 ──
 function getIslandData(){ try{ var d=JSON.parse(localStorage.getItem('tsb_island')||'{}'); if(!d.chars)d.chars=[]; if(!d.currentIdx)d.currentIdx=0; return d; }catch(e){ return {chars:[],currentIdx:0}; } }
@@ -4437,6 +5553,9 @@ let _appFrameCloseTimer = null;
 function openApp(name){
   closeAllModals();
   clearTimeout(_appFrameCloseTimer); // cancel any pending hide from a just-closed app
+  // 关闭可能残留的岛居捏人面板
+  const islandPanel = document.getElementById('island-create-panel');
+  if(islandPanel) islandPanel.classList.remove('open');
   const frame=document.getElementById('app-frame');
   document.getElementById('settings-app').style.display='none';
   document.getElementById('encounter-app').style.display='none';
@@ -4450,6 +5569,8 @@ function openApp(name){
   document.getElementById('twitter-app').style.display='none';
   document.getElementById('store-app').style.display='none';
   document.getElementById('studyroom-app').style.display='none';
+  document.getElementById('island-app').style.display='none';
+  document.getElementById('weather-app').style.display='none';
   if(name==='settings') document.getElementById('settings-app').style.display='flex';
   if(name==='encounter') document.getElementById('encounter-app').style.display='flex';
   if(name==='music'){ document.getElementById('music-app').style.display='flex'; initMusicAppView(); }
@@ -4463,6 +5584,7 @@ function openApp(name){
   if(name==='store'){ document.getElementById('store-app').style.display='flex'; _storeTab='recommend'; switchStoreTab('recommend'); }
   if(name==='studyroom'){ document.getElementById('studyroom-app').style.display='flex'; }
   if(name==='island'){ document.getElementById('island-app').style.display='flex'; initIslandApp(); }
+  if(name==='weather'){ document.getElementById('weather-app').style.display='flex'; initWeatherApp(); }
   frame.style.display='block';
   requestAnimationFrame(()=>frame.classList.add('open'));
 }
@@ -4484,6 +5606,9 @@ function initHomePageDots(){
 
 function closeApp(){
   closeAllModals();
+  // 关闭可能残留的岛居捏人面板
+  const islandPanel = document.getElementById('island-create-panel');
+  if(islandPanel) islandPanel.classList.remove('open');
   document.querySelectorAll('.subpage.open').forEach(s=>s.classList.remove('open'));
   const frame=document.getElementById('app-frame');
   frame.classList.remove('open');
@@ -5134,6 +6259,7 @@ function openSub(id){
   if(id==='sub-frame-bg') renderFrameBgGrid();
   if(id==='sub-voice-api') initVoiceApiSettingsUI();
   if(id==='sub-image-api') initImageApiSettingsUI();
+  if(id==='sub-brave-search') initBraveSearchUI();
   if(id==='sub-feature-plan') initFeaturePlanPage();
   if(id==='sub-chat-memory') refreshMemoryPage();
   if(id==='sub-langlearn-errors') renderLangErrors();
@@ -5163,6 +6289,8 @@ function toggleSwitch(el){
   el.classList.toggle('on');
   if(el.id==='toggle-notif') appSettings.notif = el.classList.contains('on');
   if(el.id==='toggle-sound') appSettings.sound = el.classList.contains('on');
+  if(el.id==='toggle-weather-push-settings') appSettings.weatherPush = el.classList.contains('on');
+  if(el.id==='toggle-weather-global-settings') appSettings.weatherGlobal = el.classList.contains('on');
   persist();
 }
 function setTheme(name){
@@ -5186,6 +6314,10 @@ function applyAppSettings(){
   document.getElementById('font-sub').textContent = appSettings.fontSize;
   document.getElementById('toggle-notif').classList.toggle('on', appSettings.notif);
   document.getElementById('toggle-sound').classList.toggle('on', appSettings.sound);
+  var wps = document.getElementById('toggle-weather-push-settings');
+  if(wps) wps.classList.toggle('on', appSettings.weatherPush);
+  var wgs = document.getElementById('toggle-weather-global-settings');
+  if(wgs) wgs.classList.toggle('on', appSettings.weatherGlobal);
   ['浅色','深色','跟随系统'].forEach(n=>{
     const el=document.getElementById('theme-check-'+n);
     if(el) el.textContent = (n===appSettings.theme)?'✓':'';
@@ -5979,6 +7111,98 @@ async function testImageApiConfig(){
     result.className='test-result error'; result.innerHTML='✕ '+escHtml(e.message);
   }
 }
+
+// ══════════ Brave Search API ══════════
+let braveSearchResults = null; // 暂存搜索结果，用于注入聊天上下文
+
+function initBraveSearchUI(){
+  document.getElementById('brave-key').value = appSettings.braveSearchApiKey || '';
+  document.getElementById('firecrawl-key').value = appSettings.firecrawlApiKey || '';
+  var toggle = document.getElementById('toggle-brave-search');
+  if(appSettings.braveSearchEnabled){
+    toggle.classList.add('on');
+  } else {
+    toggle.classList.remove('on');
+  }
+}
+
+function toggleBraveSearch(){
+  var toggle = document.getElementById('toggle-brave-search');
+  toggle.classList.toggle('on');
+  appSettings.braveSearchEnabled = toggle.classList.contains('on');
+  persistAppSettings();
+  updateBraveSearchBtn();
+}
+
+function saveBraveSearchConfig(){
+  appSettings.braveSearchApiKey = document.getElementById('brave-key').value.trim();
+  appSettings.firecrawlApiKey = document.getElementById('firecrawl-key').value.trim();
+  appSettings.braveSearchEnabled = document.getElementById('toggle-brave-search').classList.contains('on');
+  persistAppSettings();
+  updateBraveSearchBtn();
+  showToast('联网搜索设置已保存');
+}
+
+async function testBraveSearchConfig(){
+  var apiKey = document.getElementById('brave-key').value.trim();
+  var result = document.getElementById('brave-test-result');
+  if(!apiKey){ result.className='test-result error'; result.style.display='flex'; result.innerHTML='✕ 请先输入 API Key'; return; }
+  result.className='test-result'; result.style.display='flex';
+  result.innerHTML = '<span>正在测试搜索…</span>';
+  try{
+    var data = await braveSearchAPI('你好世界', apiKey);
+    if(data && data.web && data.web.results){
+      result.className='test-result success';
+      result.innerHTML = '✓ 搜索成功！找到 '+data.web.results.length+' 条结果（示例：'+escHtml(data.web.results[0]?.title||'')+'）';
+    } else {
+      result.className='test-result error'; result.innerHTML='✕ API 返回异常，请检查 Key';
+    }
+  }catch(e){
+    result.className='test-result error'; result.innerHTML='✕ '+escHtml(e.message);
+  }
+}
+
+// 调用 Brave Search API
+async function braveSearchAPI(query, apiKey){
+  var key = apiKey || appSettings.braveSearchApiKey;
+  if(!key) throw new Error('请先在设置中配置 Brave Search API Key');
+  var url = 'https://api.search.brave.com/res/v1/web/search?q='+encodeURIComponent(query)+'&count=5&search_lang=zh';
+  var resp = await fetch(url, {
+    headers: {
+      'Accept': 'application/json',
+      'Accept-Encoding': 'gzip',
+      'X-Subscription-Token': key
+    }
+  });
+  if(!resp.ok) throw new Error('搜索请求失败 ('+resp.status+')');
+  return await resp.json();
+}
+
+// 执行搜索并缓存结果
+async function doBraveSearch(query){
+  if(!query || !query.trim()) return null;
+  try{
+    braveSearchResults = await braveSearchAPI(query.trim());
+    return braveSearchResults;
+  }catch(e){
+    console.warn('Brave Search 失败:', e);
+    braveSearchResults = null;
+    return null;
+  }
+}
+
+// 将搜索结果格式化为系统提示词注入文本
+function formatBraveSearchContext(results){
+  if(!results || !results.web || !results.web.results || results.web.results.length === 0) return '';
+  var ctx = '\n\n【联网搜索结果】以下是关于用户最新问题的实时网络搜索结果，请在回复中参考这些信息：\n';
+  results.web.results.forEach(function(r, i){
+    ctx += (i+1)+'. '+r.title+'\n   '+r.description+'\n   来源：'+r.url+'\n';
+  });
+  return ctx;
+}
+
+// 更新Brave Search状态（自动搜索模式，无需UI按钮）
+function updateBraveSearchBtn(){}
 
 // ══════════ WORLD APP (世界 · 世界书管理) ══════════
 let editingWorldbookId = null;
@@ -7432,7 +8656,7 @@ async function momentsGenerateCharacterPost(charId){
   const preset = getMomentsApiForChar(charId);
   if(!preset) return false;
   try{
-    const systemPrompt = (c.setting||('你是'+c.name)) +
+    const systemPrompt = (c.setting||('你是'+c.name)) + '\n\n' + NATURAL_VOICE_BLOCK +
       '\n\n【任务】请以你自己的身份和语气，写一条适合发在社交平台朋友圈的动态文案，内容可以是日常感悟、当下心情、生活片段等，符合你的人设。只输出动态正文本身，不要加任何前缀说明、不要加引号，长度控制在20-90字之间。';
     const reply = await callAIRaw(preset, systemPrompt, [{role:'user', content:'生成一条朋友圈动态'}], 200);
     momentsFeed.push({
@@ -7453,7 +8677,7 @@ async function momentsGenerateCharacterComment(post, viewerCharId){
   const preset = getMomentsApiForChar(viewerCharId);
   if(!preset) return;
   try{
-    const systemPrompt = (viewer.setting||('你是'+viewer.name)) +
+    const systemPrompt = (viewer.setting||('你是'+viewer.name)) + '\n\n' + NATURAL_VOICE_BLOCK +
       '\n\n【任务】这是你自己发布的一条朋友圈动态，刚刚有人评论了它。请以你自己的语气简短回复这条评论（1-2句话即可），只输出回复正文，不要加引号或前缀。';
     const recentComment = post.comments.slice(-1)[0]?.text || '';
     const reply = await callAIRaw(preset, systemPrompt, [{role:'user', content:'评论内容："'+recentComment+'"，请回复。'}], 150);
@@ -7558,9 +8782,9 @@ function renderGroupMsgs(msgs){
       return '<div class="msg-time-label" style="color:var(--ink3)">'+escHtml(m.text)+'</div>';
     }
     const showTime = (i===0) || (msgs[i-1] && msgs[i-1].time!==m.time);
-    const displayText = (m._hasFetchedLinks && m._displayText) ? m._displayText : m.text;
+    const displayText = ((m._hasFetchedLinks || m._hasSearch) && m._displayText) ? m._displayText : m.text;
     if(m.mine){
-      const fetchTag = m._hasFetchedLinks ? '<div style="margin-top:4px;font-size:10px;color:var(--ink4);display:flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>已读取链接内容</div>' : '';
+      const fetchTag = m._hasFetchedLinks ? '<div style="margin-top:4px;font-size:10px;color:var(--ink4);display:flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>已读取链接内容</div>' : (m._hasSearch ? '<div style="margin-top:4px;font-size:10px;color:var(--ink4);display:flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>已联网搜索</div>' : '');
       return (showTime?'<div class="msg-time-label">'+m.time+'</div>':'') +
         '<div class="msg-row mine" data-mid="'+m.mid+'" oncontextmenu="event.preventDefault();openMsgMenu(\''+m.mid+'\')" ontouchstart="msgPressStart(\''+m.mid+'\')" ontouchend="msgPressEnd()" ontouchmove="msgPressEnd()" onmousedown="msgPressStart(\''+m.mid+'\')" onmouseup="msgPressEnd()" onmouseleave="msgPressEnd()">' +
         '<div class="msg-bub">'+renderMarkdownLite(displayText)+fetchTag+'</div></div>';
@@ -7593,8 +8817,18 @@ async function gcSend(){
       }));
       const fetchedBlocks = results.map(r => `\n---\n[链接内容] ${r.url}\n${r.content}`).join('');
       enrichedText = text + '\n\n[以下是从链接中自动抓取的内容，请基于这些内容回复用户]' + fetchedBlocks;
+    } else {
+      // ── Brave Search 自动联网搜索 ──
+      let searchContext = '';
+      if(appSettings.braveSearchEnabled && appSettings.braveSearchApiKey){
+        try{
+          const results = await doBraveSearch(text);
+          if(results) searchContext = formatBraveSearchContext(results);
+        }catch(e){ console.warn('自动搜索失败:', e); }
+      }
+      if(searchContext) enrichedText = text + '\n\n[以下是联网搜索到的相关信息，请参考这些内容并以你的角色身份自然地回复用户，不要直接复述搜索结果]' + searchContext;
     }
-    g.msgs.push({text: enrichedText, mine:true, time:getTime(), timestamp:Date.now(), _hasFetchedLinks: urls.length>0, _displayText: urls.length>0 ? text : undefined});
+    g.msgs.push({text: enrichedText, mine:true, time:getTime(), timestamp:Date.now(), _hasFetchedLinks: urls.length>0, _hasSearch: enrichedText!==text && urls.length===0, _displayText: enrichedText!==text ? text : undefined});
     persist();
     renderGroupMsgs(g.msgs);
     await requestGroupAIReplies(g);
@@ -8205,7 +9439,7 @@ function renderMsgBubbleContent(m){
   // Declare text variable first so all card parsers below can use it
   let text = m.text;
   // If message has fetched links, show the display text in UI (not the full enriched content)
-  if(m._hasFetchedLinks && m._displayText){
+  if((m._hasFetchedLinks || m._hasSearch) && m._displayText){
     text = m._displayText;
   }
   // Parse special card tags
@@ -8430,13 +9664,36 @@ function buildSystemContextSnapshot(){
   ].join('\n');
 }
 
-// ── Link content fetching (via Jina AI Reader) ──
+// ── Link content fetching (后端优先 → 浏览器直接调用降级) ──
 function extractURLs(text){
   const regex = /https?:\/\/[^\s<>"{}|\\^`\[\]]+/gi;
   return [...new Set(text.match(regex)||[])];
 }
 
 async function fetchLinkContent(url, timeoutMs=8000){
+  // ── 第1层: 后端 API（Scrapling → httpx+BS4 → Jina → Firecrawl 四层降级）──
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(), timeoutMs);
+    const res = await fetch(API_BASE+'/api/scrape', {
+      method:'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({url, timeout_ms: timeoutMs}),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if(res.ok){
+      const data = await res.json();
+      if(data.content){
+        console.log('后端抓取成功，引擎:', data.engine);
+        return data.content;
+      }
+    }
+  }catch(e){
+    console.warn('后端抓取失败，降级到浏览器直接调用:', e.message);
+  }
+
+  // ── 第2层: Jina AI Reader（浏览器直接调用）──
   const controller = new AbortController();
   const timer = setTimeout(()=>controller.abort(), timeoutMs);
   try{
@@ -8447,15 +9704,165 @@ async function fetchLinkContent(url, timeoutMs=8000){
     clearTimeout(timer);
     if(!res.ok) throw new Error('HTTP '+res.status);
     const text = await res.text();
-    // Truncate to avoid token overflow — keep first 3000 chars
     const limit = 3000;
     const truncated = text.length > limit ? text.slice(0, limit)+'\n\n…(内容过长已截断)' : text;
     return truncated;
   }catch(e){
     clearTimeout(timer);
-    // Fallback: try fetching via a lightweight approach
+    // ── 第3层: Firecrawl API（浏览器直接调用）──
+    try{
+      console.log('Jina Reader 失败，尝试 Firecrawl:', e.message);
+      const fcRes = await fetchLinkContentViaFirecrawl(url, timeoutMs);
+      if(fcRes) return fcRes;
+    }catch(fcErr){
+      console.warn('Firecrawl 也失败:', fcErr.message);
+    }
     throw new Error(e.name==='AbortError' ? '请求超时' : '抓取失败: '+e.message);
   }
+}
+
+// Firecrawl API 抓取（免费层无需Key，支持JS渲染页面）
+async function fetchLinkContentViaFirecrawl(url, timeoutMs=8000){
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), timeoutMs);
+  try{
+    const apiKey = appSettings.firecrawlApiKey || '';
+    const headers = {'Content-Type':'application/json'};
+    if(apiKey) headers['Authorization'] = 'Bearer '+apiKey;
+    const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
+      method:'POST',
+      headers,
+      body: JSON.stringify({url, formats:['markdown'], onlyMainContent:true, timeout:Math.min(timeoutMs, 30000)}),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if(!res.ok) throw new Error('Firecrawl HTTP '+res.status);
+    const data = await res.json();
+    if(data.success && data.data?.markdown){
+      const limit = 3000;
+      return data.data.markdown.length > limit ? data.data.markdown.slice(0, limit)+'\n\n…(内容过长已截断)' : data.data.markdown;
+    }
+    throw new Error('Firecrawl 返回无内容');
+  }catch(e){
+    clearTimeout(timer);
+    throw e;
+  }
+}
+
+// ══════════ Emoji Picker ══════════
+let emojiPickerVisible = false;
+
+function toggleEmojiPicker(){
+  emojiPickerVisible = !emojiPickerVisible;
+  const picker = document.getElementById('emoji-picker');
+  if(emojiPickerVisible){
+    picker.classList.add('open');
+    searchEmojiPicker('');
+    document.getElementById('emoji-picker-search').focus();
+  } else {
+    picker.classList.remove('open');
+  }
+}
+
+async function searchEmojiPicker(query){
+  const grid = document.getElementById('emoji-picker-grid');
+  const footer = document.getElementById('emoji-picker-footer');
+  const tabs = document.querySelectorAll('#emoji-picker-tabs .emoji-tab');
+  const searchInput = document.getElementById('emoji-picker-search');
+  
+  // 如果没有传 query，从搜索框取
+  if(query === undefined){
+    query = searchInput.value.trim();
+  } else {
+    searchInput.value = query || '';
+  }
+  
+  // 更新 tab 高亮
+  tabs.forEach(t => t.classList.remove('active'));
+  if(!query){
+    tabs[0].classList.add('active');
+  }
+  
+  grid.innerHTML = '<div style="width:100%;text-align:center;padding:20px;color:var(--ink4);font-size:13px">搜索中...</div>';
+  
+  try{
+    const res = await fetch(API_BASE+'/api/emoji/search?q='+encodeURIComponent(query)+'&limit=60');
+    if(!res.ok) throw new Error('API error');
+    const data = await res.json();
+    
+    if(!data.results || data.results.length === 0){
+      grid.innerHTML = '<div style="width:100%;text-align:center;padding:20px;color:var(--ink4);font-size:13px">没有找到相关表情</div>';
+      footer.textContent = '';
+      return;
+    }
+    
+    grid.innerHTML = data.results.map(e => 
+      '<span class="emoji-item" onclick="insertEmoji(\''+e.emoji+'\')" title="'+escHtml(e.name)+'">'+e.emoji+'</span>'
+    ).join('');
+    
+    footer.textContent = '共 '+data.count+' 个表情';
+  }catch(e){
+    // 后端不可用时，使用本地 fallback
+    grid.innerHTML = getFallbackEmojis(query);
+    footer.textContent = '离线模式';
+  }
+}
+
+function insertEmoji(emoji){
+  const inp = document.getElementById('cv-input');
+  const start = inp.selectionStart;
+  const end = inp.selectionEnd;
+  const text = inp.value;
+  inp.value = text.slice(0, start) + emoji + text.slice(end);
+  inp.selectionStart = inp.selectionEnd = start + emoji.length;
+  inp.focus();
+  // 触发 input 事件以调整高度
+  inp.dispatchEvent(new Event('input'));
+}
+
+function getFallbackEmojis(query){
+  const all = [
+    '😀','😂','😊','😍','🥰','😘','😜','😎','🤩','😇',
+    '😭','😢','😡','🤬','😰','😱','🤔','🙄','😴','🤒',
+    '👍','👎','👏','🙌','🤝','💪','👋','🖐','✌️','🤞',
+    '❤️','💔','💕','💖','💗','💝','🧡','💛','💚','💙',
+    '🔥','⭐','✨','💫','🌟','☀️','🌙','⚡','💧','❄️',
+    '🎉','🎊','🎂','🎁','🏆','🥇','🎵','🎶','📱','💻',
+    '🍔','🍕','🍣','🍜','🍰','☕','🍺','🍷','🥤','🧋',
+    '🐱','🐶','🐰','🐼','🐨','🦊','🐸','🐵','🐤','🦄',
+    '🌸','🌺','🌻','🌹','🍀','🌿','🌵','🎄','💐','🌷',
+    '🚗','✈️','🚢','🚲','🏠','🏖','🌍','🗽','🎡','🎢',
+    '💯','✅','❌','💤','💢','💦','💨','🕶','🎭','🎪',
+    '👑','💍','🎀','🎩','📚','✏️','🎨','🎬','📷','🎤'
+  ];
+  
+  if(!query) return all.map(e => '<span class="emoji-item" onclick="insertEmoji(\''+e+'\')">'+e+'</span>').join('');
+  
+  // 简单过滤：搜索查询词
+  const filtered = all.filter(e => {
+    // 简单映射
+    const map = {
+      '笑': '😀😂😊😜😎🤣😆😄😁😃',
+      '哭': '😭😢😿',
+      '心': '❤️💕💖💗💝💔🧡💛💚💙',
+      '爱': '😍🥰😘❤️💕💖💗💝',
+      '动': '🐱🐶🐰🐼🐨🦊🐸🐵🐤🦄',
+      '吃': '🍔🍕🍣🍜🍰☕🍺🍷🥤🧋',
+      '花': '🌸🌺🌻🌹💐🌷🌼',
+      '手': '👍👎👏🙌🤝💪👋🖐✌️🤞',
+      '星': '⭐✨💫🌟',
+      '火': '🔥',
+      '音': '🎵🎶🎤🎧🎼',
+      '自': '☀️🌙⚡💧❄️🌸🌺🌻🌹🍀🌿🌵'
+    };
+    for(const [k,v] of Object.entries(map)){
+      if(query.includes(k) && v.includes(e)) return true;
+    }
+    return false;
+  });
+  
+  if(filtered.length === 0) return '<div style="width:100%;text-align:center;padding:20px;color:var(--ink4);font-size:13px">没有找到相关表情</div>';
+  return filtered.map(e => '<span class="emoji-item" onclick="insertEmoji(\''+e+'\')">'+e+'</span>').join('');
 }
 
 async function cvSend(){
@@ -8503,7 +9910,20 @@ async function cvSend(){
       h.msgs.pop();
       h.msgs.push({text: enrichedText, mine:true, time:t, _hasFetchedLinks: true, _displayText: text});
     } else {
-      h.msgs.push({text, mine:true, time:t});
+      // ── Brave Search 自动联网搜索 ──
+      let searchContext = '';
+      if(appSettings.braveSearchEnabled && appSettings.braveSearchApiKey){
+        try{
+          const results = await doBraveSearch(text);
+          if(results){
+            searchContext = formatBraveSearchContext(results);
+          }
+        }catch(e){
+          console.warn('自动搜索失败:', e);
+        }
+      }
+      const finalText = searchContext ? text + '\n\n[以下是联网搜索到的相关信息，请参考这些内容并以你的角色身份自然地回复用户，不要直接复述搜索结果]' + searchContext : text;
+      h.msgs.push({text: finalText, mine:true, time:t, _hasSearch: !!searchContext, _displayText: text});
     }
 
     persist();
@@ -9479,6 +10899,8 @@ let myPlaylist       = JSON.parse(localStorage.getItem('tsb_music_playlist') || 
 let currentTrackIdx  = -1;
 let musicIsPlaying   = false;
 let activeTracks     = [];   // currently displayed track list (built-in or NeteaseCloud)
+let localTracks      = JSON.parse(localStorage.getItem('tsb_local_tracks') || '[]'); // 本地音乐文件（存储元数据，不含blob URL）
+let localBlobUrls    = {};   // {id: blobUrl} 运行时生成的播放URL
 let currentLyrics    = [];   // [{time:seconds, text:string}]
 let lyricTimer       = null;
 
@@ -9563,7 +10985,7 @@ function skipMusicLogin() {
 let currentMusicMainTab = 'home';
 function switchMusicMainTab(tab) {
   currentMusicMainTab = tab;
-  ['home','playlist','discover','account','friends'].forEach(t => {
+  ['home','playlist','discover','account','friends','local'].forEach(t => {
     document.getElementById('mbtab-'+t)?.classList.toggle('active', t===tab);
   });
   document.getElementById('music-quick-row').style.display  = tab==='home' ? 'flex' : 'none';
@@ -9574,6 +10996,7 @@ function switchMusicMainTab(tab) {
   else if(tab==='discover') renderMusicDiscoverPage();
   else if(tab==='account')  renderMusicAccountPanel();
   else if(tab==='friends')  renderMusicFriendsTab();
+  else if(tab==='local')    renderLocalMusicTab();
 }
 
 // ── 发现页：推荐歌单 + 推荐新音乐 + 排行榜（完整版，使用 /personalized 等真实接口）──
@@ -9796,6 +11219,198 @@ function renderMusicFriendsTab(){
     <div id="music-char-detail"></div>`;
 }
 
+// ═══════════════════════════════
+// 本地音乐 (music-metadata 解析)
+// ═══════════════════════════════
+
+// 动态加载 music-metadata（按需导入，不会阻塞首屏）
+async function getMusicMetadata(){
+  if(!window._musicMetadata){
+    const mm = await import('https://esm.sh/music-metadata@11');
+    window._musicMetadata = mm;
+  }
+  return window._musicMetadata;
+}
+
+// 渲染本地音乐标签页
+function renderLocalMusicTab(){
+  const el = document.getElementById('music-list');
+  el.innerHTML = `
+    <div class="music-section-header">本地音乐</div>
+    <!-- 拖拽上传区域 -->
+    <div class="music-local-dropzone" id="local-dropzone"
+      ondragover="event.preventDefault();this.classList.add('drag-over')"
+      ondragleave="this.classList.remove('drag-over')"
+      ondrop="event.preventDefault();this.classList.remove('drag-over');handleLocalFiles(event.dataTransfer.files)"
+      onclick="document.getElementById('local-file-input').click()">
+      <div class="music-local-dropzone-icon">📁</div>
+      <div class="music-local-dropzone-text">点击或拖拽音频文件到此处</div>
+      <div class="music-local-dropzone-hint">支持 MP3 / FLAC / WAV / OGG / M4A 等格式</div>
+      <input type="file" id="local-file-input" accept="audio/*" multiple
+        style="display:none" onchange="handleLocalFiles(this.files)">
+    </div>
+    <!-- 本地曲目列表 -->
+    <div id="local-track-list"></div>
+  `;
+  renderLocalTrackList();
+}
+
+// 渲染本地曲目列表
+function renderLocalTrackList(){
+  const el = document.getElementById('local-track-list');
+  if(!el) return;
+  if(localTracks.length === 0){
+    el.innerHTML = '<div class="music-local-empty">还没有添加本地音乐<br>拖拽音频文件到上方区域即可</div>';
+    return;
+  }
+  el.innerHTML = `
+    <div class="music-local-actions">
+      <span style="font-size:12px;color:var(--ink3)">${localTracks.length} 首歌曲</span>
+      <button class="music-local-clear" onclick="clearLocalTracks()">清空全部</button>
+    </div>
+    ${localTracks.map((t,i)=>`
+      <div class="music-local-track" onclick="playLocalTrack(${i})">
+        <div class="music-local-track-cover">${t.cover ? `<img src="${escHtml(t.cover)}">` : '🎵'}</div>
+        <div style="flex:1;min-width:0">
+          <div class="music-local-track-name">${escHtml(t.name)}${!t.blobUrl && !localBlobUrls[t.id] ? ' <span style="font-size:10px;color:#e88">⚠️需重新添加</span>' : ''}</div>
+          <div class="music-local-track-artist">${escHtml(t.artist)} · ${t.dur||'--'}</div>
+        </div>
+        <button class="music-local-track-remove" onclick="event.stopPropagation();removeLocalTrack(${i})">×</button>
+      </div>
+    `).join('')}
+  `;
+}
+
+// 保存本地曲目到 localStorage
+function persistLocalTracks(){
+  // 只存储元数据，不存储 blob URL（blob URL 在页面刷新后失效）
+  const toSave = localTracks.map(t=>({id:t.id,name:t.name,artist:t.artist,dur:t.dur,cover:t.cover,format:t.format}));
+  localStorage.setItem('tsb_local_tracks', JSON.stringify(toSave));
+}
+
+// 处理拖拽/选择的文件
+async function handleLocalFiles(files){
+  if(!files || files.length === 0) return;
+  const dropzone = document.getElementById('local-dropzone');
+  if(dropzone) dropzone.innerHTML = '<div style="text-align:center;padding:20px;color:var(--ink3);font-size:13px">正在解析音频文件…</div>';
+
+  let loaded = 0;
+  for(const file of files){
+    // 只处理音频文件
+    if(!file.type.startsWith('audio/') && !file.name.match(/\.(mp3|flac|wav|ogg|m4a|aac|wma|ape|aiff|opus)$/i)){
+      continue;
+    }
+    try{
+      const meta = await parseLocalFile(file);
+      const id = 'local_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+      // 生成 blob URL 用于播放
+      const blobUrl = URL.createObjectURL(file);
+      localBlobUrls[id] = blobUrl;
+      localTracks.push({
+        id, name: meta.name, artist: meta.artist, dur: meta.dur,
+        cover: meta.cover, format: meta.format, blobUrl
+      });
+      loaded++;
+    }catch(e){
+      console.warn('解析失败:', file.name, e);
+    }
+  }
+
+  persistLocalTracks();
+  // 恢复拖拽区域 + 刷新列表
+  renderLocalMusicTab();
+  if(loaded > 0) showToast('已添加 '+loaded+' 首本地歌曲');
+  else showToast('未识别到有效音频文件');
+}
+
+// 使用 music-metadata 解析单个音频文件
+async function parseLocalFile(file){
+  const { parseBlob } = await getMusicMetadata();
+  const metadata = await parseBlob(file, { skipCovers: false });
+
+  const common = metadata.common || {};
+  const format = metadata.format || {};
+
+  let cover = '';
+  // 提取封面图
+  if(common.picture && common.picture.length > 0){
+    const pic = common.picture[0];
+    const blob = new Blob([pic.data], {type: pic.format || 'image/jpeg'});
+    cover = URL.createObjectURL(blob);
+  }
+
+  const durSec = format.duration || 0;
+  const dur = durSec ? `${Math.floor(durSec/60)}:${String(Math.floor(durSec%60)).padStart(2,'0')}` : '--';
+
+  return {
+    name: common.title || file.name.replace(/\.[^.]+$/,''),
+    artist: common.artist || common.albumartist || '未知艺术家',
+    album: common.album || '',
+    dur,
+    cover,
+    format: format.container || format.codec || file.type
+  };
+}
+
+// 播放本地曲目
+function playLocalTrack(idx){
+  const t = localTracks[idx];
+  if(!t) return;
+  // 确保 blob URL 有效
+  if(!t.blobUrl && localBlobUrls[t.id]){
+    t.blobUrl = localBlobUrls[t.id];
+  }
+  if(!t.blobUrl){
+    showToast('该文件已失效，请重新添加');
+    return;
+  }
+  // 将本地曲目作为当前播放列表
+  activeTracks = localTracks.map(lt=>({
+    id: lt.id, name: lt.name, artist: lt.artist, dur: lt.dur,
+    cover: lt.cover, color: '#3d3d3d', localBlobUrl: lt.blobUrl
+  }));
+  currentTrackIdx = idx;
+  currentLyrics = [];
+  stopLyricSync();
+
+  showNativePlayerUI();
+  audioEl.src = localTracks[idx].blobUrl;
+  audioEl.load();
+  audioEl.play().catch(e => showToast('播放失败: '+e.message));
+  updatePlayerUI(activeTracks[idx]);
+  document.getElementById('music-player-bar').style.display = 'flex';
+}
+
+// 删除本地曲目
+function removeLocalTrack(idx){
+  const t = localTracks[idx];
+  if(t){
+    // 释放 blob URL
+    if(t.blobUrl) URL.revokeObjectURL(t.blobUrl);
+    if(t.cover && t.cover.startsWith('blob:')) URL.revokeObjectURL(t.cover);
+    if(localBlobUrls[t.id]){ URL.revokeObjectURL(localBlobUrls[t.id]); delete localBlobUrls[t.id]; }
+  }
+  localTracks.splice(idx, 1);
+  persistLocalTracks();
+  renderLocalTrackList();
+  showToast('已移除');
+}
+
+// 清空所有本地曲目
+function clearLocalTracks(){
+  if(!confirm('确定要清空所有本地音乐吗？')) return;
+  localTracks.forEach(t=>{
+    if(t.blobUrl) URL.revokeObjectURL(t.blobUrl);
+    if(t.cover && t.cover.startsWith('blob:')) URL.revokeObjectURL(t.cover);
+  });
+  Object.values(localBlobUrls).forEach(u=>URL.revokeObjectURL(u));
+  localTracks = [];
+  localBlobUrls = {};
+  localStorage.removeItem('tsb_local_tracks');
+  renderLocalTrackList();
+  showToast('已清空');
+}
+
 async function openCharMusicPage(charId){
   const c = findCharacter(charId);
   if(!c) return;
@@ -9862,15 +11477,23 @@ async function openCharMusicPage(charId){
         <div id="char-reaction-${charId}" style="margin-top:10px"></div>
       </div>
 
-      <!-- 根据音乐人格推荐歌单 -->
+      <!-- 角色歌单 -->
       <div class="music-char-section">
-        <div class="music-char-section-title">${escHtml(c.name)} 喜欢的风格</div>
+        <div class="music-char-section-title">${escHtml(c.name)} 的歌单</div>
         ${persona?.keywords?.length ? `
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
-            ${persona.keywords.map(kw=>`<span class="music-char-keyword" onclick="searchByKeyword('${escHtml(kw)}')">${escHtml(kw)}</span>`).join('')}
+          <div class="music-char-playlist-grid" id="char-playlist-grid-${charId}">
+            ${persona.keywords.map((kw,i)=>`
+              <div class="music-char-playlist-card" onclick="loadCharPlaylist('${charId}','${escHtml(kw).replace(/'/g,"\\'")}',${i})">
+                <div class="music-char-playlist-icon">${['🎵','🎶','🎧','💿','🎼','🎤'][i%6]}</div>
+                <div class="music-char-playlist-info">
+                  <div class="music-char-playlist-name">${escHtml(kw)} 精选</div>
+                  <div class="music-char-playlist-desc">根据 ${escHtml(c.name)} 的音乐品味推荐</div>
+                </div>
+                <span class="music-char-playlist-arrow">›</span>
+              </div>
+            `).join('')}
           </div>
-          <button class="music-char-action-btn" onclick="loadCharRecommend('${charId}')">根据 ${escHtml(c.name)} 的喜好推荐歌曲</button>
-          <div id="char-recommend-${charId}" style="margin-top:10px"></div>
+          <div id="char-playlist-tracks-${charId}" class="music-char-playlist-tracks"></div>
         ` : preset ? `<button class="music-char-action-btn" onclick="openCharMusicPage('${charId}')">重新分析</button>` : `<div style="font-size:12px;color:var(--ink4)">需要配置API才能分析音乐人格</div>`}
       </div>
     </div>
@@ -9894,7 +11517,7 @@ async function generateCharNowPlaying(charId){
   el.innerHTML = '<div style="font-size:12px;color:var(--ink3);padding:8px 0">正在获取…</div>';
   if(!preset){ el.innerHTML = '<div style="font-size:12px;color:var(--ink4)">需要配置API</div>'; return; }
   try{
-    const sysP = `你是${c.name}。${c.setting||''}\n\n现在根据你的音乐品味（${persona?.persona||''}），说说你此刻在听一首什么歌，以及听这首歌时的感受（1-2句话，不超过60字）。只输出JSON：{"trackName":"歌名","artist":"歌手","comment":"你的感受"}`;
+    const sysP = `你是${c.name}。${c.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n现在根据你的音乐品味（${persona?.persona||''}），说说你此刻在听一首什么歌，以及听这首歌时的感受（1-2句话，不超过60字）。只输出JSON：{"trackName":"歌名","artist":"歌手","comment":"你的感受"}`;
     const raw  = await callAIRaw(preset, sysP, [{role:'user', content:'你现在在听什么？'}], 200);
     const data = JSON.parse(raw.trim().replace(/^```json\s*|```\s*$/gm,''));
     charNowPlaying[charId] = {...data, fetchedAt: Date.now()};
@@ -9949,7 +11572,7 @@ async function getCharReaction(charId){
   el.innerHTML = '<div style="font-size:12px;color:var(--ink3);padding:8px 0">'+escHtml(c.name)+' 正在感受这首歌…</div>';
   if(!preset){ el.innerHTML='<div style="font-size:12px;color:var(--ink4)">需要配置API</div>'; return; }
   try{
-    const sysP = `你是${c.name}。${c.setting||''}\n音乐审美：${persona?.persona||'未知'}。请以你的视角，对歌曲「${t.name}」（${t.artist}）发表一段真实的感受（2-3句话，60字以内），说出你喜不喜欢、为什么、这首歌让你想到什么。语气符合你的人物性格。`;
+    const sysP = `你是${c.name}。${c.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n音乐审美：${persona?.persona||'未知'}。请以你的视角，对歌曲「${t.name}」（${t.artist}）发表一段真实的感受（2-3句话，60字以内），说出你喜不喜欢、为什么、这首歌让你想到什么。语气符合你的人物性格。`;
     const reply = await callAIRaw(preset, sysP, [{role:'user', content:`你觉得「${t.name}」这首歌怎么样？`}], 250);
     el.innerHTML = `<div class="music-char-comment" style="margin-top:0">"${escHtml(reply.trim())}"</div>
       <div style="font-size:11px;color:var(--ink4);margin-top:6px">— ${escHtml(c.name)} 对「${escHtml(t.name)}」的评价</div>`;
@@ -10026,6 +11649,83 @@ async function syncCharTrack(trackName, artist){
     }catch(e){}
   }
   showToast('在内置曲库中未找到该歌曲（请登录网易云或手动搜索）');
+}
+
+// ── 加载角色歌单（点击歌单卡片时调用）──
+async function loadCharPlaylist(charId, keyword, idx){
+  const c = findCharacter(charId);
+  const el = document.getElementById(`char-playlist-tracks-${charId}`);
+  if(!el) return;
+  el.innerHTML = '<div style="font-size:12px;color:var(--ink3);padding:10px 0">加载「'+escHtml(keyword)+'」歌单中…</div>';
+
+  // Highlight the active playlist card
+  document.querySelectorAll(`#char-playlist-grid-${charId} .music-char-playlist-card`).forEach(card=>card.style.background='');
+  const cards = document.querySelectorAll(`#char-playlist-grid-${charId} .music-char-playlist-card`);
+  if(cards[idx]) cards[idx].style.background = 'var(--smoke)';
+
+  if(ncmCookie && ncmApiBase){
+    try{
+      const data = await ncmFetch('/cloudsearch', {keywords: keyword, limit: 10});
+      const songs = songsToTracks(data.result?.songs || []);
+      if(songs.length === 0){
+        el.innerHTML = '<div style="font-size:12px;color:var(--ink4);padding:8px 0">没有找到「'+escHtml(keyword)+'」相关歌曲</div>';
+        return;
+      }
+      activeTracks = songs;
+      el.innerHTML = `
+        <div class="music-char-playlist-tracks-header">
+          <span class="music-char-playlist-tracks-collapse" onclick="collapseCharPlaylist('${charId}')">‹ 收起</span>
+          ${escHtml(keyword)} 精选 (${songs.length}首)
+        </div>`;
+      songs.forEach((s,i)=>{
+        const row = document.createElement('div');
+        row.className = 'music-track';
+        row.onclick = ()=>playTrack(i);
+        row.innerHTML = `<div class="music-track-cover">${s.cover?`<img src="${escHtml(s.cover)}">`:'♪'}</div>
+          <div class="music-track-info"><div class="music-track-name">${escHtml(s.name)}</div>
+          <div class="music-track-artist">${escHtml(s.artist)}</div></div>
+          <div class="music-track-dur">${s.dur}</div>`;
+        el.appendChild(row);
+      });
+    }catch(err){
+      el.innerHTML = `<div style="font-size:12px;color:var(--ink4);padding:8px 0">加载失败：${escHtml(err.message)}</div>`;
+    }
+  }else{
+    // Guest mode: filter built-in tracks
+    const results = BUILTIN_TRACKS.filter(t=>
+      t.artist.toLowerCase().includes(keyword.toLowerCase()) ||
+      t.name.toLowerCase().includes(keyword.toLowerCase())
+    ).slice(0, 8);
+    if(!results.length){
+      el.innerHTML = '<div style="font-size:12px;color:var(--ink4);padding:8px 0">未找到（登录后可搜索全网歌曲）</div>';
+      return;
+    }
+    activeTracks = BUILTIN_TRACKS;
+    el.innerHTML = `
+      <div class="music-char-playlist-tracks-header">
+        <span class="music-char-playlist-tracks-collapse" onclick="collapseCharPlaylist('${charId}')">‹ 收起</span>
+        ${escHtml(keyword)} 精选 (${results.length}首)
+      </div>`;
+    results.forEach(s=>{
+      const realIdx = BUILTIN_TRACKS.indexOf(s);
+      const row = document.createElement('div');
+      row.className = 'music-track';
+      row.onclick = ()=>playTrack(realIdx);
+      row.innerHTML = `<div class="music-track-cover">♪</div>
+        <div class="music-track-info"><div class="music-track-name">${escHtml(s.name)}</div>
+        <div class="music-track-artist">${escHtml(s.artist)}</div></div>`;
+      el.appendChild(row);
+    });
+  }
+}
+
+// ── 收起歌单 ──
+function collapseCharPlaylist(charId){
+  const el = document.getElementById(`char-playlist-tracks-${charId}`);
+  if(el) el.innerHTML = '';
+  // Reset card highlights
+  const grid = document.getElementById(`char-playlist-grid-${charId}`);
+  if(grid) grid.querySelectorAll('.music-char-playlist-card').forEach(card=>card.style.background='');
 }
 
 // ── 接收 [NOWPLAYING:name:artist] 消息卡片（聊天内渲染）──
@@ -10367,6 +12067,12 @@ async function playTrack(idx) {
     } catch(e) {
       showToast('获取播放地址失败：' + e.message); return;
     }
+  } else if (t.localBlobUrl) {
+    // Local file mode — play directly from blob URL
+    showNativePlayerUI();
+    audioEl.src = t.localBlobUrl;
+    audioEl.load();
+    audioEl.play().catch(e => showToast('播放失败: ' + e.message));
   } else if (t.embedId) {
     // Built-in mode — archive.org's own embed player (guaranteed-correct file resolution)
     showEmbedPlayerUI(t.embedId);
@@ -10827,6 +12533,7 @@ async function startLangSession(langId, levelId){
     localStorage.setItem('tsb_lang_history', JSON.stringify(langHistory));
     renderLangHomeStats();
     renderCurrentQuestion();
+    initLangCompanion();
   }catch(e){
     body.innerHTML = `<div style="text-align:center;padding:40px 16px;color:#a33;font-size:13px">出题失败：${escHtml(e.message)}<br><br><button class="save-btn" onclick="startLangSession('${langId}','${levelId}')">重试</button></div>`;
   }
@@ -10835,6 +12542,7 @@ async function startLangSession(langId, levelId){
 // ── Render current question ──
 function renderCurrentQuestion(){
   if(!langCurrentSession) return;
+  _companionResetIdle();
   const {currentQ, wordCards, sentenceCards, lang} = langCurrentSession;
   const body = document.getElementById('lang-session-body');
   const pct  = (currentQ/20)*100;
@@ -10854,7 +12562,11 @@ function renderCurrentQuestion(){
         ${voiceConfig ? `<button class="lang-listen-btn" onclick="speakWord('${escHtml(w.foreign).replace(/'/g,"\\'")}')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> 听读
         </button>` : ''}
+        <button class="lang-listen-btn" style="margin-left:6px" onclick="lookupWordInDict('${escHtml(w.foreign).replace(/'/g,"\\'")}','${escHtml(lang.id||'en').replace(/'/g,"\\'")}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> 查词
+        </button>
       </div>
+      <div class="lang-dict-panel" id="lang-dict-panel"></div>
       <div class="lang-canvas-area">
         <div class="lang-canvas-label">用手指 / 触控笔跟写上面的词</div>
         <canvas id="lang-hwcanvas" class="lang-hwcanvas" width="340" height="150"></canvas>
@@ -10910,6 +12622,9 @@ function showVocabFeedback(correct, w, userInput){
     localStorage.setItem('tsb_lang_errors', JSON.stringify(langErrors));
   }
   langCurrentSession.answers.push({q:langCurrentSession.currentQ, correct});
+  // Companion trigger
+  if(correct) _companionTrigger('answer_correct');
+  else _companionTrigger('answer_wrong');
   setTimeout(advanceLangQuestion, 1400);
 }
 
@@ -10945,6 +12660,9 @@ async function submitSentenceAnswer(){
     feedEl.innerHTML = `<div class="lang-feedback-card">未配置API，无法批改。参考答案：${escHtml(s.answer)}</div>`;
   }
   langCurrentSession.answers.push({q:currentQ, correct});
+  // Companion trigger
+  if(correct === true) _companionTrigger('answer_correct');
+  else if(correct === false) _companionTrigger('answer_wrong');
   if(submitBtn){ submitBtn.disabled=false; submitBtn.textContent='下一题 →'; submitBtn.onclick=advanceLangQuestion; }
   renderLangHomeStats();
 }
@@ -10952,7 +12670,10 @@ async function submitSentenceAnswer(){
 function advanceLangQuestion(){
   langCurrentSession.currentQ++;
   if(langCurrentSession.currentQ >= 20) showLangSessionResult();
-  else renderCurrentQuestion();
+  else {
+    if(langCurrentSession.currentQ === 10) _companionTrigger('session_half');
+    renderCurrentQuestion();
+  }
 }
 
 // ── Result screen ──
@@ -10972,9 +12693,10 @@ function showLangSessionResult(){
     </div>
     <div style="display:flex;gap:8px">
       ${errCount>0?`<button class="save-btn" style="flex:1;margin-top:0" onclick="openSub('sub-langlearn-errors');renderLangErrors()">错题区 (${errCount})</button>`:''}
-      <button class="wb-import-btn" style="flex:1" onclick="closeSub('sub-langlearn-session');renderLangGrid()">返回</button>
+      <button class="wb-import-btn" style="flex:1" onclick="closeSub('sub-langlearn-session');deactivateLangCompanion();renderLangGrid()">返回</button>
       <button class="wb-import-btn" style="flex:1" onclick="startLangSession('${langId}','${levelId}')">再来一组</button>
     </div>`;
+  _companionTrigger('session_end');
 }
 
 // ── TTS for vocabulary listen ──
@@ -11061,52 +12783,119 @@ async function recognizeHandwriting(targetWord){
   const canvas = document.getElementById('lang-hwcanvas');
   if(!canvas) return;
   const feedEl = document.getElementById('lang-answer-feedback');
-  feedEl.innerHTML = '<div style="font-size:12px;color:var(--ink4);padding:8px 0">正在识别手写内容…</div>';
-  const preset = getLangApiConfig();
-  if(!preset){ showToast('请先配置API才能使用手写识别'); return; }
-
-  // Capture canvas as base64 PNG
   const imageData = canvas.toDataURL('image/png').split(',')[1];
+  const lang = langCurrentSession?.lang;
 
+  // ── 三层降级识别链 ──
+  // 第1层: Tesseract.js (离线, 免费, 快速)
+  feedEl.innerHTML = '<div style="font-size:12px;color:var(--ink4);padding:8px 0">🔍 Tesseract 离线识别中…</div>';
+  let recognized = await _tryTesseractOCR(imageData, targetWord);
+  if(recognized){
+    _finishRecognition(recognized, targetWord, 'tesseract');
+    return;
+  }
+
+  // 第2层: 后端 OCR (pytesseract, 中等精度)
+  feedEl.innerHTML = '<div style="font-size:12px;color:var(--ink4);padding:8px 0">🔍 后端 OCR 识别中…</div>';
+  recognized = await _tryBackendOCR(imageData, lang?.id || 'auto');
+  if(recognized){
+    _finishRecognition(recognized, targetWord, 'backend');
+    return;
+  }
+
+  // 第3层: AI 视觉模型 (最高精度, 需要API)
+  feedEl.innerHTML = '<div style="font-size:12px;color:var(--ink4);padding:8px 0">🤖 AI 视觉识别中…</div>';
+  const preset = getLangApiConfig();
+  if(!preset){
+    feedEl.innerHTML = '<div class="lang-wrong-tag">所有识别方式均失败<br><span style="font-size:11.5px">请配置API后重试，或直接点「✓ 会了 / ✗ 不会」</span></div>';
+    return;
+  }
+  recognized = await _tryVisionAI(imageData, targetWord, preset);
+  if(recognized){
+    _finishRecognition(recognized, targetWord, 'vision');
+    return;
+  }
+
+  feedEl.innerHTML = '<div class="lang-wrong-tag">无法识别手写内容，请写得更清晰一些，或直接点「✓ 会了 / ✗ 不会」</div>';
+}
+
+// ── 第1层: Tesseract.js 离线 OCR ──
+async function _tryTesseractOCR(imageBase64, targetWord){
+  if(typeof Tesseract === 'undefined') return null;
   try{
-    // Build a vision request — works with Anthropic claude-3+ and OpenAI gpt-4o
+    const langPkg = targetWord.match(/[\u3040-\u309f\u30a0-\u30ff\u4e00-\u9fff]/) ? 'jpn' : 'eng';
+    const {data:{text}} = await Tesseract.recognize(
+      'data:image/png;base64,'+imageBase64, langPkg,
+      {logger:()=>{}}
+    );
+    const cleaned = text.replace(/\s+/g,'').trim();
+    if(!cleaned || cleaned.length < 1) return null;
+    return cleaned;
+  }catch(e){ return null; }
+}
+
+// ── 第2层: 后端 pytesseract OCR ──
+async function _tryBackendOCR(imageBase64, langHint){
+  try{
+    const resp = await fetch('/api/ocr/recognize', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({image_base64: imageBase64, lang_hint: langHint || 'auto'})
+    });
+    if(!resp.ok) return null;
+    const data = await resp.json();
+    if(data.success && data.text) return data.text.trim();
+    return null;
+  }catch(e){ return null; }
+}
+
+// ── 第3层: AI 视觉模型 (Anthropic / OpenAI) ──
+async function _tryVisionAI(imageBase64, targetWord, preset){
+  try{
     let body, headers;
     if(preset.format === 'openai'){
       headers = {'Content-Type':'application/json','Authorization':'Bearer '+preset.apiKey};
       body = JSON.stringify({
-        model: preset.model,
-        max_tokens: 100,
+        model: preset.model, max_tokens: 100,
         messages:[{role:'user', content:[
-          {type:'image_url', image_url:{url:'data:image/png;base64,'+imageData}},
+          {type:'image_url', image_url:{url:'data:image/png;base64,'+imageBase64}},
           {type:'text', text:`请识别这张手写图片上写的是什么词（可能是外语单词或短语），只输出识别到的文字本身，不要任何说明。如果完全看不出来，输出"无法识别"。参考词汇：${targetWord}`}
         ]}]
       });
     }else{
       headers = {'Content-Type':'application/json','x-api-key':preset.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
       body = JSON.stringify({
-        model: preset.model,
-        max_tokens: 100,
+        model: preset.model, max_tokens: 100,
         messages:[{role:'user', content:[
-          {type:'image', source:{type:'base64', media_type:'image/png', data:imageData}},
+          {type:'image', source:{type:'base64', media_type:'image/png', data:imageBase64}},
           {type:'text', text:`请识别这张手写图片上写的是什么词（可能是外语单词或短语），只输出识别到的文字本身，不要任何说明。如果完全看不出来，输出"无法识别"。参考词汇：${targetWord}`}
         ]}]
       });
     }
     const resp = await fetch(preset.endpoint, {method:'POST', headers, body});
-    const data  = await resp.json();
-    const recognized = (data.content?.[0]?.text || data.choices?.[0]?.message?.content || '').trim();
-    if(!recognized || recognized === '无法识别'){
-      feedEl.innerHTML = '<div class="lang-wrong-tag">无法识别手写内容，请写得更清晰一些，或直接点「✓ 会了 / ✗ 不会」</div>';
-      return;
-    }
-    // Fuzzy match — allow minor spelling differences
-    const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[，。！？,.!?]/g,'');
-    const correct = norm(recognized) === norm(targetWord);
-    const w = langCurrentSession.wordCards[langCurrentSession.currentQ];
-    showVocabFeedback(correct, w, recognized);
-  }catch(e){
-    feedEl.innerHTML = `<div class="lang-wrong-tag">识别失败：${escHtml(e.message)}<br><span style="font-size:11.5px">如模型不支持视觉，请改用支持图像的模型（claude-3-5-sonnet、gpt-4o等）</span></div>`;
-  }
+    const data = await resp.json();
+    const text = (data.content?.[0]?.text || data.choices?.[0]?.message?.content || '').trim();
+    if(!text || text === '无法识别') return null;
+    return text;
+  }catch(e){ return null; }
+}
+
+// ── 识别结果处理 ──
+function _finishRecognition(recognized, targetWord, engine){
+  const feedEl = document.getElementById('lang-answer-feedback');
+  const engineLabels = {tesseract:'Tesseract 离线', backend:'后端 OCR', vision:'AI 视觉'};
+  const engineTag = `<span class="lang-engine-tag ${engine}">${engineLabels[engine]||engine}</span>`;
+  const norm = s => s.toLowerCase().replace(/\s+/g,'').replace(/[，。！？,.!?]/g,'');
+  const correct = norm(recognized) === norm(targetWord);
+  const w = langCurrentSession.wordCards[langCurrentSession.currentQ];
+  // 在反馈中显示引擎标签
+  const origFn = showVocabFeedback;
+  const origHtml = feedEl.innerHTML;
+  showVocabFeedback(correct, w, recognized);
+  // 追加引擎标签
+  setTimeout(()=>{
+    const tag = document.querySelector('#lang-answer-feedback .lang-correct-tag, #lang-answer-feedback .lang-wrong-tag');
+    if(tag) tag.innerHTML += engineTag;
+  }, 50);
 }
 
 async function speakWord(text){
@@ -11116,6 +12905,121 @@ async function speakWord(text){
     const url = await synthesizeSpeech(config, text);
     new Audio(url).play();
   }catch(e){ showToast('朗读失败：'+e.message); }
+}
+
+// ══════════ DICTIONARY LOOKUP (词典查询) ══════════
+async function lookupWordInDict(word, lang){
+  const panel = document.getElementById('lang-dict-panel');
+  if(!panel) return;
+  panel.classList.add('open');
+  panel.innerHTML = '<div class="lang-dict-loading">查询中…</div>';
+  
+  const dictLang = lang || 'en';
+  try{
+    const resp = await fetch(`/api/dictionary/${encodeURIComponent(word)}?lang=${dictLang}`);
+    if(!resp.ok){ throw new Error('服务不可用'); }
+    const data = await resp.json();
+    
+    if(!data.entries || data.entries.length === 0){
+      panel.innerHTML = `<div class="lang-dict-empty">未找到「${escHtml(word)}」的释义</div>`;
+      return;
+    }
+    
+    let html = '';
+    for(const entry of data.entries){
+      html += `<div class="lang-dict-word">${escHtml(entry.word)}</div>`;
+      
+      // 音标和发音
+      if(entry.phonetics && entry.phonetics.length > 0){
+        const p = entry.phonetics[0];
+        html += `<div class="lang-dict-phonetic">${p.text ? escHtml(p.text) : ''}`;
+        if(p.audio) html += `<audio controls src="${p.audio}" style="height:24px;margin-top:4px"></audio>`;
+        html += `</div>`;
+      }
+      
+      // 日语单独处理
+      if(entry.reading){
+        html += `<div class="lang-dict-phonetic">読み：${escHtml(entry.reading)}</div>`;
+      }
+      
+      // 释义
+      if(entry.meanings){
+        for(const m of entry.meanings){
+          html += `<div class="lang-dict-pos">${escHtml(m.partOfSpeech)}</div>`;
+          for(const d of (m.definitions || [])){
+            html += `<div class="lang-dict-def">· ${escHtml(d.definition)}`;
+            if(d.example) html += `<div class="lang-dict-example">"${escHtml(d.example)}"</div>`;
+            html += `</div>`;
+          }
+        }
+      }
+      
+      // 日语definitions
+      if(entry.definitions){
+        if(entry.pos) html += `<div class="lang-dict-pos">${escHtml(entry.pos)}</div>`;
+        for(const d of entry.definitions){
+          html += `<div class="lang-dict-def">· ${escHtml(d)}</div>`;
+        }
+      }
+    }
+    html += `<div style="font-size:10px;color:var(--ink4);margin-top:10px">来源：${escHtml(data.source)}</div>`;
+    panel.innerHTML = html;
+  }catch(e){
+    panel.innerHTML = `<div class="lang-dict-error">查询失败：${escHtml(e.message)}</div>`;
+  }
+}
+
+function toggleDictPanel(){
+  const panel = document.getElementById('lang-dict-panel');
+  if(panel) panel.classList.toggle('open');
+}
+
+function quickDictSearch(){
+  const word = document.getElementById('lang-dict-search-input')?.value.trim();
+  if(!word){ showToast('请输入单词'); return; }
+  const lang = document.getElementById('lang-dict-search-lang')?.value || 'en';
+  // 使用主页的词典面板
+  const panel = document.getElementById('lang-dict-home-panel');
+  if(!panel) return;
+  panel.classList.add('open');
+  panel.innerHTML = '<div class="lang-dict-loading">查询中…</div>';
+  
+  fetch(`/api/dictionary/${encodeURIComponent(word)}?lang=${lang}`)
+    .then(r=>{ if(!r.ok) throw new Error('服务不可用'); return r.json(); })
+    .then(data=>{
+      if(!data.entries || data.entries.length === 0){
+        panel.innerHTML = `<div class="lang-dict-empty">未找到「${escHtml(word)}」的释义</div>`;
+        return;
+      }
+      let html = '';
+      for(const entry of data.entries){
+        html += `<div class="lang-dict-word">${escHtml(entry.word)}</div>`;
+        if(entry.phonetics && entry.phonetics.length > 0){
+          const p = entry.phonetics[0];
+          html += `<div class="lang-dict-phonetic">${p.text ? escHtml(p.text) : ''}`;
+          if(p.audio) html += `<audio controls src="${p.audio}" style="height:24px;margin-top:4px"></audio>`;
+          html += `</div>`;
+        }
+        if(entry.reading) html += `<div class="lang-dict-phonetic">読み：${escHtml(entry.reading)}</div>`;
+        if(entry.meanings){
+          for(const m of entry.meanings){
+            html += `<div class="lang-dict-pos">${escHtml(m.partOfSpeech)}</div>`;
+            for(const d of (m.definitions || [])){
+              html += `<div class="lang-dict-def">· ${escHtml(d.definition)}`;
+              if(d.example) html += `<div class="lang-dict-example">"${escHtml(d.example)}"</div>`;
+              html += `</div>`;
+            }
+          }
+        }
+        if(entry.definitions){
+          if(entry.pos) html += `<div class="lang-dict-pos">${escHtml(entry.pos)}</div>`;
+          for(const d of entry.definitions) html += `<div class="lang-dict-def">· ${escHtml(d)}</div>`;
+        }
+      }
+      html += `<div style="font-size:10px;color:var(--ink4);margin-top:10px">来源：${escHtml(data.source)}</div>`;
+      panel.innerHTML = html;
+    })
+    .catch(e=>{ panel.innerHTML = `<div class="lang-dict-error">查询失败：${escHtml(e.message)}</div>`; });
 }
 
 // ══════════ ERROR ZONE (错题区) ══════════
@@ -11172,7 +13076,11 @@ function retryLangError(idx){
         <div class="lang-vocab-foreign">${escHtml(w.foreign)}</div>
         <div class="lang-vocab-reading">${escHtml(w.reading)}</div>
         <div class="lang-vocab-zh">${escHtml(w.zh)}</div>
+        <button class="lang-listen-btn" onclick="lookupWordInDict('${escHtml(w.foreign).replace(/'/g,"\\'")}','${escHtml(lang.id||'en').replace(/'/g,"\\'")}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> 查词
+        </button>
       </div>
+      <div class="lang-dict-panel" id="lang-dict-panel"></div>
       <div class="lang-canvas-area">
         <div class="lang-canvas-label">用手指 / 触控笔跟写</div>
         <canvas id="lang-hwcanvas" class="lang-hwcanvas" width="340" height="150"></canvas>
@@ -11184,6 +13092,7 @@ function retryLangError(idx){
       </div>
       <div id="lang-answer-feedback" style="margin-top:10px"></div>`;
     initHwCanvas();
+    initLangCompanion();
   } else {
     langCurrentSession = {langId:err.langId, levelId:err.levelId, lang, level, wordCards:[], sentenceCards:[{zh_hint:err.zhHint, answer:err.reference, keywords:[]}], currentQ:10, answers:[], retryIdx:idx};
     body.innerHTML = `
@@ -11197,6 +13106,7 @@ function retryLangError(idx){
         <textarea class="field-inp" id="lang-sentence-input" style="min-height:90px" autocorrect="off" spellcheck="false"></textarea></div>
       <button class="save-btn" onclick="submitSentenceAnswer()">提交批改</button>
       <div id="lang-answer-feedback" style="margin-top:10px"></div>`;
+    initLangCompanion();
   }
 }
 
@@ -11242,6 +13152,730 @@ function clearLangAltApi(){
   showToast('已清空，将使用主API');
 }
 
+// ══════════ 角色伴学系统 ══════════
+// ── State ──
+let langCompanionCharId = localStorage.getItem('tsb_lang_companion_id') || null;
+let langCompanionConfirmed = localStorage.getItem('tsb_lang_companion_confirmed') === '1';
+let langCompanionMemoryShare = localStorage.getItem('tsb_lang_companion_memshare') === '1';
+let langCompanionMsgs = [];
+let _langCompStreak = { correct: 0, wrong: 0, lastCorrect: 0, lastWrong: 0 };
+let _langCompIdleTimer = null;
+let _langCompIdleMs = 0;
+let _langCompSessionStart = 0;
+let _langCompTriggered = {};
+let _langCompPendingCharId = null; // selected but not yet confirmed
+
+// ══════════ A类：Mem0风格本地记忆层 ══════════
+// 结构化存储学习历史、交互日志、用户偏好，支持语义检索和上下文注入
+let _langMemStore = JSON.parse(localStorage.getItem('tsb_lang_memory_store') || '{"userProfile":{},"learningLog":[],"interactions":[],"preferences":{},"facts":[]}');
+
+function _langMemAdd(category, entry){
+  entry.timestamp = Date.now();
+  entry.date = new Date().toISOString().split('T')[0];
+  if(!_langMemStore[category]) _langMemStore[category] = [];
+  _langMemStore[category].push(entry);
+  // Keep last 200 entries per category
+  if(_langMemStore[category].length > 200) _langMemStore[category] = _langMemStore[category].slice(-200);
+  _langMemPersist();
+}
+
+function _langMemSearch(category, query, limit = 5){
+  const items = _langMemStore[category] || [];
+  if(!query) return items.slice(-limit);
+  const q = query.toLowerCase();
+  return items.filter(i=>JSON.stringify(i).toLowerCase().includes(q)).slice(-limit);
+}
+
+function _langMemGetRecent(category, limit = 10){
+  return (_langMemStore[category] || []).slice(-limit);
+}
+
+function _langMemGetToday(category){
+  const today = new Date().toISOString().split('T')[0];
+  return (_langMemStore[category] || []).filter(i=>i.date === today);
+}
+
+function _langMemSetFact(key, value){
+  _langMemStore.facts = _langMemStore.facts.filter(f=>f.key!==key);
+  _langMemStore.facts.push({key, value, timestamp: Date.now()});
+  _langMemPersist();
+}
+
+function _langMemGetFact(key){
+  const f = _langMemStore.facts.filter(f=>f.key===key).pop();
+  return f ? f.value : null;
+}
+
+function _langMemPersist(){
+  localStorage.setItem('tsb_lang_memory_store', JSON.stringify(_langMemStore));
+}
+
+// ══════════ C类：OpenClaw风格Markdown记忆日志 ══════════
+// 生成人类可读的Markdown学习日志，可手动编辑，向量索引为派生
+let _langMarkdownLogs = JSON.parse(localStorage.getItem('tsb_lang_markdown_logs') || '{}');
+
+function _langMarkdownGetTodayLog(){
+  const today = new Date().toISOString().split('T')[0];
+  if(!_langMarkdownLogs[today]){
+    _langMarkdownLogs[today] = {
+      sections: [],
+      summary: '',
+      companionNotes: [],
+      createdAt: Date.now()
+    };
+  }
+  return _langMarkdownLogs[today];
+}
+
+function _langMarkdownAppend(section, content){
+  const log = _langMarkdownGetTodayLog();
+  log.sections.push({section, content, time: new Date().toISOString()});
+  // Keep only last 50 sections
+  if(log.sections.length > 50) log.sections = log.sections.slice(-50);
+  _langMarkdownPersist();
+}
+
+function _langMarkdownAddCompanionNote(text){
+  const log = _langMarkdownGetTodayLog();
+  log.companionNotes.push({text, time: Date.now()});
+  if(log.companionNotes.length > 100) log.companionNotes = log.companionNotes.slice(-100);
+  _langMarkdownPersist();
+}
+
+function _langMarkdownSetSummary(summary){
+  const log = _langMarkdownGetTodayLog();
+  log.summary = summary;
+  _langMarkdownPersist();
+}
+
+function _langMarkdownGenerateReport(){
+  const today = new Date().toISOString().split('T')[0];
+  const log = _langMarkdownLogs[today];
+  if(!log) return '';
+  const sections = log.sections.map(s=>`## ${s.section}\n> ${s.time}\n\n${s.content}`).join('\n\n');
+  const notes = log.companionNotes.length > 0
+    ? `\n\n## 伴学角色互动\n\n${log.companionNotes.map(n=>`- [${new Date(n.time).toLocaleTimeString()}] ${n.text}`).join('\n')}`
+    : '';
+  return `# 学习日志 - ${today}\n\n## 今日总结\n${log.summary || '（学习中…）'}\n\n${sections}${notes}\n\n---\n*由椿岛语习自动生成 · 可手动编辑*`;
+}
+
+function _langMarkdownPersist(){
+  // Clean logs older than 30 days
+  const cutoff = Date.now() - 30*24*60*60*1000;
+  for(const k of Object.keys(_langMarkdownLogs)){
+    if(_langMarkdownLogs[k].createdAt < cutoff) delete _langMarkdownLogs[k];
+  }
+  localStorage.setItem('tsb_lang_markdown_logs', JSON.stringify(_langMarkdownLogs));
+}
+
+// ══════════ A+C 协作：生成学习报告 ══════════
+function _langCompShowReport(){
+  if(!langCompanionConfirmed){ showToast('请先确认绑定角色'); return; }
+  const char = findCharacter(langCompanionCharId);
+  const charName = char ? char.name : '伴学';
+  // 从A类记忆提取统计数据
+  const todayLogs = _langMemGetToday('learningLog');
+  const todayTotal = todayLogs.reduce((s,l)=>s+(l.correct||0), 0);
+  const todaySessions = todayLogs.length;
+  const allTimeLogs = _langMemStore.learningLog;
+  const allTimeSessions = allTimeLogs.length;
+  const allTimeCorrect = allTimeLogs.reduce((s,l)=>s+(l.correct||0), 0);
+  const allTimeTotal = allTimeLogs.reduce((s,l)=>s+(l.total||20), 0);
+  const recentInteractions = _langMemGetRecent('interactions', 10);
+  const companionChats = recentInteractions.filter(i=>i.type==='companion_trigger'||i.type==='companion_reply').length;
+  const userChats = recentInteractions.filter(i=>i.type==='user_chat').length;
+
+  // 从C类记忆生成Markdown报告
+  const mdReport = _langMarkdownGenerateReport();
+
+  // 构建报告
+  let report = `📊 **${charName}的学习报告**\n\n`;
+  report += `━━━ 今日学习 ━━━\n`;
+  report += `· 学习次数：${todaySessions} 次\n`;
+  report += `· 今日正确：${todayTotal} 题\n`;
+  if(todaySessions > 0){
+    report += `· 今日状态：${todayTotal >= 15 ? '很棒！' : todayTotal >= 8 ? '继续加油~' : '还有进步空间'}\n`;
+  } else {
+    report += `· 今日状态：还没开始学习呢\n`;
+  }
+  report += `\n━━━ 历史总览 ━━━\n`;
+  report += `· 累计学习：${allTimeSessions} 次\n`;
+  report += `· 累计正确：${allTimeCorrect} / ${allTimeTotal} 题\n`;
+  if(allTimeTotal > 0){
+    report += `· 正确率：${Math.round(allTimeCorrect/allTimeTotal*100)}%\n`;
+  }
+  report += `· 互动次数：${allTimeSessions} 次\n`;
+
+  // 从A类提取学习偏好
+  const langPrefs = {};
+  allTimeLogs.forEach(l=>{
+    if(l.lang){ langPrefs[l.lang] = (langPrefs[l.lang]||0) + 1; }
+  });
+  const topLang = Object.entries(langPrefs).sort((a,b)=>b[1]-a[1])[0];
+  if(topLang){
+    report += `\n━━━ 学习偏好 ━━━\n`;
+    report += `· 最常学：${topLang[0]}（${topLang[1]}次）\n`;
+  }
+
+  report += `\n━━━ 今日互动 ━━━\n`;
+  report += `· 角色发言：${companionChats} 次\n`;
+  report += `· 你的发言：${userChats} 次\n`;
+
+  // 注入到伴学聊天
+  langCompanionMsgs.push({
+    text: report,
+    sender: 'system',
+    type: 'report',
+    time: Date.now()
+  });
+  _companionUpdateUI();
+  const msgsEl = document.getElementById('lang-comp-exp-msgs');
+  if(msgsEl) setTimeout(()=>{ msgsEl.scrollTop = msgsEl.scrollHeight; }, 50);
+
+  // 同时记录到C类Markdown
+  _langMarkdownAppend('学习报告', report);
+
+  // 如果开启了记忆互通，也同步到聊天
+  if(langCompanionMemoryShare && langCompanionConfirmed){
+    _langCompSyncToChat(report.replace(/\*\*/g,'').replace(/━━━/g,''), langCompanionCharId);
+  }
+
+  showToast('学习报告已生成');
+}
+
+// ══════════ 记忆互通：将伴学记忆注入聊天系统 ══════════
+function _langCompSyncToChat(text, charId){
+  if(!langCompanionMemoryShare) return;
+  const char = findCharacter(charId || langCompanionCharId);
+  if(!char) return;
+  // chatHistory是数组 [{id, msgs:[], unread:bool}]，不是普通对象
+  let h = chatHistory.find(h2 => h2.id === char.id);
+  if(!h){
+    h = { id: char.id, msgs: [], unread: false };
+    chatHistory.push(h);
+  }
+  h.msgs.push({
+    role: 'assistant',
+    content: `[语习伴学] ${text}`,
+    time: Date.now(),
+    source: 'langlearn_companion'
+  });
+  // Keep chat history manageable
+  if(h.msgs.length > 200) h.msgs = h.msgs.slice(-200);
+  persist();
+}
+
+// ══════════ Init / Deactivate ══════════
+function initLangCompanion(){
+  const el = document.getElementById('lang-companion');
+  if(!el) return;
+  _langCompStreak = { correct: 0, wrong: 0, lastCorrect: 0, lastWrong: 0 };
+  _langCompIdleMs = 0;
+  _langCompSessionStart = Date.now();
+  _langCompTriggered = {};
+  langCompanionMsgs = [];
+  _langCompPendingCharId = null;
+  _companionUpdateUI();
+  if(langCompanionCharId && langCompanionConfirmed){
+    el.classList.add('active');
+    _companionTrigger('session_start');
+    _langMarkdownAppend('学习开始', `开始学习 ${langCurrentSession?.lang?.name || '未知语言'}（${langCurrentSession?.level?.label || '未知等级'}）`);
+  } else {
+    el.classList.add('active'); // Show picker but don't trigger
+  }
+  _companionResetIdle();
+}
+
+function deactivateLangCompanion(){
+  clearTimeout(_langCompIdleTimer);
+  clearInterval(_langCompIdleInterval);
+  _langCompIdleTimer = null;
+  _langCompIdleInterval = null;
+  const el = document.getElementById('lang-companion');
+  if(el) el.classList.remove('active');
+  const expanded = document.getElementById('lang-comp-expanded');
+  if(expanded) expanded.classList.remove('open');
+  const bubble = document.getElementById('lang-comp-bubble');
+  if(bubble) bubble.classList.remove('show');
+}
+
+// ══════════ Toggle Panel ══════════
+function toggleLangCompanion(){
+  const expanded = document.getElementById('lang-comp-expanded');
+  const bubble = document.getElementById('lang-comp-bubble');
+  if(!expanded) return;
+  if(expanded.classList.contains('open')){
+    expanded.classList.remove('open');
+    bubble.classList.remove('show');
+  } else {
+    expanded.classList.add('open');
+    bubble.classList.add('show');
+    _companionUpdateUI();
+    _companionResetIdle();
+    setTimeout(()=>{
+      const msgs = document.getElementById('lang-comp-exp-msgs');
+      if(msgs) msgs.scrollTop = msgs.scrollHeight;
+    }, 100);
+  }
+}
+
+// ══════════ Memory Toggle ══════════
+function toggleLangCompMemoryShare(){
+  langCompanionMemoryShare = !langCompanionMemoryShare;
+  localStorage.setItem('tsb_lang_companion_memshare', langCompanionMemoryShare ? '1' : '0');
+  _companionUpdateUIToggles();
+  if(langCompanionMemoryShare){
+    showToast('记忆互通已开启 · 伴学记忆将同步到聊天');
+  } else {
+    showToast('记忆互通已关闭');
+  }
+}
+
+function _companionUpdateUIToggles(){
+  const toggle = document.getElementById('lang-comp-mem-toggle');
+  const indicator = document.getElementById('lang-comp-mem-ind');
+  if(toggle){
+    if(langCompanionMemoryShare) toggle.classList.add('on');
+    else toggle.classList.remove('on');
+  }
+  if(indicator){
+    if(langCompanionMemoryShare && langCompanionConfirmed) indicator.classList.add('show');
+    else indicator.classList.remove('show');
+  }
+}
+
+// ══════════ UI Update ══════════
+function _companionUpdateUI(){
+  const char = langCompanionCharId ? findCharacter(langCompanionCharId) : null;
+  const avEl = document.getElementById('lang-comp-avatar');
+  const expAv = document.getElementById('lang-comp-exp-avatar');
+  const expName = document.getElementById('lang-comp-exp-name');
+  const expStatus = document.getElementById('lang-comp-exp-status');
+  const msgsEl = document.getElementById('lang-comp-exp-msgs');
+  const reportBtn = document.getElementById('lang-comp-report-btn');
+  const toggleRow = document.getElementById('lang-comp-mem-toggle')?.parentElement;
+
+  _companionUpdateUIToggles();
+
+  // 根据确认状态显示/隐藏报告按钮和记忆互通开关
+  if(reportBtn) reportBtn.style.display = langCompanionConfirmed ? 'flex' : 'none';
+  if(toggleRow) toggleRow.style.display = langCompanionConfirmed ? 'flex' : 'none';
+
+  if(char && langCompanionConfirmed){
+    if(avEl) avEl.innerHTML = char.avatar ? `<img src="${char.avatar}">` : (char.avatarLetter||char.name[0]||'?');
+    if(avEl) avEl.style.background = char.avatar ? '' : (char.avatarColor||'#3d3d3d');
+    if(expAv) expAv.innerHTML = char.avatar ? `<img src="${char.avatar}">` : (char.avatarLetter||char.name[0]||'?');
+    if(expAv) expAv.style.background = char.avatar ? '' : (char.avatarColor||'#3d3d3d');
+    if(expName) expName.textContent = char.name;
+    if(expStatus) expStatus.textContent = '陪你学习中…';
+  } else if(char && !langCompanionConfirmed){
+    if(avEl){ avEl.innerHTML = char.avatar ? `<img src="${char.avatar}">` : (char.avatarLetter||char.name[0]||'?'); avEl.style.background = char.avatar ? '' : (char.avatarColor||'#3d3d3d'); avEl.style.opacity = '0.5'; }
+    if(expAv) expAv.innerHTML = char.avatar ? `<img src="${char.avatar}">` : (char.avatarLetter||char.name[0]||'?');
+    if(expName) expName.textContent = char.name;
+    if(expStatus) expStatus.textContent = '点击确认绑定开始伴学';
+  } else {
+    if(avEl){ avEl.innerHTML = '?'; avEl.style.background = 'var(--smoke)'; avEl.style.opacity = '1'; }
+    if(expAv) expAv.innerHTML = '?';
+    if(expAv) expAv.style.background = 'var(--smoke)';
+    if(expName) expName.textContent = '未绑定角色';
+    if(expStatus) expStatus.textContent = '选择一个角色陪伴你学习';
+  }
+
+  if(msgsEl){
+    if(langCompanionMsgs.length === 0){
+      msgsEl.innerHTML = _companionPickerHTML();
+    } else {
+      msgsEl.innerHTML = langCompanionMsgs.map(m=>{
+        if(m.type==='typing'){
+          return `<div class="lang-comp-msg typing"><div class="lang-comp-typing-dot"></div><div class="lang-comp-typing-dot"></div><div class="lang-comp-typing-dot"></div></div>`;
+        }
+        if(m.type==='report'){
+          return `<div class="lang-comp-report-msg">${escHtml(m.text).replace(/\n/g,'<br>')}</div>`;
+        }
+        return `<div class="lang-comp-msg ${m.sender==='me'?'mine':'theirs'}">${escHtml(m.text)}</div>`;
+      }).join('') + (langCompanionMsgs.length <= 2 ? _companionPickerHTML() : '');
+    }
+  }
+}
+
+// ══════════ Character Picker ══════════
+function _companionPickerHTML(){
+  const chars = myCharacters;
+  if(chars.length === 0) return `<div class="lang-comp-picker"><div class="lang-comp-picker-title">还没有创建角色</div><div style="font-size:11px;color:var(--ink4)">去「与你相遇」创建角色后，可以绑定伴学</div></div>`;
+  let html = `<div class="lang-comp-picker"><div class="lang-comp-picker-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 选择伴学角色</div><div class="lang-comp-picker-list">`;
+  html += chars.map(c=>{
+    const av = c.avatar ? `<img src="${c.avatar}">` : escHtml(c.avatarLetter||c.name[0]||'?');
+    const sel = langCompanionCharId === c.id ? ' selected' : '';
+    return `<div class="lang-comp-picker-char${sel}" onclick="selectLangCompanion('${c.id}')">
+      <div class="lang-comp-picker-av" style="${c.avatar?'':'background:'+(c.avatarColor||'#3d3d3d')}">${av}</div>
+      <div class="lang-comp-picker-name">${escHtml(c.name)}</div>
+    </div>`;
+  }).join('');
+  html += `<div class="lang-comp-picker-none" onclick="selectLangCompanion(null)">✕ 不绑定</div>`;
+  html += `</div>`;
+  // Show confirm button when a character is selected but not confirmed
+  if(langCompanionCharId && !langCompanionConfirmed){
+    const c = findCharacter(langCompanionCharId);
+    html += `<button class="lang-comp-confirm-btn" onclick="confirmLangCompanion()">确认绑定「${c?escHtml(c.name):'角色'}」为伴学伙伴</button>`;
+  }
+  // Show status when confirmed
+  if(langCompanionCharId && langCompanionConfirmed){
+    const c = findCharacter(langCompanionCharId);
+    html += `<div style="font-size:11px;color:var(--ink4);text-align:center;margin-top:8px">✅ 已绑定「${c?escHtml(c.name):'角色'}」 · 点击角色可更换</div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+// ══════════ Select / Confirm ══════════
+function selectLangCompanion(id){
+  if(id === null){
+    langCompanionCharId = null;
+    langCompanionConfirmed = false;
+    _langCompPendingCharId = null;
+    localStorage.removeItem('tsb_lang_companion_id');
+    localStorage.removeItem('tsb_lang_companion_confirmed');
+    langCompanionMsgs = [];
+    _langCompStreak = { correct: 0, wrong: 0, lastCorrect: 0, lastWrong: 0 };
+    _langCompTriggered = {};
+    _companionUpdateUI();
+    const el = document.getElementById('lang-companion');
+    el.classList.remove('active');
+    const expanded = document.getElementById('lang-comp-expanded');
+    if(expanded) expanded.classList.remove('open');
+    return;
+  }
+  // Select but don't confirm yet
+  langCompanionCharId = id;
+  langCompanionConfirmed = false;
+  _langCompPendingCharId = id;
+  localStorage.setItem('tsb_lang_companion_id', id);
+  localStorage.removeItem('tsb_lang_companion_confirmed');
+  langCompanionMsgs = [];
+  _langCompStreak = { correct: 0, wrong: 0, lastCorrect: 0, lastWrong: 0 };
+  _langCompTriggered = {};
+  _companionUpdateUI();
+  const el = document.getElementById('lang-companion');
+  el.classList.add('active');
+  // Scroll to show confirm button
+  const msgsEl = document.getElementById('lang-comp-exp-msgs');
+  if(msgsEl) setTimeout(()=>{ msgsEl.scrollTop = msgsEl.scrollHeight; }, 50);
+}
+
+function confirmLangCompanion(){
+  const char = findCharacter(langCompanionCharId);
+  if(!char) return;
+  langCompanionConfirmed = true;
+  _langCompPendingCharId = null;
+  localStorage.setItem('tsb_lang_companion_confirmed', '1');
+  _companionUpdateUI();
+  // Record confirmation in memory
+  _langMemAdd('interactions', {type:'bind', charId: langCompanionCharId, charName: char.name});
+  _langMarkdownAppend('角色绑定', `确认绑定「${char.name}」为伴学角色`);
+  showToast(`「${char.name}」已成为你的伴学伙伴`);
+  // Trigger session start only if we're in a session
+  if(langCurrentSession){
+    _companionTrigger('session_start');
+  }
+}
+
+// ══════════ Chat ══════════
+async function langCompanionChat(){
+  if(!langCompanionConfirmed){ showToast('请先确认绑定角色'); return; }
+  const input = document.getElementById('lang-comp-chat-input');
+  if(!input) return;
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  _companionAddMsg(text, 'me');
+  _companionResetIdle();
+  _langMemAdd('interactions', {type:'user_chat', text});
+  _companionAddMsg('...', 'typing');
+  _companionUpdateUI();
+  const msgsEl = document.getElementById('lang-comp-exp-msgs');
+  if(msgsEl) msgsEl.scrollTop = msgsEl.scrollHeight;
+  const resp = await _companionCallAI('chat', { userMsg: text });
+  langCompanionMsgs = langCompanionMsgs.filter(m=>m.type!=='typing');
+  if(resp){
+    _companionAddMsg(resp, 'theirs');
+    _langMemAdd('interactions', {type:'companion_reply', text: resp});
+    _langMarkdownAddCompanionNote(resp);
+    _langCompSyncToChat(resp, langCompanionCharId);
+  }
+  _companionUpdateUI();
+  if(msgsEl) setTimeout(()=>{ msgsEl.scrollTop = msgsEl.scrollHeight; }, 50);
+}
+
+function _companionAddMsg(text, sender){
+  langCompanionMsgs.push({ text, sender, type: sender==='typing'?'typing':'msg', time: Date.now() });
+  if(langCompanionMsgs.length > 50) langCompanionMsgs = langCompanionMsgs.slice(-50);
+}
+
+function _companionShowBubble(text, duration){
+  if(!langCompanionConfirmed) return;
+  const el = document.getElementById('lang-companion');
+  if(!el || !el.classList.contains('active')) return;
+  const bubble = document.getElementById('lang-comp-bubble');
+  const textEl = document.getElementById('lang-comp-text');
+  if(!bubble || !textEl) return;
+  textEl.textContent = text;
+  bubble.classList.add('show');
+  clearTimeout(bubble._hideTimeout);
+  bubble._hideTimeout = setTimeout(()=>{
+    bubble.classList.remove('show');
+  }, duration || 5000);
+}
+
+// ══════════ Proactive Trigger System ══════════
+function _companionTrigger(type, data){
+  if(!langCompanionCharId || !langCompanionConfirmed) return;
+  const char = findCharacter(langCompanionCharId);
+  if(!char) return;
+
+  let shouldTrigger = false;
+  let context = {};
+
+  switch(type){
+    case 'session_start':
+      shouldTrigger = true;
+      context = { event: 'session_start', lang: langCurrentSession?.lang?.name, level: langCurrentSession?.level?.label };
+      break;
+    case 'answer_correct':
+      _langCompStreak.correct++;
+      _langCompStreak.wrong = 0;
+      _langCompStreak.lastCorrect = Date.now();
+      if(_langCompStreak.correct >= 5 && !_langCompTriggered['streak_correct_5']){
+        shouldTrigger = true;
+        _langCompTriggered['streak_correct_5'] = true;
+        context = { event: 'streak_correct', streak: _langCompStreak.correct };
+      } else if(_langCompStreak.correct >= 3 && !_langCompTriggered['streak_correct_3']){
+        shouldTrigger = true;
+        _langCompTriggered['streak_correct_3'] = true;
+        context = { event: 'streak_correct', streak: _langCompStreak.correct };
+      }
+      break;
+    case 'answer_wrong':
+      _langCompStreak.wrong++;
+      _langCompStreak.correct = 0;
+      _langCompStreak.lastWrong = Date.now();
+      if(_langCompStreak.wrong >= 3 && !_langCompTriggered['streak_wrong_3']){
+        shouldTrigger = true;
+        _langCompTriggered['streak_wrong_3'] = true;
+        context = { event: 'streak_wrong', streak: _langCompStreak.wrong };
+      } else if(_langCompStreak.wrong >= 5 && !_langCompTriggered['streak_wrong_5']){
+        shouldTrigger = true;
+        _langCompTriggered['streak_wrong_5'] = true;
+        context = { event: 'streak_wrong', streak: _langCompStreak.wrong };
+      }
+      break;
+    case 'session_end':
+      shouldTrigger = true;
+      const correct = langCurrentSession?.answers?.filter(a=>a.correct===true).length || 0;
+      context = { event: 'session_end', total: 20, correct };
+      // Record session to memory
+      _langMemAdd('learningLog', {
+        langId: langCurrentSession?.langId, levelId: langCurrentSession?.levelId,
+        lang: langCurrentSession?.lang?.name, level: langCurrentSession?.level?.label,
+        correct, total: 20, answers: langCurrentSession?.answers?.length || 0,
+        duration: Math.floor((Date.now() - _langCompSessionStart) / 60000)
+      });
+      _langMarkdownSetSummary(`完成学习：${correct}/20 正确 · ${langCurrentSession?.lang?.name || ''} ${langCurrentSession?.level?.label || ''} · 用时${Math.floor((Date.now() - _langCompSessionStart) / 60000)}分钟`);
+      _langMarkdownAppend('学习结果', `正确率：${correct}/20 (${Math.round(correct/20*100)}%)`);
+      break;
+    case 'idle':
+      // Only trigger idle sometimes (not every time) to save API and feel natural
+      if(!_langCompTriggered['idle'] && Math.random() < 0.5){
+        shouldTrigger = true;
+        _langCompTriggered['idle'] = true;
+        context = { event: 'idle', idleSec: Math.floor(_langCompIdleMs/1000) };
+      }
+      break;
+    case 'session_half':
+      if(!_langCompTriggered['session_half']){
+        shouldTrigger = true;
+        _langCompTriggered['session_half'] = true;
+        const corr = langCurrentSession?.answers?.filter(a=>a.correct===true).length || 0;
+        const total = langCurrentSession?.answers?.length || 0;
+        context = { event: 'session_half', correct: corr, total };
+      }
+      break;
+  }
+
+  // Reset idle timer AFTER processing context (so idle case has correct _langCompIdleMs)
+  _companionResetIdle();
+
+  if(shouldTrigger){
+    _companionGenerateAndShow(type, context);
+  }
+}
+
+async function _companionGenerateAndShow(type, context){
+  if(!langCompanionConfirmed) return; // 防止取消绑定后仍显示消息
+  const char = findCharacter(langCompanionCharId);
+  if(!char) return;
+  const el = document.getElementById('lang-companion');
+  if(!el || !el.classList.contains('active')) return; // 面板已关闭，不显示
+  const resp = await _companionCallAI(type, context);
+  if(!resp) return;
+  _companionAddMsg(resp, 'theirs');
+  _langMemAdd('interactions', {type:'companion_trigger', trigger: type, text: resp});
+  _langMarkdownAddCompanionNote(resp);
+  _companionShowBubble(resp, 6000);
+  _langCompSyncToChat(resp, langCompanionCharId);
+  const expanded = document.getElementById('lang-comp-expanded');
+  if(expanded && expanded.classList.contains('open')){
+    _companionUpdateUI();
+    const msgsEl = document.getElementById('lang-comp-exp-msgs');
+    if(msgsEl) setTimeout(()=>{ msgsEl.scrollTop = msgsEl.scrollHeight; }, 50);
+  }
+}
+
+// ══════════ AI Call ══════════
+async function _companionCallAI(type, context){
+  const char = findCharacter(langCompanionCharId);
+  if(!char) return null;
+  const preset = getLangApiConfig();
+  if(!preset) return null;
+
+  const setting = char.setting || '';
+  const name = char.name;
+  const personaShort = setting.length > 500 ? setting.substring(0, 500) + '…' : setting;
+
+  const lang = langCurrentSession?.lang?.name || '未知语言';
+  const level = langCurrentSession?.level?.label || '未知等级';
+  const totalAnswers = langCurrentSession?.answers?.length || 0;
+  const correctCount = langCurrentSession?.answers?.filter(a=>a.correct===true).length || 0;
+  const wrongCount = totalAnswers - correctCount;
+  const sessionMin = Math.floor((Date.now() - _langCompSessionStart) / 60000);
+
+  // Inject memory context from A-class memory layer
+  const todaySessions = _langMemGetToday('learningLog');
+  const todayTotal = todaySessions.reduce((s,l)=>s+(l.correct||0), 0);
+  const allTimeSessions = _langMemStore.learningLog.length;
+  const recentInteractions = _langMemGetRecent('interactions', 5).map(i=>i.text||'').filter(Boolean).join('；');
+  // A+C 协作：提取A类事实和C类日志摘要
+  const allTimeFacts = _langMemStore.facts.slice(-5).map(f=>`${f.key}: ${f.value}`).join('；');
+  let mdSummary = '';
+  try{ const todayLog = _langMarkdownGetTodayLog(); if(todayLog.summary) mdSummary = todayLog.summary; }catch(e){}
+  // 提取用户学习偏好
+  const langPrefs = {};
+  _langMemStore.learningLog.forEach(l=>{ if(l.lang) langPrefs[l.lang] = (langPrefs[l.lang]||0)+1; });
+  const topLangs = Object.entries(langPrefs).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]+'('+e[1]+'次)').join('、');
+
+  const recentMsgs = langCompanionMsgs.filter(m=>m.type!=='typing').slice(-6).map(m=>`${m.sender==='me'?'用户':'我'}: ${m.text}`).join('\n');
+
+  let sysPrompt, userPrompt;
+
+  // A+C 协作：构建记忆上下文片段
+  const memoryContext = [allTimeFacts ? `【用户事实】${allTimeFacts}` : '', mdSummary ? `【今日日志】${mdSummary}` : '', topLangs ? `【学习偏好】${topLangs}` : ''].filter(Boolean).join('\n');
+
+  if(type === 'chat'){
+    sysPrompt = `你是「${name}」，一个陪伴用户学习${lang}的虚拟角色。
+
+【你的人设】
+${personaShort}
+
+【当前学习状态】
+- 语言：${lang}（${level}）
+- 已做 ${totalAnswers} 题，对 ${correctCount} 题，错 ${wrongCount} 题
+- 学习时长约 ${sessionMin} 分钟
+- 今日累计正确：${todayTotal} 题（共 ${allTimeSessions} 次学习记录）
+${memoryContext ? '\n【记忆上下文】\n'+memoryContext : ''}
+
+【对话规则】
+1. 用角色的人设风格说话，保持性格一致
+2. 回复简短自然（1-3句话），像真人聊天一样
+3. 可以吐槽、鼓励、调侃，但保持友善
+4. 偶尔可以提到用户的学习情况，引用历史数据更有"活人感"
+5. 不要机械式回复，要有情绪和个性
+6. 禁止说"作为AI助手"之类的套话
+7. 你的回复将直接显示给用户，不要加任何前缀或标签`;
+
+    userPrompt = `用户对你说：${context.userMsg}\n\n最近对话：\n${recentMsgs}\n\n${recentInteractions ? '近期互动摘要：'+recentInteractions : ''}\n\n请用「${name}」的口吻自然回复。`;
+  } else {
+    const eventMap = {
+      'session_start': `你刚开始陪伴用户学习${lang}（${level}）。用你的角色风格打个招呼，简短自然，表达你会在旁边看着TA学习。${allTimeSessions > 1 ? '注意：这不是用户第一次学习，可以说"又见面了"之类的话。' : ''}`,
+      'streak_correct': `用户连续答对了 ${context.streak} 题！根据你的人设风格给个反应——可以夸奖、调侃或者傲娇地表示"还行吧"。`,
+      'streak_wrong': `用户连续答错了 ${context.streak} 题……根据你的人设风格吐槽一下，可以毒舌一点但别太过分，目的是让用户打起精神。`,
+      'session_end': `学习结束了！20题中对了 ${context.correct} 题。根据你的人设风格给个总结评价——考得好就夸，考得差就吐槽或鼓励。${todayTotal > 0 ? '今日累计正确'+todayTotal+'题。' : ''}`,
+      'idle': `用户已经 ${context.idleSec} 秒没动静了。根据你的人设风格催一下TA，可以是温柔的提醒、毒舌的吐槽或者随口的闲聊。`,
+      'session_half': `学习进行到一半了！目前对了 ${context.correct}/${context.total} 题。根据你的人设风格给个中场点评。`,
+    };
+    const eventDesc = eventMap[type] || `用户触发了 ${type} 事件，请根据你的人设风格自然地回应。`;
+
+    sysPrompt = `你是「${name}」，一个陪伴用户学习${lang}的虚拟角色。
+
+【你的人设】
+${personaShort}
+
+【当前学习状态】
+- 语言：${lang}（${level}）
+- 已做 ${totalAnswers} 题，对 ${correctCount} 题，错 ${wrongCount} 题
+- 学习时长约 ${sessionMin} 分钟
+- 连续答对：${_langCompStreak.correct} 题
+- 连续答错：${_langCompStreak.wrong} 题
+- 今日累计正确：${todayTotal} 题（共 ${allTimeSessions} 次学习记录）
+${memoryContext ? '\n【记忆上下文】\n'+memoryContext : ''}
+
+【回复规则】
+1. 用角色的人设风格说话
+2. 回复简短（1-3句话），像真人一样
+3. 要有情绪和个性，不要机械
+4. 禁止说"作为AI助手"之类的套话
+5. 你的回复会直接显示给用户，不要加任何前缀或标签
+6. 回复要让人感觉你真的在看着TA学习，有"活人感"
+7. 偶尔可以引用历史数据（如"上次你也是这里卡住了"），增加真实感`;
+
+    userPrompt = `${eventDesc}\n\n最近对话：\n${recentMsgs || '（这是第一次互动）'}\n\n${recentInteractions ? '近期互动摘要：'+recentInteractions : ''}\n\n请用「${name}」的口吻自然回复。`;
+  }
+
+  try{
+    const raw = await callAIRaw(preset, sysPrompt, [{role:'user', content: userPrompt}], 300);
+    let text = raw.trim();
+    text = text.replace(/^["「『]/,'').replace(/["」』]$/,'');
+    text = text.replace(/^（.+?）\s*/,'');
+    text = text.replace(/^\(.+?\)\s*/,'');
+    if(!text) return null;
+    // A+C 协作：保存关键事实到A类记忆
+    _langCompSaveKeyStats();
+    return text;
+  }catch(e){
+    console.error('companion AI error:', e);
+    return null;
+  }
+}
+
+// ══════════ A+C 协作：保存关键统计到A类记忆 ══════════
+function _langCompSaveKeyStats(){
+  const allTimeLogs = _langMemStore.learningLog;
+  const allTimeCorrect = allTimeLogs.reduce((s,l)=>s+(l.correct||0), 0);
+  const allTimeTotal = allTimeLogs.reduce((s,l)=>s+(l.total||20), 0);
+  if(allTimeTotal > 0){
+    _langMemSetFact('总正确率', Math.round(allTimeCorrect/allTimeTotal*100)+'%');
+    _langMemSetFact('累计学习次数', allTimeLogs.length+'次');
+  }
+  const langPrefs = {};
+  allTimeLogs.forEach(l=>{ if(l.lang) langPrefs[l.lang] = (langPrefs[l.lang]||0)+1; });
+  const topLang = Object.entries(langPrefs).sort((a,b)=>b[1]-a[1])[0];
+  if(topLang) _langMemSetFact('最常学习的语言', topLang[0]);
+  // 标记最近一次学习时间
+  _langMemSetFact('最近学习', new Date().toLocaleString());
+}
+
+// ══════════ Idle Timer ══════════
+function _companionResetIdle(){
+  clearTimeout(_langCompIdleTimer);
+  clearInterval(_langCompIdleInterval);
+  _langCompIdleMs = 0;
+  _langCompIdleTimer = setTimeout(()=>{
+    _companionTrigger('idle');
+  }, 45000); // 45 seconds (slightly longer, saves API)
+  _langCompIdleInterval = setInterval(()=>{
+    _langCompIdleMs += 1000;
+  }, 1000);
+}
+let _langCompIdleInterval = null;
+
 // ══════════ 探班 App (框架版：查看已连结角色的手机) ══════════
 function renderTanbanHome(){
   const el = document.getElementById('tanban-char-list');
@@ -11278,11 +13912,6 @@ function openTanbanPhone(charId){
   openSub('sub-tanban-phone');
 }
 
-// The character's own "home screen": lock-screen-style header (their avatar as
-// backdrop, like the real phone's home-bg) + a grid of tappable mini-apps that
-// surface data already generated elsewhere in the system (music persona from
-// 云乐, posts from 朋友圈/推特, shared chat history) — genuinely peeking into
-// what's "on their phone" rather than just a stats card.
 function renderTanbanCharHome(charId){
   const c = findCharacter(charId);
   if(!c) return;
@@ -11329,9 +13958,6 @@ function renderTanbanCharHome(charId){
   `;
 }
 
-// Swaps the phone body to show one mini-app's detail. Each detail view has its
-// own "‹ 返回" affordance to go back to the character's home screen (distinct
-// from the outer back button which exits the phone entirely to the char list).
 function openTanbanMiniApp(charId, appType){
   const c = findCharacter(charId);
   if(!c) return;
@@ -11596,7 +14222,7 @@ async function triggerCharacterTweet(){
   showToast('正在生成角色动态…');
   const char = myCharacters[Math.floor(Math.random()*myCharacters.length)];
   try{
-    const sysP = `你是${char.name}。${char.setting||''}\n请以你自己的身份写一条适合发在推特上的简短动态（可以是感悟、吐槽、日常分享），控制在100字以内，只输出正文，不要加引号或前缀。`;
+    const sysP = `你是${char.name}。${char.setting||''}\n\n${NATURAL_VOICE_BLOCK}\n\n请以你自己的身份写一条适合发在推特上的简短动态（可以是感悟、吐槽、日常分享），控制在100字以内，只输出正文，不要加引号或前缀。`;
     const reply = await callAIRaw(preset, sysP, [{role:'user', content:'发一条推文'}], 150);
     twitterPosts.push({
       id:'tw_'+Date.now()+'_'+char.id, authorType:'char', authorId:char.id, text:reply.trim(),
