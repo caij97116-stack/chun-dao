@@ -21,12 +21,12 @@
   --bg-gif:url('https://i.postimg.cc/4dDHD5q2/1000102681.gif');
   --frame-bg:rgba(80,80,80,0.38);
 }
-html,body{width:100%;height:100%;background:#111;display:flex;justify-content:center;align-items:center;font-family:-apple-system,"Helvetica Neue",sans-serif;overflow:hidden;}
+html,body{width:100%;height:100%;background:#111;display:flex;justify-content:center;align-items:center;font-family:-apple-system,"Helvetica Neue",sans-serif;overflow:auto;}
 
 .phone{
   width:min(390px,100vw); height:min(844px,100dvh);
   background:#0a0a0a; border-radius:clamp(0px,5vw,54px);
-  position:relative; overflow:hidden;
+  position:relative; overflow:auto;
   box-shadow:0 0 0 1px rgba(255,255,255,0.06),0 40px 120px rgba(0,0,0,0.9);
 }
 @media(max-width:420px){.phone{border-radius:0;width:100vw;height:100dvh;}}
@@ -96,7 +96,7 @@ html,body{width:100%;height:100%;background:#111;display:flex;justify-content:ce
 #app-frame{position:absolute;inset:0;transform:scale(0.92) translateY(40px);opacity:0;pointer-events:none;transition:transform 0.45s cubic-bezier(0.4,0,0.2,1),opacity 0.35s ease;z-index:50;display:none;}
 #app-frame.open{display:block;transform:scale(1) translateY(0);opacity:1;pointer-events:all;}
 
-#settings-app,#encounter-app,#lifefaces-app,#miniapps-app,#world-app,#langlearn-app,#diary-app,#tanban-app,#store-app,#studyroom-app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--smoke);}
+#settings-app,#encounter-app,#lifefaces-app,#miniapps-app,#world-app,#langlearn-app,#diary-app,#tanban-app,#store-app,#studyroom-app,#vr-app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--smoke);}
 
 .app-statusbar{height:40px;background:var(--white);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0;border-bottom:1px solid var(--silver);}
 .app-statusbar .asb-time{font-size:12px;color:var(--ink3);}
@@ -1620,89 +1620,29 @@ input[type=file]{display:none;}
           </div>
           <span class="app-label">推特</span>
         </div>
+        <div class="app-icon-wrap" onclick="openApp('vr')">
+          <div class="app-icon" style="background:linear-gradient(135deg,#e8d5cf,#c9a99f)">
+            <span style="font-size:28px">🎬</span>
+          </div>
+          <span class="app-label">观影室</span>
+        </div>
         </div>
       </div>
     </div>
-      <!-- ── 第三页：观影室 ── -->
+      <!-- ── 第三页 ── -->
       <div class="app-page" id="app-page-2">
-        <div class="vr-container" id="vr-container">
-          <!-- 视频区 -->
-          <div class="vr-video-section" id="vr-video-section">
-            <div class="vr-url-bar">
-              <input class="vr-url-input" id="vr-url-input" type="text" placeholder="粘贴 YouTube / Bilibili 视频链接…" onkeydown="if(event.key==='Enter')vrLoadVideo()">
-              <button class="vr-url-btn" onclick="vrLoadVideo()">▶ 加载</button>
-              <button class="vr-url-btn vr-url-btn-sub" id="vr-sub-btn" onclick="vrExtractSubs()" style="display:none">📝 提取字幕</button>
+        <div class="app-row">
+          <div class="app-icon-wrap" onclick="openApp('encounter')">
+            <div class="app-icon" style="background:linear-gradient(135deg,#e8d5cf,#c9a99f)">
+              <span style="font-size:28px">💫</span>
             </div>
-            <div class="vr-player-wrap" id="vr-player-wrap">
-              <div class="vr-player-empty" id="vr-player-empty">
-                <div class="vr-player-empty-icon">🎬</div>
-                <div class="vr-player-empty-text">粘贴视频链接，与角色一起观影</div>
-              </div>
-              <div class="vr-player" id="vr-player" style="display:none"></div>
-            </div>
-            <div class="vr-subtitle-bar" id="vr-subtitle-bar" style="display:none">
-              <div class="vr-subtitle-label">📝 字幕已加载</div>
-              <div class="vr-subtitle-timestamp" id="vr-subtitle-ts"></div>
-            </div>
+            <span class="app-label">与你相遇</span>
           </div>
-          <!-- 聊天区 -->
-          <div class="vr-chat-section" id="vr-chat-section">
-            <div class="vr-chat-header">
-              <div class="vr-chat-header-left">
-                <div class="vr-comp-avatar" id="vr-comp-avatar" onclick="vrToggleCharPicker()"></div>
-                <div>
-                  <div class="vr-comp-name" id="vr-comp-name">选择观影角色</div>
-                  <div class="vr-comp-status" id="vr-comp-status">未绑定</div>
-                </div>
-              </div>
-              <div class="vr-chat-header-right">
-                <button class="vr-mem-share-btn" id="vr-mem-share-btn" onclick="vrToggleMemShare()" title="记忆互通" style="display:none">🔄</button>
-                <button class="vr-api-btn" id="vr-api-btn" onclick="vrToggleApiPanel()" title="API设置">⚙️</button>
-                <button class="vr-comp-bind-btn" id="vr-comp-bind-btn" onclick="vrConfirmBind()" style="display:none">确认绑定</button>
-              </div>
+          <div class="app-icon-wrap" onclick="openApp('settings')">
+            <div class="app-icon" style="background:linear-gradient(135deg,#3d3d3d,#1a1a1a)">
+              <span style="font-size:28px">⚙️</span>
             </div>
-            <!-- 角色选择面板 -->
-            <div class="vr-char-picker" id="vr-char-picker" style="display:none">
-              <div class="vr-char-picker-title">选择一起观影的角色</div>
-              <div class="vr-char-picker-list" id="vr-char-picker-list"></div>
-              <div class="vr-char-picker-none" onclick="vrUnbindChar()">✕ 不绑定角色</div>
-            </div>
-            <!-- API设置面板 -->
-            <div class="vr-api-panel" id="vr-api-panel" style="display:none">
-              <div class="vr-api-panel-title">⚙️ API 设置</div>
-              <div class="vr-api-section">
-                <div class="vr-api-section-title">主 API（全局默认）</div>
-                <div class="vr-api-hint" id="vr-api-main-hint">使用全局预设的主API</div>
-                <button class="vr-api-set-btn" onclick="openSub('sub-preset-manager')">管理预设</button>
-              </div>
-              <div class="vr-api-section">
-                <div class="vr-api-section-title">副 API（观影室专用）</div>
-                <div class="vr-api-hint">填写后在观影室优先使用此API，留空则使用主API</div>
-                <div class="field-group"><div class="field-lbl">接口地址</div><input class="field-inp" id="vr-alt-endpoint" type="text" placeholder="https://api.openai.com/v1/chat/completions"></div>
-                <div class="field-group"><div class="field-lbl">API Key</div><input class="field-inp" id="vr-alt-apikey" type="password" placeholder="sk-..."></div>
-                <div class="field-group"><div class="field-lbl">模型</div><input class="field-inp" id="vr-alt-model" type="text" placeholder="gpt-4o"></div>
-                <div class="vr-api-format-options" id="vr-alt-format-options">
-                  <span class="format-opt selected" data-format="openai" onclick="vrSelectFormat(this)">OpenAI</span>
-                  <span class="format-opt" data-format="anthropic" onclick="vrSelectFormat(this)">Anthropic</span>
-                  <span class="format-opt" data-format="gemini" onclick="vrSelectFormat(this)">Gemini</span>
-                </div>
-                <div style="display:flex;gap:8px;margin-top:10px">
-                  <button class="vr-api-set-btn" onclick="vrSaveAltApi()">保存副API</button>
-                  <button class="vr-api-set-btn" style="background:var(--silver);color:var(--ink2)" onclick="vrClearAltApi()">清空</button>
-                </div>
-              </div>
-            </div>
-            <!-- 聊天消息 -->
-            <div class="vr-chat-msgs" id="vr-chat-msgs">
-              <div class="vr-chat-empty" id="vr-chat-empty">加载视频并绑定角色后，开始观影聊天</div>
-            </div>
-            <!-- 输入区 -->
-            <div class="vr-chat-input-row">
-              <input class="vr-chat-input" id="vr-chat-input" placeholder="说说你的观影感受…" onkeydown="if(event.key==='Enter')vrSendMessage()">
-              <button class="vr-chat-send" onclick="vrSendMessage()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              </button>
-            </div>
+            <span class="app-label">设置</span>
           </div>
         </div>
       </div>
@@ -1711,7 +1651,6 @@ input[type=file]{display:none;}
       <div class="page-dot active" data-page="0" onclick="goToHomePage(0)"></div>
       <div class="page-dot" data-page="1" onclick="goToHomePage(1)"></div>
       <div class="page-dot" data-page="2" onclick="goToHomePage(2)"></div>
-      <div class="page-dot" data-page="3" onclick="goToHomePage(3)"></div>
     </div>
     <div class="dock">
       <div class="app-icon-wrap" onclick="openApp('encounter')">
@@ -3160,6 +3099,88 @@ input[type=file]{display:none;}
       </div>
     </div>
   </div>
+
+  <!-- ══════ 观影室 App ══════ -->
+  <div id="vr-app" style="display:none">
+    <div class="app-statusbar">
+      <span class="asb-time" id="vrclock">09:41</span>
+      <button class="app-close-btn" onclick="closeApp()">×</button>
+    </div>
+    <div class="vr-container" id="vr-container">
+      <div class="vr-video-section" id="vr-video-section">
+        <div class="vr-url-bar">
+          <input class="vr-url-input" id="vr-url-input" type="text" placeholder="粘贴 YouTube / Bilibili 视频链接…" onkeydown="if(event.key==='Enter')vrLoadVideo()">
+          <button class="vr-url-btn" onclick="vrLoadVideo()">▶ 加载</button>
+          <button class="vr-url-btn vr-url-btn-sub" id="vr-sub-btn" onclick="vrExtractSubs()" style="display:none">📝 提取字幕</button>
+        </div>
+        <div class="vr-player-wrap" id="vr-player-wrap">
+          <div class="vr-player-empty" id="vr-player-empty">
+            <div class="vr-player-empty-icon">🎬</div>
+            <div class="vr-player-empty-text">粘贴视频链接，与角色一起观影</div>
+          </div>
+          <div class="vr-player" id="vr-player" style="display:none"></div>
+        </div>
+        <div class="vr-subtitle-bar" id="vr-subtitle-bar" style="display:none">
+          <div class="vr-subtitle-label">📝 字幕已加载</div>
+          <div class="vr-subtitle-timestamp" id="vr-subtitle-ts"></div>
+        </div>
+      </div>
+      <div class="vr-chat-section" id="vr-chat-section">
+        <div class="vr-chat-header">
+          <div class="vr-chat-header-left">
+            <div class="vr-comp-avatar" id="vr-comp-avatar" onclick="vrToggleCharPicker()"></div>
+            <div>
+              <div class="vr-comp-name" id="vr-comp-name">选择观影角色</div>
+              <div class="vr-comp-status" id="vr-comp-status">未绑定</div>
+            </div>
+          </div>
+          <div class="vr-chat-header-right">
+            <button class="vr-mem-share-btn" id="vr-mem-share-btn" onclick="vrToggleMemShare()" title="记忆互通" style="display:none">🔄</button>
+            <button class="vr-api-btn" id="vr-api-btn" onclick="vrToggleApiPanel()" title="API设置">⚙️</button>
+            <button class="vr-comp-bind-btn" id="vr-comp-bind-btn" onclick="vrConfirmBind()" style="display:none">确认绑定</button>
+          </div>
+        </div>
+        <div class="vr-char-picker" id="vr-char-picker" style="display:none">
+          <div class="vr-char-picker-title">选择一起观影的角色</div>
+          <div class="vr-char-picker-list" id="vr-char-picker-list"></div>
+          <div class="vr-char-picker-none" onclick="vrUnbindChar()">✕ 不绑定角色</div>
+        </div>
+        <div class="vr-api-panel" id="vr-api-panel" style="display:none">
+          <div class="vr-api-panel-title">⚙️ API 设置</div>
+          <div class="vr-api-section">
+            <div class="vr-api-section-title">主 API（全局默认）</div>
+            <div class="vr-api-hint" id="vr-api-main-hint">使用全局预设的主API</div>
+            <button class="vr-api-set-btn" onclick="openSub('sub-preset-manager')">管理预设</button>
+          </div>
+          <div class="vr-api-section">
+            <div class="vr-api-section-title">副 API（观影室专用）</div>
+            <div class="vr-api-hint">填写后在观影室优先使用此API，留空则使用主API</div>
+            <div class="field-group"><div class="field-lbl">接口地址</div><input class="field-inp" id="vr-alt-endpoint" type="text" placeholder="https://api.openai.com/v1/chat/completions"></div>
+            <div class="field-group"><div class="field-lbl">API Key</div><input class="field-inp" id="vr-alt-apikey" type="password" placeholder="sk-..."></div>
+            <div class="field-group"><div class="field-lbl">模型</div><input class="field-inp" id="vr-alt-model" type="text" placeholder="gpt-4o"></div>
+            <div class="vr-api-format-options" id="vr-alt-format-options">
+              <span class="format-opt selected" data-format="openai" onclick="vrSelectFormat(this)">OpenAI</span>
+              <span class="format-opt" data-format="anthropic" onclick="vrSelectFormat(this)">Anthropic</span>
+              <span class="format-opt" data-format="gemini" onclick="vrSelectFormat(this)">Gemini</span>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button class="vr-api-set-btn" onclick="vrSaveAltApi()">保存副API</button>
+              <button class="vr-api-set-btn" style="background:var(--silver);color:var(--ink2)" onclick="vrClearAltApi()">清空</button>
+            </div>
+          </div>
+        </div>
+        <div class="vr-chat-msgs" id="vr-chat-msgs">
+          <div class="vr-chat-empty" id="vr-chat-empty">加载视频并绑定角色后，开始观影聊天</div>
+        </div>
+        <div class="vr-chat-input-row">
+          <input class="vr-chat-input" id="vr-chat-input" placeholder="说说你的观影感受…" onkeydown="if(event.key==='Enter')vrSendMessage()">
+          <button class="vr-chat-send" onclick="vrSendMessage()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ══════ MODALS ══════ -->
@@ -3785,6 +3806,14 @@ const SYS_ASSISTANT = {
 语习App：#langlearn-app（整体背景）、.lang-grid（语言列表）、.lang-card（语言卡片）、.lang-card-flag（旗帜）、.lang-card-name（名称）、.lang-card-desc（描述）、.lang-stat-card（统计卡片）、.lang-stat-num（统计数字）、.lang-stat-lbl（统计标签）、.lang-progress-bar（进度条）、.lang-progress-fill（进度填充）、.lang-q-counter（题计数器）、.lang-vocab-card（词汇卡片）、.lang-vocab-foreign（外语词）、.lang-vocab-reading（读音）、.lang-vocab-zh（中文释义）、.lang-listen-btn（听力按钮）、.lang-correct-tag（正确提示）、.lang-wrong-tag（错误提示）、.lang-lesson-card（课程卡片）、.lang-feedback-card（反馈卡片）、.lang-error-card（错题卡片）、.lang-canvas-area（画布区域）、.lang-canvas-label（画布标签）、.lang-hwcanvas（手写Canvas）、.lang-canvas-hint（画布提示）
 
 推特App：#twitter-app（整体背景）、.tw-header（头部）、.tw-header-avatar（头像）、.tw-header-icon-btn（头部图标按钮）、.tw-header-tabs（Tab栏）、.tw-header-tab（Tab项）、.tw-header-tab.active（选中Tab）、.tw-content（内容区）、.tw-post（推文）、.tw-post-head（推文头部）、.tw-post-av（发布者头像）、.tw-post-body（正文区）、.tw-post-name（发布者名）、.tw-post-handle（@账号）、.tw-post-text（推文正文）、.tw-post-image（配图）、.tw-post-dot（推文菜单点）、.tw-post-time（推文时间）、.tw-post-actions（互动按钮行）、.tw-action（互动按钮）、.tw-action.active-like（已点赞）、.tw-action.active-retweet（已转发）、.tw-replies（回复列表）、.tw-reply-line（回复行）、.tw-compose-fab（发推悬浮按钮）、.tw-bottom-tabs（底部导航）、.tw-btab（底部Tab）、.tw-btab.active（选中底部Tab）、.tw-badge（角标）、.tw-search-bar-wrap（搜索栏容器）、.tw-search-bar（搜索栏）、.tw-notif-row（通知行）、.tw-profile-header（个人页头部）、.tw-profile-av（个人页头像）、.twitter-icon-skin（图标皮肤）
+
+岛居App：#island-app（整体背景）、.island-header（顶部栏）、.island-title（标题）、.island-canvas（游戏画布）、.island-sky（天空）、.island-ground（地面）、.island-ocean（海洋）、.island-character（角色小人）、.island-bubble（对话气泡）、.island-ui-stat（状态栏）、.island-header-btn（操作按钮）、.island-create-panel（捏人面板）、.island-avatar-preview（头像预览）、.island-icon-skin（图标皮肤）
+
+天气App：#weather-app（整体背景）、.weather-main（天气主体）、.weather-big-icon（天气大图标）、.weather-temp（温度数字）、.weather-desc（天气描述）、.weather-location（位置文字）、.weather-detail-row（详情行）、.weather-detail-item（详情单项）、.weather-forecast-section（7日预报区域）、.weather-forecast-row（预报横向滚动）、.weather-forecast-day（单日预报）、.weather-char-section（角色评价区域）、.weather-char-item（单个角色评价）、.weather-char-bubble（角色评价气泡）、.weather-global-section（全局视野区域）、.weather-toggle-overlay（天气授权弹窗）、.weather-toggle-card（授权卡片）、.weather-toggle-row（授权行）、.weather-notif-toast（天气通知Toast）、.weather-icon-skin（图标皮肤）
+
+通话记录App：#callrecords-app（整体背景）、.cr-topbar（顶部栏）、.cr-body（列表区域）、.cr-card（通话记录卡片）、.cr-card-header（卡片头部）、.cr-avatar（通话头像）、.cr-name（角色名）、.cr-time（通话时间）、.cr-duration（通话时长）、.cr-preview（内容预览）、.cr-empty（空状态）、.cr-detail（详情子页）、.cr-detail-body（详情内容）、.cr-detail-header（详情头部）、.cr-detail-avatar（详情头像）、.cr-detail-name（详情角色名）、.cr-detail-meta（详情元数据）、.cr-detail-chat（详情对话内容）、.cr-detail-line（单条对话行）、.cr-detail-actions（详情操作按钮）、.call-records-icon-skin（图标皮肤）
+
+观影室App：#vr-app（整体背景）、.vr-container（观影室容器）、.vr-url-bar（链接输入栏）、.vr-url-input（链接输入框）、.vr-url-btn（加载/字幕按钮）、.vr-player-wrap（视频播放区）、.vr-player-empty（未加载空状态）、.vr-player（播放器容器）、.vr-subtitle-bar（字幕状态栏）、.vr-chat-section（聊天区）、.vr-chat-header（聊天顶部）、.vr-comp-avatar（观影角色头像）、.vr-comp-name（角色名称）、.vr-comp-status（角色绑定状态）、.vr-api-btn（API设置按钮）、.vr-mem-share-btn（记忆互通按钮）、.vr-comp-bind-btn（确认绑定按钮）、.vr-char-picker（角色选择面板）、.vr-char-picker-char（可选角色）、.vr-api-panel（API设置面板）、.vr-chat-msgs（聊天消息列表）、.vr-chat-empty（聊天空状态）、.vr-chat-msg（单条聊天消息）、.vr-chat-msg.mine（我方消息气泡）、.vr-chat-msg.theirs（角色消息气泡）、.vr-chat-msg.system（系统消息）、.vr-chat-input-row（聊天输入行）、.vr-chat-input（聊天输入框）、.vr-chat-send（发送按钮）
 
 【生成 CSS 时的注意事项】
 - 始终使用 :root 变量覆盖来改变全局颜色，而不是逐个修改元素
@@ -4670,6 +4699,8 @@ function _persistNow(){
     if(typeof groupChats !== 'undefined') localStorage.setItem('tsb_groupchats', JSON.stringify(groupChats));
     // 同时写入 IndexedDB（大对象存储，突破 localStorage 5MB 限制）
     _persistToDB().catch(()=>{});
+    // 同步到后端（用于跨浏览器恢复）
+    _syncToBackend().catch(()=>{});
   }catch(e){
     if(typeof showToast === 'function') showToast('保存失败，可能是存储空间已满：' + e.message);
     console.error('persist failed', e);
@@ -4748,14 +4779,19 @@ function showScreen(id){
 
 var VERIFY_API_BASE = (function(){
   if(typeof window.__CHUNDAO_API_BASE !== 'undefined') return window.__CHUNDAO_API_BASE;
-  if(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1') return 'http://localhost:9000/api';
+  if(window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1') return 'http://localhost:8765/api';
   return '/api';
 })();
 
 function isActivated(){ return localStorage.getItem('chundao_activated')==='1'; }
 
-function afterSplash(){
-  if(isActivated()){ showScreen('home'); return; }
+async function afterSplash(){
+  if(isActivated()){
+    // 尝试从后端恢复数据（跨浏览器支持）
+    await _restoreFromBackend();
+    showScreen('home');
+    return;
+  }
   showScreen('verify-code-screen');
   setTimeout(()=>{ var inp=document.getElementById('verify-code-input'); inp&&inp.focus(); },300);
 }
@@ -4772,13 +4808,84 @@ async function submitVerifyCode(){
     if(d.success){
       localStorage.setItem('chundao_activated','1');
       localStorage.setItem('chundao_code',code);
+      localStorage.setItem('chundao_user_id',d.user_id);
       document.getElementById('verify-code-screen').style.display='none';
+      // 如果是已激活的码（跨浏览器恢复），从后端拉取数据
+      if(d.message && d.message.includes('恢复')){
+        await _restoreFromBackend(d.user_id);
+        showToast('数据已恢复');
+      }
       showScreen('home');
     }else{
       err.textContent=d.message||'测试码无效或已被激活';
     }
   }catch(e){
     err.textContent='无法连接验证服务器，请稍后重试';
+  }
+}
+
+// ══════════ 后端数据同步 ══════════
+async function _restoreFromBackend(uid){
+  const userId = uid || localStorage.getItem('chundao_user_id');
+  if(!userId) return;
+  try{
+    const r = await fetch(VERIFY_API_BASE+'/user/'+encodeURIComponent(userId)+'/data');
+    if(!r.ok) return;
+    const d = await r.json();
+    if(!d.data || d.data==='{}') return;
+    const data = JSON.parse(d.data);
+    // 恢复数据（仅当本地没有对应数据时才从后端恢复，避免覆盖本地更新的数据）
+    if(data.tsb_characters && (!localStorage.getItem('tsb_characters') || localStorage.getItem('tsb_characters')==='[]')) localStorage.setItem('tsb_characters', JSON.stringify(data.tsb_characters));
+    if(data.tsb_contacts && (!localStorage.getItem('tsb_contacts') || localStorage.getItem('tsb_contacts')==='[]')) localStorage.setItem('tsb_contacts', JSON.stringify(data.tsb_contacts));
+    if(data.tsb_history && (!localStorage.getItem('tsb_history') || localStorage.getItem('tsb_history')==='[]')) localStorage.setItem('tsb_history', JSON.stringify(data.tsb_history));
+    if(data.tsb_diaries && (!localStorage.getItem('tsb_diaries') || localStorage.getItem('tsb_diaries')==='[]')) localStorage.setItem('tsb_diaries', JSON.stringify(data.tsb_diaries));
+    if(data.tsb_identities && (!localStorage.getItem('tsb_identities') || localStorage.getItem('tsb_identities')==='[]')) localStorage.setItem('tsb_identities', JSON.stringify(data.tsb_identities));
+    if(data.tsb_presets && (!localStorage.getItem('tsb_presets') || localStorage.getItem('tsb_presets')==='[]')) localStorage.setItem('tsb_presets', JSON.stringify(data.tsb_presets));
+    if(data.tsb_chathist_by_id && (!localStorage.getItem('tsb_chathist_by_id') || localStorage.getItem('tsb_chathist_by_id')==='{}')) localStorage.setItem('tsb_chathist_by_id', JSON.stringify(data.tsb_chathist_by_id));
+    if(data.tsb_blocked_chars && !localStorage.getItem('tsb_blocked_chars')) localStorage.setItem('tsb_blocked_chars', JSON.stringify(data.tsb_blocked_chars));
+    if(data.tsb_blocked_by_chars && !localStorage.getItem('tsb_blocked_by_chars')) localStorage.setItem('tsb_blocked_by_chars', JSON.stringify(data.tsb_blocked_by_chars));
+    if(data.tsb_active_identity && !localStorage.getItem('tsb_active_identity')) localStorage.setItem('tsb_active_identity', data.tsb_active_identity);
+    if(data.tsb_wallet && !localStorage.getItem('tsb_wallet')) localStorage.setItem('tsb_wallet', data.tsb_wallet);
+    if(data.tsb_profile && !localStorage.getItem('tsb_profile')) localStorage.setItem('tsb_profile', JSON.stringify(data.tsb_profile));
+    if(data.tsb_appsettings && !localStorage.getItem('tsb_appsettings')) localStorage.setItem('tsb_appsettings', JSON.stringify(data.tsb_appsettings));
+    if(data.tsb_moments && !localStorage.getItem('tsb_moments')) localStorage.setItem('tsb_moments', JSON.stringify(data.tsb_moments));
+    if(data.tsb_groupchats && !localStorage.getItem('tsb_groupchats')) localStorage.setItem('tsb_groupchats', JSON.stringify(data.tsb_groupchats));
+    console.log('后端数据已恢复');
+    // 重新加载数据到内存
+    if(typeof loadData === 'function') loadData();
+  }catch(e){
+    console.error('后端数据恢复失败:', e);
+  }
+}
+
+async function _syncToBackend(){
+  const userId = localStorage.getItem('chundao_user_id');
+  if(!userId) return;
+  try{
+    const data = {
+      tsb_characters: JSON.parse(localStorage.getItem('tsb_characters')||'[]'),
+      tsb_contacts: JSON.parse(localStorage.getItem('tsb_contacts')||'[]'),
+      tsb_history: JSON.parse(localStorage.getItem('tsb_history')||'[]'),
+      tsb_diaries: JSON.parse(localStorage.getItem('tsb_diaries')||'[]'),
+      tsb_identities: JSON.parse(localStorage.getItem('tsb_identities')||'[]'),
+      tsb_presets: JSON.parse(localStorage.getItem('tsb_presets')||'[]'),
+      tsb_chathist_by_id: JSON.parse(localStorage.getItem('tsb_chathist_by_id')||'{}'),
+      tsb_blocked_chars: JSON.parse(localStorage.getItem('tsb_blocked_chars')||'{}'),
+      tsb_blocked_by_chars: JSON.parse(localStorage.getItem('tsb_blocked_by_chars')||'{}'),
+      tsb_active_identity: localStorage.getItem('tsb_active_identity')||'',
+      tsb_wallet: localStorage.getItem('tsb_wallet')||'0',
+      tsb_profile: JSON.parse(localStorage.getItem('tsb_profile')||'{}'),
+      tsb_appsettings: JSON.parse(localStorage.getItem('tsb_appsettings')||'{}'),
+      tsb_moments: JSON.parse(localStorage.getItem('tsb_moments')||'[]'),
+      tsb_groupchats: JSON.parse(localStorage.getItem('tsb_groupchats')||'[]'),
+    };
+    await fetch(VERIFY_API_BASE+'/user/sync', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({user_id: userId, data: JSON.stringify(data)})
+    });
+  }catch(e){
+    console.error('后端数据同步失败:', e);
   }
 }
 
@@ -6208,6 +6315,7 @@ function openApp(name){
   document.getElementById('island-app').style.display='none';
   document.getElementById('weather-app').style.display='none';
   document.getElementById('callrecords-app').style.display='none';
+  document.getElementById('vr-app').style.display='none';
   if(name==='settings') document.getElementById('settings-app').style.display='flex';
   if(name==='encounter') document.getElementById('encounter-app').style.display='flex';
   if(name==='music'){ document.getElementById('music-app').style.display='flex'; initMusicAppView(); }
@@ -6223,6 +6331,7 @@ function openApp(name){
   if(name==='island'){ document.getElementById('island-app').style.display='flex'; initIslandApp(); }
   if(name==='weather'){ document.getElementById('weather-app').style.display='flex'; initWeatherApp(); }
   if(name==='callrecords'){ document.getElementById('callrecords-app').style.display='flex'; renderCallRecords(); }
+  if(name==='vr'){ document.getElementById('vr-app').style.display='flex'; initVRApp(); }
   frame.style.display='block';
   requestAnimationFrame(()=>frame.classList.add('open'));
 }
@@ -6487,42 +6596,223 @@ function renderStoreMine(ct){
 }
 
 function renderStoreUpload(ct){
-  var html = '<div class="store-section-title" style="cursor:pointer" onclick="switchStoreTab(\'mine\')">← 返回</div>';
+  var css = '<style>.upload-section{margin-bottom:14px}.upload-section-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--silver)}.upload-label{font-size:11px;color:var(--ink4);margin-bottom:4px;display:block}.upload-input{width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box;outline:none}.upload-input:focus{border-color:var(--ink3)}.upload-textarea{width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box;min-height:70px;resize:vertical;outline:none}.upload-textarea:focus{border-color:var(--ink3)}.upload-hint{font-size:10px;color:var(--ink4);margin-top:3px}.upload-btn-sm{padding:8px 14px;border:1.5px solid var(--silver);border-radius:10px;background:none;font-size:12px;color:var(--ink3);cursor:pointer;font-family:inherit}.upload-btn-sm:active{background:var(--smoke)}.upload-btn-primary{width:100%;padding:13px;font-size:14px;background:var(--ink);color:white;border:none;border-radius:12px;cursor:pointer;font-family:inherit;font-weight:600;margin-top:8px}.upload-btn-primary:active{opacity:0.85}.screenshot-grid{display:flex;gap:8px;flex-wrap:wrap}.screenshot-item{width:72px;height:72px;border-radius:10px;background:var(--silver);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;overflow:hidden;position:relative}.screenshot-item img{width:100%;height:100%;object-fit:cover}.screenshot-item .del-badge{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,0.6);color:white;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}.screenshot-add{border:1.5px dashed var(--silver);color:var(--ink4)}.attach-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--white);border:1px solid var(--silver);border-radius:8px;font-size:12px;color:var(--ink2);margin-bottom:6px}.attach-item .del-badge{color:var(--ink4);cursor:pointer;font-size:14px}.tag-input-wrap{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px;border:1px solid var(--silver);border-radius:10px;min-height:42px;background:var(--white)}.tag-item{display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--smoke);border-radius:14px;font-size:12px;color:var(--ink2)}.tag-item .tag-close{cursor:pointer;font-size:13px;color:var(--ink4)}.tag-input{flex:1;min-width:80px;border:none;outline:none;font-size:13px;font-family:inherit;padding:4px}</style>';
+  var html = css;
+  html += '<div class="store-section-title" style="cursor:pointer" onclick="switchStoreTab(\'mine\')">← 返回</div>';
   html += '<div class="store-section-title">上传应用</div>';
-  html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">封面图片</label>';
-  html += '<div style="display:flex;align-items:center;gap:12px">';
+
+  // ── 基本信息 ──
+  html += '<div class="upload-section"><div class="upload-section-title">基本信息</div>';
+  html += '<div class="upload-label" style="margin-top:0">应用名称 <span style="color:#ff3b30">*</span></div>';
+  html += '<input type="text" id="upload-name" class="upload-input" placeholder="给你的应用取个名字（最多30字）" maxlength="30">';
+  html += '<div class="upload-label" style="margin-top:10px">简短描述 <span style="color:#ff3b30">*</span></div>';
+  html += '<input type="text" id="upload-desc" class="upload-input" placeholder="一句话介绍（最多50字）" maxlength="50">';
+  html += '<div class="upload-label" style="margin-top:10px">详细描述</div>';
+  html += '<textarea id="upload-fulldesc" class="upload-textarea" placeholder="详细介绍应用的功能、特色和使用方法" style="min-height:90px"></textarea>';
+  html += '</div>';
+
+  // ── 封面 & 截图 ──
+  html += '<div class="upload-section"><div class="upload-section-title">封面与截图</div>';
+  html += '<div class="upload-label">封面图片 <span style="color:#ff3b30">*</span></div>';
+  html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">';
   html += '<div id="upload-cover-preview" style="width:80px;height:80px;border-radius:12px;background:var(--silver);display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;flex-shrink:0">⊡</div>';
   html += '<div style="flex:1">';
-  html += '<button class="store-card-btn" style="width:100%;padding:10px;font-size:13px;margin-bottom:4px" onclick="document.getElementById(\'upload-cover-file\').click()">从相册选择图片</button>';
+  html += '<button class="upload-btn-sm" style="width:100%;margin-bottom:4px" onclick="document.getElementById(\'upload-cover-file\').click()">从相册选择图片</button>';
   html += '<input type="file" id="upload-cover-file" accept="image/*" style="display:none" onchange="onUploadCoverSelected(this)">';
-  html += '<div style="font-size:10px;color:var(--ink4)">支持 JPG/PNG/WebP，建议 512×512</div>';
-  html += '</div></div></div>';
-  html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">应用名称 *</label>';
-  html += '<input type="text" id="upload-name" placeholder="给你的应用取个名字" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box"></div>';
-  html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">简短描述 *</label>';
-  html += '<input type="text" id="upload-desc" placeholder="一句话介绍你的应用" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box"></div>';
-  html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">详细描述</label>';
-  html += '<textarea id="upload-fulldesc" placeholder="详细介绍应用的功能和特色" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box;min-height:80px;resize:vertical"></textarea></div>';
-  html += '<div style="display:flex;gap:10px;margin-bottom:10px">';
-  html += '<div class="form-group" style="flex:1"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">分类</label>';
-  html += '<select id="upload-cat" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;background:var(--white)">';
+  html += '<div class="upload-hint">支持 JPG/PNG/WebP，建议 512×512，最大 2MB</div>';
+  html += '</div></div>';
+  html += '<div class="upload-label" style="margin-top:10px">应用截图 <span style="color:var(--ink4);font-weight:400">（建议 2-5 张，展示核心功能页面）</span></div>';
+  html += '<div class="screenshot-grid" id="screenshot-grid">';
+  html += '<div class="screenshot-item screenshot-add" onclick="document.getElementById(\'upload-screenshot-file\').click()">+</div>';
+  html += '<input type="file" id="upload-screenshot-file" accept="image/*" multiple style="display:none" onchange="onUploadScreenshots(this)">';
+  html += '</div>';
+  html += '</div>';
+
+  // ── 分类与标签 ──
+  html += '<div class="upload-section"><div class="upload-section-title">分类与标签</div>';
+  html += '<div style="display:flex;gap:10px">';
+  html += '<div style="flex:1"><div class="upload-label">分类</div>';
+  html += '<select id="upload-cat" class="upload-input" style="background:var(--white)">';
   STORE_CATS.slice(1).forEach(function(c){ html += '<option value="'+c+'">'+c+'</option>'; });
   html += '</select></div>';
-  html += '<div class="form-group" style="flex:1"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">图标 Emoji</label>';
-  html += '<input type="text" id="upload-icon" placeholder="如: ♪" maxlength="2" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box"></div>';
+  html += '<div style="flex:1"><div class="upload-label">图标 Emoji</div>';
+  html += '<input type="text" id="upload-icon" class="upload-input" placeholder="如: ♪" maxlength="2"></div>';
   html += '</div>';
-  html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">主题色</label>';
-  html += '<input type="text" id="upload-color" placeholder="#607d8b" value="#607d8b" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box"></div>';
-  html += '<div class="form-group" style="margin-bottom:10px"><label style="font-size:11px;color:var(--ink4);margin-bottom:4px;display:block">HTML 源代码 *</label>';
+  html += '<div class="upload-label" style="margin-top:10px">主题色</div>';
+  html += '<input type="text" id="upload-color" class="upload-input" placeholder="#607d8b" value="#607d8b">';
+  html += '<div class="upload-label" style="margin-top:10px">标签 <span style="color:var(--ink4);font-weight:400">（输入后按回车添加）</span></div>';
+  html += '<div class="tag-input-wrap" id="tag-input-wrap" onclick="document.getElementById(\'tag-input-field\').focus()">';
+  html += '<input type="text" id="tag-input-field" class="tag-input" placeholder="添加标签..." onkeydown="onTagKeydown(event)">';
+  html += '</div>';
+  html += '</div>';
+
+  // ── 版本信息 ──
+  html += '<div class="upload-section"><div class="upload-section-title">版本信息</div>';
+  html += '<div class="upload-label">版本号 <span style="color:#ff3b30">*</span></div>';
+  html += '<input type="text" id="upload-version" class="upload-input" placeholder="1.0.0" value="1.0.0">';
+  html += '<div class="upload-label" style="margin-top:10px">更新日志</div>';
+  html += '<textarea id="upload-changelog" class="upload-textarea" placeholder="本次版本的更新内容..."></textarea>';
+  html += '</div>';
+
+  // ── 权限声明 ──
+  html += '<div class="upload-section"><div class="upload-section-title">权限声明</div>';
+  html += '<div class="upload-label">所需权限 <span style="color:var(--ink4);font-weight:400">（勾选应用需要的权限）</span></div>';
+  var perms = ['网络访问', '位置信息', '相机', '麦克风', '存储空间', '通知推送', '联系人'];
+  var permHtml = '<div style="display:flex;flex-wrap:wrap;gap:6px">';
+  perms.forEach(function(p,i){
+    permHtml += '<label style="display:flex;align-items:center;gap:4px;padding:6px 12px;border:1px solid var(--silver);border-radius:16px;font-size:12px;color:var(--ink3);cursor:pointer;background:var(--white)">';
+    permHtml += '<input type="checkbox" class="upload-perm-check" value="'+p+'" style="accent-color:var(--ink)">'+p+'</label>';
+  });
+  permHtml += '</div>';
+  html += permHtml;
+  html += '</div>';
+
+  // ── 附件上传 ──
+  html += '<div class="upload-section"><div class="upload-section-title">附加文件</div>';
+  html += '<div class="upload-label">附件 <span style="color:var(--ink4);font-weight:400">（可上传说明文档、配置文件等，单个最大 10MB）</span></div>';
+  html += '<div id="attach-list"></div>';
+  html += '<button class="upload-btn-sm" style="width:100%;margin-top:4px" onclick="document.getElementById(\'upload-attach-file\').click()">+ 添加附件</button>';
+  html += '<input type="file" id="upload-attach-file" style="display:none" onchange="onUploadAttachment(this)">';
+  html += '</div>';
+
+  // ── 审核辅助信息 ──
+  html += '<div class="upload-section"><div class="upload-section-title">审核辅助信息 <span style="color:var(--ink4);font-weight:400;font-size:11px">（帮助审核人员快速测试你的应用）</span></div>';
+  html += '<div class="upload-label">测试账号</div>';
+  html += '<input type="text" id="upload-test-account" class="upload-input" placeholder="自动填充用户uid">';
+  html += '<div class="upload-label" style="margin-top:8px">测试密码</div>';
+  html += '<input type="text" id="upload-test-password" class="upload-input" placeholder="自动填充测试码">';
+  html += '</div>';
+
+  // ── 开发者信息 ──
+  html += '<div class="upload-section"><div class="upload-section-title">开发者信息</div>';
+  html += '<div class="upload-label">联系人姓名</div>';
+  html += '<input type="text" id="upload-contact-name" class="upload-input" placeholder="自动填充用户uid">';
+  html += '<div class="upload-label" style="margin-top:8px">联系邮箱</div>';
+  html += '<input type="text" id="upload-contact-email" class="upload-input" placeholder="自动填充测试码@example.com">';
+  html += '<div class="upload-label" style="margin-top:8px">支持页面 URL</div>';
+  html += '<input type="text" id="upload-support-url" class="upload-input" placeholder="https://...">';
+  html += '</div>';
+
+  // ── 源代码 ──
+  html += '<div class="upload-section"><div class="upload-section-title">源代码 <span style="color:#ff3b30">*</span></div>';
   html += '<div style="display:flex;gap:8px;margin-bottom:6px">';
-  html += '<button class="store-card-btn" style="flex:1;padding:10px;font-size:13px" onclick="document.getElementById(\'upload-source-file\').click()">📂 导入 HTML 文件</button>';
-  html += '<input type="file" id="upload-source-file" accept=".html,.htm,.txt,.js,.css" style="display:none" onchange="onUploadSourceFileSelected(this)">';
+  html += '<button class="upload-btn-sm" style="flex:1" onclick="document.getElementById(\'upload-source-file\').click()">📂 导入 HTML 文件</button>';
+  html += '<input type="file" id="upload-source-file" accept=".html,.htm,.txt,.js,.css,.zip" style="display:none" onchange="onUploadSourceFileSelected(this)">';
   html += '</div>';
-  html += '<textarea id="upload-source" placeholder="粘贴你的 HTML/CSS/JS 代码...（或点击上方按钮导入文件）" style="width:100%;padding:10px 12px;border:1px solid var(--silver);border-radius:10px;font-size:12px;font-family:monospace;box-sizing:border-box;min-height:180px;resize:vertical"></textarea></div>';
-  html += '<button class="store-card-btn" style="width:100%;padding:12px;font-size:14px;background:var(--ink);color:white" onclick="submitStoreUpload()">提交审核</button>';
-  html += '<div style="text-align:center;padding:12px 0;font-size:11px;color:var(--ink4)">提交后将由椿岛团队审核，通过后即可在应用商店上架</div>';
+  html += '<textarea id="upload-source" class="upload-textarea" placeholder="粘贴你的 HTML/CSS/JS 代码...（或点击上方按钮导入文件）" style="font-family:monospace;font-size:12px;min-height:180px"></textarea>';
+  html += '</div>';
+
+  html += '<button class="upload-btn-primary" onclick="submitStoreUpload()">提交审核</button>';
+  html += '<div style="text-align:center;padding:12px 0 30px;font-size:11px;color:var(--ink4)">提交后将由椿岛团队审核，通过后即可在应用商店上架</div>';
   ct.innerHTML = html;
+
+  // 自动填充测试账号和联系人信息
+  autoFillUploadForm();
 }
+
+// ── 自动填充测试账号和联系人信息 ──
+function autoFillUploadForm(){
+  var userId = localStorage.getItem('chundao_user_id') || '';
+  var code = localStorage.getItem('chundao_code') || '';
+
+  var testAccountEl = document.getElementById('upload-test-account');
+  var testPasswordEl = document.getElementById('upload-test-password');
+  var contactNameEl = document.getElementById('upload-contact-name');
+  var contactEmailEl = document.getElementById('upload-contact-email');
+
+  if(userId){
+    if(testAccountEl) testAccountEl.value = userId;
+    if(contactNameEl) contactNameEl.value = userId;
+  }
+  if(code){
+    if(testPasswordEl) testPasswordEl.value = code;
+    if(contactEmailEl) contactEmailEl.value = code + '@example.com';
+  }
+}
+
+// ── 标签管理 ──
+var _uploadTags = [];
+function onTagKeydown(e){
+  if(e.key==='Enter'){ e.preventDefault();
+    var val = e.target.value.trim();
+    if(val && _uploadTags.indexOf(val)===-1 && _uploadTags.length<10){
+      _uploadTags.push(val); e.target.value = ''; renderTagList();
+    }
+  }
+}
+function renderTagList(){
+  var wrap = document.getElementById('tag-input-wrap');
+  if(!wrap) return;
+  var field = document.getElementById('tag-input-field');
+  var existing = wrap.querySelectorAll('.tag-item');
+  existing.forEach(function(el){ el.remove(); });
+  _uploadTags.forEach(function(t,i){
+    var span = document.createElement('span'); span.className = 'tag-item';
+    span.innerHTML = t+'<span class="tag-close" onclick="removeTag('+i+')">✕</span>';
+    wrap.insertBefore(span, field);
+  });
+}
+function removeTag(i){ _uploadTags.splice(i,1); renderTagList(); }
+
+// ── 截图管理 ──
+var _uploadScreenshots = [];
+function onUploadScreenshots(input){
+  var files = Array.from(input.files);
+  var remaining = 5 - _uploadScreenshots.length;
+  if(files.length > remaining){ showToast('最多上传 5 张截图'); return; }
+  var loaded = 0;
+  files.forEach(function(file){
+    if(file.size > 10*1024*1024){ showToast('单张截图不能超过 10MB'); return; }
+    var reader = new FileReader();
+    reader.onload = function(e){
+      _uploadScreenshots.push(e.target.result);
+      loaded++;
+      if(loaded === files.length || loaded === files.length - (files.length - remaining)){
+        renderScreenshotGrid();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+function renderScreenshotGrid(){
+  var grid = document.getElementById('screenshot-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  _uploadScreenshots.forEach(function(s,i){
+    grid.innerHTML += '<div class="screenshot-item"><img src="'+s+'"><div class="del-badge" onclick="removeScreenshot('+i+')">✕</div></div>';
+  });
+  if(_uploadScreenshots.length < 5){
+    grid.innerHTML += '<div class="screenshot-item screenshot-add" onclick="document.getElementById(\'upload-screenshot-file\').click()">+</div>';
+  }
+}
+function removeScreenshot(i){ _uploadScreenshots.splice(i,1); renderScreenshotGrid(); }
+
+// ── 附件管理 ──
+var _uploadAttachments = [];
+function onUploadAttachment(input){
+  var file = input.files[0];
+  if(!file) return;
+  if(file.size > 10*1024*1024){ showToast('附件不能超过 10MB'); return; }
+  if(_uploadAttachments.length >= 5){ showToast('最多上传 5 个附件'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    _uploadAttachments.push({name:file.name,size:file.size,data:e.target.result});
+    renderAttachList();
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+function renderAttachList(){
+  var list = document.getElementById('attach-list');
+  if(!list) return;
+  list.innerHTML = '';
+  _uploadAttachments.forEach(function(a,i){
+    var sizeStr = a.size<1024?a.size+'B':a.size<1048576?(a.size/1024).toFixed(1)+'KB':(a.size/1048576).toFixed(1)+'MB';
+    list.innerHTML += '<div class="attach-item"><span style="flex:1">📎 '+escHtml(a.name)+' ('+sizeStr+')</span><span class="del-badge" onclick="removeAttachment('+i+')">✕</span></div>';
+  });
+}
+function removeAttachment(i){ _uploadAttachments.splice(i,1); renderAttachList(); }
 
 async function submitStoreUpload(){
   var name = document.getElementById('upload-name').value.trim();
@@ -6532,19 +6822,49 @@ async function submitStoreUpload(){
   var icon = document.getElementById('upload-icon').value.trim() || '⊡';
   var color = document.getElementById('upload-color').value.trim() || '#607d8b';
   var source = document.getElementById('upload-source').value.trim();
+  var version = document.getElementById('upload-version').value.trim() || '1.0.0';
+  var changelog = document.getElementById('upload-changelog').value.trim();
+  var testAccount = document.getElementById('upload-test-account').value.trim();
+  var testPassword = document.getElementById('upload-test-password').value.trim();
+  var contactName = document.getElementById('upload-contact-name').value.trim();
+  var contactEmail = document.getElementById('upload-contact-email').value.trim();
+  var supportUrl = document.getElementById('upload-support-url').value.trim();
+
   if(!name){ showToast('请填写应用名称'); return; }
   if(!desc){ showToast('请填写简短描述'); return; }
   if(!source){ showToast('请粘贴源代码或导入文件'); return; }
+
+  // 收集权限
+  var permChecks = document.querySelectorAll('.upload-perm-check:checked');
+  var permissions = Array.from(permChecks).map(function(c){return c.value;}).join(',');
+
+  // 封面图放到截图的第一个
+  var screenshots = [];
+  if(_uploadCoverData){ screenshots.push(_uploadCoverData); }
+  screenshots = screenshots.concat(_uploadScreenshots);
+
   try{
-    var body = {name:name,description:desc,full_description:fulldesc,category:cat,icon_emoji:icon,color:color,hero_color:color,source_code:source};
-    if(_uploadCoverData){ body.cover_image = _uploadCoverData; }
+    var body = {
+      name:name, description:desc, full_description:fulldesc, category:cat,
+      icon_emoji:icon, color:color, hero_color:color, source_code:source,
+      version:version, changelog:changelog, permissions:permissions,
+      tags:_uploadTags.join(','), contact_email:contactEmail, contact_name:contactName,
+      test_account:testAccount, test_password:testPassword,
+      support_url:supportUrl,
+      screenshots:JSON.stringify(screenshots),
+      attachments:JSON.stringify(_uploadAttachments)
+    };
     var r = await fetch((window.__CHUNDAO_API_BASE||'/api')+'/store/apps/upload',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify(body)
     });
     var d = await r.json();
-    if(d.success){ _uploadCoverData = null; storeAddUpload(d.id); showToast('提交成功，等待审核'); switchStoreTab('mine'); }
-    else { showToast(d.message||'提交失败'); }
+    if(d.success){
+      _uploadCoverData = null; _uploadScreenshots = []; _uploadAttachments = []; _uploadTags = [];
+      storeAddUpload(d.id);
+      showToast('提交成功，等待审核');
+      switchStoreTab('mine');
+    } else { showToast(d.message||'提交失败'); }
   }catch(e){ showToast('网络错误，请重试'); }
 }
 
@@ -8748,6 +9068,95 @@ const CSS_REF_DATA = [
     ['.tw-notif-row','通知行'],
     ['.tw-profile-header','个人页头部'],
     ['.tw-profile-av','个人页头像'],
+  ]},
+  {group:'岛居 App', items:[
+    ['#island-app','岛居整体背景'],
+    ['.island-header','岛居顶部栏'],
+    ['.island-title','岛居标题'],
+    ['.island-canvas','游戏画布区'],
+    ['.island-sky','天空背景'],
+    ['.island-ground','地面背景'],
+    ['.island-ocean','海洋背景'],
+    ['.island-character','角色小人'],
+    ['.island-bubble','对话气泡'],
+    ['.island-ui-stat','状态栏（心情/饱食度）'],
+    ['.island-header-btn','顶部操作按钮'],
+    ['.island-create-panel','捏人面板'],
+    ['.island-avatar-preview','捏人面板头像预览'],
+  ]},
+  {group:'天气 App', items:[
+    ['#weather-app','天气整体背景'],
+    ['.weather-main','天气主体区域'],
+    ['.weather-big-icon','天气大图标'],
+    ['.weather-temp','温度数字'],
+    ['.weather-desc','天气描述'],
+    ['.weather-location','位置文字'],
+    ['.weather-detail-row','详情行（湿度/风速/体感）'],
+    ['.weather-detail-item','详情单项'],
+    ['.weather-forecast-section','7日预报区域'],
+    ['.weather-forecast-row','预报横向滚动'],
+    ['.weather-forecast-day','单日预报'],
+    ['.weather-char-section','角色评价区域'],
+    ['.weather-char-item','单个角色评价'],
+    ['.weather-char-bubble','角色评价气泡'],
+    ['.weather-global-section','全局视野区域'],
+    ['.weather-toggle-overlay','天气授权弹窗'],
+    ['.weather-toggle-card','授权卡片'],
+    ['.weather-toggle-row','授权行'],
+    ['.weather-notif-toast','天气通知Toast'],
+  ]},
+  {group:'通话记录 App', items:[
+    ['#callrecords-app','通话记录整体背景'],
+    ['.cr-topbar','通话记录顶部栏'],
+    ['.cr-body','通话记录列表区域'],
+    ['.cr-card','单条通话记录卡片'],
+    ['.cr-card-header','卡片头部'],
+    ['.cr-avatar','通话头像'],
+    ['.cr-name','通话角色名'],
+    ['.cr-time','通话时间'],
+    ['.cr-duration','通话时长'],
+    ['.cr-preview','通话内容预览'],
+    ['.cr-empty','空状态提示'],
+    ['.cr-detail','通话详情子页'],
+    ['.cr-detail-body','详情内容区'],
+    ['.cr-detail-header','详情头部'],
+    ['.cr-detail-avatar','详情头像'],
+    ['.cr-detail-name','详情角色名'],
+    ['.cr-detail-meta','详情元数据'],
+    ['.cr-detail-chat','详情对话内容'],
+    ['.cr-detail-line','单条对话行'],
+    ['.cr-detail-actions','详情操作按钮'],
+  ]},
+  {group:'观影室 App', items:[
+    ['#vr-app','观影室整体背景'],
+    ['.vr-container','观影室容器'],
+    ['.vr-url-bar','视频链接输入栏'],
+    ['.vr-url-input','链接输入框'],
+    ['.vr-url-btn','加载/字幕按钮'],
+    ['.vr-player-wrap','视频播放区'],
+    ['.vr-player-empty','未加载空状态'],
+    ['.vr-player','播放器容器'],
+    ['.vr-subtitle-bar','字幕状态栏'],
+    ['.vr-chat-section','聊天区'],
+    ['.vr-chat-header','聊天顶部'],
+    ['.vr-comp-avatar','观影角色头像'],
+    ['.vr-comp-name','角色名称'],
+    ['.vr-comp-status','角色绑定状态'],
+    ['.vr-api-btn','API设置按钮'],
+    ['.vr-mem-share-btn','记忆互通按钮'],
+    ['.vr-comp-bind-btn','确认绑定按钮'],
+    ['.vr-char-picker','角色选择面板'],
+    ['.vr-char-picker-char','可选角色'],
+    ['.vr-api-panel','API设置面板'],
+    ['.vr-chat-msgs','聊天消息列表'],
+    ['.vr-chat-empty','聊天空状态'],
+    ['.vr-chat-msg','单条聊天消息'],
+    ['.vr-chat-msg.mine','我方消息气泡'],
+    ['.vr-chat-msg.theirs','角色消息气泡'],
+    ['.vr-chat-msg.system','系统消息'],
+    ['.vr-chat-input-row','聊天输入行'],
+    ['.vr-chat-input','聊天输入框'],
+    ['.vr-chat-send','发送按钮'],
   ]},
 ];
 
@@ -16825,7 +17234,13 @@ function vrLoadVideo(){
   if(parsed.platform === 'youtube'){
     embedHtml = `<iframe src="https://www.youtube.com/embed/${parsed.videoId}?autoplay=0&rel=0&enablejsapi=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
   } else if(parsed.platform === 'bilibili'){
-    embedHtml = `<iframe src="https://player.bilibili.com/player.html?bvid=${parsed.videoId}&page=1&autoplay=0" allow="autoplay" allowfullscreen></iframe>`;
+    embedHtml = `<iframe src="https://player.bilibili.com/player.html?bvid=${parsed.videoId}&page=1&autoplay=0&high_quality=1" allow="autoplay; fullscreen" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups"></iframe>`;
+  } else if(parsed.platform === 'bilibili_short'){
+    showToast('请使用完整的Bilibili链接（bilibili.com/video/BV...），短链接暂不支持直接嵌入');
+    if(emptyEl) emptyEl.style.display = 'block';
+    if(playerEl) playerEl.style.display = 'none';
+    if(subBtn) subBtn.style.display = 'none';
+    return;
   }
 
   if(playerEl) playerEl.innerHTML = embedHtml;
@@ -16845,11 +17260,15 @@ function vrParseVideoUrl(url){
   let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
   if(m) return {platform:'youtube', videoId:m[1], url, title:url};
 
-  // Bilibili
+  // Bilibili - BV号
   m = url.match(/bilibili\.com\/video\/(BV[a-zA-Z0-9]+)/);
   if(m) return {platform:'bilibili', videoId:m[1], url, title:url};
+  // Bilibili - 番剧
   m = url.match(/bilibili\.com\/bangumi\/play\/(ep\d+)/);
   if(m) return {platform:'bilibili', videoId:m[1], url, title:url};
+  // Bilibili - 短链接 b23.tv
+  m = url.match(/b23\.tv\/([a-zA-Z0-9]+)/);
+  if(m) return {platform:'bilibili_short', videoId:m[1], url, title:url};
 
   return null;
 }
@@ -17084,33 +17503,15 @@ function vrSyncToChat(text){
 }
 
 // ── Init VR Page ──
-function vrInitPage(){
+function initVRApp(){
   vrUpdateHeaderUI();
   vrRenderMsgs();
   vrUpdateApiPanelUI();
-  // 跨APP感知：如果同一角色也是语习伴学，更新状态提示
   if(vrConfirmed && vrCharId && langCompanionCharId === vrCharId && langCompanionConfirmed){
     const statusEl = document.getElementById('vr-comp-status');
     if(statusEl) statusEl.textContent = '已绑定 · 观影中（也是你的伴学伙伴）';
   }
 }
-
-// ── Page visibility: auto-pause/resume idle timer ──
-let _vrPageActive = false;
-const _vrPageObserver = new MutationObserver(()=>{
-  const page = document.getElementById('app-page-2');
-  const nowActive = page?.classList.contains('active');
-  if(nowActive && !_vrPageActive){
-    _vrPageActive = true;
-    vrInitPage();
-  } else if(!nowActive && _vrPageActive){
-    _vrPageActive = false;
-  }
-});
-(function(){
-  const page = document.getElementById('app-page-2');
-  if(page) _vrPageObserver.observe(page, {attributes:true, attributeFilter:['class']});
-})();
 
 init();
 initPWA();

@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.db
+vapid_keys.json
+*.log
+.DS_Store

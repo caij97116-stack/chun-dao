@@ -85,8 +85,23 @@ def init_db():
                 code TEXT UNIQUE NOT NULL,
                 is_activated INTEGER DEFAULT 0,
                 activated_at TEXT,
+                user_id TEXT DEFAULT '',
+                banned INTEGER DEFAULT 0,
+                banned_at TEXT,
+                ban_reason TEXT DEFAULT '',
                 created_at TEXT NOT NULL,
                 notes TEXT DEFAULT ''
+            )
+        """)
+        # 兼容旧表：如果缺少新列则自动添加
+        _migrate_invite_codes(conn)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS user_data (
+                user_id TEXT PRIMARY KEY,
+                code TEXT NOT NULL,
+                data TEXT DEFAULT '{}',
+                updated_at TEXT NOT NULL,
+                created_at TEXT NOT NULL
             )
         """)
         conn.execute("""
@@ -104,6 +119,17 @@ def init_db():
                 status TEXT DEFAULT 'pending',
                 source_code TEXT DEFAULT '',
                 screenshots TEXT DEFAULT '[]',
+                attachments TEXT DEFAULT '[]',
+                version TEXT DEFAULT '1.0.0',
+                changelog TEXT DEFAULT '',
+                permissions TEXT DEFAULT '',
+                tags TEXT DEFAULT '',
+                contact_email TEXT DEFAULT '',
+                contact_name TEXT DEFAULT '',
+                test_account TEXT DEFAULT '',
+                test_password TEXT DEFAULT '',
+                privacy_url TEXT DEFAULT '',
+                support_url TEXT DEFAULT '',
                 rating REAL DEFAULT 0,
                 downloads TEXT DEFAULT '0',
                 review_notes TEXT DEFAULT '',
@@ -111,6 +137,7 @@ def init_db():
                 updated_at TEXT
             )
         """)
+        _migrate_store_apps(conn)
         conn.execute("""
             CREATE TABLE IF NOT EXISTS push_subscriptions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -120,6 +147,38 @@ def init_db():
                 created_at TEXT NOT NULL
             )
         """)
+
+def _migrate_invite_codes(conn):
+    """兼容旧版 invite_codes 表，自动添加缺失的列"""
+    existing = {r[1] for r in conn.execute("PRAGMA table_info(invite_codes)").fetchall()}
+    if 'user_id' not in existing:
+        conn.execute("ALTER TABLE invite_codes ADD COLUMN user_id TEXT DEFAULT ''")
+    if 'banned' not in existing:
+        conn.execute("ALTER TABLE invite_codes ADD COLUMN banned INTEGER DEFAULT 0")
+    if 'banned_at' not in existing:
+        conn.execute("ALTER TABLE invite_codes ADD COLUMN banned_at TEXT")
+    if 'ban_reason' not in existing:
+        conn.execute("ALTER TABLE invite_codes ADD COLUMN ban_reason TEXT DEFAULT ''")
+
+def _migrate_store_apps(conn):
+    """兼容旧版 store_apps 表，自动添加缺失的列"""
+    existing = {r[1] for r in conn.execute("PRAGMA table_info(store_apps)").fetchall()}
+    new_cols = {
+        'attachments': "TEXT DEFAULT '[]'",
+        'version': "TEXT DEFAULT '1.0.0'",
+        'changelog': "TEXT DEFAULT ''",
+        'permissions': "TEXT DEFAULT ''",
+        'tags': "TEXT DEFAULT ''",
+        'contact_email': "TEXT DEFAULT ''",
+        'contact_name': "TEXT DEFAULT ''",
+        'test_account': "TEXT DEFAULT ''",
+        'test_password': "TEXT DEFAULT ''",
+        'privacy_url': "TEXT DEFAULT ''",
+        'support_url': "TEXT DEFAULT ''",
+    }
+    for col, definition in new_cols.items():
+        if col not in existing:
+            conn.execute(f"ALTER TABLE store_apps ADD COLUMN {col} {definition}")
 
 init_db()
 
@@ -213,8 +272,9 @@ async def admin_page():
 async def get_stats():
     with get_db() as conn:
         total = conn.execute("SELECT COUNT(*) as c FROM invite_codes").fetchone()["c"]
-        activated = conn.execute("SELECT COUNT(*) as c FROM invite_codes WHERE is_activated=1").fetchone()["c"]
-    return {"total": total, "activated": activated, "unactivated": total - activated}
+        activated = conn.execute("SELECT COUNT(*) as c FROM invite_codes WHERE is_activated=1 AND banned=0").fetchone()["c"]
+        banned = conn.execute("SELECT COUNT(*) as c FROM invite_codes WHERE banned=1").fetchone()["c"]
+    return {"total": total, "activated": activated, "unactivated": total - activated - banned, "banned": banned}
 
 @app.get("/api/codes")
 async def list_codes(
@@ -226,9 +286,11 @@ async def list_codes(
     query = "SELECT * FROM invite_codes WHERE 1=1"
     params = []
     if status == "activated":
-        query += " AND is_activated=1"
+        query += " AND is_activated=1 AND banned=0"
     elif status == "unactivated":
-        query += " AND is_activated=0"
+        query += " AND is_activated=0 AND banned=0"
+    elif status == "banned":
+        query += " AND banned=1"
     if search:
         query += " AND code LIKE ?"
         params.append(f"%{search}%")
@@ -279,18 +341,58 @@ async def generate_codes(req: GenerateRequest):
 
 @app.post("/api/codes/{code}/activate")
 async def activate_code(code: str):
+    """激活测试码，首次激活生成唯一用户ID并绑定"""
     with get_db() as conn:
         row = conn.execute("SELECT * FROM invite_codes WHERE code=?", (code,)).fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="测试码不存在")
-        if row["is_activated"]:
-            return {"success": False, "message": "该测试码已被激活"}
+        if row["banned"]:
+            raise HTTPException(status_code=403, detail="该测试码已被封禁")
         now = datetime.now(TZ).strftime("%Y-%m-%d %H:%M:%S")
+        if row["is_activated"]:
+            user_id = row["user_id"]
+            # 兼容旧数据：已激活但缺少 user_id（升级前的记录），自动补全
+            if not user_id:
+                user_id = secrets.token_hex(16)
+                conn.execute(
+                    "UPDATE invite_codes SET user_id=? WHERE code=?",
+                    (user_id, code)
+                )
+                conn.execute(
+                    "INSERT INTO user_data (user_id, code, data, updated_at, created_at) VALUES (?, ?, '{}', ?, ?)",
+                    (user_id, code, now, now)
+                )
+                return {
+                    "success": True, "code": code,
+                    "user_id": user_id,
+                    "activated_at": row["activated_at"],
+                    "message": "该测试码已激活，数据已迁移"
+                }
+            # 确保 user_data 记录存在（容错）
+            existing = conn.execute("SELECT user_id FROM user_data WHERE user_id=?", (user_id,)).fetchone()
+            if not existing:
+                conn.execute(
+                    "INSERT INTO user_data (user_id, code, data, updated_at, created_at) VALUES (?, ?, '{}', ?, ?)",
+                    (user_id, code, now, now)
+                )
+            return {
+                "success": True, "code": code,
+                "user_id": user_id,
+                "activated_at": row["activated_at"],
+                "message": "该测试码已激活，正在恢复数据"
+            }
+        # 首次激活：生成唯一用户ID
+        user_id = secrets.token_hex(16)
         conn.execute(
-            "UPDATE invite_codes SET is_activated=1, activated_at=? WHERE code=?",
-            (now, code)
+            "UPDATE invite_codes SET is_activated=1, activated_at=?, user_id=? WHERE code=?",
+            (now, user_id, code)
         )
-    return {"success": True, "code": code, "activated_at": now}
+        # 创建用户数据记录
+        conn.execute(
+            "INSERT INTO user_data (user_id, code, data, updated_at, created_at) VALUES (?, ?, '{}', ?, ?)",
+            (user_id, code, now, now)
+        )
+    return {"success": True, "code": code, "user_id": user_id, "activated_at": now}
 
 @app.get("/api/codes/{code}/status")
 async def check_code(code: str):
@@ -309,6 +411,80 @@ async def delete_code(code: str):
         conn.execute("DELETE FROM invite_codes WHERE code=?", (code,))
     return {"success": True}
 
+# ══════════ 用户数据同步 API ══════════
+
+class UserDataSyncRequest(BaseModel):
+    user_id: str
+    data: str  # JSON 字符串，包含所有用户数据
+
+@app.post("/api/user/sync")
+async def sync_user_data(req: UserDataSyncRequest):
+    """保存/同步用户数据到后端"""
+    if not req.user_id or not req.data:
+        raise HTTPException(status_code=400, detail="user_id 和 data 不能为空")
+    now = datetime.now(TZ).strftime("%Y-%m-%d %H:%M:%S")
+    with get_db() as conn:
+        # 验证 user_id 是否存在
+        row = conn.execute("SELECT user_id, banned FROM invite_codes WHERE user_id=?", (req.user_id,)).fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="用户不存在")
+        if row["banned"]:
+            raise HTTPException(status_code=403, detail="该账号已被封禁")
+        # 更新或插入用户数据
+        conn.execute(
+            "INSERT INTO user_data (user_id, code, data, updated_at, created_at) VALUES (?, ?, ?, ?, ?) "
+            "ON CONFLICT(user_id) DO UPDATE SET data=?, updated_at=?",
+            (req.user_id, '', req.data, now, now, req.data, now)
+        )
+    return {"success": True, "updated_at": now}
+
+@app.get("/api/user/{user_id}/data")
+async def get_user_data(user_id: str):
+    """获取用户数据（用于跨浏览器恢复）"""
+    with get_db() as conn:
+        # 检查封禁状态
+        code_row = conn.execute("SELECT banned FROM invite_codes WHERE user_id=?", (user_id,)).fetchone()
+        if not code_row:
+            raise HTTPException(status_code=404, detail="用户不存在")
+        if code_row["banned"]:
+            raise HTTPException(status_code=403, detail="该账号已被封禁")
+        row = conn.execute("SELECT data, updated_at FROM user_data WHERE user_id=?", (user_id,)).fetchone()
+        if not row:
+            return {"data": "{}", "updated_at": ""}
+    return {"data": row["data"], "updated_at": row["updated_at"]}
+
+# ══════════ 封禁/解封 API ══════════
+
+class BanRequest(BaseModel):
+    reason: str = ""
+
+@app.post("/api/codes/{code}/ban")
+async def ban_code(code: str, req: BanRequest = BanRequest()):
+    """封禁测试码"""
+    now = datetime.now(TZ).strftime("%Y-%m-%d %H:%M:%S")
+    with get_db() as conn:
+        row = conn.execute("SELECT * FROM invite_codes WHERE code=?", (code,)).fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="测试码不存在")
+        conn.execute(
+            "UPDATE invite_codes SET banned=1, banned_at=?, ban_reason=? WHERE code=?",
+            (now, req.reason, code)
+        )
+    return {"success": True, "code": code, "banned_at": now}
+
+@app.post("/api/codes/{code}/unban")
+async def unban_code(code: str):
+    """解封测试码"""
+    with get_db() as conn:
+        row = conn.execute("SELECT * FROM invite_codes WHERE code=?", (code,)).fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="测试码不存在")
+        conn.execute(
+            "UPDATE invite_codes SET banned=0, banned_at=NULL, ban_reason='' WHERE code=?",
+            (code,)
+        )
+    return {"success": True, "code": code}
+
 # ══════════ Store App APIs ══════════
 
 class StoreAppUpload(BaseModel):
@@ -322,6 +498,18 @@ class StoreAppUpload(BaseModel):
     author_id: str = "anonymous"
     author_name: str = "匿名开发者"
     source_code: str = ""
+    version: str = "1.0.0"
+    changelog: str = ""
+    permissions: str = ""
+    tags: str = ""
+    contact_email: str = ""
+    contact_name: str = ""
+    test_account: str = ""
+    test_password: str = ""
+    privacy_url: str = ""
+    support_url: str = ""
+    screenshots: str = "[]"
+    attachments: str = "[]"
 
 class StoreAppReview(BaseModel):
     review_notes: str = ""
@@ -336,11 +524,15 @@ async def upload_store_app(req: StoreAppUpload):
     with get_db() as conn:
         cursor = conn.execute("""
             INSERT INTO store_apps (name, description, full_description, category, icon_emoji, color, hero_color,
-            author_id, author_name, status, source_code, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)
+            author_id, author_name, status, source_code, screenshots, attachments, version, changelog,
+            permissions, tags, contact_email, contact_name, test_account, test_password, privacy_url, support_url, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (req.name.strip(), req.description.strip(), req.full_description.strip(), req.category.strip(),
               req.icon_emoji.strip() or '⊡', req.color.strip(), req.hero_color.strip(),
-              req.author_id.strip(), req.author_name.strip(), req.source_code, now))
+              req.author_id.strip(), req.author_name.strip(), req.source_code,
+              req.screenshots, req.attachments, req.version.strip(), req.changelog.strip(),
+              req.permissions.strip(), req.tags.strip(), req.contact_email.strip(), req.contact_name.strip(),
+              req.test_account.strip(), req.test_password.strip(), req.privacy_url.strip(), req.support_url.strip(), now))
         new_id = cursor.lastrowid
     return {"success": True, "id": new_id, "message": "提交成功，等待审核"}
 
@@ -384,6 +576,7 @@ async def get_store_app(app_id: int):
         raise HTTPException(status_code=404, detail="应用不存在")
     app = dict(row)
     app["screenshots"] = json.loads(app.get("screenshots", "[]"))
+    app["attachments"] = json.loads(app.get("attachments", "[]"))
     return app
 
 @app.post("/api/store/apps/{app_id}/approve")
@@ -1460,6 +1653,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;letter-spacing:.03em}
 .badge-active{background:rgba(34,197,94,.15);color:var(--success)}
 .badge-inactive{background:rgba(245,158,11,.15);color:var(--warning)}
+.badge-banned{background:rgba(239,68,68,.15);color:var(--danger)}
 .badge-pending{background:rgba(99,102,241,.15);color:var(--accent)}
 .badge-rejected{background:rgba(239,68,68,.15);color:var(--danger)}
 .code-text{font-family:"SF Mono",Menlo,monospace;font-size:13px;letter-spacing:.05em}
@@ -1499,6 +1693,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <div class="stat-card total"><div class="stat-label">总数</div><div class="stat-value" id="stat-total">0</div></div>
   <div class="stat-card activated"><div class="stat-label">已激活</div><div class="stat-value" id="stat-activated">0</div></div>
   <div class="stat-card unactivated"><div class="stat-label">未激活</div><div class="stat-value" id="stat-unactivated">0</div></div>
+  <div class="stat-card" style="--stat-color:var(--danger)"><div class="stat-label" style="color:var(--danger)">已封禁</div><div class="stat-value" id="stat-banned" style="color:var(--danger)">0</div></div>
 </div>
 
 <div class="section">
@@ -1519,7 +1714,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <div class="section-title">测试码列表</div>
   <div class="toolbar">
     <input type="text" id="search-input" placeholder="搜索测试码..." oninput="loadCodes()">
-    <select id="status-filter" onchange="loadCodes()"><option value="all">全部</option><option value="activated">已激活</option><option value="unactivated">未激活</option></select>
+    <select id="status-filter" onchange="loadCodes()"><option value="all">全部</option><option value="activated">已激活</option><option value="unactivated">未激活</option><option value="banned">已封禁</option></select>
     <button class="btn btn-outline" onclick="refreshAll()">刷新</button>
   </div>
   <div style="overflow-x:auto">
@@ -1543,21 +1738,32 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 </div>
 
 <div class="modal" id="review-modal">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width:800px">
     <button class="modal-close" onclick="closeReviewModal()">&times;</button>
     <h3 id="rm-title">审核应用</h3>
     <div style="display:flex;gap:16px;flex-wrap:wrap">
-      <div style="flex:1;min-width:300px">
-        <div class="form-group" style="margin-bottom:12px"><label>应用名称</label><div id="rm-name" style="padding:8px 0;font-size:16px;font-weight:600">-</div></div>
-        <div class="form-group" style="margin-bottom:12px"><label>分类</label><div id="rm-cat" style="padding:4px 0">-</div></div>
-        <div class="form-group" style="margin-bottom:12px"><label>作者</label><div id="rm-author" style="padding:4px 0">-</div></div>
-        <div class="form-group" style="margin-bottom:12px"><label>描述</label><div id="rm-desc" style="padding:4px 0;color:var(--text2)">-</div></div>
+      <div style="flex:1;min-width:280px">
+        <div class="form-group" style="margin-bottom:10px"><label>应用名称</label><div id="rm-name" style="padding:6px 0;font-size:16px;font-weight:600">-</div></div>
+        <div style="display:flex;gap:12px;margin-bottom:10px">
+          <div class="form-group" style="flex:1"><label>分类</label><div id="rm-cat" style="padding:4px 0">-</div></div>
+          <div class="form-group" style="flex:1"><label>版本</label><div id="rm-version" style="padding:4px 0">-</div></div>
+        </div>
+        <div class="form-group" style="margin-bottom:10px"><label>作者</label><div id="rm-author" style="padding:4px 0">-</div></div>
+        <div class="form-group" style="margin-bottom:10px"><label>描述</label><div id="rm-desc" style="padding:4px 0;color:var(--text2);max-height:80px;overflow-y:auto">-</div></div>
+        <div class="form-group" style="margin-bottom:10px"><label>更新日志</label><div id="rm-changelog" style="padding:4px 0;color:var(--text2)">-</div></div>
+        <div class="form-group" style="margin-bottom:10px"><label>权限</label><div id="rm-perms" style="padding:4px 0">-</div></div>
+        <div class="form-group" style="margin-bottom:10px"><label>标签</label><div id="rm-tags" style="padding:4px 0">-</div></div>
+        <div class="form-group" style="margin-bottom:10px"><label>测试账号 / 密码</label><div id="rm-test" style="padding:4px 0;color:var(--text2)">-</div></div>
+        <div class="form-group" style="margin-bottom:10px"><label>联系方式</label><div id="rm-contact" style="padding:4px 0;color:var(--text2)">-</div></div>
+        <div class="form-group" style="margin-bottom:10px"><label>隐私政策</label><div id="rm-privacy" style="padding:4px 0;color:var(--text2);word-break:break-all">-</div></div>
       </div>
-      <div style="flex:1;min-width:300px">
-        <div class="form-group" style="margin-bottom:12px"><label>预览</label><div class="preview-frame"><iframe id="rm-preview" style="width:390px;height:100%;border:none;display:block;margin:0 auto" sandbox="allow-scripts"></iframe></div></div>
+      <div style="flex:1;min-width:280px">
+        <div class="form-group" style="margin-bottom:10px"><label>预览</label><div class="preview-frame"><iframe id="rm-preview" style="width:390px;height:100%;border:none;display:block;margin:0 auto" sandbox="allow-scripts"></iframe></div></div>
+        <div class="form-group" style="margin-top:10px"><label>截图</label><div id="rm-screenshots" style="display:flex;gap:6px;flex-wrap:wrap">-</div></div>
+        <div class="form-group" style="margin-top:10px"><label>附件</label><div id="rm-attachments" style="padding:4px 0;color:var(--text2)">-</div></div>
       </div>
     </div>
-    <div class="form-group" style="margin-top:12px"><label>源代码</label><div class="source-code-box" id="rm-source">-</div></div>
+    <div class="form-group" style="margin-top:10px"><label>源代码</label><div class="source-code-box" id="rm-source" style="max-height:200px;overflow-y:auto">-</div></div>
     <div class="review-actions" id="rm-actions">
       <textarea class="review-textarea" id="rm-notes" placeholder="审核备注（通过可选，拒绝必填）"></textarea>
       <button class="btn btn-success" onclick="approveApp()">通过审核</button>
@@ -1592,6 +1798,7 @@ async function loadStats(){
   document.getElementById('stat-total').textContent = d.total;
   document.getElementById('stat-activated').textContent = d.activated;
   document.getElementById('stat-unactivated').textContent = d.unactivated;
+  document.getElementById('stat-banned').textContent = d.banned || 0;
 }
 async function loadCodes(){
   const status = document.getElementById('status-filter').value;
@@ -1599,7 +1806,16 @@ async function loadCodes(){
   const r = await fetch(API + '/codes?status=' + status + '&search=' + encodeURIComponent(search));
   const d = await r.json(); const tbody = document.getElementById('codes-tbody');
   if(d.codes.length === 0){ tbody.innerHTML = '<tr><td colspan="6" class="empty-row">暂无数据</td></tr>'; }
-  else { tbody.innerHTML = d.codes.map(c => `<tr><td><span class="code-text">${esc(c.code)}</span></td><td>${c.is_activated?'<span class="badge badge-active">已激活</span>':'<span class="badge badge-inactive">未激活</span>'}</td><td style="color:var(--text2);font-size:12px">${esc(c.notes||'-')}</td><td style="color:var(--text2);font-size:12px">${c.created_at}</td><td style="color:var(--text2);font-size:12px">${c.activated_at||'-'}</td><td><button class="btn btn-sm btn-danger" onclick="deleteCode('${esc(c.code)}')">删除</button></td></tr>`).join(''); }
+  else { tbody.innerHTML = d.codes.map(c => {
+    let statusHtml = '';
+    if(c.banned){ statusHtml = '<span class="badge badge-banned">已封禁</span>'; }
+    else if(c.is_activated){ statusHtml = '<span class="badge badge-active">已激活</span>'; }
+    else { statusHtml = '<span class="badge badge-inactive">未激活</span>'; }
+    let actions = '<button class="btn btn-sm btn-danger" onclick="deleteCode(\''+esc(c.code)+'\')">删除</button>';
+    if(c.banned){ actions += ' <button class="btn btn-sm btn-outline" onclick="unbanCode(\''+esc(c.code)+'\')">解封</button>'; }
+    else { actions += ' <button class="btn btn-sm btn-outline" onclick="banCode(\''+esc(c.code)+'\')">封禁</button>'; }
+    return '<tr><td><span class="code-text">'+esc(c.code)+'</span></td><td>'+statusHtml+'</td><td style="color:var(--text2);font-size:12px">'+esc(c.notes||'-')+'</td><td style="color:var(--text2);font-size:12px">'+c.created_at+'</td><td style="color:var(--text2);font-size:12px">'+c.activated_at||'-'+'</td><td>'+actions+'</td></tr>';
+  }).join(''); }
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 async function refreshAll(){ await loadStats(); await loadCodes(); }
@@ -1624,6 +1840,17 @@ async function deleteCode(code){
   const r = await fetch(API+'/codes/'+encodeURIComponent(code),{method:'DELETE'});
   if(r.ok){toast('已删除','success');refreshAll()}else{toast('删除失败','error')}
 }
+async function banCode(code){
+  const reason = prompt('封禁原因 (可选):');
+  if(reason===null)return;
+  const r = await fetch(API+'/codes/'+encodeURIComponent(code)+'/ban',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason:reason||''})});
+  if(r.ok){toast('已封禁','success');refreshAll()}else{toast('封禁失败','error')}
+}
+async function unbanCode(code){
+  if(!confirm('确定解封测试码 '+code+' ?'))return;
+  const r = await fetch(API+'/codes/'+encodeURIComponent(code)+'/unban',{method:'POST'});
+  if(r.ok){toast('已解封','success');refreshAll()}else{toast('解封失败','error')}
+}
 
 // ── Store Review ──
 async function loadStoreApps(){
@@ -1640,8 +1867,33 @@ async function openReview(id){
   document.getElementById('rm-title').textContent = '审核 #'+id+' - '+a.name;
   document.getElementById('rm-name').textContent = a.name;
   document.getElementById('rm-cat').textContent = a.category;
+  document.getElementById('rm-version').textContent = a.version || '1.0.0';
   document.getElementById('rm-author').textContent = a.author_name + ' (' + a.author_id + ')';
-  document.getElementById('rm-desc').textContent = a.full_description || a.description;
+  document.getElementById('rm-desc').textContent = a.full_description || a.description || '-';
+  document.getElementById('rm-changelog').textContent = a.changelog || '-';
+  document.getElementById('rm-perms').textContent = a.permissions || '未声明';
+  document.getElementById('rm-tags').textContent = a.tags || '-';
+  document.getElementById('rm-test').textContent = (a.test_account ? a.test_account + ' / ' + (a.test_password||'无密码') : '未提供');
+  document.getElementById('rm-contact').textContent = (a.contact_name||'') + (a.contact_email ? ' <'+a.contact_email+'>' : '') || '未提供';
+  document.getElementById('rm-privacy').textContent = a.privacy_url || '未提供';
+  // 截图
+  var screenshots = [];
+  try { screenshots = JSON.parse(a.screenshots||'[]'); } catch(e){}
+  var ssDiv = document.getElementById('rm-screenshots');
+  if(screenshots.length > 0){
+    ssDiv.innerHTML = screenshots.map(function(s,i){
+      return '<div style="width:80px;height:80px;border-radius:8px;overflow:hidden;background:#eee;flex-shrink:0"><img src="'+esc(s)+'" style="width:100%;height:100%;object-fit:cover" title="截图'+(i+1)+'"></div>';
+    }).join('');
+  } else { ssDiv.textContent = '无截图'; }
+  // 附件
+  var attachments = [];
+  try { attachments = JSON.parse(a.attachments||'[]'); } catch(e){}
+  var attDiv = document.getElementById('rm-attachments');
+  if(attachments.length > 0){
+    attDiv.innerHTML = attachments.map(function(a,i){
+      return '<div style="margin-bottom:4px"><a href="'+esc(a.data)+'" download="'+esc(a.name)+'" style="color:var(--primary);font-size:12px">📎 '+esc(a.name)+' ('+(a.size<1024?a.size+'B':a.size<1048576?(a.size/1024).toFixed(1)+'KB':(a.size/1048576).toFixed(1)+'MB')+')</a></div>';
+    }).join('');
+  } else { attDiv.textContent = '无附件'; }
   document.getElementById('rm-source').textContent = a.source_code || '(无源代码)';
   var iframe = document.getElementById('rm-preview');
   iframe.srcdoc = a.source_code || '<div style="padding:40px;text-align:center;color:#aaa">无源代码</div>';
@@ -1678,4 +1930,4 @@ refreshAll();
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=9000)
+    uvicorn.run(app, host="0.0.0.0", port=8765)
