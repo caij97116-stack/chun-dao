@@ -1411,7 +1411,7 @@ input[type=file]{display:none;}
 .verify-skip{font-size:11px;color:rgba(255,255,255,0.25);background:none;border:none;cursor:pointer;font-family:inherit;letter-spacing:0.08em;padding:8px;margin-top:8px;}
 
 /* ══════════ 观影室 VR ─═════════ */
-.vr-container{display:flex;flex-direction:column;width:100%;height:100%;background:#0a0a0a;}
+.vr-container{display:flex;flex-direction:column;width:100%;flex:1;min-height:0;background:#0a0a0a;}
 .vr-video-section{flex:0 0 auto;width:100%;display:flex;flex-direction:column;}
 .vr-url-bar{display:flex;gap:6px;padding:8px 10px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);}
 .vr-url-input{flex:1;padding:8px 12px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.05);color:white;font-size:12px;outline:none;font-family:inherit;transition:border-color 0.2s;}
@@ -3105,6 +3105,7 @@ input[type=file]{display:none;}
       </div>
     </div>
   </div>
+</div>
 
   <!-- ══════ 观影室 App ══════ -->
   <div id="vr-app" style="display:none">
@@ -6322,9 +6323,8 @@ function openApp(name){
   document.getElementById('weather-app').style.display='none';
   document.getElementById('callrecords-app').style.display='none';
   document.getElementById('vr-app').style.display='none';
-  try {
-    if(name==='settings'){ document.getElementById('settings-app').style.display='flex'; updateSettingsProfileSub(); }
-  if(name==='encounter') document.getElementById('encounter-app').style.display='flex';
+  if(name==='settings'){ document.getElementById('settings-app').style.display='flex'; updateSettingsProfileSub(); }
+  if(name==='encounter'){ document.getElementById('encounter-app').style.display='flex'; }
   if(name==='music'){ document.getElementById('music-app').style.display='flex'; initMusicAppView(); }
   if(name==='lifefaces'){ document.getElementById('lifefaces-app').style.display='flex'; renderLfList(); }
   if(name==='miniapps'){ document.getElementById('miniapps-app').style.display='flex'; renderMiniappGrid(); }
@@ -6341,11 +6341,6 @@ function openApp(name){
   if(name==='vr'){ document.getElementById('vr-app').style.display='flex'; initVRApp(); }
   frame.style.display='block';
   requestAnimationFrame(()=>frame.classList.add('open'));
-  } catch(e) {
-    console.error('应用打开失败 ('+name+'):', e);
-    closeApp();
-    showToast('应用打开失败，请重试');
-  }
 }
 
 // ── Home screen multi-page swipe ──
@@ -6954,7 +6949,12 @@ function enterAppDragMode(){
   _appDragMode = true;
   // 拖拽时移除overflow裁剪，防止图标被遮挡
   document.querySelectorAll('.app-pages-container,.app-pages-clip').forEach(el=>{ el.style.overflow = 'visible'; });
-  document.querySelectorAll('.app-page').forEach(page=>{
+  // 只处理当前可见的页面，避免不可见页面的getBoundingClientRect返回错误值
+  const scroll = document.getElementById('app-pages-scroll');
+  const currentPageIdx = scroll ? Math.round(scroll.scrollLeft / scroll.clientWidth) : 0;
+  const currentPage = document.getElementById('app-page-' + currentPageIdx);
+  const pages = currentPage ? [currentPage] : document.querySelectorAll('.app-page');
+  pages.forEach(page=>{
     page.style.overflow = 'visible';
     const pageRect = page.getBoundingClientRect();
     const icons = page.querySelectorAll('.app-icon-wrap');
@@ -6974,8 +6974,9 @@ function enterAppDragMode(){
       p.el.classList.add('placed');
       p.el.style.transition = 'none';
     });
+    // 只隐藏当前页面的app-row
+    page.querySelectorAll('.app-row').forEach(r=>{ r.style.display = 'none'; });
   });
-  document.querySelectorAll('.app-row').forEach(r=>{ r.style.display = 'none'; });
   document.querySelectorAll('.app-icon-wrap').forEach(el=>el.classList.add('drag-mode'));
   showToast('拖动图标自由定位 · 点击空白完成');
 }
@@ -7138,15 +7139,18 @@ function snapAppIcon(el, x, y){
 
 function persistAppPositions(){
   const positions = [];
-  document.querySelectorAll('.app-page .app-icon-wrap[data-app]').forEach(el=>{
+  document.querySelectorAll('.app-page .app-icon-wrap[data-app].placed').forEach(el=>{
     const page = el.closest('.app-page');
     if(!page) return;
     const pageIdx = parseInt(page.id.replace('app-page-','')) || 0;
+    const x = parseInt(el.dataset.x);
+    const y = parseInt(el.dataset.y);
+    if(isNaN(x) || isNaN(y)) return;
     positions.push({
       app: el.dataset.app,
       page: pageIdx,
-      x: parseInt(el.dataset.x) || 0,
-      y: parseInt(el.dataset.y) || 0
+      x: x,
+      y: y
     });
   });
   localStorage.setItem('tsb_apppositions', JSON.stringify(positions));
@@ -7161,12 +7165,14 @@ function restoreAppPositions(){
     document.querySelectorAll('.app-page .app-icon-wrap[data-app]').forEach(el=>{
       map[el.dataset.app] = el;
     });
+    const pagesWithPositions = new Set();
     positions.forEach(p=>{
       const el = map[p.app];
       if(!el) return;
       if(!el.closest('.app-page')) return;
       const targetPage = document.getElementById('app-page-' + (p.page || 0));
       if(targetPage){
+        pagesWithPositions.add(p.page || 0);
         if(targetPage !== el.parentNode) targetPage.appendChild(el);
         if(!el.dataset.x || !el.classList.contains('placed')){
           setAppIconPos(el, p.x, p.y);
@@ -7174,7 +7180,13 @@ function restoreAppPositions(){
         }
       }
     });
-    document.querySelectorAll('.app-page .app-row').forEach(r=>{ r.style.display = 'none'; });
+    // 只隐藏有已保存位置页面的app-row，不影响其他页面
+    pagesWithPositions.forEach(pageIdx=>{
+      const page = document.getElementById('app-page-' + pageIdx);
+      if(page){
+        page.querySelectorAll('.app-row').forEach(r=>{ r.style.display = 'none'; });
+      }
+    });
   }catch(e){}
 }
 
