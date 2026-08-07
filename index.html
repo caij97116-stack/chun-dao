@@ -6322,7 +6322,8 @@ function openApp(name){
   document.getElementById('weather-app').style.display='none';
   document.getElementById('callrecords-app').style.display='none';
   document.getElementById('vr-app').style.display='none';
-  if(name==='settings'){ document.getElementById('settings-app').style.display='flex'; updateSettingsProfileSub(); }
+  try {
+    if(name==='settings'){ document.getElementById('settings-app').style.display='flex'; updateSettingsProfileSub(); }
   if(name==='encounter') document.getElementById('encounter-app').style.display='flex';
   if(name==='music'){ document.getElementById('music-app').style.display='flex'; initMusicAppView(); }
   if(name==='lifefaces'){ document.getElementById('lifefaces-app').style.display='flex'; renderLfList(); }
@@ -6337,19 +6338,14 @@ function openApp(name){
   if(name==='island'){ document.getElementById('island-app').style.display='flex'; initIslandApp(); }
   if(name==='weather'){ document.getElementById('weather-app').style.display='flex'; initWeatherApp(); }
   if(name==='callrecords'){ document.getElementById('callrecords-app').style.display='flex'; renderCallRecords(); }
-  if(name==='vr'){ 
-    try {
-      document.getElementById('vr-app').style.display='flex'; 
-      initVRApp(); 
-    } catch(e) {
-      console.error('观影室初始化失败:', e);
-      closeApp();
-      showToast('观影室打开失败，请检查数据后重试');
-      return;
-    }
-  }
+  if(name==='vr'){ document.getElementById('vr-app').style.display='flex'; initVRApp(); }
   frame.style.display='block';
   requestAnimationFrame(()=>frame.classList.add('open'));
+  } catch(e) {
+    console.error('应用打开失败 ('+name+'):', e);
+    closeApp();
+    showToast('应用打开失败，请重试');
+  }
 }
 
 // ── Home screen multi-page swipe ──
