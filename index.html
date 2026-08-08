@@ -1416,14 +1416,14 @@ input[type=file]{display:none;}
 .vr-url-bar{display:flex;gap:6px;padding:8px 10px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);}
 .vr-url-input{flex:1;padding:8px 12px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.05);color:white;font-size:12px;outline:none;font-family:inherit;transition:border-color 0.2s;}
 .vr-url-input:focus{border-color:rgba(255,255,255,0.3);}
-.vr-url-input::placeholder{color:rgba(255,255,255,0.2);}
+.vr-url-input::placeholder{color:rgba(255,255,255,0.35);}
 .vr-url-btn{padding:8px 14px;border:none;border-radius:8px;background:rgba(180,140,140,0.5);color:white;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;letter-spacing:0.04em;}
 .vr-url-btn:active{transform:scale(0.95);opacity:0.8;}
 .vr-url-btn-sub{background:rgba(255,255,255,0.06);}
 .vr-player-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;}
 .vr-player-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:rgba(255,255,255,0.2);}
 .vr-player-empty-icon{font-size:48px;opacity:0.5;}
-.vr-player-empty-text{font-size:13px;letter-spacing:0.06em;}
+.vr-player-empty-text{font-size:13px;letter-spacing:0.06em;color:rgba(255,255,255,0.5);}
 .vr-player{position:absolute;inset:0;width:100%;height:100%;}
 .vr-player iframe{width:100%;height:100%;border:none;}
 .vr-subtitle-bar{display:flex;align-items:center;gap:10px;padding:6px 12px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);}
@@ -1438,8 +1438,8 @@ input[type=file]{display:none;}
 .vr-comp-avatar{width:34px;height:34px;border-radius:50%;background:var(--smoke);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink3);cursor:pointer;overflow:hidden;flex-shrink:0;transition:transform 0.2s;}
 .vr-comp-avatar:active{transform:scale(0.9);}
 .vr-comp-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.vr-comp-name{font-size:13px;color:var(--ink);letter-spacing:0.04em;font-weight:500;}
-.vr-comp-status{font-size:10px;color:var(--ink4);margin-top:1px;}
+.vr-comp-name{font-size:13px;color:#fff;letter-spacing:0.04em;font-weight:500;}
+.vr-comp-status{font-size:10px;color:rgba(255,255,255,0.5);margin-top:1px;}
 .vr-api-btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
 .vr-api-btn:active{background:rgba(255,255,255,0.08);}
 .vr-mem-share-btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.3);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
@@ -1481,12 +1481,12 @@ input[type=file]{display:none;}
 
 /* 聊天消息 */
 .vr-chat-msgs{flex:1;overflow-y:auto;padding:8px 12px;display:flex;flex-direction:column;gap:6px;min-height:0;}
-.vr-chat-empty{text-align:center;padding:30px 0;font-size:12px;color:var(--ink4);letter-spacing:0.04em;}
+.vr-chat-empty{text-align:center;padding:30px 0;font-size:12px;color:rgba(255,255,255,0.35);letter-spacing:0.04em;}
 .vr-chat-msg{max-width:85%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5;word-break:break-word;letter-spacing:0.03em;animation:vrMsgIn 0.25s ease;}
 @keyframes vrMsgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.vr-chat-msg.mine{align-self:flex-end;background:rgba(180,140,140,0.3);color:var(--ink);border-bottom-right-radius:4px;}
-.vr-chat-msg.theirs{align-self:flex-start;background:rgba(255,255,255,0.06);color:var(--ink);border-bottom-left-radius:4px;}
-.vr-chat-msg.system{align-self:center;background:rgba(255,255,255,0.03);color:var(--ink4);font-size:11px;border-radius:8px;max-width:90%;text-align:center;}
+.vr-chat-msg.mine{align-self:flex-end;background:rgba(180,140,140,0.35);color:#fff;border-bottom-right-radius:4px;}
+.vr-chat-msg.theirs{align-self:flex-start;background:rgba(255,255,255,0.12);color:#e8e8e8;border-bottom-left-radius:4px;}
+.vr-chat-msg.system{align-self:center;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-size:11px;border-radius:8px;max-width:90%;text-align:center;}
 .vr-chat-msg.typing{align-self:flex-start;padding:10px 14px;background:rgba(255,255,255,0.06);border-radius:12px;border-bottom-left-radius:4px;}
 .vr-chat-msg-typing-dots{display:flex;gap:3px;}
 .vr-chat-msg-typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--ink4);animation:vrDotBounce 1.2s infinite;}
@@ -1498,7 +1498,7 @@ input[type=file]{display:none;}
 .vr-chat-input-row{display:flex;gap:8px;padding:8px 12px;padding-bottom:max(8px, env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);flex-shrink:0;}
 .vr-chat-input{flex:1;padding:9px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;background:rgba(255,255,255,0.05);color:white;font-size:13px;outline:none;font-family:inherit;resize:none;transition:border-color 0.2s;}
 .vr-chat-input:focus{border-color:rgba(180,140,140,0.5);}
-.vr-chat-input::placeholder{color:rgba(255,255,255,0.2);}
+.vr-chat-input::placeholder{color:rgba(255,255,255,0.35);}
 .vr-chat-send{width:36px;height:36px;border-radius:50%;border:none;background:rgba(180,140,140,0.5);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
 .vr-chat-send:active{transform:scale(0.9);opacity:0.8;}
 
@@ -17285,6 +17285,9 @@ function vrLoadVideo(){
   vrSubIndex = -1;
   if(vrSubTimer){ clearInterval(vrSubTimer); vrSubTimer = null; }
 
+  // 异步获取视频元数据（标题、作者），让AI知道当前播放的是什么
+  vrFetchVideoMetadata();
+
   const emptyEl = document.getElementById('vr-player-empty');
   const playerEl = document.getElementById('vr-player');
   const subBar = document.getElementById('vr-subtitle-bar');
@@ -17322,19 +17325,37 @@ function vrLoadVideo(){
 function vrParseVideoUrl(url){
   // YouTube
   let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
-  if(m) return {platform:'youtube', videoId:m[1], url, title:url};
+  if(m) return {platform:'youtube', videoId:m[1], url, title:url, author:''};
 
   // Bilibili - BV号
   m = url.match(/bilibili\.com\/video\/(BV[a-zA-Z0-9]+)/);
-  if(m) return {platform:'bilibili', videoId:m[1], url, title:url};
+  if(m) return {platform:'bilibili', videoId:m[1], url, title:url, author:''};
   // Bilibili - 番剧
   m = url.match(/bilibili\.com\/bangumi\/play\/(ep\d+)/);
-  if(m) return {platform:'bilibili', videoId:m[1], url, title:url};
+  if(m) return {platform:'bilibili', videoId:m[1], url, title:url, author:''};
   // Bilibili - 短链接 b23.tv
   m = url.match(/b23\.tv\/([a-zA-Z0-9]+)/);
-  if(m) return {platform:'bilibili_short', videoId:m[1], url, title:url};
+  if(m) return {platform:'bilibili_short', videoId:m[1], url, title:url, author:''};
 
   return null;
+}
+
+// ── Video Metadata Fetch ──
+async function vrFetchVideoMetadata(){
+  if(!vrCurrentVideo || !vrCurrentVideo.url) return;
+  try{
+    const apiBase = window.location.origin;
+    const resp = await fetch(`${apiBase}/api/video-metadata?url=${encodeURIComponent(vrCurrentVideo.url)}`);
+    if(!resp.ok) return;
+    const data = await resp.json();
+    if(data.success){
+      vrCurrentVideo.title = data.title || vrCurrentVideo.title;
+      vrCurrentVideo.author = data.author || '';
+      vrCurrentVideo.thumbnail = data.thumbnail || '';
+    }
+  }catch(e){
+    console.warn('视频元数据获取失败:', e);
+  }
 }
 
 // ── Subtitle Extraction ──
@@ -17438,7 +17459,7 @@ async function vrCallAI(type, context){
   const personaShort = setting.length > 500 ? setting.substring(0,500)+'…' : setting;
 
   const videoInfo = vrCurrentVideo
-    ? `正在观看的视频：${vrCurrentVideo.platform === 'youtube' ? 'YouTube' : 'Bilibili'}（${vrCurrentVideo.url}）`
+    ? `正在观看的视频：${vrCurrentVideo.platform === 'youtube' ? 'YouTube' : 'Bilibili'}《${vrCurrentVideo.title || '未知视频'}》${vrCurrentVideo.author ? '（UP主：'+vrCurrentVideo.author+'）' : ''}`
     : '尚未加载视频';
 
   const recentMsgs = vrMsgs.filter(m=>m.type!=='typing').slice(-6)
@@ -17498,15 +17519,14 @@ ${videoInfo}${memoryContext}
 
 【对话规则】
 1. 用角色的人设风格说话，保持性格一致
-2. 回复简短自然（1-3句话），像真人聊天一样
-3. 你可以对视频内容进行吐槽、评论、猜测剧情，就像真的在一起看
-4. 如果用户提到剧情内容，结合你的角色性格给出有趣的反馈
-5. 可以毒舌、可以温柔、可以傲娇，但要有"活人感"，不要机械
+2. 回复极简短（1-2句话，不超过30字），像真人实时聊天
+3. 只讨论当前视频内容，不要涉及无关话题
+4. 用口语化表达，避免书面语和长句
+5. 可以包含语气词或表情符号（如"～""！"）增加生动性
 6. 禁止说"作为AI助手"或"根据记忆"之类的套话，记忆数据是你"本来就该知道的"
-7. 你的回复将直接显示给用户，不要加任何前缀或标签
-8. 偶尔可以自然地带出关于用户的事情（如"你上次英语才对了8题，今天看电影倒是挺积极"），但不要每句都提`;
+7. 你的回复将直接显示给用户，不要加任何前缀或标签`;
 
-    userPrompt = `用户对你说：${context.userMsg}\n\n最近对话：\n${recentMsgs}\n\n请用「${name}」的口吻自然回复。`;
+    userPrompt = `用户对你说：${context.userMsg}\n\n最近对话：\n${recentMsgs}\n\n请用「${name}」的口吻极简短回复（不超过30字）。`;
   } else {
     const eventMap = {
       'video_start': `你们刚开始一起看视频。用你的角色风格打个招呼或评论一下即将开始的内容，简短自然。`,
@@ -17525,13 +17545,13 @@ ${videoInfo}${memoryContext}
 
 【回复规则】
 1. 用角色的人设风格说话
-2. 回复简短（1-3句话），像真人一样
+2. 回复极简短（1-2句话，不超过30字），像真人实时聊天
 3. 要有情绪和个性，不要机械
 4. 禁止说"作为AI助手"或"根据记忆"之类的套话
 5. 你的回复会直接显示给用户，不要加任何前缀或标签
 6. 回复要让人感觉你真的在旁边一起看，有"活人感"`;
 
-    userPrompt = `${eventDesc}\n\n最近对话：\n${recentMsgs || '（这是第一次互动）'}\n\n请用「${name}」的口吻自然回复。`;
+    userPrompt = `${eventDesc}\n\n最近对话：\n${recentMsgs || '（这是第一次互动）'}\n\n请用「${name}」的口吻极简短回复（不超过30字）。`;
   }
 
   try{

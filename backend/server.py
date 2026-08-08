@@ -930,6 +930,78 @@ async def scrape_url(req: ScrapeRequest):
         detail=f"所有抓取引擎均失败: {' → '.join(engines_tried)}"
     )
 
+# ══════════ Video Metadata API ══════════
+# 支持 YouTube (oEmbed) 和 Bilibili (公开API) 获取视频标题、作者等信息
+# 用于观影室 AI 上下文，让 AI 知道当前播放的是什么视频
+
+@app.get("/api/video-metadata")
+async def get_video_metadata(url: str = Query(..., description="视频链接")):
+    """获取视频元数据（标题、作者、平台等）"""
+    parsed = urlparse(url)
+    host = parsed.netloc.lower()
+
+    if 'youtube.com' in host or 'youtu.be' in host:
+        # YouTube oEmbed API — 无需 API Key
+        m = re.search(r'(?:v=|/)([a-zA-Z0-9_-]{11})', url)
+        if not m:
+            raise HTTPException(status_code=400, detail="无法解析 YouTube 视频 ID")
+        video_id = m.group(1)
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                resp = await client.get(
+                    f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={video_id}&format=json"
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                return {
+                    "success": True,
+                    "title": data.get("title", ""),
+                    "author": data.get("author_name", ""),
+                    "platform": "youtube",
+                    "video_id": video_id,
+                    "thumbnail": data.get("thumbnail_url", "")
+                }
+        except Exception as e:
+            logging.warning(f"YouTube 元数据获取失败: {e}")
+            return {"success": False, "platform": "youtube", "video_id": video_id, "title": "", "author": ""}
+
+    elif 'bilibili.com' in host or 'b23.tv' in host:
+        # Bilibili 公开 API — 无需 API Key
+        m = re.search(r'(BV[a-zA-Z0-9]+)', url)
+        if not m:
+            # 可能是番剧或短链接，返回基础信息
+            return {"success": False, "platform": "bilibili", "video_id": "", "title": "", "author": ""}
+        bv_id = m.group(1)
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                resp = await client.get(
+                    f"https://api.bilibili.com/x/web-interface/view?bvid={bv_id}",
+                    headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                        "Referer": "https://www.bilibili.com/"
+                    }
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                if data.get("code") == 0 and data.get("data"):
+                    info = data["data"]
+                    return {
+                        "success": True,
+                        "title": info.get("title", ""),
+                        "author": info.get("owner", {}).get("name", ""),
+                        "platform": "bilibili",
+                        "video_id": bv_id,
+                        "thumbnail": info.get("pic", "")
+                    }
+                return {"success": False, "platform": "bilibili", "video_id": bv_id, "title": "", "author": ""}
+        except Exception as e:
+            logging.warning(f"Bilibili 元数据获取失败: {e}")
+            return {"success": False, "platform": "bilibili", "video_id": bv_id, "title": "", "author": ""}
+
+    else:
+        raise HTTPException(status_code=400, detail="不支持的视频平台，当前仅支持 YouTube 和 Bilibili")
+
+
 # ══════════ Video Subtitle Extraction API (yt-dlp) ══════════
 
 class VideoSubtitlesRequest(BaseModel):
