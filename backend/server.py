@@ -623,6 +623,11 @@ async def delete_store_app(app_id: int):
 
 DEEPLX_BASE = os.environ.get("DEEPLX_BASE", "https://dplx.xi-xu.me")
 
+# Supadata API — 第三方 YouTube API，无需 Google Cloud 项目
+# 免费 100次/月，获取：标题、描述、标签、字幕语言列表等
+# 注册: https://supadata.ai  → 获取 API Key → 设置环境变量 SUPADATA_API_KEY
+SUPADATA_API_KEY = os.environ.get("SUPADATA_API_KEY", "")
+
 class TranslateRequest(BaseModel):
     text: str
     target_lang: str = "zh"          # 目标语言代码，如 zh/en/ja/ko/fr/de/...
@@ -941,11 +946,39 @@ async def get_video_metadata(url: str = Query(..., description="视频链接")):
     host = parsed.netloc.lower()
 
     if 'youtube.com' in host or 'youtu.be' in host:
-        # YouTube oEmbed API — 无需 API Key
         m = re.search(r'(?:v=|/)([a-zA-Z0-9_-]{11})', url)
         if not m:
             raise HTTPException(status_code=400, detail="无法解析 YouTube 视频 ID")
         video_id = m.group(1)
+
+        # 优先使用 Supadata API（更丰富的元数据 + 字幕语言列表）
+        if SUPADATA_API_KEY:
+            try:
+                async with httpx.AsyncClient(timeout=10.0) as client:
+                    resp = await client.get(
+                        f"https://api.supadata.ai/v1/metadata?url=https://www.youtube.com/watch?v={video_id}",
+                        headers={"x-api-key": SUPADATA_API_KEY}
+                    )
+                    resp.raise_for_status()
+                    data = resp.json()
+                    return {
+                        "success": True,
+                        "title": data.get("title", ""),
+                        "author": data.get("channel", {}).get("name", ""),
+                        "platform": "youtube",
+                        "video_id": video_id,
+                        "thumbnail": data.get("thumbnail", ""),
+                        "description": (data.get("description", "") or "")[:500],
+                        "duration": data.get("duration", 0),
+                        "tags": data.get("tags", []),
+                        "view_count": data.get("viewCount", 0),
+                        "transcript_languages": data.get("transcriptLanguages", []),
+                        "source": "supadata"
+                    }
+            except Exception as e:
+                logging.warning(f"Supadata API 失败，回退到 oEmbed: {e}")
+
+        # 回退: YouTube oEmbed API — 无需 API Key
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:
                 resp = await client.get(
@@ -959,7 +992,8 @@ async def get_video_metadata(url: str = Query(..., description="视频链接")):
                     "author": data.get("author_name", ""),
                     "platform": "youtube",
                     "video_id": video_id,
-                    "thumbnail": data.get("thumbnail_url", "")
+                    "thumbnail": data.get("thumbnail_url", ""),
+                    "source": "oembed"
                 }
         except Exception as e:
             logging.warning(f"YouTube 元数据获取失败: {e}")

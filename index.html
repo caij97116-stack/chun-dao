@@ -17287,6 +17287,8 @@ function vrLoadVideo(){
 
   // 异步获取视频元数据（标题、作者），让AI知道当前播放的是什么
   vrFetchVideoMetadata();
+  // 异步提取字幕，让AI理解视频内容
+  vrExtractSubs();
 
   const emptyEl = document.getElementById('vr-player-empty');
   const playerEl = document.getElementById('vr-player');
@@ -17352,6 +17354,10 @@ async function vrFetchVideoMetadata(){
       vrCurrentVideo.title = data.title || vrCurrentVideo.title;
       vrCurrentVideo.author = data.author || '';
       vrCurrentVideo.thumbnail = data.thumbnail || '';
+      vrCurrentVideo.description = data.description || '';
+      vrCurrentVideo.tags = data.tags || [];
+      vrCurrentVideo.duration = data.duration || 0;
+      vrCurrentVideo.transcriptLanguages = data.transcript_languages || [];
     }
   }catch(e){
     console.warn('视频元数据获取失败:', e);
@@ -17359,12 +17365,62 @@ async function vrFetchVideoMetadata(){
 }
 
 // ── Subtitle Extraction ──
-function vrExtractSubs(){
+async function vrExtractSubs(){
   if(!vrCurrentVideo){ showToast('请先加载视频'); return; }
-  showToast('字幕提取功能需后端支持 · 开发中');
-  // TODO: Backend endpoint for subtitle extraction
-  // For YouTube: use get-youtube-transcript or yt-dlp
-  // For Bilibili: use video-subtitle-extractor
+  const subBar = document.getElementById('vr-subtitle-bar');
+  const subTs = document.getElementById('vr-subtitle-ts');
+  if(subBar) subBar.style.display = 'flex';
+  if(subTs) subTs.textContent = '正在提取字幕…';
+
+  try{
+    const apiBase = window.location.origin;
+    // Step 1: 获取可用字幕列表
+    const listResp = await fetch(`${apiBase}/api/video/subtitles?url=${encodeURIComponent(vrCurrentVideo.url)}&lang=zh`);
+    if(!listResp.ok){
+      // 尝试英文
+      const enResp = await fetch(`${apiBase}/api/video/subtitles?url=${encodeURIComponent(vrCurrentVideo.url)}&lang=en`);
+      if(!enResp.ok) throw new Error('无可用字幕');
+      const enData = await enResp.json();
+      if(!enData.subtitles_available || enData.subtitles_available.length === 0) throw new Error('无可用字幕');
+    }
+    const listData = await listResp.ok ? await listResp.json() : null;
+
+    // Step 2: 下载字幕内容
+    const dlResp = await fetch(`${apiBase}/api/video/subtitles/download?url=${encodeURIComponent(vrCurrentVideo.url)}&lang=zh`);
+    if(!dlResp.ok){
+      const enDlResp = await fetch(`${apiBase}/api/video/subtitles/download?url=${encodeURIComponent(vrCurrentVideo.url)}&lang=en`);
+      if(!enDlResp.ok) throw new Error('字幕下载失败');
+      const enData = await enDlResp.json();
+      vrSubtitles = enData.content || '';
+    } else {
+      const dlData = await dlResp.json();
+      vrSubtitles = dlData.content || '';
+    }
+
+    if(vrSubtitles){
+      const langLabel = listData?.subtitles_available?.find(s=>s.lang==='zh') ? '中文' : '英文';
+      if(subTs) subTs.textContent = `${langLabel}字幕 · ${vrSubtitles.length}字`;
+      showToast(`字幕已加载（${langLabel}）· AI 现在能理解视频内容了`);
+    } else {
+      throw new Error('字幕内容为空');
+    }
+  }catch(e){
+    console.warn('字幕提取失败:', e);
+    vrSubtitles = null;
+    if(subTs) subTs.textContent = '无字幕可用';
+    if(subBar) subBar.style.display = 'flex';
+    showToast('字幕提取失败 · 视频可能没有字幕');
+  }
+}
+
+// ── Subtitle Context for AI ──
+function vrGetSubtitleContext(){
+  if(!vrSubtitles) return '';
+  // 取前 2000 字作为视频内容摘要
+  const summary = vrSubtitles.length > 2000
+    ? vrSubtitles.substring(0, 2000) + '…(后续内容省略)'
+    : vrSubtitles;
+  return `\n【视频字幕内容（用于理解当前视频）】\n${summary}`;
 }
 
 // ── Chat Messages ──
@@ -17459,8 +17515,11 @@ async function vrCallAI(type, context){
   const personaShort = setting.length > 500 ? setting.substring(0,500)+'…' : setting;
 
   const videoInfo = vrCurrentVideo
-    ? `正在观看的视频：${vrCurrentVideo.platform === 'youtube' ? 'YouTube' : 'Bilibili'}《${vrCurrentVideo.title || '未知视频'}》${vrCurrentVideo.author ? '（UP主：'+vrCurrentVideo.author+'）' : ''}`
+    ? `正在观看的视频：${vrCurrentVideo.platform === 'youtube' ? 'YouTube' : 'Bilibili'}《${vrCurrentVideo.title || '未知视频'}》${vrCurrentVideo.author ? '（UP主：'+vrCurrentVideo.author+'）' : ''}${vrCurrentVideo.description ? '\n视频简介：'+vrCurrentVideo.description : ''}${vrCurrentVideo.tags && vrCurrentVideo.tags.length > 0 ? '\n标签：'+vrCurrentVideo.tags.slice(0,10).join('、') : ''}`
     : '尚未加载视频';
+
+  // 字幕内容上下文
+  const subtitleContext = vrGetSubtitleContext();
 
   const recentMsgs = vrMsgs.filter(m=>m.type!=='typing').slice(-6)
     .map(m=>`${m.sender==='me'?'用户':'我'}: ${m.text}`).join('\n');
@@ -17515,7 +17574,7 @@ async function vrCallAI(type, context){
 ${personaShort}
 
 【当前观影状态】
-${videoInfo}${memoryContext}
+${videoInfo}${subtitleContext}${memoryContext}
 
 【对话规则】
 1. 用角色的人设风格说话，保持性格一致
@@ -17524,7 +17583,8 @@ ${videoInfo}${memoryContext}
 4. 用口语化表达，避免书面语和长句
 5. 可以包含语气词或表情符号（如"～""！"）增加生动性
 6. 禁止说"作为AI助手"或"根据记忆"之类的套话，记忆数据是你"本来就该知道的"
-7. 你的回复将直接显示给用户，不要加任何前缀或标签`;
+7. 你的回复将直接显示给用户，不要加任何前缀或标签
+8. 如果提供了字幕内容，说明你了解视频的大致内容，可以基于字幕内容进行讨论`;
 
     userPrompt = `用户对你说：${context.userMsg}\n\n最近对话：\n${recentMsgs}\n\n请用「${name}」的口吻极简短回复（不超过30字）。`;
   } else {
@@ -17541,7 +17601,7 @@ ${videoInfo}${memoryContext}
 ${personaShort}
 
 【当前观影状态】
-${videoInfo}${memoryContext}
+${videoInfo}${subtitleContext}${memoryContext}
 
 【回复规则】
 1. 用角色的人设风格说话
@@ -17549,7 +17609,8 @@ ${videoInfo}${memoryContext}
 3. 要有情绪和个性，不要机械
 4. 禁止说"作为AI助手"或"根据记忆"之类的套话
 5. 你的回复会直接显示给用户，不要加任何前缀或标签
-6. 回复要让人感觉你真的在旁边一起看，有"活人感"`;
+6. 回复要让人感觉你真的在旁边一起看，有"活人感"
+7. 如果提供了字幕内容，可以基于字幕内容进行自然的评论`;
 
     userPrompt = `${eventDesc}\n\n最近对话：\n${recentMsgs || '（这是第一次互动）'}\n\n请用「${name}」的口吻极简短回复（不超过30字）。`;
   }
